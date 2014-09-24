@@ -1,0 +1,49 @@
+{% extends "base.html" %} 
+
+{% block headblock %}
+<link rel="stylesheet" type="text/css" href="/portal/css/app/publishers.css">
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery.tablesorter/css/theme.blue.css">
+<meta property="og:site_name" content="iDigBio Specimen Portal" />
+<meta property="og:title" content="iDigBio Publishers" />
+<meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />
+<meta property="og:url" content="{{user.protocol}}://{{ user.host }}/portal/publishers" />
+<meta property="og:description" content="iDigBio data publishers list" />
+{% endblock %} 
+
+{% block content %}
+
+<div style="margin:20px;max-width:1300px;margin:auto;padding:20px;" class="">
+<h3>iDigBio Data Publishers</h3>
+<p>This page shows all iDigBio data contributors. If you are interested in providing data, consult the <a href="//www.idigbio.org/wiki/index.php/Data_Ingestion_Guidance">data ingestion guide</a> for more information.</p>
+    <div id="main">
+    </div>
+</div>
+{% endblock %} 
+
+{% block scriptblock %}
+
+<script>
+
+function toggle(me,ele){
+    var show = '<i class="icon-chevron-down"></i> Show Recordsets';
+    var hide = '<i class="icon-chevron-up"></i> Hide Recordsets';    
+    $("#" + ele).toggle();
+    if (me.innerHTML == show){
+        me.innerHTML = hide;
+    } else {
+        me.innerHTML = show;
+    }
+}
+
+function expandAll(){
+  $("table").show()
+}
+</script>
+
+{% endblock %}
+
+{% block appblock %}
+  {% parent %}
+
+  <script type="text/javascript" src="/portal/js/app.js"></script>
+{% endblock %}

@@ -1,0 +1,43 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>iDigBio Portal</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap-responsive.css">
+    <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
+    <link rel="stylesheet" type="text/css" href="/portal/css/idigbio.css">
+    <style>
+      .logoimg {
+        height: 51px;
+      }
+    </style>
+  </head>
+  <body>
+      <div class="sixteen columns full alpha omega" id="header">
+        <div id="nav">
+            <ul>
+                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>
+                <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>
+                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>
+                <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
+            </ul>
+        </div>
+        <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
+      </div>
+
+      <div>
+      {% autoescape false %}
+      {{ content }}
+      {% endautoescape %}
+      </div>
+  </body>
+</html>

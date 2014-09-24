@@ -1,0 +1,44 @@
+{% extends "base.html" %} 
+
+{% block headblock %}
+<link rel="stylesheet" type="text/css" href="/portal/components/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery-ui-bootstrap/jquery.ui.theme.css" />
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery.tablesorter/css/theme.blue.css">
+<link rel="stylesheet" type="text/css" href="/portal/css/app/recordset.css">
+<meta property="og:site_name" content="iDigBio Specimen Portal" />
+<meta property="og:title" content="iDigBio Recordset | {{ recordset.collection_name }}" />
+{% if recordset.logo_url %}
+    <meta property="og:image" content="{{ recordset.logo_url }}" />
+{% else %}
+    <meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />
+{% endif %}
+
+{% if recordset.collection_description %}
+    <meta property="og:description" content="{{ recordset.collection_description }}" />
+{% else %}
+    <meta property="og:description" content="iDigBio Recordset Information"  />
+{% endif %}
+<meta property="og:url" content="{{user.protocol}}://{{ user.host }}/portal/recordsets/{{ id }}" />
+{% endblock %} 
+
+{% block content %}
+<input type="hidden" value="{{ id }}" id="recordsetID">
+<div id="main" class="container-fluid" style="margin:0px;">
+    <div id="container">
+        <div id="title"></div>
+        <div id="react-wrapper">
+              {% autoescape false %}
+              {{ content }}
+              {% endautoescape %}
+        </div> 
+    </div>
+</div>
+{% endblock %} 
+
+{% block appblock %}
+<script type="text/template" id="frame">
+
+</script>
+<script type="text/javascript" src="/portal/js/app.js"></script>
+{% endblock %}
+{% block scriptblock %} {% endblock %}

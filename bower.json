@@ -1,0 +1,37 @@
+{
+  "name": "idb-controller",
+  "version": "0.0.0",
+  "directory": "public/components",
+  "dependencies": {
+    "underscore": "*",
+    "backbone": "*",
+    "mustache": "*",
+    "lodash": "*",
+    "flot": "*",
+    "bootstrap": "~>2",
+    "jquery": "*",
+    "jquery-ui": "*",
+    "jquery-ui-bootstrap": "*",
+    "jquery.tablesorter": "*",
+    "async": "*",
+    "elasticsearch-js": "iDigBio/elasticsearch-js",
+    "leaflet": "~>0.6",
+    "leaflet.draw": "*",
+    "highcharts": "*",
+    "jeoquery": "tompi/jeoquery",
+    "rainbowvis": "anomal/RainbowVis-JS",
+    "fgh": "https://bitbucket.org/monoid/fgh/raw/465610eb2dcca8e48b84f7ed6927b81fd292bb65/fgh.js",
+    "knockout": "*",
+    "knockout-mapping": "*",
+    "bootstrap-multiselect": "*",
+    "parsleyjs": "*",
+    "headjs": "*",
+    "markercluster": "git://github.com/Leaflet/Leaflet.markercluster",
+    "spiderfier": "git://github.com/jawj/OverlappingMarkerSpiderfier-Leaflet"
+  },
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components"
+  ]
+}

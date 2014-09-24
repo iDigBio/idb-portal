@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block headblock %}
+<link rel="stylesheet" type="text/css" href="/portal/components/leaflet/dist/leaflet.css" />
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery-ui/themes/base/jquery.ui.core.css" />
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery-ui/themes/base/jquery.ui.datepicker.css" />
+<link rel="stylesheet" type="text/css" href="/portal/components/jquery-ui-bootstrap/jquery.ui.theme.css" />
+<link rel="stylesheet" type="text/css" href="/portal/css/app/record.css">
+<link rel="stylesheet" media="print" type="text/css" href="/portal/css/app/print.css">
+{% if record._source.mediarecords -%}
+<meta property="og:image" content="https://api.idigbio.org/v1/mediarecords/{{ record._source.mediarecords[0] }}/media?quality=webview" />
+{% else %}
+<meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />    
+{%- endif %}
+<meta property="og:site_name" content="iDigBio Specimen Portal" />
+{% if record._source.scientificname -%}
+<meta property="og:title" content="iDigBio Specimen Record | {{ record._source.scientificname|capitalize }}" />
+{% else %}
+<meta property="og:title" content="iDigBio Specimen Record" />
+{% endif %}
+{% if recordset._source.data['idigbio:data'].collection_description %}
+<meta property="og:description" content="{{ recordset._source.data['idigbio:data'].collection_description }}" />
+{% elseif recordset._source.data['idigbio:data'].collection_name %}
+<meta property="og:description" content="{{ recordset._source.data['idigbio:data'].collection_name }}" />
+{% endif %}
+<meta property="og:url" content="https://{{ user.host }}/portal/records/{{ id }}" />
+{% endblock %} 
+
+{% block content %}
+<input type="hidden" value="{{ id }}" id="recordID">
+<div id="react-wrapper">
+      {% autoescape false %}
+      {{ content }}
+      {% endautoescape %}
+</div>       
+{% endblock %}
+
+{% block appblock %}
+<script>L_PREFER_CANVAS = true;</script>
+<script type="text/javascript" src="/portal/js/app.js"></script>
+{% endblock %}
+{% block scriptblock %} 
+
+{% endblock %}

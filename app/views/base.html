@@ -1,0 +1,171 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!-->
+<html class="no-js" lang="en">
+<!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <title>iDigBio Portal</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    {% block cssblock %}
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap-responsive.css">
+    {% endblock %}
+    <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
+    <link rel="stylesheet" type="text/css" href="/portal/css/idigbio.css">
+    <style>
+      .logoimg {
+        height: 51px;
+      }
+    </style>
+    {% block headblock %}    
+    {% endblock %}
+  </head>
+  <body>
+    <header>
+      <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> 
+      <input type="hidden" id="api-url" name="api-url" value="{{ urls.api }}" />
+      <!-- wakulla header -->
+      <div class="sixteen columns full alpha omega" id="header">
+        <div id="nav">
+            <ul id="header-links">
+                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>
+                <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>
+                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>
+                <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
+            </ul>
+        
+           <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
+              {% if !user.is_authenticated -%} 
+              <li style="border:none;">
+               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
+                <span style="color:white;font-size:.8em;">|</span>
+                <a href="https://www.idigbio.org/login/accounts/new" style="color:white;font-size:.8em;">Sign Up</a>
+              </li>
+              {% else %}
+              <li style="border:none;"><a id="logout-link" href="/portal/logout" style="color:white;font-size:.8em;">Log Out</a></li>  
+              {%- endif %}
+            </div>
+        
+        </div>
+        <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
+
+      </div>
+      <div class="sixteen columns full alpha omega" id="snav-research">
+        <div id="snav" class="clearfix">
+          <ul id="portal-menu" style="float:left">
+          {% for value in menus.public -%}
+              <li {% if loop.key == activemenu %} class="active" {% endif %}>
+                <a href="{{ value.url }}" >{{ value.label }} </a>
+              </li>
+          {%- endfor %}
+          </ul>
+         
+          <ul id="user-menu" style="float:right">
+          {% if user.is_authenticated -%}          
+              <li>
+                <a style="min-width:90px;" href="#">&#x25BC;&nbsp;&nbsp;{{ user.login }}</a>
+                <ul id="user-menu-dd">
+                  {% for value in menus.private -%}
+                  <li {% if loop.key == activemenu %} class="active" {% endif %}>
+                       <a href="{{ value.url }}" >{{ value.label }}</a>
+                  </li>
+                  {%- endfor %}   
+
+                </ul> 
+              </li>
+          {%- endif %}
+          </ul>
+        </div>
+      </div>
+      <!-- /end wakulla header -->
+    </header>
+    <div class="container-fluid" style="min-height:600px;margin:0px;padding:0px; margin-top: 10px;">
+      <div class="row-fluid" style="margin:0px;padding:0px;">
+        <!-- dyna content-->
+        <div class="span12" style="margin:0px;padding:0px;">
+          {% block content %}
+          {% endblock %}
+        </div>
+      </div>
+      <a id="feedback-link" href="//idigbio.org/contact">
+      </a>
+    </div>
+    <!-- list link for web crawlers-->
+    <a href="/portal/list/index.html" alt="specimen links" style="display:none;">specimen list</a>
+    <!-- footer section -->
+    <footer class="container-fluid">
+        <div class="sixteen columns" id="footer">       
+            <ul id="logo-list">
+
+                  <li><a href="http://ufl.edu"><img alt="University of Florida logo" class="logo-center" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/uf.png" style="width: 60px; height: 60px; "></a></li>
+                  <li><a href="http://fsu.edu"><img alt="Florida State University logo" class="logo-center" src="https://www.idigbio.org/sites/default/files/sites/default/files/fsu100.png" style="width: 60px; height: 60px; "></a></li>
+                  <li><a href="http://flmnh.ufl.edu"><img alt="Florida Museum logo" class="logo-center" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/flmnh.png" style="width: 60px; height: 60px; "></a></li>
+                  <li><a href="http://nsf.gov"><img alt="National Science Foundation logo" class="logo-center" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/nsf.png" style="width: 60px; height: 60px; "></a></li>
+                </ul>
+                
+                <ul id="social-list">
+                  <li><a href="https://www.facebook.com/iDigBio" target="_blank"><img alt="Like iDigBio on Facebook" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/facebook.png"></a></li>
+                  <li><a href="https://twitter.com/iDigBio" target="_blank"><img alt="Follow iDigbio on Twitter" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/twitter.png"></a></li>
+                  <li><a target="_blank" href="https://vimeo.com/idigbio"><img alt="Vimeo" style="width:32px;height:32px" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/vimeo.png"></a></li>
+                  <li><a target="_blank" href="https://www.idigbio.org/rss-feed.xml"><img alt="RSS feed" style="width:32px;height:32px" src="https://www.idigbio.org/sites/default/files/pamphlet/logos/RSS.png"></a></li>
+                </ul>
+
+            <p><a href="https://www.facebook.com/iDigBio" target="_blank">Like iDigBio on Facebook</a> | <a href="https://twitter.com/iDigBio" target="_blank">Follow iDigBio on Twitter</a></p>
+                <p>Use of this website is subject to iDigBio's&nbsp;<a href="https://www.idigbio.org/content/idigbio-terms-use-policy">Terms of Use</a>&nbsp;and&nbsp;<a href="https://www.idigbio.org/content/idigbio-service-level-agreement-sla">Service Level Agreement</a>.</p>
+                <p>This page uses <a href="http://www.google.com/analytics">Google Analytics</a> • <a href="http://www.google.com/intl/en_ALL/privacypolicy.html">Google Privacy Policy</a> © Copyright 2011</p>
+
+        </div>
+        <div class="sixteen columns" id="footnote">
+            <p>iDigBio is funded by a grant from the National Science Foundation's Advancing Digitization of Biodiversity Collections Program (Cooperative Agreement EF-1115210). Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation.</p>
+        </div>
+  
+    </footer>
+
+    <div id="dialog-window" class="modal hide fade">
+    </div> 
+    {% if !user.is_authenticated -%}
+      <form id="login-form" style="display:none" method="get" action="/portal/authenticate">
+        <p>Login using OpenID</p>
+        <input type="hidden" name="openid_identifier" />
+        <input type="hidden" name="firstname">
+        <input type="hidden" name="lastname">
+        <input type="hidden" name="login">
+        <input type="hidden" name="email">
+        <input type="submit" value="Login" />
+      </form>
+    {%- endif %}
+    {% block appblock %}
+    <script src='/portal/components/jquery/jquery.min.js'></script>
+    <script src="/portal/components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
+    <script src="/portal/js/idigbio.js"></script>
+    <script src="/portal/js/portal-helper.js"></script>
+    {% endblock %}
+    {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
+    <script src="https://www.idigbio.org/login/server/script?type=portal&t={{ user.random }}"></script>
+    {%- endif %}
+    <script>
+      {% autoescape false %}
+      {{ javascript }}
+      {% endautoescape %}
+    </script>
+    <script src="/portal/components/async/lib/async.js"></script>
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-32912865-1', 'idigbio.org');
+      ga('send', 'pageview');
+    </script>
+    {% block scriptblock %}
+    {% endblock %}
+  </body>
+</html>

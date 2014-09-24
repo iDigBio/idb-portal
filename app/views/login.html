@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="get" action="/portal/authenticate">
+  <p>Login using OpenID</p>
+  <input name="openid_identifier" />
+  <input type="submit" value="Login" />
+</form>
+{% endblock %}
+{% block scriptblock %}
+   
+{% endblock %}

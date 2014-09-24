@@ -83,11 +83,6 @@ module.exports = function(app, config) {
       var ip = req.ip;
       var forward = req.headers['x-forwarded-for'];
       //don't send acis and localhost/dev requests
-      //console.log('ip is: ' +ip);
-      //console.log('x-forwarded-for is: '+req.headers['x-forwarded-for']);
-      //console.log('remote address is: ' +req.connection.remoteAddress);
-      //console.log('socket remote ip is: '+req.socket.remoteAddress);
-
       if(typeof forward != 'undefined' && forward.indexOf('10.244.19') !== 0  && ip !== '127.0.0.1'){
         var stats = {form:{type: req.body.type, search: req.body.search, results: req.body.results}};
         request.post(

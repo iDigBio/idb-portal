@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     react = require('gulp-react');
 
 gulp.task('default',function(){
-    var bundle = watchify('./public/js/app/main.js');
+    var bundle = watchify('./client/js/main.js');
     bundle.transform('reactify');
     bundle.on('update',rebundle)
 
@@ -26,9 +26,9 @@ gulp.task('default',function(){
     livereload.listen();
     gulp.watch(['app/views/*','public/js/app.js','public/css/**']).on('change',livereload.changed);
     gulp.watch(['public/react/src/**']).on('change',function(){
-        return gulp.src("./public/react/src/**/*.js")
+        return gulp.src("./client/js/react/src/**/*.js")
         .pipe(react())
-        .pipe(gulp.dest('./public/react/build'))
+        .pipe(gulp.dest('./client/js/react/build'))
     })
     return rebundle();
 });

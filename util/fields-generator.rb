@@ -1,3 +1,4 @@
+#using 2.1.1 with RVM 
 require 'csv'
 require 'json'
 require 'mechanize'#gem
@@ -24,6 +25,6 @@ CSV.parse(resp.body, :headers => true) do |row|
   output['names'][row['field_dwc_term']] = row['field_label'] 
 end
 
-File.open('../public/react/src/lib/dwc_fields.js','w') do |file|
+File.open('../client/js/react/src/lib/dwc_fields.js','w') do |file|
   file.write "module.exports = " << output.to_json
 end

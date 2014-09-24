@@ -1,0 +1,27 @@
+var Fields = function (cb){{
+    var self = this;
+
+    self.context_field_list= {0};
+    self.context_list = {1};
+    self.dwc_to_context_term = {2};
+    self.items = {3};
+    self.master_to_context = {4};
+    self.solr_to_context_term = {5};
+
+}}
+
+Fields.prototype.solrTermToLabel = function(term){{
+	var self = this;
+	var fc = self.solr_to_context_term[term]
+    return self.items[fc[0]]["fields"][fc[1]]["field_label"]
+}}
+
+Fields.prototype.dwcTermToLabel = function(term){{
+	var self = this;
+	var fc = self.dwc_to_context_term[term]
+    return self.items[fc[0]]["fields"][fc[1]]["field_label"]
+}}
+
+if(typeof module !== "undefined") {{
+  module.exports = Fields;
+}}

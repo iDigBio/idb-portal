@@ -1,0 +1,71 @@
+{
+  "name": "idigbio",
+  "description": "iDigBio Portal",
+  "version": "5.0.0",
+  "author": "Greg Traub <gtraub@acis.ufl.edu>",
+  "contributors": [
+    {
+      "name": "Alex Thompson",
+      "email": "godfoder@acis.ufl.edu"
+    },
+    {
+      "name": "Greg Traub",
+      "email": "gtraub@acis.ufl.edu"
+    }
+  ],
+  "scripts": {
+    "start": "node app.js",
+    "postinstall": "./postinstall.sh"
+  },
+  "dependencies": {
+    "express": "3.0.3",
+    "lodash": "*",
+    "express-expose": "*",
+    "consolidate": "*",
+    "swig": "*",
+    "openid": "*",
+    "hamljs": "*",
+    "async": "*",
+    "elasticsearchclient": "*",
+    "hiredis": "*",
+    "redis": "*",
+    "connect-redis": "~1.4.6",
+    "node-uuid": "*",
+    "node-markdown": "*",
+    "pg": "*",
+    "http-proxy": "*",
+    "browserify": "*",
+    "backbone": "*",
+    "underscore": "*",
+    "jquery-browserify": "*",
+    "jquery-ui-browserify": "*",
+    "bootstrap-browserify": "*",
+    "uglify-js": "*",
+    "bower": "*",
+    "leaflet": "*",
+    "reactify": "~0.13.1",
+    "envify": "~1.2.1",
+    "react": "~0.10.0",
+    "request": "*"
+  },
+  "devDependencies": {
+    "assert": "*",
+    "docco": "*",
+    "chai": "*",
+    "mocha": "*",
+    "zombie": "*",
+    "lorem": "*",
+    "gulp": "^3.8.6",
+    "gulp-livereload": "^2.1.0",
+    "gulp-util": "^2.2.20",
+    "watchify": "^0.10.2",
+    "gulp-react": "^1.0.0",
+    "gulp-jsx": "^0.4.0",
+    "gulp-rename": "^1.2.0"
+  },
+  "keywords": [],
+  "repository": "git://github.com/idigbio/idigbio-portal",
+  "engines": {
+    "node": "*"
+  }
+}

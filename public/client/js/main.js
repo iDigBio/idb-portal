@@ -2,19 +2,20 @@
 *MAIN iDigBio Portal client-side app file.
 *this provides initial routing for per page app execution.
 *****/
-window.$ = require('jquery-browserify');
+//window.$ = require('jquery-browserify');
 window.url = require('./lib/url');
-window._ = require('underscore');
-window.Backbone = require('backbone');
-require('./lib/jquery-ui-1.10.4.custom.min');
-require('../../components/jquery.tablesorter/js/jquery.tablesorter.min.js');
-require('bootstrap-browserify');
-Backbone.$ = $;
+//window._ = require('underscore');
+//window.Backbone = require('backbone');
+//require('../../components/jquery.tablesorter/js/jquery.tablesorter.min.js');
+//Backbone.$ = $;
 require('./lib/searchserver');
 //
 $(document).ready(function(){
 	var path = url(1) == 'portal' ? url(2) : url(1);
 	switch(path){
+		case '':
+			require('./home');
+			break;
 		case 'search':
 			require('./search');
 			break;

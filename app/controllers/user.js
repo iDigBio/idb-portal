@@ -15,7 +15,7 @@ module.exports = function(app, config) {
         []
     );
 
-    var helper = require('../../lib/helper')(app,config);
+    //var helper = require('../../lib/helper')(app,config);
 
     return {
         login: function(req, res) {

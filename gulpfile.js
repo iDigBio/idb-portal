@@ -7,12 +7,25 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     gutil = require('gulp-util'),
     watchify = require('watchify'),
+    browserify = require('gulp-browserify'),
     react = require('gulp-react'),
     less = require('gulp-less'),
     path = require('path');
 
 gulp.task('default',function(){
-    var bundle = watchify('./client/js/main.js');
+        //build js changes 
+    function buildReact(){
+      return  gulp.src("./public/client/js/react/src/**/*.js")
+        .pipe(react())
+        .pipe(gulp.dest('./public/client/js/react/build'))
+    }
+    buildReact();
+     
+    gulp.watch(['public/client/js/react/src/**']).on('change',function(){
+        buildReact();
+    })
+
+    var bundle = watchify('./public/client/js/main.js');
     bundle.transform('reactify');
     bundle.on('update',rebundle)
 
@@ -27,19 +40,22 @@ gulp.task('default',function(){
     //live reload of compiled files
     livereload.listen();
     gulp.watch(['app/views/*','public/js/app.js','public/css/**']).on('change',livereload.changed);
-    //build js changes 
-    gulp.watch(['client/js/react/src/**']).on('change',function(){
-        return gulp.src("./client/js/react/src/**/*.js")
-        .pipe(react())
-        .pipe(gulp.dest('./client/js/react/build'))
-    })
+
     //build less css changes
-    gulp.watch('client/less/**').on('change', function(){
-        return gulp.src('./client/less/**/*.less')
+    gulp.watch('public/client/less/**').on('change', function(){
+        return gulp.src('./public/client/less/**/*.less')
         .pipe(less({
             paths: [ path.join(__dirname, 'less', 'includes') ]
         }))
         .pipe(gulp.dest('./public/css'));
     })
     return rebundle();
+});
+
+gulp.task('libs', function(){
+    gulp.src('./public/client/libs.js')
+    .pipe(browserify({
+        insertGlobals: true
+    }))
+    .pipe(gulp.dest('./public/js'))
 });

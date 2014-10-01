@@ -14,10 +14,13 @@
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
     {% block cssblock %}
-    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap.css">
-    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/docs/assets/css/bootstrap-responsive.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/material.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/material-wfont.css">
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/ripples.css">
     {% endblock %}
     <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
+    <link rel="stylesheet" type="text/css" href="/portal/css/libs.css">
     <link rel="stylesheet" type="text/css" href="/portal/css/idigbio.css">
     <style>
       .logoimg {
@@ -141,12 +144,7 @@
         <input type="submit" value="Login" />
       </form>
     {%- endif %}
-    {% block appblock %}
-    <script src='/portal/components/jquery/jquery.min.js'></script>
-    <script src="/portal/components/jquery-ui/ui/minified/jquery-ui.min.js"></script>
-    <script src="/portal/js/idigbio.js"></script>
-    <script src="/portal/js/portal-helper.js"></script>
-    {% endblock %}
+
     {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
     <script src="https://www.idigbio.org/login/server/script?type=portal&t={{ user.random }}"></script>
     {%- endif %}
@@ -155,7 +153,12 @@
       {{ javascript }}
       {% endautoescape %}
     </script>
-    <script src="/portal/components/async/lib/async.js"></script>
+    <!-- load gloabal libs here managed with bower packages-->
+    <!-- end global libs block -->
+    {% block appblock %}
+        <script src='/portal/js/libs.js'></script>
+        <script src='/portal/js/app.js'></script>
+    {% endblock %}
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

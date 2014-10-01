@@ -1,4 +1,4 @@
-var fields = require('../public/js/fields.js');
+//var fields = require('../public/js/fields.js');
 //var pg = require('pg').native
 var _ = require('lodash')
 
@@ -16,7 +16,7 @@ var config = {
 		name: 'iDigBio Portal'
 	},
 	port: 3000,
-	fieldobj: new fields(),
+	//fieldobj: new fields(),
 	context_lists: {
 		people: [
 				"person",

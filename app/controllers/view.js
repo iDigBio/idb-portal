@@ -2,8 +2,8 @@
 var request = require('request');
 var path = require('path'),
     appDir = path.dirname(require.main.filename)
-var RecordPage = require(appDir+'/public/react/build/record');
-var MediaPage = require(appDir+'/public/react/build/media');
+var RecordPage = require(appDir+'/public/client/js/react/build/record');
+var MediaPage = require(appDir+'/public/client/js/react/build/media');
 var async = require('async');
 var _ = require('underscore');
 

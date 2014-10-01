@@ -6,7 +6,7 @@ var RedisStore = require('connect-redis')(express);
 //var a3 = require('../lib/a3')
 //var libuuid = require('node-uuid');
 var _ = require('lodash');
-var helper = require('../lib/helper');//(app,config);
+//var helper = require('../lib/helper');//(app,config);
 
 module.exports = function(app, config) {
     app.configure(function() {

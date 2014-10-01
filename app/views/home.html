@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block headblock %}
+<meta property="og:site_name" content="iDigBio Specimen Portal" />
+<meta property="og:title" content="iDigBio Portal Home" />
+<meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />
+<meta property="og:url" content="{{user.protocol}}://{{ user.host }}/portal" />
+<meta property="og:description" content="The iDigBio Specimen Portal provides access to millions of digitized natural history records gathered from institutions across the United States." />
+{% endblock %} {% block content %}
+<div class="row-fluid" id="portal-home">
+    <div class="span12" style="padding:10px 20px;" class="clearfix">
+        <div style="margin:auto;float:left;" class="clearfix">
+            <div  id="facets"  class="clearfix">
+                <div class="pull-left" style="margin:15px 15px 15px 5px">
+                    <div id="basicsearch">
+                        
+                        <h4>Start Searching Specimen Records</h4>
+                        <div id="search" class="">
+                            <p>Press ESC to close auto-complete suggestions. </p>
+                            <div class="input-append">
+                                <input type="text" placeholder="Scientific Name" class="input-large" id="searchbox" autocomplete="off">
+                                <button type="submit" class="btn btn-success" id="search-button">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin:15px 15px 15px 5px" class="pull-left">
+                    <h3 style="color: #444;margin:0px 0px;padding-top:0px;">iDigBio Specimen Portal</h3>
+                    <p>If you are familiar with our portal's interface, you can start searching <a href="/portal/search">Specimen Records</a>.<br>
+                    If this is your first time here, you might consider browsing <a href="/portal/tutorial">our tutorial.</a><br>
+                    Our data are based on the <a href="http://rs.tdwg.org/dwc/terms/index.htm">Darwin Core</a> and <a href="http://terms.gbif.org/wiki/Audubon_Core">Audubon Core</a> standards.</p>
+                </div>
+            </div>
+            <div id="output">
+
+
+
+                <br>
+                <div id="graph-stats" style="border-top: #ccc 1px solid;border-bottom: #ccc 1px solid;" class="row-fluid">
+                    <div class="span4" style="margin:0px;" id="specimen-graph">
+                        <div style="width: 100%; text-align: center; font-weight: bold; font-size: 11px;">Specimen Records by Collection Type</div>
+                        <div style="min-width: 200px; height: 280px; margin: 0 auto" id="record">
+                        </div>
+                    </div>
+                    <div class="span4" style="margin:0px;" id="media-graph">
+                        <div style="width: 100%; text-align: center; font-weight: bold; font-size: 11px;">Media Records by Collection Type</div>
+                        <div style="min-width: 200px; height: 280px; margin: 0 auto" id="media"></div>
+                    </div>
+
+                    <div  id="stats" class="span4">
+                        <div style="margin:60px 0px 30px 30px;">
+
+                            <div class="stat clearfix">
+                                <h3>
+
+                                    <a href="/portal/search">
+
+                                        <span id="rcount">---</span>
+                                        <br>Specimen Records</a>
+                                </h3>
+                            </div>
+
+                            <div class="stat cleafix">
+                                <h3>
+                                    <a href="/portal/search?hasImage=true">
+
+                                        <span id="mrcount">---</span>
+                                        <br>Media Records</a>
+                                </h3>
+                            </div>
+                            <div class="stat clearfix">
+                                <h3>
+                                    <a href="/portal/publishers">
+                                        <span id="rscount">---</span>
+                                        <br>Recordsets
+                                    </a>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %} 
+
+{% block scriptblock %}
+
+{% endblock %}

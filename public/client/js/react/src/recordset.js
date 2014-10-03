@@ -6,7 +6,7 @@
 * Recordset View page.
 ****/
 var React = require('react')
-var fields = require('../../js/app/search/lib/fields');
+var fields = require('../../lib/fields');
 var _ = require('underscore');
 
 //var helpers = require('./search/lib/helpers');
@@ -41,7 +41,7 @@ var Fieldrow = React.createClass({
         }
     },
     render: function(){
-        var style = {'width': this.props.value+'px'};
+        var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
             <tr key={this.props.key}>
@@ -76,7 +76,7 @@ var FieldsTable = React.createClass({
                 <h5 className="pull-right">Total Records: {formatNum(this.props.stotal)}</h5>
                 <div className="pull-left">This table represents the fields in specimen records that are used for iDigBio <a href="/portal/search">search</a>. The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of 
                  records that provide the field.</div>
-                <table className="table  table-condensed pull-left tablesorter-blue" id="table-fields">
+                <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                     <thead>
                         <tr>
                             <th>Field</th>

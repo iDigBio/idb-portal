@@ -41,7 +41,7 @@ var Fieldrow = React.createClass({displayName: 'Fieldrow',
         }
     },
     render: function(){
-        var style = {'width': this.props.value+'px'};
+        var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
             React.DOM.tr({key: this.props.key}, 
@@ -76,7 +76,7 @@ var FieldsTable = React.createClass({displayName: 'FieldsTable',
                 React.DOM.h5({className: "pull-right"}, "Total Records: ", formatNum(this.props.stotal)), 
                 React.DOM.div({className: "pull-left"}, "This table represents the fields in specimen records that are used for iDigBio ", React.DOM.a({href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
                  "records that provide the field."), 
-                React.DOM.table({className: "table  table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
+                React.DOM.table({className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.DOM.thead(null, 
                         React.DOM.tr(null, 
                             React.DOM.th(null, "Field"), 

@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block headblock %}
 <link rel="stylesheet" type="text/css" href="/portal/components/leaflet/dist/leaflet.css" />
-<link rel="stylesheet" type="text/css" href="/portal/css/app/record.css">
-<link rel="stylesheet" media="print" type="text/css" href="/portal/css/app/print.css">
+<link rel="stylesheet" type="text/css" href="/portal/css/record.css">
 {% if record._source.mediarecords -%}
 <meta property="og:image" content="https://api.idigbio.org/v1/mediarecords/{{ record._source.mediarecords[0] }}/media?quality=webview" />
 {% else %}
@@ -31,10 +30,3 @@
 </div>       
 {% endblock %}
 
-{% block appblock %}
-<script>L_PREFER_CANVAS = true;</script>
-<script type="text/javascript" src="/portal/js/app.js"></script>
-{% endblock %}
-{% block scriptblock %} 
-
-{% endblock %}

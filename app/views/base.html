@@ -15,12 +15,13 @@
     <![endif]-->
     {% block cssblock %}
     <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap/dist/css/bootstrap.min.css">
+   
+    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/ripples.css">
     <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/material.css">
     <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/material-wfont.css">
-    <link rel="stylesheet" type="text/css" href="/portal/components/bootstrap-material-design/css-compiled/ripples.css">
+  
     {% endblock %}
     <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
-    <link rel="stylesheet" type="text/css" href="/portal/css/libs.css">
     <link rel="stylesheet" type="text/css" href="/portal/css/idigbio.css">
     <style>
       .logoimg {
@@ -90,9 +91,9 @@
       <!-- /end wakulla header -->
     </header>
     <div class="container-fluid" style="min-height:600px;margin:0px;padding:0px; margin-top: 10px;">
-      <div class="row-fluid" style="margin:0px;padding:0px;">
+      <div class="row" style="margin:0px;padding:0px;">
         <!-- dyna content-->
-        <div class="span12" style="margin:0px;padding:0px;">
+        <div class="col-lg-8 col-lg-offset-2" >
           {% block content %}
           {% endblock %}
         </div>
@@ -156,6 +157,7 @@
     <!-- load gloabal libs here managed with bower packages-->
     <!-- end global libs block -->
     {% block appblock %}
+        <script>L_PREFER_CANVAS = true;</script>
         <script src='/portal/js/libs.js'></script>
         <script src='/portal/js/app.js'></script>
     {% endblock %}

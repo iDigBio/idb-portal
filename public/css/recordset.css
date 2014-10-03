@@ -1,0 +1,172 @@
+#container {
+  max-width: 1600px;
+  margin: auto;
+}
+#content {
+  margin: 10px auto;
+  padding: 10px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-shadow: 0px 1px 0px #aaa;
+}
+.contact,
+.contact li {
+  text-decoration: none;
+  list-style-type: none;
+  min-width: 180px;
+  word-break: break-word;
+}
+.description {
+  text-align: justify;
+  line-height: 1.25em;
+}
+.last {
+  margin-left: 20px;
+}
+.logo {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 0px 10px 2px 10px;
+  float: left;
+  padding: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
+h3 {
+  font-size: 1.5em;
+}
+h4 {
+  font-size: 1.2em;
+}
+a {
+  text-shadow: none;
+}
+td.record-count {
+  text-align: right;
+}
+.perc-box {
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  width: 100px;
+  color: darkred;
+  height: 20px;
+  background-color: #eee;
+  margin: auto;
+  position: relative;
+}
+.perc-bar {
+  background-color: #ccc;
+  position: absolute;
+  z-index: 1;
+  display: inline-block;
+  height: 18px;
+  text-align: center;
+}
+.perc-text {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  width: 100px;
+  text-align: center;
+  font-size: 1em;
+}
+.button {
+  margin: 5px;
+}
+.buttons {
+  text-align: center;
+}
+#title {
+  width: 100%;
+  margin: 25px 0px;
+}
+#title label {
+  font-size: 1.7em;
+  letter-spacing: 0.0em;
+  font-weight: bold;
+  color: #333;
+}
+#description {
+  width: 100%;
+  float: left;
+}
+#description p {
+  margin: 10px;
+}
+#fields {
+  width: 100%;
+  float: left;
+}
+#fields-table {
+  margin: 10px;
+}
+.info {
+  font-weight: bold;
+  font-size: 1.02em;
+}
+.cotact {
+  margin-left: 0px;
+}
+#info,
+#contacts,
+#results-map {
+  width: 100%;
+  float: right;
+}
+#info .wrapper,
+#contacts .wrapper {
+  margin: 10px;
+}
+#info .info {
+  margin-bottom: 5px;
+}
+#description,
+#fields,
+#info,
+#contacts,
+#results-map {
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #efefef;
+  box-shadow: 0px 1px 0px #aaa;
+  margin: 5px;
+}
+#fields,
+#description {
+  background-color: #fbfbfb;
+  color: #444;
+}
+#field-loader {
+  display: block;
+  margin: 20% auto;
+}
+#map {
+  width: 100%;
+  margin: 10px;
+}
+#left {
+  float: left;
+  width: 64%;
+}
+#right {
+  float: right;
+  width: 34%;
+}
+@media (max-width: 900px) {
+  #description,
+  #fields,
+  #info,
+  #contacts {
+    width: 98%;
+    float: none;
+  }
+  #left,
+  #right {
+    width: 100%;
+    float: none;
+  }
+  #title {
+    margin: 20px 0px;
+  }
+}

@@ -1,4 +1,7 @@
 @bggrey: #fafafa;
+@idbgreen: #6aaa51;
+@idblightgreen: #C0E4B3;
+@idblightred: #FFDDC7;
 // Material colors palette
 @red: #F44336;
 @pink: #E91E63;
@@ -17,9 +20,10 @@
 @bluegrey: #607D8B;
 @brown: #795548;
 @lightgrey: #ECECEC;
-
-#search-filters, #search-fulltext{
-    width:500px;
+#main{
+    background-color: @bggrey;
+}
+#search-fulltext{
     background-color: @bggrey;
     .checkbox{
         display:inline-block;
@@ -27,21 +31,42 @@
         font-size:1.1em;
     }
 }
+#search-filters{
+    width:100%;
+    margin:0px;
+    padding:0px;
+    .filter{
+        padding:3px;
+        width:200px;
+        height:100px;
+        margin:0px;
+        background-color:@lightgrey;
+        display:inline-block;
+        float:left;
+        textarea{
+            border-radius:3px;
+            margin:3px;
+        }
+    }
+}
 #filter-control{
-    height:100px;
-    width:140px;
-    background-color: @lightgreen;
+    height:80px;
+    width:100%;
+    background-color: @idblightgreen;
     padding:10px;
-
+    display:block;
+    float:left;
     select{
         width:90%;
         height:25px;
         border-radius:4px;
         background-color: white;
-        margin-top:7px;
+        
     }
 }
 #map{
-    width:500px;
-    height:200px;
+    width:100%;
+    max-width:800px;
+    height:400px;
+    display:block;
 }

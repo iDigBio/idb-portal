@@ -2,11 +2,12 @@
  * @jsx React.DOM
  */
 
+var React = require('react')
 var L = require('leaflet/dist/leaflet');
 var SearchPage = require('./react/build/search');
 
 React.renderComponent(
-    <SearchPage />,
+    <SearchPage key={'hello'}/>,
     document.getElementById('main')
 )
 
@@ -16,7 +17,7 @@ var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     //maxZoom: 19,
     reuseTiles: true
 });
- debugger
+
 var map = L.map('map',{
     center: [0,0],
     zoom: 0,
@@ -24,3 +25,5 @@ var map = L.map('map',{
     scrollWheelZoom: true,
     boxZoom: false
 });
+
+

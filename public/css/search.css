@@ -1,28 +1,49 @@
-#search-filters,
-#search-fulltext {
-  width: 500px;
+#main {
   background-color: #fafafa;
 }
-#search-filters .checkbox,
+#search-fulltext {
+  background-color: #fafafa;
+}
 #search-fulltext .checkbox {
   display: inline-block;
   margin-right: 20px;
   font-size: 1.1em;
 }
-#filter-control {
+#search-filters {
+  width: 100%;
+  margin: 0px;
+  padding: 0px;
+}
+#search-filters .filter {
+  padding: 3px;
+  width: 200px;
   height: 100px;
-  width: 140px;
-  background-color: #8bc34a;
+  margin: 0px;
+  background-color: #ececec;
+  display: inline-block;
+  float: left;
+}
+#search-filters .filter textarea {
+  border-radius: 3px;
+  margin: 3px;
+}
+#filter-control {
+  height: 80px;
+  width: 100%;
+  background-color: #c0e4b3;
   padding: 10px;
+  display: block;
+  float: left;
 }
 #filter-control select {
   width: 90%;
   height: 25px;
   border-radius: 4px;
   background-color: white;
-  margin-top: 7px;
 }
 #map {
-  width: 500px;
-  height: 200px;
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  display: block;
 }

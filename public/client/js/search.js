@@ -1,8 +1,26 @@
-/* Search Page SPA 
-* This is the entry point for the Search page
-* All views are rendered as separate Backbone views
-* that listen for results or submit queries to the Searchstate model 
-* global libs defined here to reduce writing them as locals in every sub view.
-****/
+/**
+ * @jsx React.DOM
+ */
 
+var L = require('leaflet/dist/leaflet');
+var SearchPage = require('./react/build/search');
 
+React.renderComponent(
+    <SearchPage />,
+    document.getElementById('main')
+)
+
+var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    attribution: 'Map data © OpenStreetMap contributors',
+    minZoom: 0, 
+    //maxZoom: 19,
+    reuseTiles: true
+});
+ debugger
+var map = L.map('map',{
+    center: [0,0],
+    zoom: 0,
+    layers: [base],
+    scrollWheelZoom: true,
+    boxZoom: false
+});

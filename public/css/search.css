@@ -1,0 +1,28 @@
+#search-filters,
+#search-fulltext {
+  width: 500px;
+  background-color: #fafafa;
+}
+#search-filters .checkbox,
+#search-fulltext .checkbox {
+  display: inline-block;
+  margin-right: 20px;
+  font-size: 1.1em;
+}
+#filter-control {
+  height: 100px;
+  width: 140px;
+  background-color: #8bc34a;
+  padding: 10px;
+}
+#filter-control select {
+  width: 90%;
+  height: 25px;
+  border-radius: 4px;
+  background-color: white;
+  margin-top: 7px;
+}
+#map {
+  width: 500px;
+  height: 200px;
+}

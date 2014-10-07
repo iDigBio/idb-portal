@@ -20,7 +20,7 @@ gulp.task('default',function(){
         .pipe(gulp.dest('./public/client/js/react/build'))
     }
     buildReact();
-     
+
     gulp.watch(['public/client/js/react/src/**']).on('change',function(){
         buildReact();
     })
@@ -39,7 +39,7 @@ gulp.task('default',function(){
     }
     //live reload of compiled files
     livereload.listen();
-    gulp.watch(['app/views/*','public/js/app.js','public/css/**']).on('change',livereload.changed);
+    gulp.watch(['app/views/*','public/js/app.js','public/css/*']).on('change',livereload.changed);
 
     //build less css changes
     gulp.watch('public/client/less/**').on('change', function(){

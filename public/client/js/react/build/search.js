@@ -13,28 +13,37 @@ module.exports = React.createClass({displayName: 'exports',
         return(
             React.DOM.div({key: "react"}, 
                 React.DOM.div({key: 'left', className: "row"}, 
-                    React.DOM.div({key: "fulltext", id: "search-fulltext", className: "col-lg-4 clearfix"}, 
-                        React.DOM.h3(null, "Start Searching"), 
-                        React.DOM.div({className: "input-group"}, 
-                            React.DOM.input({type: "text", className: "form-control", placeholder: "search any field"}), 
-                            React.DOM.a({className: "btn input-group-addon"}, "Go")
-                        ), 
-                        React.DOM.div({className: "checkbox"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({type: "checkbox"}), 
-                                "Must have image"
-                            )
-                        ), 
-                        React.DOM.div({className: "checkbox"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({type: "checkbox"}), 
-                                "Must have map point"
+                    React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
+                        
+                        React.DOM.div({id: "search-any", className: "clearfix"}, 
+                            React.DOM.h3(null, "Start Searching"), 
+                            React.DOM.div({className: "input-group"}, 
+                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field"}), 
+                                React.DOM.a({className: "btn input-group-addon"}, "Go")
+                            ), 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox"}), 
+                                    "Must have image"
+                                )
+                            ), 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox"}), 
+                                    "Must have map point"
+                                )
                             )
                         ), 
                         React.DOM.div({key: "filters", id: "search-filters"}, 
-                            React.DOM.div({className: "clearfix", id: "filter-control"}, 
-                                React.DOM.h4(null, "Add a Filter"), 
+                            React.DOM.div({className: "clearfix", id: "filter-sort"}, 
+                                React.DOM.label(null, "Sort by"), 
+                                React.DOM.select(null, React.DOM.option({value: "select"}, "select")), 
+                                React.DOM.label(null, "Sort direction"), 
                                 React.DOM.select(null, React.DOM.option({value: "select"}, "select"))
+                            ), 
+                            React.DOM.div({className: "clearfix", id: "filter-control"}, 
+                                React.DOM.h4(null, "Advanced Filters"), 
+                                React.DOM.select({placeholder: "select to add"}, React.DOM.option({value: "select"}, "select to add"))
                             ), 
                             React.DOM.div({className: "filter"}, 
                                 "Scientific Name", 
@@ -42,7 +51,7 @@ module.exports = React.createClass({displayName: 'exports',
                             )
                         )
                     ), 
-                    React.DOM.div({id: "map-holder", className: "col-lg-8"}, 
+                    React.DOM.div({id: "map-box"}, 
                         React.DOM.div({id: "map"})
                     )
                 )

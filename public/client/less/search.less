@@ -23,24 +23,33 @@
 #main{
     background-color: @bggrey;
 }
-#search-fulltext{
+#search{
+    width:25%;
     background-color: @bggrey;
+    display:inline-block;
+    float:left;
+    #search-any{
+        margin:0px 10px;
+    }
     .checkbox{
         display:inline-block;
         margin-right:20px;
         font-size:1.1em;
     }
 }
+
 #search-filters{
     width:100%;
     margin:0px;
     padding:0px;
+   
+
     .filter{
         padding:3px;
         width:200px;
         height:100px;
         margin:0px;
-        background-color:@lightgrey;
+        background-color:@idblightgreen;
         display:inline-block;
         float:left;
         textarea{
@@ -49,13 +58,35 @@
         }
     }
 }
+#filter-sort{
+    width:50%;
+    display:block;
+    float:left;
+     border-bottom:1px solid #999;
+     min-height:100px;
+    select{
+        display:inline-block;
+        width:90%;
+        background-color: white;
+        height:22px;
+        margin:0px 10px;
+        border-radius:3px;
+    }
+    label{
+        margin:2px 10px;
+    }
+}
 #filter-control{
-    height:80px;
-    width:100%;
+    min-height:100px;
+    width:50%;
+    min-width:100px;
     background-color: @idblightgreen;
     padding:10px;
     display:block;
     float:left;
+     border:1px solid #999;
+    border-bottom:1px solid green;
+    border-right:none;
     select{
         width:90%;
         height:25px;
@@ -63,10 +94,28 @@
         background-color: white;
         
     }
+    h4{
+        margin-top:5px;
+    }
+}
+#map-box{
+    width:75%;
+    display:inline-block;
+    float:left;
+
 }
 #map{
     width:100%;
     max-width:800px;
     height:400px;
     display:block;
+    border:1px solid #999;
+}
+
+@media (max-width: 1000px){
+    #map-box, #search, #search-any{
+        float:none;
+        width:100%
+    }
+
 }

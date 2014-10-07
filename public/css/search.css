@@ -1,10 +1,16 @@
 #main {
   background-color: #fafafa;
 }
-#search-fulltext {
+#search {
+  width: 25%;
   background-color: #fafafa;
+  display: inline-block;
+  float: left;
 }
-#search-fulltext .checkbox {
+#search #search-any {
+  margin: 0px 10px;
+}
+#search .checkbox {
   display: inline-block;
   margin-right: 20px;
   font-size: 1.1em;
@@ -19,7 +25,7 @@
   width: 200px;
   height: 100px;
   margin: 0px;
-  background-color: #ececec;
+  background-color: #c0e4b3;
   display: inline-block;
   float: left;
 }
@@ -27,13 +33,35 @@
   border-radius: 3px;
   margin: 3px;
 }
+#filter-sort {
+  width: 50%;
+  display: block;
+  float: left;
+  border-bottom: 1px solid #999;
+  min-height: 100px;
+}
+#filter-sort select {
+  display: inline-block;
+  width: 90%;
+  background-color: white;
+  height: 22px;
+  margin: 0px 10px;
+  border-radius: 3px;
+}
+#filter-sort label {
+  margin: 2px 10px;
+}
 #filter-control {
-  height: 80px;
-  width: 100%;
+  min-height: 100px;
+  width: 50%;
+  min-width: 100px;
   background-color: #c0e4b3;
   padding: 10px;
   display: block;
   float: left;
+  border: 1px solid #999;
+  border-bottom: 1px solid green;
+  border-right: none;
 }
 #filter-control select {
   width: 90%;
@@ -41,9 +69,26 @@
   border-radius: 4px;
   background-color: white;
 }
+#filter-control h4 {
+  margin-top: 5px;
+}
+#map-box {
+  width: 75%;
+  display: inline-block;
+  float: left;
+}
 #map {
   width: 100%;
   max-width: 800px;
   height: 400px;
   display: block;
+  border: 1px solid #999;
+}
+@media (max-width: 1000px) {
+  #map-box,
+  #search,
+  #search-any {
+    float: none;
+    width: 100%;
+  }
 }

@@ -13,7 +13,6 @@ require('./lib/searchserver');
 
 $(document).ready(function(){
 	var path = url(1) == 'portal' ? url(2) : url(1);
-
 	switch(path){
 		case '':
 			require('./home');

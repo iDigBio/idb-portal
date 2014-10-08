@@ -8,11 +8,19 @@ var _ = require('underscore');
 
 
 module.exports = React.createClass({displayName: 'exports',
+    showPanel: function(event){
+        debugger
+        $('#options-menu .active').removeClass('active');
+        var panel = $(event.target).addClass('active').attr('data-panel');
+        
+        $('#options .section').hide();
+        $('#options #'+panel).show();
+    },
     render: function(){
 
         return(
             React.DOM.div({key: "react"}, 
-                React.DOM.div({key: 'left', className: "row"}, 
+                React.DOM.div({id: "top", className: "clearfix"}, 
                     React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
                         
                         React.DOM.div({id: "search-any", className: "clearfix"}, 
@@ -34,31 +42,50 @@ module.exports = React.createClass({displayName: 'exports',
                                 )
                             )
                         ), 
-                        React.DOM.div({key: "filters", id: "options"}, 
-                            React.DOM.ul({id: "options-menu"}, 
-                                React.DOM.li(null, "Sorting "), 
-                                React.DOM.li(null, "Advanced Filters "), 
-                                React.DOM.li(null, "Download & History")
+                        React.DOM.div({key: "filters", id: "options", className: "clearfix"}, 
+                            React.DOM.ul({id: "options-menu", onClick: this.showPanel}, 
+                                React.DOM.li({className: "active", 'data-panel': "sorting"}, "Sorting"), 
+                                React.DOM.li({'data-panel': "filters"}, "Advanced Filters"), 
+                                React.DOM.li({'data-panel': "download"}, "Download & History")
                             ), 
-                            React.DOM.div({className: "clearfix panel active", id: "filter-sort"}, 
-                                React.DOM.label(null, "Sort by"), 
-                                React.DOM.select(null, React.DOM.option({value: "select"}, "select")), 
-                                React.DOM.label(null, "Sort direction"), 
-                                React.DOM.select(null, React.DOM.option({value: "select"}, "select"))
+                            React.DOM.div({className: "clearfix section active", id: "sorting"}, 
+                                React.DOM.div({className: "option-group"}, 
+                                    React.DOM.label(null, "Sort by"), 
+                                    React.DOM.select({className: "direction form-control"}, 
+                                        React.DOM.option(null, "Ascending"), 
+                                        React.DOM.option(null, "Descending")
+                                    ), 
+                                    React.DOM.select({className: "name form-control"}, 
+                                        React.DOM.option(null, "Scientific Name")
+                                    )
+
+                                ), 
+                                React.DOM.div({className: "option-group-add"}, 
+                                     "Add another sort  ", React.DOM.span({className: "glyphicon glyphicon-plus"})
+                                )
                             ), 
-                            React.DOM.div({className: "clearfix panel", id: "filter-control"}, 
+                            React.DOM.div({className: "clearfix section", id: "filters"}, 
                                 React.DOM.h4(null, "Advanced Filters"), 
                                 React.DOM.select({placeholder: "select to add"}, React.DOM.option({value: "select"}, "select to add"))
                             ), 
-                            React.DOM.div({className: "panel"}, 
-                                "Scientific Name", 
-                                React.DOM.textarea(null)
+                            React.DOM.div({className: "clearfix section", id: "download"}, 
+                                React.DOM.label(null, "Download Current Result Set")
                             )
                         )
                     ), 
                     React.DOM.div({id: "map-box"}, 
                         React.DOM.div({id: "map"})
                     )
+                ), 
+                React.DOM.div({id: "results"}, 
+                    React.DOM.ul({id: "results-menu"}, 
+                        React.DOM.li(null, "Table View"), 
+                        React.DOM.li(null, "Label View"), 
+                        React.DOM.li(null, "Images")
+                    ), 
+                    React.DOM.div({className: "panel"}), 
+                    React.DOM.div({className: "panel"}), 
+                    React.DOM.div({className: "panel"})
                 )
             )
         )

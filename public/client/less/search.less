@@ -1,7 +1,10 @@
 @bggrey: #fafafa;
+@bggreydark: #f0f0f0;
+@bggreymed: #f9f9f9;
 @idbgreen: #6aaa51;
 @idblightgreen: #C0E4B3;
 @idblightred: #FFDDC7;
+@border: #ccc;
 // Material colors palette
 @red: #F44336;
 @pink: #E91E63;
@@ -35,7 +38,11 @@
     .checkbox{
         display:inline-block;
         margin-right:20px;
+        margin-left:10px;
         font-size:1.1em;
+    }
+    .checkbox:first-of-type{
+        padding-left:40px;
     }
 }
 
@@ -43,35 +50,47 @@
     width:100%;
     margin:0px;
     padding:0px;
-   
+
     #options-menu{
         list-style-type: none;
-        margin:5px 5px 0px 15px;
+        margin:5px 5px 1px 15px;
         padding:0px;
         width:100%;
         position:relative;
         z-index:100;
+
         li{
             display: inline;
-            border: 1px solid #999;
+            border: 1px solid @border;
             border-bottom: none;
             margin:0px 2px;
-            padding:2px 4px;
+            padding:3px 6px;
             border-radius:3px 3px 0px 0px;
+            background-color: white;
+
+        }
+        li:hover{
+            cursor:pointer;
         }
         li.active{
-            border-bottom:1px solid @bggrey;
-            padding-bottom:6px; 
+            background-color: @bggreydark;
+            border-bottom:1px solid @bggreydark;
+            padding-bottom:3px; 
+        }
+        li.active:hover{
+            cursor:auto;
         }
     }
-    .panel{
+    .section{
         display:none;
-        width:97%;
-        border:1px solid #999;
-        margin:0px 5px;
-        min-height:200px;
+        width:100%;
+        border-top:1px solid @border;
+        border-bottom:1px solid @border;
+        border-radius:none;
+        margin:0px;
+        min-height:240px;
     }
-    .panel:first-of-type{
+    .section:first-of-type{
         display:block;
     }
 
@@ -89,19 +108,46 @@
         }
     }
 }
-#filter-sort{
+#sorting{
     width:50%;
     display:block;
     float:left;
-     border-bottom:1px solid #999;
-     min-height:100px;
-    select{
+    border-bottom:1px solid #999;
+    min-height:100px;
+    .option-group{
+        margin:0px;
+        background-color: @bggreydark;
         display:inline-block;
-        width:90%;
-        background-color: white;
-        height:22px;
-        margin:0px 10px;
-        border-radius:3px;
+        width:100%;
+        padding:5px;
+        border-bottom:1px solid @border;
+        select{
+            display:inline;
+            background-color: white;
+           
+            margin:0px 2px;
+            border-radius:3px;
+            float:right;
+        }
+        label{
+            margin-top:8px;
+            dispay:inline;
+            float:left;
+        }
+        .name{
+            width:50%;
+        }
+        .direction{
+            width:25%;
+        }
+    }
+    .option-group-add{
+        text-align: right;
+        padding:4px 7px;
+        background-color:@bggreymed;
+        border-bottom:1px solid @border;
+        border-top:1px solid white;
+        margin-top:0px;
     }
     label{
         margin:2px 10px;
@@ -115,7 +161,7 @@
     padding:10px;
     display:block;
     float:left;
-     border:1px solid #999;
+     border:1px solid @border;
     border-bottom:1px solid green;
     border-right:none;
     select{
@@ -135,10 +181,35 @@
     margin:5px 10px;
     height:400px;
     display:block;
-    border:1px solid #999;
+    border:1px solid @border;
     border-radius:4px;
     position:relative;
 }
+
+#results{
+    margin-top:20px;
+    #results-menu{
+        list-style-type: none;
+        margin:0px;
+        li{
+            display:inline;
+            margin:0px 3px;
+            font-size:1.2em;
+            font-weight:bold;
+            border:1px solid @border;
+            border-bottom:none;
+            padding:4px 8px;
+            border-radius:3px 3px 0px 0px;
+        }
+    }
+    #results-menu.active{
+
+    }
+    .panel{
+        display:none;
+    }
+}
+
 @media(max-width:1360px){
     #search{
         width:30%;
@@ -179,7 +250,7 @@
         width:49%;
     }
 }
-@media (max-width: 700px){
+@media(max-width: 700px){
     #search, #search-any{
         float:none;
         width:100%

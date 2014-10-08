@@ -8,11 +8,19 @@ var _ = require('underscore');
 
 
 module.exports = React.createClass({
+    showPanel: function(event){
+        debugger
+        $('#options-menu .active').removeClass('active');
+        var panel = $(event.target).addClass('active').attr('data-panel');
+        
+        $('#options .section').hide();
+        $('#options #'+panel).show();
+    },
     render: function(){
 
         return(
             <div key='react'>
-                <div key={'left'} className="row">
+                <div id="top" className="clearfix">
                     <div key='fulltext' id="search" className="clearfix">
                         
                         <div id="search-any" className="clearfix">
@@ -34,31 +42,50 @@ module.exports = React.createClass({
                                 </label>
                             </div>
                         </div>
-                        <div key='filters' id="options">
-                            <ul id="options-menu">
-                                <li>Sorting </li>
-                                <li>Advanced Filters </li>
-                                <li>Download &amp; History</li>
+                        <div key='filters' id="options" className="clearfix">
+                            <ul id="options-menu" onClick={this.showPanel}>
+                                <li className="active" data-panel="sorting">Sorting</li>
+                                <li data-panel="filters">Advanced Filters</li>
+                                <li data-panel="download">Download &amp; History</li>
                             </ul>
-                            <div className="clearfix panel active" id="filter-sort">
-                                <label>Sort by</label>
-                                <select><option value="select">select</option></select>
-                                <label>Sort direction</label>
-                                <select><option value="select">select</option></select>
+                            <div className="clearfix section active" id="sorting">
+                                <div className="option-group">
+                                    <label>Sort by</label>
+                                    <select className="direction form-control">
+                                        <option>Ascending</option>
+                                        <option>Descending</option>
+                                    </select>
+                                    <select className="name form-control">
+                                        <option>Scientific Name</option>
+                                    </select>
+
+                                </div>
+                                <div className="option-group-add">
+                                     Add another sort &nbsp;<span className="glyphicon glyphicon-plus"></span> 
+                                </div>
                             </div>
-                            <div className="clearfix panel" id="filter-control">
+                            <div className="clearfix section" id="filters">
                                 <h4>Advanced Filters</h4>
                                 <select placeholder="select to add"><option value="select">select to add</option></select>
                             </div>
-                            <div className="panel">
-                                Scientific Name
-                                <textarea></textarea>
+                            <div className="clearfix section" id="download">
+                                <label>Download Current Result Set</label>
                             </div>
                         </div>
                     </div>
                     <div id="map-box">
                         <div id="map"></div>
                     </div>
+                </div>
+                <div id="results">
+                    <ul id="results-menu">
+                        <li>Table View</li>
+                        <li>Label View</li>
+                        <li>Images</li>
+                    </ul>
+                    <div className="panel"></div>
+                    <div className="panel"></div>
+                    <div className="panel"></div>
                 </div>
             </div>
         )

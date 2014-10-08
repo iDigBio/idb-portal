@@ -34,18 +34,23 @@ module.exports = React.createClass({
                                 </label>
                             </div>
                         </div>
-                        <div key='filters' id="search-filters">
-                            <div className="clearfix" id="filter-sort">
+                        <div key='filters' id="options">
+                            <ul id="options-menu">
+                                <li>Sorting </li>
+                                <li>Advanced Filters </li>
+                                <li>Download &amp; History</li>
+                            </ul>
+                            <div className="clearfix panel active" id="filter-sort">
                                 <label>Sort by</label>
                                 <select><option value="select">select</option></select>
                                 <label>Sort direction</label>
                                 <select><option value="select">select</option></select>
                             </div>
-                            <div className="clearfix" id="filter-control">
+                            <div className="clearfix panel" id="filter-control">
                                 <h4>Advanced Filters</h4>
                                 <select placeholder="select to add"><option value="select">select to add</option></select>
                             </div>
-                            <div className="filter">
+                            <div className="panel">
                                 Scientific Name
                                 <textarea></textarea>
                             </div>

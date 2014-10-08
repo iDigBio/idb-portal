@@ -34,18 +34,23 @@ module.exports = React.createClass({displayName: 'exports',
                                 )
                             )
                         ), 
-                        React.DOM.div({key: "filters", id: "search-filters"}, 
-                            React.DOM.div({className: "clearfix", id: "filter-sort"}, 
+                        React.DOM.div({key: "filters", id: "options"}, 
+                            React.DOM.ul({id: "options-menu"}, 
+                                React.DOM.li(null, "Sorting "), 
+                                React.DOM.li(null, "Advanced Filters "), 
+                                React.DOM.li(null, "Download & History")
+                            ), 
+                            React.DOM.div({className: "clearfix panel active", id: "filter-sort"}, 
                                 React.DOM.label(null, "Sort by"), 
                                 React.DOM.select(null, React.DOM.option({value: "select"}, "select")), 
                                 React.DOM.label(null, "Sort direction"), 
                                 React.DOM.select(null, React.DOM.option({value: "select"}, "select"))
                             ), 
-                            React.DOM.div({className: "clearfix", id: "filter-control"}, 
+                            React.DOM.div({className: "clearfix panel", id: "filter-control"}, 
                                 React.DOM.h4(null, "Advanced Filters"), 
                                 React.DOM.select({placeholder: "select to add"}, React.DOM.option({value: "select"}, "select to add"))
                             ), 
-                            React.DOM.div({className: "filter"}, 
+                            React.DOM.div({className: "panel"}, 
                                 "Scientific Name", 
                                 React.DOM.textarea(null)
                             )

@@ -65,8 +65,12 @@ module.exports = React.createClass({displayName: 'exports',
                                 )
                             ), 
                             React.DOM.div({className: "clearfix section", id: "filters"}, 
-                                React.DOM.h4(null, "Advanced Filters"), 
-                                React.DOM.select({placeholder: "select to add"}, React.DOM.option({value: "select"}, "select to add"))
+                                React.DOM.div({className: "option-group"}, 
+                                    React.DOM.label(null, "Add a Filter"), 
+                                    React.DOM.select({className: "form-control", placeholder: "select to add"}, 
+                                        React.DOM.option({value: "select"}, "select to add")
+                                    )
+                                )
                             ), 
                             React.DOM.div({className: "clearfix section", id: "download"}, 
                                 React.DOM.label(null, "Download Current Result Set")

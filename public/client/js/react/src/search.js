@@ -65,8 +65,12 @@ module.exports = React.createClass({
                                 </div>
                             </div>
                             <div className="clearfix section" id="filters">
-                                <h4>Advanced Filters</h4>
-                                <select placeholder="select to add"><option value="select">select to add</option></select>
+                                <div className="option-group">
+                                    <label>Add a Filter</label>
+                                    <select className="form-control" placeholder="select to add">
+                                        <option value="select">select to add</option>
+                                    </select>
+                                </div>
                             </div>
                             <div className="clearfix section" id="download">
                                 <label>Download Current Result Set</label>

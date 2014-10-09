@@ -106,6 +106,7 @@ header{
         display:none;
         width:100%;
         border-top:1px solid @border;
+        background-color: @bggreydark;
         border-radius:none;
         margin:0px;
         min-height:240px;
@@ -113,27 +114,6 @@ header{
     .section:first-of-type{
         display:block;
     }
-
-    .filter{
-        padding:3px;
-        width:200px;
-        height:100px;
-        margin:0px;
-        background-color:@idblightgreen;
-        display:inline-block;
-        float:left;
-        textarea{
-            border-radius:3px;
-            margin:3px;
-        }
-    }
-}
-#sorting{
-    width:50%;
-    display:block;
-    float:left;
-   
-    min-height:100px;
     .option-group{
         margin:0px;
         background-color: @bggreydark;
@@ -151,6 +131,7 @@ header{
         }
         label{
             margin-top:8px;
+            margin-left:10px;
             dispay:inline;
             float:left;
         }
@@ -161,6 +142,14 @@ header{
             width:25%;
         }
     }
+}
+#sorting{
+    width:50%;
+    display:block;
+    float:left;
+   
+    min-height:100px;
+
     .option-group-add{
         text-align: right;
         padding:4px 7px;
@@ -173,26 +162,15 @@ header{
         margin:2px 10px;
     }
 }
-#filter-control{
-    min-height:100px;
-    width:50%;
-    min-width:100px;
-    background-color: @idblightgreen;
-    padding:10px;
-    display:block;
-    float:left;
-     border:1px solid @border;
-    border-bottom:1px solid green;
-    border-right:none;
+#filters{
+
     select{
-        width:90%;
-        height:25px;
+        display:inline;
+        width: 70%;
+        margin:5px;
+        float:left;
         border-radius:4px;
         background-color: white;
-        
-    }
-    h4{
-        margin-top:5px;
     }
 }
 
@@ -269,6 +247,7 @@ header{
         width:100%
     }
     #map{
+        margin:5px;
         float:none;
         width:97%;
     }

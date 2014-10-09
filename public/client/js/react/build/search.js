@@ -19,7 +19,7 @@ module.exports = React.createClass({displayName: 'exports',
     render: function(){
 
         return(
-            React.DOM.div({key: "react"}, 
+            React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
                     React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
                         
@@ -73,11 +73,9 @@ module.exports = React.createClass({displayName: 'exports',
                             )
                         )
                     ), 
-                    React.DOM.div({id: "map-box"}, 
-                        React.DOM.div({id: "map"})
-                    )
+                    React.DOM.div({id: "map"})
                 ), 
-                React.DOM.div({id: "results"}, 
+                React.DOM.div({id: "results", className: "clearfix"}, 
                     React.DOM.ul({id: "results-menu"}, 
                         React.DOM.li(null, "Table View"), 
                         React.DOM.li(null, "Label View"), 

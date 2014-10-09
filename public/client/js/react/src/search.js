@@ -24,7 +24,7 @@ module.exports = React.createClass({
                     <div key='fulltext' id="search" className="clearfix">
                         
                         <div id="search-any" className="clearfix">
-                            <h3>Start Searching</h3>
+                            <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
                             <div className="input-group">
                                 <input type="text" className="form-control" placeholder="search any field" />
                                 <a className="btn input-group-addon">Go</a>
@@ -44,11 +44,19 @@ module.exports = React.createClass({
                         </div>
                         <div key='filters' id="options" className="clearfix">
                             <ul id="options-menu" onClick={this.showPanel}>
-                                <li className="active" data-panel="sorting">Sorting</li>
-                                <li data-panel="filters">Advanced Filters</li>
+                                <li className="active" data-panel="filters">Advanced Filters</li>
+                                <li data-panel="sorting">Sorting</li>
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
-                            <div className="clearfix section active" id="sorting">
+                            <div className="clearfix section active" id="filters">
+                                <div className="option-group">
+                                    <label>Add a Filter</label>
+                                    <select className="form-control" placeholder="select to add">
+                                        <option value="select">select to add</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div className="clearfix section" id="sorting">
                                 <div className="option-group">
                                     <label>Sort by</label>
                                     <select className="direction form-control">
@@ -64,14 +72,7 @@ module.exports = React.createClass({
                                      Add another sort &nbsp;<span className="glyphicon glyphicon-plus"></span> 
                                 </div>
                             </div>
-                            <div className="clearfix section" id="filters">
-                                <div className="option-group">
-                                    <label>Add a Filter</label>
-                                    <select className="form-control" placeholder="select to add">
-                                        <option value="select">select to add</option>
-                                    </select>
-                                </div>
-                            </div>
+
                             <div className="clearfix section" id="download">
                                 <label>Download Current Result Set</label>
                             </div>

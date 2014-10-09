@@ -24,7 +24,7 @@ module.exports = React.createClass({displayName: 'exports',
                     React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
                         
                         React.DOM.div({id: "search-any", className: "clearfix"}, 
-                            React.DOM.h3(null, "Start Searching"), 
+                            React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), " Start Searching"), 
                             React.DOM.div({className: "input-group"}, 
                                 React.DOM.input({type: "text", className: "form-control", placeholder: "search any field"}), 
                                 React.DOM.a({className: "btn input-group-addon"}, "Go")
@@ -44,11 +44,19 @@ module.exports = React.createClass({displayName: 'exports',
                         ), 
                         React.DOM.div({key: "filters", id: "options", className: "clearfix"}, 
                             React.DOM.ul({id: "options-menu", onClick: this.showPanel}, 
-                                React.DOM.li({className: "active", 'data-panel': "sorting"}, "Sorting"), 
-                                React.DOM.li({'data-panel': "filters"}, "Advanced Filters"), 
+                                React.DOM.li({className: "active", 'data-panel': "filters"}, "Advanced Filters"), 
+                                React.DOM.li({'data-panel': "sorting"}, "Sorting"), 
                                 React.DOM.li({'data-panel': "download"}, "Download & History")
                             ), 
-                            React.DOM.div({className: "clearfix section active", id: "sorting"}, 
+                            React.DOM.div({className: "clearfix section active", id: "filters"}, 
+                                React.DOM.div({className: "option-group"}, 
+                                    React.DOM.label(null, "Add a Filter"), 
+                                    React.DOM.select({className: "form-control", placeholder: "select to add"}, 
+                                        React.DOM.option({value: "select"}, "select to add")
+                                    )
+                                )
+                            ), 
+                            React.DOM.div({className: "clearfix section", id: "sorting"}, 
                                 React.DOM.div({className: "option-group"}, 
                                     React.DOM.label(null, "Sort by"), 
                                     React.DOM.select({className: "direction form-control"}, 
@@ -64,14 +72,7 @@ module.exports = React.createClass({displayName: 'exports',
                                      "Add another sort  ", React.DOM.span({className: "glyphicon glyphicon-plus"})
                                 )
                             ), 
-                            React.DOM.div({className: "clearfix section", id: "filters"}, 
-                                React.DOM.div({className: "option-group"}, 
-                                    React.DOM.label(null, "Add a Filter"), 
-                                    React.DOM.select({className: "form-control", placeholder: "select to add"}, 
-                                        React.DOM.option({value: "select"}, "select to add")
-                                    )
-                                )
-                            ), 
+
                             React.DOM.div({className: "clearfix section", id: "download"}, 
                                 React.DOM.label(null, "Download Current Result Set")
                             )

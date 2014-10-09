@@ -24,7 +24,7 @@ module.exports = React.createClass({
                     <div key='fulltext' id="search" className="clearfix">
                         
                         <div id="search-any" className="clearfix">
-                            <h3>Start Searching</h3>
+                            <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
                             <div className="input-group">
                                 <input type="text" className="form-control" placeholder="search any field" />
                                 <a className="btn input-group-addon">Go</a>

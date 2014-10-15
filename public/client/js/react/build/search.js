@@ -5,14 +5,13 @@
 var React = require('react')
 var dwc = require('./lib/dwc_fields');
 var _ = require('underscore');
-
+var fields = require('../../lib/fields');
+var Filters = require('./search/filters');
 
 module.exports = React.createClass({displayName: 'exports',
     showPanel: function(event){
-        debugger
         $('#options-menu .active').removeClass('active');
         var panel = $(event.target).addClass('active').attr('data-panel');
-        
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
@@ -49,12 +48,7 @@ module.exports = React.createClass({displayName: 'exports',
                                 React.DOM.li({'data-panel': "download"}, "Download & History")
                             ), 
                             React.DOM.div({className: "clearfix section active", id: "filters"}, 
-                                React.DOM.div({className: "option-group"}, 
-                                    React.DOM.label(null, "Add a Filter"), 
-                                    React.DOM.select({className: "form-control", placeholder: "select to add"}, 
-                                        React.DOM.option({value: "select"}, "select to add")
-                                    )
-                                )
+                                Filters(null)
                             ), 
                             React.DOM.div({className: "clearfix section", id: "sorting"}, 
                                 React.DOM.div({className: "option-group"}, 

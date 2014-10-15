@@ -146,6 +146,24 @@ header {
   border-radius: 4px;
   background-color: white;
 }
+#filters #filters-holder {
+  overflow-y: scroll;
+  position: relative;
+  height: 100%;
+}
+#filters .filter label {
+  display: inline-block;
+  float: left;
+}
+#filters .filter textarea {
+  width: 70%;
+  float: right;
+  height: 50px;
+}
+#filters .filter .glyphicon {
+  display: inline-block;
+  float: right;
+}
 #results {
   margin-top: 20px;
   border-top: 1px solid #fefefe;

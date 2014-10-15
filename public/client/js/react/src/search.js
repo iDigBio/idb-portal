@@ -5,14 +5,13 @@
 var React = require('react')
 var dwc = require('./lib/dwc_fields');
 var _ = require('underscore');
-
+var fields = require('../../lib/fields');
+var Filters = require('./search/filters');
 
 module.exports = React.createClass({
     showPanel: function(event){
-        debugger
         $('#options-menu .active').removeClass('active');
         var panel = $(event.target).addClass('active').attr('data-panel');
-        
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
@@ -49,12 +48,7 @@ module.exports = React.createClass({
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
                             <div className="clearfix section active" id="filters">
-                                <div className="option-group">
-                                    <label>Add a Filter</label>
-                                    <select className="form-control" placeholder="select to add">
-                                        <option value="select">select to add</option>
-                                    </select>
-                                </div>
+                                <Filters />
                             </div>
                             <div className="clearfix section" id="sorting">
                                 <div className="option-group">

@@ -29,14 +29,22 @@ module.exports = React.createClass({
                     //noop
                 }else{
                     var disabled = self.state.filters.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var name = field.name;
                     flist.push(
-                        <option disabled={disabled} value={field.name}>{field.name}</option>
+                            <option disabled={disabled} value={field.name}>
+                                {field.name}
+                            </option>
                     );
+                    /*flist.push(
+                            <option disabled={disabled} value={field.name}>
+                                {field.name} <span>present/missing</span>
+                            </option>
+                    );*/
                 }
             });
             fgroups.push(
               <optgroup label={fields.groupNames[val]}>
-                {flist}
+                &nbsp;&nbsp;{flist}
               </optgroup>
             );
         });
@@ -45,9 +53,10 @@ module.exports = React.createClass({
             filters.push(
                 <div className="option-group filter">
                     <i className="glyphicon glyphicon-remove" onClick={self.removeFilter} data-remove={item}></i>
-                    <label>{item}</label>
+                    <label className="filter-name">{item}</label>
                     <textarea className="form-control" placeholder={fields.byName[item].dataterm}>
                     </textarea>
+
                 </div>
             )
         })
@@ -55,8 +64,8 @@ module.exports = React.createClass({
             <div>
                 <div className="option-group" id="filter-select">
                     <label>Add a Filter</label>
-                    <select className="form-control" placeholder="select to add" onChange={this.addFilter}>
-                        <option selected="selected" value="0">select to add</option>
+                    <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
+                        <option value="0">select to add</option>
                         {fgroups}
                     </select>
                 </div>

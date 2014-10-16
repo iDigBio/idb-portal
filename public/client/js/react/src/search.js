@@ -76,8 +76,8 @@ module.exports = React.createClass({
                 </div>
                 <div id="results" className="clearfix">
                     <ul id="results-menu">
-                        <li>Table View</li>
-                        <li>Label View</li>
+                        <li>List</li>
+                        <li>Labels</li>
                         <li>Images</li>
                     </ul>
                     <div className="panel"></div>

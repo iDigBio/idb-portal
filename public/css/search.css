@@ -144,11 +144,12 @@ header {
 }
 #filters #filter-select {
   margin: 0px;
+  border-bottom-color: #999;
 }
 #filters #filter-select select {
   display: inline;
   width: 70%;
-  margin: 0px;
+  margin: 0px 5px;
   float: right;
   border-radius: 4px;
   background-color: white;
@@ -156,25 +157,33 @@ header {
 #filters #filter-select select .field-group {
   margin-left: 10px;
 }
+#filters #filter-select select option:disabled {
+  color: darkred;
+}
+#filters #filter-select select optgroup.field {
+  display: block;
+  margin-left: 20px;
+}
 #filters #filters-holder {
   overflow-y: scroll;
   position: relative;
-  height: 234px;
+  height: 233px;
   margin: 0px;
   padding: 0px;
 }
 #filters .filter {
   margin-top: 0px;
+  border-right: 1px solid #cccccc;
+  padding: 4px;
 }
-#filters .filter label {
+#filters .filter .filter-name {
   word-wrap: break-all;
   word-break: break-word;
-  width: 25%;
+  width: 20%;
   font-size: .88em;
-  text-align: right;
 }
 #filters .filter textarea {
-  width: 65%;
+  width: 260px;
   float: right;
   margin-right: 5px;
   height: 50px;
@@ -182,6 +191,25 @@ header {
 #filters .filter .glyphicon {
   display: inline-block;
   float: right;
+}
+#filters .filter .glyphicon:hover {
+  cursor: pointer;
+}
+#filters .filter .presence {
+  width: 15%;
+  float: right;
+}
+#filters .filter .presence .checkbox {
+  display: block;
+  float: left;
+  margin: 0px;
+  padding: 0px;
+  font-size: .9em;
+}
+#filters .filter .presence .checkbox label {
+  float: left;
+  margin: 0px;
+  padding: 0px;
 }
 #results {
   margin-top: 20px;

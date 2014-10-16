@@ -78,7 +78,7 @@ header{
     width:100%;
     margin:0px;
     padding:0px;
-
+    heiht:inherit;
     #options-menu{
         list-style-type: none;
         margin:5px 5px 1px 15px;
@@ -124,7 +124,7 @@ header{
         margin:0px;
         margin-bottom:0px;
         background-color: @bggreydark;
-        display:inline-block;
+        display:table;
         width:100%;
         padding:5px;
         border-bottom: @brd;
@@ -150,6 +150,7 @@ header{
         }
     }
 }
+
 #sorting{
     width:50%;
     display:block;
@@ -171,30 +172,44 @@ header{
 }
 
 #filters{
+    height:inherit;
 
+    #filter-select{
+        margin:0px;
+        select{
+            display:inline;
+            width: 70%;
+            margin:0px;
+            float:right;
+            border-radius:4px;
+            background-color: white;
 
-    select{
-        display:inline;
-        width: 70%;
-        margin:5px;
-        float:left;
-        border-radius:4px;
-        background-color: white;
+            .field-group{
+                margin-left:10px;
+            }
+        }
     }
-
     #filters-holder{
         overflow-y:scroll;
         position:relative;
-        height:100%;
+        height:234px;
+        margin:0px;
+        padding:0px;
     }
     .filter{
+        margin-top:0px;
+
         label{
-            display:inline-block;
-            float:left;
+            word-wrap:break-all;
+            word-break:break-word;
+            width:25%;
+            font-size:.88em;
+            text-align: right;
         }
         textarea{
-            width:70%;
+            width:65%;
             float:right;
+            margin-right:5px;
             height:50px;
         }
         .glyphicon{

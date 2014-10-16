@@ -16,7 +16,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     removeFilter: function(event){
         var cur = this.state.filters;
-        cur = cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value)+1);
+        cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value),1);
         this.setState({filters: cur});
     },
     render: function(){
@@ -29,7 +29,9 @@ module.exports = React.createClass({displayName: 'exports',
                     //noop
                 }else{
                     var disabled = self.state.filters.indexOf(field.name) === -1 ? '' : 'disabled';
-                    flist.push(React.DOM.option({disabled: disabled, value: field.name}, field.name));
+                    flist.push(
+                        React.DOM.option({disabled: disabled, value: field.name}, field.name)
+                    );
                 }
             });
             fgroups.push(
@@ -51,10 +53,10 @@ module.exports = React.createClass({displayName: 'exports',
         })
         return (
             React.DOM.div(null, 
-                React.DOM.div({className: "option-group"}, 
+                React.DOM.div({className: "option-group", id: "filter-select"}, 
                     React.DOM.label(null, "Add a Filter"), 
                     React.DOM.select({className: "form-control", placeholder: "select to add", onChange: this.addFilter}, 
-                        React.DOM.option({selected: true, value: "0"}, "select to add"), 
+                        React.DOM.option({selected: "selected", value: "0"}, "select to add"), 
                         fgroups
                     )
                 ), 

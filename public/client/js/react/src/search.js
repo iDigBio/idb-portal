@@ -47,7 +47,7 @@ module.exports = React.createClass({
                                 <li data-panel="sorting">Sorting</li>
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
-                            <div className="clearfix section active" id="filters">
+                            <div className="section active" id="filters">
                                 <Filters />
                             </div>
                             <div className="clearfix section" id="sorting">

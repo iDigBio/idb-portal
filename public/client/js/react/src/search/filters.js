@@ -16,7 +16,7 @@ module.exports = React.createClass({
     },
     removeFilter: function(event){
         var cur = this.state.filters;
-        cur = cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value)+1);
+        cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value),1);
         this.setState({filters: cur});
     },
     render: function(){
@@ -29,7 +29,9 @@ module.exports = React.createClass({
                     //noop
                 }else{
                     var disabled = self.state.filters.indexOf(field.name) === -1 ? '' : 'disabled';
-                    flist.push(<option disabled={disabled} value={field.name}>{field.name}</option>);
+                    flist.push(
+                        <option disabled={disabled} value={field.name}>{field.name}</option>
+                    );
                 }
             });
             fgroups.push(
@@ -51,10 +53,10 @@ module.exports = React.createClass({
         })
         return (
             <div>
-                <div className="option-group">
+                <div className="option-group" id="filter-select">
                     <label>Add a Filter</label>
                     <select className="form-control" placeholder="select to add" onChange={this.addFilter}>
-                        <option selected value="0">select to add</option>
+                        <option selected="selected" value="0">select to add</option>
                         {fgroups}
                     </select>
                 </div>

@@ -146,26 +146,56 @@ header {
   margin: 0px;
   border-bottom-color: #999;
 }
+#filters #filter-select img {
+  display: inline-block;
+  float: left;
+  height: 45px;
+}
 #filters #filter-select #filter-type {
   list-style-type: none;
-  width: 120px;
+  width: 140px;
   display: block;
   float: left;
-  margin: 0px;
-  margin-left: 12px;
+  margin: 2px;
+  margin-left: 8px;
   margin-right: -2px;
+  padding: 1px;
+  border-left: 1px solid #cccccc;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  border-radius: 3px 0px 0px 3px;
+  background-color: #fefefe;
+  font-size: .9em;
+  /*li.active{
+                background-color: @bglight;
+                padding-right:4px;
+                border-right: @bglight;
+                z-index:100;
+                margin-right:0px;
+                margin-left:0px;
+                postion:fixed;
+            }*/
+}
+#filters #filter-select #filter-type .filter-type {
+  margin: 2px;
   padding: 0px;
+}
+#filters #filter-select #filter-type .filter-type label {
+  margin: 0px;
+  padding: 0px;
+}
+#filters #filter-select #filter-type .filter-type label input {
+  margin-right: 5px;
+  margin-top: 4px;
+  margin-left: 5px;
 }
 #filters #filter-select #filter-type li {
   text-decoration: none;
   font-size: .85em;
   font-weight: bold;
   text-align: left;
-  border-left: 1px solid #cccccc;
-  border-top: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  margin: 2px 0px 2px 0px;
-  padding: 2px 7px;
+  margin: 1px 0px 2px 0px;
+  padding: 0px 7px;
   border-radius: 3px 0px 0px 3px;
   display: inline-block;
   z-index: 100;
@@ -174,19 +204,12 @@ header {
 #filters #filter-select #filter-type li:hover {
   cursor: pointer;
 }
-#filters #filter-select #filter-type li.active {
-  background-color: #fefefe;
-  padding-right: 4px;
-  border-right: #fefefe;
-  z-index: 100;
-  margin-right: 0px;
-  margin-left: 0px;
-  postion: fixed;
-}
 #filters #filter-select #filter-selects {
   padding: 7px 5px 7px 5px;
   margin-top: 2px;
-  border: 1px solid #cccccc;
+  border-top: 1px solid #cccccc;
+  border-right: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
   display: block;
   float: left;
   background-color: #fefefe;
@@ -241,21 +264,14 @@ header {
 #filters .filter .glyphicon:hover {
   cursor: pointer;
 }
-#filters .filter .presence {
-  width: 15%;
-  float: right;
-}
-#filters .filter .presence .checkbox {
-  display: block;
-  float: left;
-  margin: 0px;
-  padding: 0px;
+#filters .filter .checkbox {
+  margin: 0px 8px 0px 0px;
+  padding: 0px 12px 0px 20px;
   font-size: .9em;
+  font-weight: bold;
 }
-#filters .filter .presence .checkbox label {
-  float: left;
-  margin: 0px;
-  padding: 0px;
+#filters .filter .checkbox label {
+  font-weight: bold;
 }
 #results {
   margin-top: 20px;

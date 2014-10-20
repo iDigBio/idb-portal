@@ -177,26 +177,48 @@ header{
     #filter-select{
         margin:0px;
         border-bottom-color: #999;
-        
+        img{
+            display:inline-block;
+            float:left;
+            height:45px;
+        }
         #filter-type{
             list-style-type: none;
-            width:120px;
+            width:140px;
             display:block;
             float:left;
-            margin:0px;
-            margin-left:12px;
+            margin:2px;
+            margin-left:8px;
             margin-right:-2px;
-            padding:0px;
+            padding:1px;
+            border-left:@brd;
+            border-top:@brd;
+            border-bottom:@brd;
+            border-radius: 3px 0px 0px 3px;
+            background-color: @bglight;
+            font-size:.9em;
+            .filter-type{
+                margin:2px;
+                padding:0px;
+
+                label{
+                    margin:0px;
+                    padding:0px;
+                    input{
+                        margin-right:5px;
+                        margin-top:4px;
+                        margin-left:5px;
+                    }
+                }
+            }
             li{
                 text-decoration: none;
                 font-size:.85em;
                 font-weight:bold;
                 text-align:left;
-                border-left:@brd;
-                border-top:@brd;
-                border-bottom:@brd;
-                margin:2px 0px 2px 0px;
-                padding:2px 7px;
+                
+                margin:1px 0px 2px 0px;
+                padding:0px 7px;
                 border-radius:3px 0px 0px 3px;
                 display:inline-block;
                 z-index:100;
@@ -206,7 +228,7 @@ header{
                 }
             }
 
-            li.active{
+            /*li.active{
                 background-color: @bglight;
                 padding-right:4px;
                 border-right: @bglight;
@@ -214,12 +236,14 @@ header{
                 margin-right:0px;
                 margin-left:0px;
                 postion:fixed;
-            }
+            }*/
         }
         #filter-selects{
             padding:7px 5px 7px 5px;
             margin-top:2px;
-            border:@brd;
+            border-top:@brd;
+            border-right:@brd;
+            border-bottom:@brd;
             display:block;
             float:left;
             background-color: @bglight;
@@ -280,21 +304,14 @@ header{
                 cursor:pointer;
             }
         }
-        .presence{
-            width: 15%;
-            .checkbox{
-                display:block;
-                float:left;
-                margin:0px;
-                padding:0px;
-                font-size: .9em;
-                label{
-                    float:left;
-                    margin:0px;
-                    padding:0px;
-                }
+        .checkbox{
+            margin:0px 8px 0px 0px;
+            padding: 0px 12px 0px 20px;
+            font-size: .9em;
+            font-weight: bold;
+            label{
+                font-weight:bold;
             }
-            float:right;
         }
     }
 }

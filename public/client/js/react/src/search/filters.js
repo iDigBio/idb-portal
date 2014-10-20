@@ -11,7 +11,7 @@ module.exports = React.createClass({
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.push(event.currentTarget.value);
+        cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
@@ -63,16 +63,21 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="option-group" id="filter-select">
-                    <label>Add a Filter</label>
-                    <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
-                        <option value="0">select to add</option>
-                        {fgroups}
-                    </select>
+                    <ul id="filter-type">
+                        <li className="active">Text Filter</li>
+                        <li>Presence Filter</li>
+                    </ul>
+                    <div id="filter-selects" className="clearfix">
+                        <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
+                            <option value="0">select to add</option>
+                            {fgroups}
+                        </select>
+                    </div>
                 </div>
                 <div id="filters-holder">
                     {filters}
                 </div>
             </div>
-        )
+        );
     }
 })

@@ -146,28 +146,74 @@ header {
   margin: 0px;
   border-bottom-color: #999;
 }
-#filters #filter-select select {
+#filters #filter-select #filter-type {
+  list-style-type: none;
+  width: 120px;
+  display: block;
+  float: left;
+  margin: 0px;
+  margin-left: 12px;
+  margin-right: -2px;
+  padding: 0px;
+}
+#filters #filter-select #filter-type li {
+  text-decoration: none;
+  font-size: .85em;
+  font-weight: bold;
+  text-align: left;
+  border-left: 1px solid #cccccc;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  margin: 2px 0px 2px 0px;
+  padding: 2px 7px;
+  border-radius: 3px 0px 0px 3px;
+  display: inline-block;
+  z-index: 100;
+  width: 120px;
+}
+#filters #filter-select #filter-type li:hover {
+  cursor: pointer;
+}
+#filters #filter-select #filter-type li.active {
+  background-color: #fefefe;
+  padding-right: 4px;
+  border-right: #fefefe;
+  z-index: 100;
+  margin-right: 0px;
+  margin-left: 0px;
+  postion: fixed;
+}
+#filters #filter-select #filter-selects {
+  padding: 7px 5px 7px 5px;
+  margin-top: 2px;
+  border: 1px solid #cccccc;
+  display: block;
+  float: left;
+  background-color: #fefefe;
+  border-radius: 0px 4px 4px 0px;
+}
+#filters #filter-select #filter-selects select {
   display: inline;
-  width: 70%;
+  width: 220px;
   margin: 0px 5px;
   float: right;
   border-radius: 4px;
   background-color: white;
 }
-#filters #filter-select select .field-group {
+#filters #filter-select #filter-selects select .field-group {
   margin-left: 10px;
 }
-#filters #filter-select select option:disabled {
+#filters #filter-select #filter-selects select option:disabled {
   color: darkred;
 }
-#filters #filter-select select optgroup.field {
+#filters #filter-select #filter-selects select optgroup.field {
   display: block;
   margin-left: 20px;
 }
 #filters #filters-holder {
   overflow-y: scroll;
   position: relative;
-  height: 233px;
+  height: 218px;
   margin: 0px;
   padding: 0px;
 }
@@ -238,6 +284,9 @@ header {
   #search {
     width: 400px;
   }
+  #filter-selects select {
+    width: 120px;
+  }
   #map {
     margin-left: 405px;
   }
@@ -275,10 +324,18 @@ header {
   }
 }
 @media (max-width: 660px) {
-  #search,
-  #search-any {
+  #search {
     float: none;
     width: 100%;
+  }
+  #filter-selects select {
+    width: 160px;
+  }
+  #filters-holder {
+    height: 100px;
+  }
+  #search-any {
+    width: 93%;
   }
   #map {
     margin: 5px;

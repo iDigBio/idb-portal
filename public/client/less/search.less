@@ -1,4 +1,5 @@
 @bggrey: #fafafa;
+@bglight: #fefefe;
 @bggreydark: #f0f0f0;
 @bggreymed: #f9f9f9;
 @idbgreen: #6aaa51;
@@ -95,7 +96,6 @@ header{
             padding:3px 6px;
             border-radius:3px 3px 0px 0px;
             background-color: white;
-
         }
         li:hover{
             cursor:pointer;
@@ -177,33 +177,82 @@ header{
     #filter-select{
         margin:0px;
         border-bottom-color: #999;
-        select{
-            display:inline;
-            width: 70%;
-            margin:0px 5px;
-            float:right;
-            border-radius:4px;
-            background-color: white;
+        
+        #filter-type{
+            list-style-type: none;
+            width:120px;
+            display:block;
+            float:left;
+            margin:0px;
+            margin-left:12px;
+            margin-right:-2px;
+            padding:0px;
+            li{
+                text-decoration: none;
+                font-size:.85em;
+                font-weight:bold;
+                text-align:left;
+                border-left:@brd;
+                border-top:@brd;
+                border-bottom:@brd;
+                margin:2px 0px 2px 0px;
+                padding:2px 7px;
+                border-radius:3px 0px 0px 3px;
+                display:inline-block;
+                z-index:100;
+                width:120px;
+                &:hover{
+                    cursor:pointer;
+                }
+            }
 
-            .field-group{
-                margin-left:10px;
-            }
-            option:disabled{
-                color:darkred;
-            }
-            option span{
-
-            }
-            optgroup.field{
-                display:block;
-                margin-left:20px;
+            li.active{
+                background-color: @bglight;
+                padding-right:4px;
+                border-right: @bglight;
+                z-index:100;
+                margin-right:0px;
+                margin-left:0px;
+                postion:fixed;
             }
         }
+        #filter-selects{
+            padding:7px 5px 7px 5px;
+            margin-top:2px;
+            border:@brd;
+            display:block;
+            float:left;
+            background-color: @bglight;
+            border-radius:0px 4px 4px 0px;
+            select{
+                display:inline;
+                width: 220px;
+                margin:0px 5px;
+                float:right;
+                border-radius:4px;
+                background-color: white;
+
+                .field-group{
+                    margin-left:10px;
+                }
+                option:disabled{
+                    color:darkred;
+                }
+                option span{
+
+                }
+                optgroup.field{
+                    display:block;
+                    margin-left:20px;
+                }
+            }            
+        }
+
     }
     #filters-holder{
         overflow-y:scroll;
         position:relative;
-        height:233px;
+        height:218px;
         margin:0px;
         padding:0px;
     }
@@ -281,6 +330,11 @@ header{
     #search{
         width:400px;
     }
+    #filter-selects{
+        select{
+            width:120px;
+        }
+    }
     #map{
         margin-left:405px;
     }
@@ -318,9 +372,20 @@ header{
     }
 }
 @media(max-width: 660px){
-    #search, #search-any{
+    #search {
         float:none;
         width:100%
+    }
+    #filter-selects{
+       select{
+         width:160px;
+       }
+    }
+    #filters-holder{
+        height:100px;
+    }
+    #search-any{
+        width:93%;
     }
     #map{
         margin:5px;

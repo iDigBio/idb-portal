@@ -11,7 +11,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.push(event.currentTarget.value);
+        cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
@@ -63,16 +63,21 @@ module.exports = React.createClass({displayName: 'exports',
         return (
             React.DOM.div(null, 
                 React.DOM.div({className: "option-group", id: "filter-select"}, 
-                    React.DOM.label(null, "Add a Filter"), 
-                    React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
-                        React.DOM.option({value: "0"}, "select to add"), 
-                        fgroups
+                    React.DOM.ul({id: "filter-type"}, 
+                        React.DOM.li({className: "active"}, "Text Filter"), 
+                        React.DOM.li(null, "Presence Filter")
+                    ), 
+                    React.DOM.div({id: "filter-selects", className: "clearfix"}, 
+                        React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
+                            React.DOM.option({value: "0"}, "select to add"), 
+                            fgroups
+                        )
                     )
                 ), 
                 React.DOM.div({id: "filters-holder"}, 
                     filters
                 )
             )
-        )
+        );
     }
 })

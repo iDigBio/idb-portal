@@ -5,13 +5,14 @@
 var React = require('react');
 var fields = require('../../../lib/fields');
 
+
 module.exports = React.createClass({displayName: 'exports',
     getInitialState: function(){
-        return {filters: [], filterType: 'text'};
+        return {filters: [], filtertype: 'text'};
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.unshift({name: event.currentTarget.value, type: this.state.filterType});
+        cur.unshift({name: event.currentTarget.value, type: this.state.filtertype});
         this.setState({filters: cur});
     },
     removeFilter: function(event){
@@ -20,7 +21,7 @@ module.exports = React.createClass({displayName: 'exports',
         this.setState({filters: cur});
     },
     changeFilterType: function(event){
-        this.setState({filterType: event.currentTarget.value});
+        this.setState({filtertype: event.currentTarget.value});
     },
     makeFilter: function(fltrObj){
         var type = fltrObj.type, name = fltrObj.name;
@@ -66,8 +67,8 @@ module.exports = React.createClass({displayName: 'exports',
     },
     render: function(){
         var self=this;
-        var ft = self.state.filterType;
-        var fgroups =[React.DOM.option({value: "0", key: "0"}, "select to add ", ft, " filter")];
+       
+        var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
         var filterlist = this.filters();
         _.each(groups,function(val){
@@ -122,6 +123,7 @@ module.exports = React.createClass({displayName: 'exports',
                     ), 
                     React.DOM.div({id: "filter-selects", className: "clearfix"}, 
                         React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
+                            SelectOption({text: this.state.filtertype}), 
                             fgroups
                         )
                     )
@@ -131,5 +133,13 @@ module.exports = React.createClass({displayName: 'exports',
                 )
             )
         );
+    }
+})
+
+var SelectOption = React.createClass({displayName: 'SelectOption',
+    render: function(){
+        return(
+            React.DOM.option({value: "0", defaultValue: true, dangerouslySetInnerHTML: {__html: 'Add a ' + this.props.text + ' filter'}})
+        )
     }
 })

@@ -314,6 +314,12 @@ header {
   #map {
     margin-left: 380px;
   }
+  #filter-select #filter-selects {
+    width: 180px;
+  }
+  #filter-select #filter-selects select {
+    width: 150px;
+  }
 }
 /*@media(max-width:1160px){
     #search{

@@ -21,14 +21,14 @@ header {
 #map {
   margin: 5px;
   margin-top: 0px;
-  margin-left: 430px;
-  height: 450px;
+  margin-left: 455px;
+  height: 470px;
   border: 1px solid #cccccc;
   border-radius: 4px;
 }
 #search {
-  width: 425px;
-  height: 450px;
+  width: 450px;
+  height: 470px;
   float: left;
   background-color: #fafafa;
   border-right: 1px solid #cccccc;
@@ -39,6 +39,9 @@ header {
 }
 #search #search-any {
   margin: 0px 10px;
+}
+#search #search-any h3:first-of-type {
+  margin-top: 10px;
 }
 #search .checkbox {
   display: inline-block;
@@ -207,36 +210,38 @@ header {
 #filters #filter-select #filter-selects {
   padding: 7px 5px 7px 5px;
   margin-top: 2px;
+  margin-left: 15px;
   border-top: 1px solid #cccccc;
   border-right: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
+  border-left: 1px solid #cccccc;
   display: block;
   float: left;
   background-color: #fefefe;
-  border-radius: 0px 4px 4px 0px;
+  border-radius: 4px;
 }
-#filters #filter-select #filter-selects select {
+#filters #filter-select select {
   display: inline;
-  width: 220px;
-  margin: 0px 5px;
+  width: 90%;
+  margin: 0px 15px;
   float: right;
   border-radius: 4px;
   background-color: white;
 }
-#filters #filter-select #filter-selects select .field-group {
+#filters #filter-select select .field-group {
   margin-left: 10px;
 }
-#filters #filter-select #filter-selects select option:disabled {
+#filters #filter-select select option:disabled {
   color: darkred;
 }
-#filters #filter-select #filter-selects select optgroup.field {
+#filters #filter-select select optgroup.field {
   display: block;
   margin-left: 20px;
 }
 #filters #filters-holder {
   overflow-y: scroll;
   position: relative;
-  height: 218px;
+  height: 263px;
   margin: 0px;
   padding: 0px;
 }
@@ -256,6 +261,24 @@ header {
   float: right;
   margin-right: 5px;
   height: 50px;
+}
+#filters .filter .presence {
+  width: 260px;
+  float: right;
+  margin: 0px;
+  margin-right: 16px;
+  padding: 0px;
+}
+#filters .filter .presence .checkbox {
+  margin: 0px 10px;
+  padding: 0px;
+}
+#filters .filter .presence .checkbox label {
+  margin: 0px;
+}
+#filters .filter .presence .checkbox:first-of-type {
+  margin-right: 40px;
+  margin-left: 0px;
 }
 #filters .filter .glyphicon {
   display: inline-block;
@@ -300,8 +323,17 @@ header {
   #search {
     width: 400px;
   }
-  #filter-selects select {
+  #filters select {
     width: 120px;
+  }
+  #filters #filters-holder {
+    height: 263px;
+  }
+  #filters .filter textarea {
+    width: 250px;
+  }
+  #filters .filter .presence {
+    width: 250px;
   }
   #map {
     margin-left: 405px;
@@ -314,11 +346,17 @@ header {
   #map {
     margin-left: 380px;
   }
-  #filter-select #filter-selects {
-    width: 180px;
+  #filters select {
+    width: 120px;
   }
-  #filter-select #filter-selects select {
-    width: 150px;
+  #filters #filters-holder {
+    height: 233px;
+  }
+  #filters .filter textarea {
+    width: 230px;
+  }
+  #filters .filter .presence {
+    width: 230px;
   }
 }
 /*@media(max-width:1160px){

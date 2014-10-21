@@ -12,7 +12,7 @@ module.exports = React.createClass({
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.unshift({name: event.currentTarget.value, type: this.state.filtertype});
+        cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
@@ -23,16 +23,34 @@ module.exports = React.createClass({
     changeFilterType: function(event){
         this.setState({filtertype: event.currentTarget.value});
     },
-    makeFilter: function(fltrObj){
-        var type = fltrObj.type, name = fltrObj.name;
+    presenceCheck: function(event){
+        
+    },
+    makeFilter: function(name){
+        //var type = fltrObj.type, name = fltrObj.name;
+        var type = 'text';
         switch(type){
             case 'text':
                 return(
-                    <div className="option-group filter">
+                    <div className="option-group filter" id={name+'-filter'}>
                         <i className="glyphicon glyphicon-remove" onClick={this.removeFilter} data-remove={name}></i>
                         <label className="filter-name">{name}</label>
-                        <textarea className="form-control" placeholder={fields.byName[name].dataterm}>
+                        <textarea className="form-control" name={name} placeholder={fields.byName[name].dataterm}>
                         </textarea>
+                        <div className="presence">
+                            <div className="checkbox">
+                                <label>
+                                    <input type="checkbox" name={name} value="exists" onClick={this.presenceCheck}/>
+                                    Present
+                                </label>
+                            </div>
+                            <div className="checkbox">
+                                <label>
+                                    <input type="checkbox" name={name} value="missing" onClick={this.presenceCheck}/>
+                                    Missing
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 );
             case 'presence':
@@ -105,12 +123,25 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="option-group" id="filter-select">
+                    <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
+                        <option value="0" defaultValue>Add a field filter</option>
+                        {fgroups}
+                    </select>
+                </div>
+                <div id="filters-holder">
+                    {filters}
+                </div>
+            </div>
+        );
+    }
+})
 
+var old = (
                     <div className="clearfix" id="filter-type">
-                    <img src="/portal/img/type.svg"/>
-                       <div className="filter-type">
+                       <img src="/portal/img/type.svg"/>
+                        <div className="filter-type">
                             <label >
-                                <input onChange={this.changeFilterType} type="radio" name="filter-type" value="text"/>
+                                <input onChange={this.changeFilterType} type="radio" name="filter-type" value="text" selected/>
                                 Text Filter
                             </label>
                         </div>
@@ -121,23 +152,11 @@ module.exports = React.createClass({
                             </label>
                        </div>
                     </div>
-                    <div id="filter-selects" className="clearfix">
-                        <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
-                            <SelectOption text={this.state.filtertype} />
-                            {fgroups}
-                        </select>
-                    </div>
-                </div>
-                <div id="filters-holder">
-                    {filters}
-                </div>
-            </div>
-        );
-    }
-})
 
+    )
 var SelectOption = React.createClass({
     render: function(){
+
         return(
             <option value="0" defaultValue dangerouslySetInnerHTML={{__html: 'Add a ' + this.props.text + ' filter' }}></option>
         )

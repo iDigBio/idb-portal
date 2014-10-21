@@ -12,7 +12,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.unshift({name: event.currentTarget.value, type: this.state.filtertype});
+        cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
@@ -23,15 +23,33 @@ module.exports = React.createClass({displayName: 'exports',
     changeFilterType: function(event){
         this.setState({filtertype: event.currentTarget.value});
     },
-    makeFilter: function(fltrObj){
-        var type = fltrObj.type, name = fltrObj.name;
+    presenceCheck: function(event){
+        
+    },
+    makeFilter: function(name){
+        //var type = fltrObj.type, name = fltrObj.name;
+        var type = 'text';
         switch(type){
             case 'text':
                 return(
-                    React.DOM.div({className: "option-group filter"}, 
+                    React.DOM.div({className: "option-group filter", id: name+'-filter'}, 
                         React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
                         React.DOM.label({className: "filter-name"}, name), 
-                        React.DOM.textarea({className: "form-control", placeholder: fields.byName[name].dataterm}
+                        React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm}
+                        ), 
+                        React.DOM.div({className: "presence"}, 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox", name: name, value: "exists", onClick: this.presenceCheck}), 
+                                    "Present"
+                                )
+                            ), 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox", name: name, value: "missing", onClick: this.presenceCheck}), 
+                                    "Missing"
+                                )
+                            )
                         )
                     )
                 );
@@ -105,27 +123,9 @@ module.exports = React.createClass({displayName: 'exports',
         return (
             React.DOM.div(null, 
                 React.DOM.div({className: "option-group", id: "filter-select"}, 
-
-                    React.DOM.div({className: "clearfix", id: "filter-type"}, 
-                    React.DOM.img({src: "/portal/img/type.svg"}), 
-                       React.DOM.div({className: "filter-type"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "text"}), 
-                                "Text Filter"
-                            )
-                        ), 
-                        React.DOM.div({className: "filter-type"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "presence"}), 
-                                "Presence Filter"
-                            )
-                       )
-                    ), 
-                    React.DOM.div({id: "filter-selects", className: "clearfix"}, 
-                        React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
-                            SelectOption({text: this.state.filtertype}), 
-                            fgroups
-                        )
+                    React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
+                        React.DOM.option({value: "0", defaultValue: true}, "Add a field filter"), 
+                        fgroups
                     )
                 ), 
                 React.DOM.div({id: "filters-holder"}, 
@@ -136,8 +136,27 @@ module.exports = React.createClass({displayName: 'exports',
     }
 })
 
+var old = (
+                    React.DOM.div({className: "clearfix", id: "filter-type"}, 
+                       React.DOM.img({src: "/portal/img/type.svg"}), 
+                        React.DOM.div({className: "filter-type"}, 
+                            React.DOM.label(null, 
+                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "text", selected: true}), 
+                                "Text Filter"
+                            )
+                        ), 
+                        React.DOM.div({className: "filter-type"}, 
+                            React.DOM.label(null, 
+                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "presence"}), 
+                                "Presence Filter"
+                            )
+                       )
+                    )
+
+    )
 var SelectOption = React.createClass({displayName: 'SelectOption',
     render: function(){
+
         return(
             React.DOM.option({value: "0", defaultValue: true, dangerouslySetInnerHTML: {__html: 'Add a ' + this.props.text + ' filter'}})
         )

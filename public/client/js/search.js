@@ -20,10 +20,11 @@ var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
 
 var map = L.map('map',{
     center: [0,0],
-    zoom: 0,
+    zoom: 2,
     layers: [base],
     scrollWheelZoom: true,
-    boxZoom: false
+    boxZoom: false,
+    zoomControl: false
 });
 
 

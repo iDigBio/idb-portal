@@ -45,15 +45,15 @@ header{
 #map{
     margin:5px;
     margin-top:0px;
-    margin-left:430px;
-    height:450px;
+    margin-left:455px;
+    height:470px;
     border: @brd;
     border-radius:4px;  
 }
 
 #search{
-    width:425px;
-    height:450px;
+    width:450px;
+    height:470px;
     float:left;
     background-color: @bggrey;
     border-right: @brd;
@@ -63,6 +63,9 @@ header{
     display:inline-block;
     #search-any{
         margin:0px 10px;
+        h3:first-of-type{
+            margin-top:10px;
+        }
     }
     .checkbox{
         display:inline-block;
@@ -241,42 +244,44 @@ header{
         #filter-selects{
             padding:7px 5px 7px 5px;
             margin-top:2px;
+            margin-left:15px;
             border-top:@brd;
             border-right:@brd;
             border-bottom:@brd;
+            border-left:@brd;
             display:block;
             float:left;
             background-color: @bglight;
-            border-radius:0px 4px 4px 0px;
-            select{
-                display:inline;
-                width: 220px;
-                margin:0px 5px;
-                float:right;
-                border-radius:4px;
-                background-color: white;
-
-                .field-group{
-                    margin-left:10px;
-                }
-                option:disabled{
-                    color:darkred;
-                }
-                option span{
-
-                }
-                optgroup.field{
-                    display:block;
-                    margin-left:20px;
-                }
-            }            
+            border-radius:4px;
+            
         }
+        select{
+            display:inline;
+            width: 90%;
+            margin:0px 15px;
+            float:right;
+            border-radius:4px;
+            background-color: white;
 
+            .field-group{
+                margin-left:10px;
+            }
+            option:disabled{
+                color:darkred;
+            }
+            option span{
+
+            }
+            optgroup.field{
+                display:block;
+                margin-left:20px;
+            }
+        }
     }
     #filters-holder{
         overflow-y:scroll;
         position:relative;
-        height:218px;
+        height:263px;
         margin:0px;
         padding:0px;
     }
@@ -289,13 +294,30 @@ header{
             word-break:break-word;
             width:20%;
             font-size:.88em;
-
         }
         textarea{
             width:260px;
             float:right;
             margin-right:5px;
             height:50px;
+        }
+        .presence{
+            width:260px;
+            float:right;
+            margin:0px;
+            margin-right:16px;
+            padding:0px;
+            .checkbox{
+                margin:0px 10px;
+                padding:0px;
+                label{
+                    margin:0px;
+                }
+            }
+            .checkbox:first-of-type{
+                margin-right:40px;
+                margin-left:0px;
+            }
         }
         .glyphicon{
             display:inline-block;
@@ -347,9 +369,20 @@ header{
     #search{
         width:400px;
     }
-    #filter-selects{
+    #filters{
         select{
             width:120px;
+        }
+        #filters-holder{
+            height:263px;
+        }
+        .filter{
+            textarea{
+                width:250px;
+            }
+            .presence{
+                width:250px;
+            }
         }
     }
     #map{
@@ -364,16 +397,22 @@ header{
         margin-left:380px;
     }
 
-    #filter-select{
-        #filter-selects{
-            width:180px;
-            select{
-                width:150px;
+    #filters{
+        select{
+            width:120px;
+        }
+        #filters-holder{
+            height:233px;
+        }
+        .filter{
+            textarea{
+                width:230px;
             }
-        }            
+            .presence{
+                width:230px;
+            }
+        }
     }
- 
-
 }
 /*@media(max-width:1160px){
     #search{

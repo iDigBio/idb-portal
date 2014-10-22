@@ -25,6 +25,7 @@
 @bluegrey: #607D8B;
 @brown: #795548;
 @lightgrey: #ECECEC;
+
 #main,#react-wrapper,#top,body{
     background-color: @bggrey;
     margin:0px;
@@ -286,6 +287,8 @@ header{
         padding:0px;
     }
     .filter{
+        
+
         margin-top:0px;
         border-right: @brd;
         padding:4px;
@@ -295,12 +298,17 @@ header{
             width:20%;
             font-size:.88em;
         }
-        textarea{
-            width:260px;
-            float:right;
-            margin-right:5px;
-            height:50px;
+        .text{
+            position:relative;
+            textarea{
+                width:260px;
+                float:right;
+                margin-right:5px;
+                height:50px;
+            }
+            @import (less) "./search/autocomplete.less";
         }
+
         .presence{
             width:260px;
             float:right;
@@ -460,3 +468,4 @@ header{
         width:97%;
     }
 }
+

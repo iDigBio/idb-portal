@@ -256,11 +256,34 @@ header {
   width: 20%;
   font-size: .88em;
 }
-#filters .filter textarea {
+#filters .filter .text {
+  position: relative;
+}
+#filters .filter .text textarea {
   width: 260px;
   float: right;
   margin-right: 5px;
   height: 50px;
+}
+#filters .filter .text .auto-list {
+  position: absolute;
+  left: 155px;
+  top: 50px;
+  z-index: 200;
+  display: block;
+  float: right;
+  background-color: white;
+  width: 200px;
+  text-decoration: none;
+  list-style-type: none;
+  padding: 0px;
+}
+#filters .filter .text .auto-list .auto-item {
+  text-decoration: none;
+  padding: 0px 6px;
+}
+#filters .filter .text .auto-list .auto-item:hover {
+  background-color: #BCD8F3;
 }
 #filters .filter .presence {
   width: 260px;

@@ -4,21 +4,20 @@
 
 var React = require('react');
 var fields = require('../../../lib/fields');
-
+var Autocomplete = require('./autocomplete');
 
 module.exports = React.createClass({displayName: 'exports',
     getInitialState: function(){
-        return {filters: [{name: 'Kingdom', text:{content:'test',disabled: false}, exists: false, missing: false}]};
+        return {filters: ['Kingdom']};
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        var filter = {name: event.currentTarget.value, text:{content:'',disabled:false},exists:false,missing:false};
-        cur.unshift(filter);
+        cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
         var cur = this.state.filters, filters=this.filters();
-        cur.splice(filters.indexOf(event.currentTarget.attributes['data-remove'].value),1);
+        cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value),1);
         this.setState({filters: cur});
     },
     filters: function(){
@@ -28,61 +27,13 @@ module.exports = React.createClass({displayName: 'exports',
         });
         return list;
     },
-    textType: function(event){
-        var ind = this.filters().indexOf(event.currentTarget.name);
-        var filters = this.state.filters, filter=filters[ind];   
-        filter.text.content=event.currentTarget.text;
-        filters[ind]=filter;
-        this.setState({filters: filters});     
-    },
-    presenceClick: function(event){
-        var ind = this.filters().indexOf(event.currentTarget.name);
-        var filters = this.state.filters, filter=filters[ind];
-        if(event.currentTarget.checked){
-            if(event.currentTarget.value=='exists'){
-                filter.exists = true;
-                filter.missing = false;                
-            }else if(event.currentTarget.value=='missing'){
-                filter.exists = false;
-                filter.missing = true;
-            }
-            filter.text.disabled=true;
-        }else{
-            filter.exists = false;
-            filter.missing = false;
-            filter.text.disabled = false;
-        }
-        filters[ind]=filter;
-        this.setState({filters: filters});
-
-    },
     makeFilter: function(filter){
         //var type = fltrObj.type, name = fltrObj.name;
-        var type = 'text', name = filter.name, tcontent=filter.text.content,
-        tdisabled=filter.text.disabled? 'disabled':'', exists=(filter.exists ? 'checked':''), missing=(filter.missing ? 'checked':'');
+        var type = 'text';
         switch(type){
             case 'text':
                 return(
-                    React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                        React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
-                        React.DOM.label({className: "filter-name"}, name), 
-                        React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm, disabled: tdisabled, onChange: this.textType, value: tcontent}
-                        ), 
-                        React.DOM.div({className: "presence"}, 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
-                                    "Present"
-                                )
-                            ), 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
-                                    "Missing"
-                                )
-                            )
-                        )
-                    )
+                    TextFilter({name: filter})
                 );     
         }
     },
@@ -134,3 +85,71 @@ module.exports = React.createClass({displayName: 'exports',
         );
     }
 });
+
+var TextFilter = React.createClass({displayName: 'TextFilter',
+    getInitialState: function(){
+        return {filter: {text:{content:'',disabled: false}, exists: false, missing: false}};
+    },
+    presenceClick: function(event){
+        //var ind = this.filters().indexOf(event.currentTarget.name);
+        var filter = this.state.filter;
+        if(event.currentTarget.checked){
+            if(event.currentTarget.value=='exists'){
+                filter.exists = true;
+                filter.missing = false;                
+            }else if(event.currentTarget.value=='missing'){
+                filter.exists = false;
+                filter.missing = true;
+            }
+            filter.text.disabled=true;
+        }else{
+            filter.exists = false;
+            filter.missing = false;
+            filter.text.disabled = false;
+        }
+        //filters[ind]=filter;
+        this.setState({filter: filter});
+
+    },
+    textType: function(event){
+        //var ind = this.filters().indexOf(event.currentTarget.name);
+        var text = event.currentTarget.value;
+        var filter = this.state.filter;//, filter=filters[ind];   
+        filter.text.content = text;
+        //filters[ind]=filter;
+     
+        this.setState({filter: filter});     
+    },
+    render: function(){
+        var filter = this.state.filter;
+        var name = this.props.name,
+        exists = filter.exists ? 'checked' : '',
+        missing = filter.missing ? 'checked' : '';
+    
+        return(
+            React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
+                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
+                React.DOM.label({className: "filter-name"}, name), 
+                React.DOM.div({className: "text"}, 
+                    React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm, disabled: filter.text.disabled, onChange: this.textType, value: filter.text.content}
+                    ), 
+                    Autocomplete({text: filter.text.content, name: name})
+                ), 
+                React.DOM.div({className: "presence"}, 
+                    React.DOM.div({className: "checkbox"}, 
+                        React.DOM.label(null, 
+                            React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
+                            "Present"
+                        )
+                    ), 
+                    React.DOM.div({className: "checkbox"}, 
+                        React.DOM.label(null, 
+                            React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
+                            "Missing"
+                        )
+                    )
+                )
+            )
+        )
+    }
+})

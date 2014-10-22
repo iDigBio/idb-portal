@@ -8,73 +8,18 @@ var fields = require('../../../lib/fields');
 
 module.exports = React.createClass({displayName: 'exports',
     getInitialState: function(){
-        return {filters: [], filtertype: 'text'};
+        return {filters: [{name: 'Kingdom', text:{content:'test',disabled: false}, exists: false, missing: false}]};
     },
     addFilter: function(event){
         var cur = this.state.filters;
-        cur.unshift(event.currentTarget.value);
+        var filter = {name: event.currentTarget.value, text:{content:'',disabled:false},exists:false,missing:false};
+        cur.unshift(filter);
         this.setState({filters: cur});
     },
     removeFilter: function(event){
-        var cur = this.state.filters;
-        cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value),1);
+        var cur = this.state.filters, filters=this.filters();
+        cur.splice(filters.indexOf(event.currentTarget.attributes['data-remove'].value),1);
         this.setState({filters: cur});
-    },
-    changeFilterType: function(event){
-        this.setState({filtertype: event.currentTarget.value});
-    },
-    presenceCheck: function(event){
-        
-    },
-    makeFilter: function(name){
-        //var type = fltrObj.type, name = fltrObj.name;
-        var type = 'text';
-        switch(type){
-            case 'text':
-                return(
-                    React.DOM.div({className: "option-group filter", id: name+'-filter'}, 
-                        React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
-                        React.DOM.label({className: "filter-name"}, name), 
-                        React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm}
-                        ), 
-                        React.DOM.div({className: "presence"}, 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: name, value: "exists", onClick: this.presenceCheck}), 
-                                    "Present"
-                                )
-                            ), 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: name, value: "missing", onClick: this.presenceCheck}), 
-                                    "Missing"
-                                )
-                            )
-                        )
-                    )
-                );
-            case 'presence':
-                return(
-                    React.DOM.div({className: "option-group filter"}, 
-                        React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
-                        React.DOM.label({className: "filter-name"}, name), 
-                        
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox"}), 
-                                    "Present"
-                                )
-                            ), 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox"}), 
-                                    "Missing"
-                                )
-                            )
-                        
-                    )
-                );       
-        }
     },
     filters: function(){
         var list = [];
@@ -83,6 +28,65 @@ module.exports = React.createClass({displayName: 'exports',
         });
         return list;
     },
+    textType: function(event){
+        var ind = this.filters().indexOf(event.currentTarget.name);
+        var filters = this.state.filters, filter=filters[ind];   
+        filter.text.content=event.currentTarget.text;
+        filters[ind]=filter;
+        this.setState({filters: filters});     
+    },
+    presenceClick: function(event){
+        var ind = this.filters().indexOf(event.currentTarget.name);
+        var filters = this.state.filters, filter=filters[ind];
+        if(event.currentTarget.checked){
+            if(event.currentTarget.value=='exists'){
+                filter.exists = true;
+                filter.missing = false;                
+            }else if(event.currentTarget.value=='missing'){
+                filter.exists = false;
+                filter.missing = true;
+            }
+            filter.text.disabled=true;
+        }else{
+            filter.exists = false;
+            filter.missing = false;
+            filter.text.disabled = false;
+        }
+        filters[ind]=filter;
+        this.setState({filters: filters});
+
+    },
+    makeFilter: function(filter){
+        //var type = fltrObj.type, name = fltrObj.name;
+        var type = 'text', name = filter.name, tcontent=filter.text.content,
+        tdisabled=filter.text.disabled? 'disabled':'', exists=(filter.exists ? 'checked':''), missing=(filter.missing ? 'checked':'');
+        switch(type){
+            case 'text':
+                return(
+                    React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
+                        React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
+                        React.DOM.label({className: "filter-name"}, name), 
+                        React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm, disabled: tdisabled, onChange: this.textType, value: tcontent}
+                        ), 
+                        React.DOM.div({className: "presence"}, 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
+                                    "Present"
+                                )
+                            ), 
+                            React.DOM.div({className: "checkbox"}, 
+                                React.DOM.label(null, 
+                                    React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
+                                    "Missing"
+                                )
+                            )
+                        )
+                    )
+                );     
+        }
+    },
+
     render: function(){
         var self=this;
        
@@ -101,11 +105,6 @@ module.exports = React.createClass({displayName: 'exports',
                                 field.name
                             )
                     );
-                    /*flist.push(
-                            <option disabled={disabled} value={field.name}>
-                                {field.name} <span>present/missing</span>
-                            </option>
-                    );*/
                 }
             });
             fgroups.push(
@@ -134,31 +133,4 @@ module.exports = React.createClass({displayName: 'exports',
             )
         );
     }
-})
-
-var old = (
-                    React.DOM.div({className: "clearfix", id: "filter-type"}, 
-                       React.DOM.img({src: "/portal/img/type.svg"}), 
-                        React.DOM.div({className: "filter-type"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "text", selected: true}), 
-                                "Text Filter"
-                            )
-                        ), 
-                        React.DOM.div({className: "filter-type"}, 
-                            React.DOM.label(null, 
-                                React.DOM.input({onChange: this.changeFilterType, type: "radio", name: "filter-type", value: "presence"}), 
-                                "Presence Filter"
-                            )
-                       )
-                    )
-
-    )
-var SelectOption = React.createClass({displayName: 'SelectOption',
-    render: function(){
-
-        return(
-            React.DOM.option({value: "0", defaultValue: true, dangerouslySetInnerHTML: {__html: 'Add a ' + this.props.text + ' filter'}})
-        )
-    }
-})
+});

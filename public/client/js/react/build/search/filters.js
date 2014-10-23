@@ -4,20 +4,19 @@
 
 var React = require('react');
 var fields = require('../../../lib/fields');
-var Autocomplete = require('./autocomplete');
 
 module.exports = React.createClass({displayName: 'exports',
     getInitialState: function(){
-        return {filters: ['Kingdom']};
+        return {filters: ['Kingdom','Phylum']};
     },
     addFilter: function(event){
         var cur = this.state.filters;
         cur.unshift(event.currentTarget.value);
         this.setState({filters: cur});
     },
-    removeFilter: function(event){
+    removeFilter: function(name){
         var cur = this.state.filters, filters=this.filters();
-        cur.splice(cur.indexOf(event.currentTarget.attributes['data-remove'].value),1);
+        cur.splice(cur.indexOf(name),1);
         this.setState({filters: cur});
     },
     filters: function(){
@@ -33,7 +32,7 @@ module.exports = React.createClass({displayName: 'exports',
         switch(type){
             case 'text':
                 return(
-                    TextFilter({name: filter})
+                    TextFilter({name: filter, onClick: this.removeFilter})
                 );     
         }
     },
@@ -43,14 +42,14 @@ module.exports = React.createClass({displayName: 'exports',
        
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
-        var filterlist = this.filters();
+     
         _.each(groups,function(val){
             var flist = [];
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled = filterlist.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled = self.state.filters.indexOf(field.name) === -1 ? '' : 'disabled';
                     flist.push(
                             React.DOM.option({disabled: disabled, value: field.name, key: field.name}, 
                                 field.name
@@ -125,7 +124,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             source: function(searchString, respCallback) {
                 var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
-                last = split[split.length-1],
+                last = split[split.length-1].toLowerCase(),
                 field = fields.byName[name].term,
                 query = {"aggs":{},"from":0,"size":0};
                 query.aggs["static_"+field]={"terms":{"field":field,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
@@ -140,7 +139,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             },
             focus: function (event,ui){
                 //adaption for textarea input with "or" query
-                var input = $(self).val().split('\n');
+                var input = $(this).val().split('\n');
                 if(input.length > 1){
                     input.pop();//remove partial line
                     ui.item.value = input.join('\n') + '\n' + ui.item.value;
@@ -152,6 +151,9 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             }
         });
     },
+    propClick: function(event){
+        this.props.onClick(event.currentTarget.attributes['data-remove'].value);
+    },
     render: function(){
         var filter = this.state.filter;
         var name = this.props.name,
@@ -160,7 +162,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     
         return(
             React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
+                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.propClick, 'data-remove': name}), 
                 React.DOM.label({className: "filter-name"}, name), 
                 React.DOM.div({className: "text"}, 
                     React.DOM.textarea({className: "form-control", name: name, 'data-name': name, 

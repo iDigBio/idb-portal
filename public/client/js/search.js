@@ -7,7 +7,7 @@ var L = require('leaflet/dist/leaflet');
 var SearchPage = require('./react/build/search');
 
 React.renderComponent(
-    <SearchPage key={'hello'}/>,
+    <SearchPage />,
     document.getElementById('main')
 )
 

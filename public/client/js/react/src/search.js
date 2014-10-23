@@ -15,6 +15,15 @@ module.exports = React.createClass({
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
+
+    getInitialState: function(){
+        return {search:{filters:[]}}
+    },
+
+    searchChange: function(obj){
+        return 
+    },
+
     render: function(){
 
         return(
@@ -48,7 +57,7 @@ module.exports = React.createClass({
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
                             <div className="section active" id="filters">
-                                <Filters />
+                                <Filters setFilters={this.setFilters}/>
                             </div>
                             <div className="clearfix section" id="sorting">
                                 <div className="option-group">

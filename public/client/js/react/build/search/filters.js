@@ -6,6 +6,12 @@ var React = require('react');
 var fields = require('../../../lib/fields');
 
 module.exports = React.createClass({displayName: 'exports',
+    filterStates: [],
+    filterStateChange: function(filterObj){
+        var list = this.filters();
+        this.filterStates[list.indexOf(filterObj.name)]=filterObj;
+        this.props.setFilters(this.filterStates);
+    },
     getInitialState: function(){
         return {filters: ['Kingdom','Phylum']};
     },
@@ -21,7 +27,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     filters: function(){
         var list = [];
-        _.each(this.state.filters,function(item){
+        _.each(this.filterStates,function(item){
             list.push(item.name);
         });
         return list;
@@ -32,7 +38,7 @@ module.exports = React.createClass({displayName: 'exports',
         switch(type){
             case 'text':
                 return(
-                    TextFilter({name: filter, onClick: this.removeFilter})
+                    TextFilter({name: filter, removeFilter: this.removeFilter, filterChange: this.filterStateChange})
                 );     
         }
     },
@@ -108,6 +114,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         }
         //filters[ind]=filter;
         this.setState({filter: filter});
+        this.props.filterChange(filter);
 
     },
     textType: function(event){
@@ -117,7 +124,8 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         filter.text.content = text;
         //filters[ind]=filter;
      
-        this.setState({filter: filter});     
+        this.setState({filter: filter});
+        this.props.filterChange(filter);     
     },
     setAutocomplete: function(event){
         $(event.currentTarget).autocomplete({
@@ -152,7 +160,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         });
     },
     propClick: function(event){
-        this.props.onClick(event.currentTarget.attributes['data-remove'].value);
+        this.props.removeFilter(event.currentTarget.attributes['data-remove'].value);
     },
     render: function(){
         var filter = this.state.filter;

@@ -47,7 +47,7 @@
     "request": "*",
     "less": "*",
     "bootstrap": "*",
-    "react-autocomplete": "*"
+    "jquery-ui-browserify": "*"
   },
   "devDependencies": {
     "assert": "*",

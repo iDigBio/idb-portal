@@ -1,6 +1,6 @@
 //required Global libs bundle
 window.$ = jQuery = require('jquery');
-require('./js/lib/jquery-ui.min');
+
 window._ = require('underscore');
 window.Backbone = require('backbone');
 Backbone.$ = $;

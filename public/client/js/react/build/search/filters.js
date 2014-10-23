@@ -120,6 +120,38 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
      
         this.setState({filter: filter});     
     },
+    setAutocomplete: function(event){
+        $(event.currentTarget).autocomplete({
+            source: function(searchString, respCallback) {
+                var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
+                var split = searchString.term.split('\n'),
+                last = split[split.length-1],
+                field = fields.byName[name].term,
+                query = {"aggs":{},"from":0,"size":0};
+                query.aggs["static_"+field]={"terms":{"field":field,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
+        
+                searchServer.esQuery('records', query, function(resp) {
+                    var list = [];
+                    $.each(resp.aggregations['static_' + field]['buckets'], function(index, obj) {
+                        list.push(obj.key);
+                    });
+                    respCallback(list);
+                });
+            },
+            focus: function (event,ui){
+                //adaption for textarea input with "or" query
+                var input = $(self).val().split('\n');
+                if(input.length > 1){
+                    input.pop();//remove partial line
+                    ui.item.value = input.join('\n') + '\n' + ui.item.value;
+                }    
+            },
+            messages: {
+                noResults: '',
+                results: function() {}
+            }
+        });
+    },
     render: function(){
         var filter = this.state.filter;
         var name = this.props.name,
@@ -131,9 +163,14 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
                 React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.removeFilter, 'data-remove': name}), 
                 React.DOM.label({className: "filter-name"}, name), 
                 React.DOM.div({className: "text"}, 
-                    React.DOM.textarea({className: "form-control", name: name, placeholder: fields.byName[name].dataterm, disabled: filter.text.disabled, onChange: this.textType, value: filter.text.content}
-                    ), 
-                    Autocomplete({text: filter.text.content, name: name})
+                    React.DOM.textarea({className: "form-control", name: name, 'data-name': name, 
+                        placeholder: fields.byName[name].dataterm, 
+                        disabled: filter.text.disabled, 
+                        onChange: this.textType, 
+                        onFocus: this.setAutocomplete, 
+                        value: filter.text.content
+                    }
+                    )
                 ), 
                 React.DOM.div({className: "presence"}, 
                     React.DOM.div({className: "checkbox"}, 

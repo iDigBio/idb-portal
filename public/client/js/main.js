@@ -3,6 +3,7 @@
 *this provides initial routing for per page app execution.
 *****/
 window.$ = require('jquery');
+require('jquery-ui-browserify');
 window.url = require('./lib/url');
 //window._ = require('underscore');
 //window.Backbone = require('backbone');

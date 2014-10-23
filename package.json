@@ -46,7 +46,8 @@
     "react": "~0.10.0",
     "request": "*",
     "less": "*",
-    "bootstrap": "*"
+    "bootstrap": "*",
+    "react-autocomplete": "*"
   },
   "devDependencies": {
     "assert": "*",

@@ -17,11 +17,14 @@ module.exports = React.createClass({
     },
 
     getInitialState: function(){
-        return {search:{filters:[]}}
+        return {search:{filters:false,fulltext:false,image:false,geopoint:false}};
     },
 
-    searchChange: function(obj){
-        return 
+    searchChange: function(key,val){
+        var search = this.state.search;
+        search[key]=val;
+        this.setState({search: search});
+        return true;
     },
 
     render: function(){
@@ -83,16 +86,7 @@ module.exports = React.createClass({
                     </div>
                     <div id="map"></div>
                 </div>
-                <div id="results" className="clearfix">
-                    <ul id="results-menu">
-                        <li>List</li>
-                        <li>Labels</li>
-                        <li>Images</li>
-                    </ul>
-                    <div className="panel"></div>
-                    <div className="panel"></div>
-                    <div className="panel"></div>
-                </div>
+                <Results search={this.state.search} />
             </div>
         )
     }

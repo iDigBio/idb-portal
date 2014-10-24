@@ -340,7 +340,7 @@ header {
   border-radius: 3px 3px 0px 0px;
 }
 #results .panel {
-  display: none;
+  border-top: 1px solid #ececec;
 }
 @media (max-width: 1360px) {
   #search {

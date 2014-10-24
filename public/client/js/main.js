@@ -10,6 +10,7 @@ window.url = require('./lib/url');
 //require('../../components/jquery.tablesorter/js/jquery.tablesorter.min.js');
 //Backbone.$ = $;
 require('./lib/searchserver');
+window.queryBuilder = require('./lib/querybuilder');
 //
 
 $(document).ready(function(){

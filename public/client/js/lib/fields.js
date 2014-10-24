@@ -37,21 +37,21 @@ var flds = {
     },
     "Family": {
         "term": "family",
-        "type": "text-sn",
+        "type": "text",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:family"
     },
     "Scientific Name": {
         "term": "scientificname",
-        "type": "text-sn",
+        "type": "text",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:scientificName"
     },
     "Genus": {
         "term": "genus",
-        "type": "text-sn",
+        "type": "text",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:genus"

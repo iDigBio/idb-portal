@@ -6,39 +6,54 @@ var React = require('react');
 var fields = require('../../../lib/fields');
 
 module.exports = React.createClass({
-    filterStates: [],
     filterStateChange: function(filterObj){
         var list = this.filters();
-        this.filterStates[list.indexOf(filterObj.name)]=filterObj;
-        this.props.setFilters(this.filterStates);
+        var filters = this.state.filters;
+        filters[list.indexOf(filterObj.name)] = filterObj;
+        this.setState({filters: filters});
+        this.props.searchChange('filters',this.state.filters);
+    },
+    newFilterState: function(name){
+        var type = fields.byName[name].type;
+        switch(type){
+            case 'text':
+                return {name: name, type: 'text', text:{content:'',disabled: false}, exists: false, missing: false};
+        }
     },
     getInitialState: function(){
-        return {filters: ['Kingdom','Phylum']};
+        var filters=[],self=this;
+        ['Kingdom','Phylum'].forEach(function(item){
+            filters.push(self.newFilterState(item));
+        });
+        return {filters: filters};
     },
     addFilter: function(event){
+        //var flist = this.filters();
         var cur = this.state.filters;
-        cur.unshift(event.currentTarget.value);
+        cur.unshift(this.newFilterState(event.currentTarget.value));
         this.setState({filters: cur});
     },
     removeFilter: function(name){
         var cur = this.state.filters, filters=this.filters();
-        cur.splice(cur.indexOf(name),1);
+        cur.splice(filters.indexOf(name),1);
         this.setState({filters: cur});
+        this.props.searchChange('filters',this.state.filters);
     },
     filters: function(){
         var list = [];
-        _.each(this.filterStates,function(item){
+        
+        _.each(this.state.filters,function(item){
             list.push(item.name);
         });
         return list;
     },
     makeFilter: function(filter){
         //var type = fltrObj.type, name = fltrObj.name;
-        var type = 'text';
-        switch(type){
+        //var type = 'text';
+        switch(filter.type){
             case 'text':
                 return(
-                    <TextFilter name={filter} removeFilter={this.removeFilter} filterChange={this.filterStateChange}/>
+                    <TextFilter filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>
                 );     
         }
     },
@@ -55,7 +70,7 @@ module.exports = React.createClass({
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled = self.state.filters.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled = self.filters().indexOf(field.name) === -1 ? '' : 'disabled';
                     flist.push(
                             <option disabled={disabled} value={field.name} key={field.name}>
                                 {field.name}
@@ -92,12 +107,8 @@ module.exports = React.createClass({
 });
 
 var TextFilter = React.createClass({
-    getInitialState: function(){
-        return {filter: {text:{content:'',disabled: false}, exists: false, missing: false}};
-    },
     presenceClick: function(event){
-        //var ind = this.filters().indexOf(event.currentTarget.name);
-        var filter = this.state.filter;
+        var filter = this.props.filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
                 filter.exists = true;
@@ -112,20 +123,13 @@ var TextFilter = React.createClass({
             filter.missing = false;
             filter.text.disabled = false;
         }
-        //filters[ind]=filter;
-        this.setState({filter: filter});
-        this.props.filterChange(filter);
-
+        this.props.changeFilter(filter);
     },
     textType: function(event){
-        //var ind = this.filters().indexOf(event.currentTarget.name);
         var text = event.currentTarget.value;
-        var filter = this.state.filter;//, filter=filters[ind];   
+        var filter = this.props.filter;//, filter=filters[ind];   
         filter.text.content = text;
-        //filters[ind]=filter;
-     
-        this.setState({filter: filter});
-        this.props.filterChange(filter);     
+        this.props.changeFilter(filter);     
     },
     setAutocomplete: function(event){
         $(event.currentTarget).autocomplete({
@@ -163,8 +167,8 @@ var TextFilter = React.createClass({
         this.props.removeFilter(event.currentTarget.attributes['data-remove'].value);
     },
     render: function(){
-        var filter = this.state.filter;
-        var name = this.props.name,
+        var filter = this.props.filter;
+        var name = filter.name,
         exists = filter.exists ? 'checked' : '',
         missing = filter.missing ? 'checked' : '';
     

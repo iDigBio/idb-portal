@@ -4,9 +4,10 @@
 
 var React = require('react')
 var dwc = require('./lib/dwc_fields');
-var _ = require('underscore');
+var _ = require('lodash');
 var fields = require('../../lib/fields');
 var Filters = require('./search/filters');
+var Results = require('./search/results');
 
 module.exports = React.createClass({
     showPanel: function(event){
@@ -17,16 +18,20 @@ module.exports = React.createClass({
     },
 
     getInitialState: function(){
-        return {search:{filters:false,fulltext:false,image:false,geopoint:false}};
+        return {search:{filters:[],fulltext:false,image:false,geopoint:false}};
     },
 
     searchChange: function(key,val){
-        var search = this.state.search;
+        var search = _.cloneDeep(this.state.search);
         search[key]=val;
         this.setState({search: search});
-        return true;
     },
 
+    checkClick: function(event){
+        var search = this.state.search;
+        this.searchChange(event.currentTarget.name, event.currentTarget.checked);
+        return true;
+    },
     render: function(){
 
         return(
@@ -42,13 +47,13 @@ module.exports = React.createClass({
                             </div>
                             <div className="checkbox">
                                 <label>
-                                    <input type="checkbox" />
+                                    <input type="checkbox" name="image" onChange={this.checkClick} checked={this.state.search.image ? 'checked':''}/>
                                     Must have image
                                 </label>
                             </div>
                             <div className="checkbox">
                                 <label>
-                                    <input type="checkbox" />
+                                    <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.state.search.geopoint ? 'checked':''}/>
                                     Must have map point
                                 </label>
                             </div>
@@ -60,7 +65,7 @@ module.exports = React.createClass({
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
                             <div className="section active" id="filters">
-                                <Filters setFilters={this.setFilters}/>
+                                <Filters searchChange={this.searchChange}/>
                             </div>
                             <div className="clearfix section" id="sorting">
                                 <div className="option-group">

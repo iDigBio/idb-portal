@@ -16,21 +16,20 @@ module.exports = React.createClass({displayName: 'exports',
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
-
     getInitialState: function(){
-        return {search:{filters:[],fulltext:false,image:false,geopoint:false}};
+        return {search:{filters:[],fulltext:'',image:false,geopoint:false}};
     },
-
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         search[key]=val;
         this.setState({search: search});
     },
-
     checkClick: function(event){
-        var search = this.state.search;
         this.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
+    },
+    textType: function(event){
+        this.searchChange('fulltext',event.currentTarget.value);
     },
     render: function(){
 
@@ -38,11 +37,10 @@ module.exports = React.createClass({displayName: 'exports',
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
                     React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
-                        
                         React.DOM.div({id: "search-any", className: "clearfix"}, 
                             React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), " Start Searching"), 
                             React.DOM.div({className: "input-group"}, 
-                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field"}), 
+                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType}), 
                                 React.DOM.a({className: "btn input-group-addon"}, "Go")
                             ), 
                             React.DOM.div({className: "checkbox"}, 

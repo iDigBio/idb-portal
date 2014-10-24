@@ -16,21 +16,20 @@ module.exports = React.createClass({
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
-
     getInitialState: function(){
-        return {search:{filters:[],fulltext:false,image:false,geopoint:false}};
+        return {search:{filters:[],fulltext:'',image:false,geopoint:false}};
     },
-
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         search[key]=val;
         this.setState({search: search});
     },
-
     checkClick: function(event){
-        var search = this.state.search;
         this.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
+    },
+    textType: function(event){
+        this.searchChange('fulltext',event.currentTarget.value);
     },
     render: function(){
 
@@ -38,11 +37,10 @@ module.exports = React.createClass({
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
                     <div key='fulltext' id="search" className="clearfix">
-                        
                         <div id="search-any" className="clearfix">
                             <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
                             <div className="input-group">
-                                <input type="text" className="form-control" placeholder="search any field" />
+                                <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} />
                                 <a className="btn input-group-addon">Go</a>
                             </div>
                             <div className="checkbox">

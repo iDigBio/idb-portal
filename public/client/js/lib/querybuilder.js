@@ -36,7 +36,7 @@ module.exports = (function(){
             var and = [];//main filter
             var ranges = {}; //collects various range inputs to be added to the and filter
             var geobounds = {}; //collects geobounds field values
-            var fulltext = search.fulltext;
+            var fulltext = helpers.strip(search.fulltext);
             /*query["sort"][so["sortName"]]={"order": so["sortDir"]};
             //always sort genus and specificepithet together
             if(so["sortName"]=='specificepithet'){

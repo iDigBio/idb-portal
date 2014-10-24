@@ -14,6 +14,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     render: function(){
         var search = this.props.search;
+     
         return(
             React.DOM.div({id: "results", className: "clearfix"}, 
                 React.DOM.ul({id: "results-menu"}, 
@@ -29,27 +30,23 @@ module.exports = React.createClass({displayName: 'exports',
 
 
 var ResultsPanel = React.createClass({displayName: 'ResultsPanel',
-
-    getInitialState: function(){
-        var query = queryBuilder.makeQuery(this.props.search), self=this;
+    getResults: function(searchObj){
+        var query = queryBuilder.makeQuery(searchObj), self=this;
         searchServer.esQuery('records',query,function(results){
-            self.setState({results: results.hits.hits, time: Date.now()},function(){
+            self.setState({results: results.hits.hits},function(){
                 self.forceUpdate();
             });
         });
-        return {results: [], time: Date.now()};
+    },
+    getInitialState: function(){
+        this.getResults(this.props.search);
+        return {results: []};
     },
     shouldComponentUpdate: function(nextProps, nextState){
-        //return JSON.stringify(nextProps.search) != JSON.stringify(this.props.search);
         return false;
     },
-    componentWillReceiveProps: function(){
-        var query = queryBuilder.makeQuery(this.props.search), self=this;
-        searchServer.esQuery('records',query,function(results){
-            self.setState({results: results.hits.hits, time: Date.now()},function(){
-                self.forceUpdate();
-            });
-        });
+    componentWillReceiveProps: function(nextProps){
+        this.getResults(nextProps.search);
     },
     render: function(){
         var columns = ['scientificname','genus','collectioncode','specificepithet','commonname'];

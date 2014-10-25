@@ -320,6 +320,7 @@ header {
   font-weight: bold;
 }
 #results {
+  margin: auto;
   margin-top: 20px;
   border-top: 1px solid #fefefe;
 }
@@ -338,9 +339,24 @@ header {
   border-bottom: none;
   padding: 4px 8px;
   border-radius: 3px 3px 0px 0px;
+  cursor: pointer;
+  background-color: #8bc34a;
+}
+#results #results-menu li.active {
+  background-color: white;
+  padding-pottom: 6px;
+  cursor: auto;
 }
 #results .panel {
-  border-top: 1px solid #ececec;
+  margin: 0px auto;
+  background-color: white;
+}
+#results .panel .result-label {
+  width: 15.9%;
+  height: 70px;
+  border: 1px solid #9e9e9e;
+  margin: 5px;
+  padding: 5px;
 }
 @media (max-width: 1360px) {
   #search {

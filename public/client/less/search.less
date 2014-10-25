@@ -349,6 +349,7 @@ header{
 }
 
 #results{
+    margin:auto;
     margin-top:20px;
     border-top:1px solid #fefefe;
     #results-menu{
@@ -365,13 +366,28 @@ header{
             border-bottom:none;
             padding:4px 8px;
             border-radius:3px 3px 0px 0px;
+            cursor: pointer;
+            background-color:@lightgreen;
+            &.active{
+                background-color:white;
+                padding-pottom:6px;
+                cursor: auto;
+            }
         }
     }
     #results-menu.active{
 
     }
     .panel{
-        border-top:1px solid @lightgrey;
+        margin:0px auto;
+        background-color: white;
+        .result-label{
+            width:15.9%;
+            height:70px;
+            border:1px solid @grey;
+            margin:5px;
+            padding:5px;
+        }
     }
 }
 

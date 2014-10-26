@@ -7,6 +7,7 @@ var dwc = require('./lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
 var Filters = require('./search/filters');
+var Sorting = require('./search/sorting');
 var Results = require('./search/results');
 
 module.exports = React.createClass({
@@ -17,7 +18,15 @@ module.exports = React.createClass({
         $('#options #'+panel).show();
     },
     getInitialState: function(){
-        return {search:{filters:[],fulltext:'',image:false,geopoint:false}};
+        return {
+            search:{
+                filters:[],
+                fulltext:'',
+                image:false,
+                geopoint:false,
+                sorting:[{name: 'Scientific Name', order: 'asc'}]
+            }
+        };
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
@@ -66,20 +75,7 @@ module.exports = React.createClass({
                                 <Filters searchChange={this.searchChange}/>
                             </div>
                             <div className="clearfix section" id="sorting">
-                                <div className="option-group">
-                                    <label>Sort by</label>
-                                    <select className="direction form-control">
-                                        <option>Ascending</option>
-                                        <option>Descending</option>
-                                    </select>
-                                    <select className="name form-control">
-                                        <option>Scientific Name</option>
-                                    </select>
-
-                                </div>
-                                <div className="option-group-add">
-                                     Add another sort &nbsp;<span className="glyphicon glyphicon-plus"></span> 
-                                </div>
+                                <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
                             </div>
 
                             <div className="clearfix section" id="download">

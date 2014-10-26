@@ -7,6 +7,7 @@ var dwc = require('./lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
 var Filters = require('./search/filters');
+var Sorting = require('./search/sorting');
 var Results = require('./search/results');
 
 module.exports = React.createClass({displayName: 'exports',
@@ -17,7 +18,15 @@ module.exports = React.createClass({displayName: 'exports',
         $('#options #'+panel).show();
     },
     getInitialState: function(){
-        return {search:{filters:[],fulltext:'',image:false,geopoint:false}};
+        return {
+            search:{
+                filters:[],
+                fulltext:'',
+                image:false,
+                geopoint:false,
+                sorting:[{name: 'Scientific Name', order: 'asc'}]
+            }
+        };
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
@@ -66,20 +75,7 @@ module.exports = React.createClass({displayName: 'exports',
                                 Filters({searchChange: this.searchChange})
                             ), 
                             React.DOM.div({className: "clearfix section", id: "sorting"}, 
-                                React.DOM.div({className: "option-group"}, 
-                                    React.DOM.label(null, "Sort by"), 
-                                    React.DOM.select({className: "direction form-control"}, 
-                                        React.DOM.option(null, "Ascending"), 
-                                        React.DOM.option(null, "Descending")
-                                    ), 
-                                    React.DOM.select({className: "name form-control"}, 
-                                        React.DOM.option(null, "Scientific Name")
-                                    )
-
-                                ), 
-                                React.DOM.div({className: "option-group-add"}, 
-                                     "Add another sort  ", React.DOM.span({className: "glyphicon glyphicon-plus"})
-                                )
+                                Sorting({searchChange: this.searchChange, sorting: this.state.search.sorting})
                             ), 
 
                             React.DOM.div({className: "clearfix section", id: "download"}, 

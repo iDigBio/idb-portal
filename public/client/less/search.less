@@ -167,13 +167,25 @@ header{
     .option-group-add{
         text-align: right;
         padding:4px 7px;
-        background-color:@bggreymed;
+        background-color:@bggreydark;
         border-bottom: @brd;
-        border-top:1px solid white;
+        
         margin-top:0px;
     }
     label{
         margin:2px 10px;
+    }
+    .option-group{
+        .direction{
+            width:90px;
+        }
+        .name{
+            width:220px;
+        }
+        button{
+            float:right;
+            margin:4px 5px;
+        }
     }
 }
 
@@ -308,7 +320,7 @@ header{
                 margin-right:5px;
                 height:50px;
             }
-            @import (less) "./search/autocomplete.less";
+            
         }
 
         .presence{

@@ -8,6 +8,13 @@ module.exports = React.createClass({displayName: 'exports',
     getInitialState: function(){
         return {sorting: this.props.sorting};
     },
+    getSortNames: function(){
+        var list=[];
+        this.props.sorting.forEach(function(item){
+            list.push(item.name);
+        });
+        return list;
+    },
     addClick: function(event){
         var s = _.cloneDeep(this.state.sorting);
         s.push({name: false, order:'desc'});
@@ -28,6 +35,29 @@ module.exports = React.createClass({displayName: 'exports',
     },
     render: function(){
         var sorts=[],self=this;
+        var options = [], names=this.getSortNames();
+        var fgroups =[];
+        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        _.each(groups,function(val){
+            var flist = [];
+            _.each(fields.byGroup[val],function(field){
+                if(field.hidden===1){
+                    //noop
+                }else{
+                    var disabled = names.indexOf(field.name) === -1 ? '' : 'disabled';
+                    flist.push(
+                            React.DOM.option({disabled: disabled, value: field.name, key: field.name}, 
+                                field.name
+                            )
+                    );
+                }
+            });
+            fgroups.push(
+              React.DOM.optgroup({label: fields.groupNames[val]}, 
+                "  ", flist
+              )
+            );
+        });
         this.state.sorting.forEach(function(item,ind){
             var txt='Then by';
             var rmv=React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"}));
@@ -46,7 +76,7 @@ module.exports = React.createClass({displayName: 'exports',
                         React.DOM.option({value: "desc"}, "Descending")
                     ), 
                     React.DOM.select({className: "name form-control", onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
-                        React.DOM.option(null, "Scientific Name")
+                        fgroups
                     )
                 )
             )
@@ -56,7 +86,9 @@ module.exports = React.createClass({displayName: 'exports',
                 React.DOM.div({className: "option-group-add"}, 
                      "Add another sort  ", React.DOM.button({onClick: this.addClick}, React.DOM.span({className: "glyphicon glyphicon-plus"}))
                 ), 
-                sorts
+                React.DOM.div({id: "sort-group"}, 
+                    sorts
+                )
             )
         )
     }

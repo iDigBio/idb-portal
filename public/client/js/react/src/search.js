@@ -85,7 +85,7 @@ module.exports = React.createClass({
                     </div>
                     <div id="map"></div>
                 </div>
-                <Results search={this.state.search} />
+                <Results search={this.state.search} total={0} />
             </div>
         )
     }

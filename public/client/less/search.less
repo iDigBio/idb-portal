@@ -180,12 +180,19 @@ header{
             width:90px;
         }
         .name{
-            width:220px;
+            width:200px;
         }
         button{
             float:right;
             margin:4px 5px;
         }
+    }
+    #sort-group{
+        overflow-y:scroll;
+        position:relative;
+        height:273px;
+        margin:0px;
+        padding:0px;        
     }
 }
 
@@ -393,12 +400,31 @@ header{
     .panel{
         margin:0px auto;
         background-color: white;
+        width:100%;
+        float:left;
         .result-label{
             width:15.9%;
             height:70px;
             border:1px solid @grey;
             margin:5px;
             padding:5px;
+        }
+        .image{
+            width:200px;
+            height:190px;
+            position:relative;
+            display:inline-block;
+            img{
+              position:absolute;
+              margin:auto;
+              top:0;
+              bottom:0;
+              left:0;
+              right:0;
+              max-height:85%;
+              max-width:85%;
+              box-shadow:0px 0px 3px #888;
+            }
         }
     }
 }

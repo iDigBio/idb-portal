@@ -63,14 +63,14 @@ module.exports = React.createClass({
        
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
-     
+        var flist = self.filters();
         _.each(groups,function(val){
             var flist = [];
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled = self.filters().indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled = flist.indexOf(field.name) === -1 ? '' : 'disabled';
                     flist.push(
                             <option disabled={disabled} value={field.name} key={field.name}>
                                 {field.name}
@@ -98,7 +98,7 @@ module.exports = React.createClass({
                         {fgroups}
                     </select>
                 </div>
-                <div id="filters-holder">
+                <div id="filters-holder" className="options-holder">
                     {filters}
                 </div>
             </div>

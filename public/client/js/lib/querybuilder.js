@@ -17,7 +17,7 @@ module.exports = (function(){
                 "size": 100,
                 "from": 0,
                 "query":{},
-                "sort":{"scientificname":{"order":"asc"}},
+                "sort":[{"scientificname":{"order":"asc"}}],
                 "aggs":{
                     "recordsets":{
                         "terms": {"field": "recordset", "size":1000}
@@ -44,6 +44,17 @@ module.exports = (function(){
             }else if(so["sortName"]=='genus'){
                 query["sort"]["specificepithet"]={"order": so["sortDir"]};
             }*/
+            var sort=[];
+            search.sorting.forEach(function(item){
+                var s={}
+                if(!_.isEmpty(item.name)){
+                    s[fields.byName[item.name].term] = item.order;
+                }
+                sort.push(s);
+            });
+            if(!_.isEmpty(sort)){
+                query.sort = sort;
+            }
             if(search.image){
                 and.push({"term":{"hasImage": true}});
             }

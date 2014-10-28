@@ -6,16 +6,46 @@ var React = require('react');
 var _ = require('lodash');
 
 module.exports = React.createClass({
+    getResults: function(searchState){
+        var query = queryBuilder.makeQuery(searchState), self=this;
+        searchServer.esQuery('records',query,function(results){
+            self.setState({results: results.hits.hits, total: results.hits.total},function(){
+                self.forceUpdate();
+            });
+        });
+    },
     getInitialState: function(){
-        return {view: 'list'};
+        this.getResults(this.props.search);
+        return {results: [], view: 'list', total: 0};
+    },
+    shouldComponentUpdate: function(nextProps, nextState){
+        if(nextState.view!==this.state.view){
+            return true;
+        }else{
+            return false
+        }
+        
+    },
+    componentWillReceiveProps: function(nextProps){
+        //component should only recieve search as props
+        this.getResults(nextProps.search);  
     },
     viewChange: function(event){
         this.setState({view: event.currentTarget.attributes['data-value'].value})
     },
     render: function(){
-        var search = this.props.search,self=this;
-        var li=[];
-
+        var search = this.props.search, self=this, li=[], results;
+        switch(this.state.view){
+            case 'list':
+                results = <ResultsList results={this.state.results} />;
+                break
+            case 'labels':
+                results = <ResultsLabels results={this.state.results} />;
+                break
+            case 'images':
+                results = <ResultsImages search={this.props.search} results={this.state.results} />;
+                break;
+        }
         ['list','labels','images'].forEach(function(item){
             var cl = item == self.state.view ? 'active' : ''; 
             li.push(
@@ -24,47 +54,20 @@ module.exports = React.createClass({
         })        
         return(
             <div id="results" className="clearfix">
-                <ul id="results-menu">
+                <ul id="results-menu" className="pull-left">
                     {li}
-                </ul>
-                <ResultsPanel search={search} view={this.state.view} />
+                </ul> 
+                <div className="pull-right total">
+                    Total: {helpers.formatNum(parseInt(this.state.total))}
+                </div>
+                {results}
             </div>
         )
     }
 });
 
 
-var ResultsPanel = React.createClass({
-    getResults: function(searchObj){
-        var query = queryBuilder.makeQuery(searchObj), self=this;
-        searchServer.esQuery('records',query,function(results){
-            self.setState({results: results.hits.hits},function(){
-                self.forceUpdate();
-            });
-        });
-    },
-    getInitialState: function(){
-        this.getResults(this.props.search);
-        return {results: []};
-    },
-    shouldComponentUpdate: function(nextProps, nextState){
-        return false;
-    },
-    componentWillReceiveProps: function(nextProps){
-        this.getResults(nextProps.search);
-    },
-    render: function(){
-        switch(this.props.view){
-            case 'list':
-                return <ResultsList results={this.state.results} />;
-            case 'labels':
-                return <ResultsLabels results={this.state.results} />;
-            case 'images':
-                return <ResultsImages results={this.state.results} />;
-        }
 
-    }
-})
 
 var ResultsList = React.createClass({
     render: function(){
@@ -193,7 +196,44 @@ var ResultsLabels = React.createClass({
 });
 
 var ResultsImages = React.createClass({
+    getImageOnlyResults: function(){
+        var search = _.cloneDeep(this.props.search),self=this
+        search.image = false,
+        query = queryBuilder.makeQuery(search);
+        searchServer.esQuery(query,function(response){
+            self.setProps({results: response.hits.hits});
+            self.forceUpdate();
+        });
+    },
+    errorImage: function(event){
+
+    },
+    makeImage: function(uuid,specimen){
+
+        return (
+            <a className="image" href={"/portal/mediarecords/"+uuid}>
+                <img alt="loading..." 
+                src={"https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=webview"}
+                onError={this.errorImage}/>
+            </a>
+        )
+
+    },
     render: function(){
-        return false
+        var images=[],self=this;
+        this.props.results.forEach(function(record){
+
+            if(_.isArray(record._source.mediarecords)){
+                record._source.mediarecords.forEach(function(uuid){
+                    images.push(self.makeImage(uuid,record));
+                })
+            }
+            
+        })
+        return (
+            <div className="panel">
+                {images}
+            </div>
+        )
     }
 })

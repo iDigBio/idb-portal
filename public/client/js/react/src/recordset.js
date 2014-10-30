@@ -7,7 +7,7 @@
 ****/
 var React = require('react')
 var fields = require('../../lib/fields');
-var _ = require('underscore');
+var _ = require('lodash');
 
 //var helpers = require('./search/lib/helpers');
 //var Map = require('./search/views/mapbox');

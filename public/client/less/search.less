@@ -376,18 +376,25 @@ header{
         margin:0px;
         margin-left:20px;
         padding:0px;
+        li:first-letter{
+            text-transform: capitalize;
+        }
         li{
+            text-transform: capitalize;
             display:inline;
-            margin:0px 3px;
-            font-size:1.2em;
+            margin:0px 4px;
+            font-size:1.3em;
+            letter-spacing:.08em;
             font-weight:bold;
             border: @brd;
             border-bottom:none;
             padding:4px 8px;
             border-radius:3px 3px 0px 0px;
             cursor: pointer;
-            background-color:@lightgreen;
+            background-color:@lightblue;
+
             &.active{
+                position:relative;
                 background-color:white;
                 padding-pottom:6px;
                 cursor: auto;
@@ -399,7 +406,9 @@ header{
     }
     .panel{
         margin:0px auto;
+        padding:10px 0px;
         background-color: white;
+        border-top: @brd;
         width:100%;
         float:left;
         .result-label{

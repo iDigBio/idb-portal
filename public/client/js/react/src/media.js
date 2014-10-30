@@ -4,7 +4,7 @@
 
 var React = require('react');
 var dwc = require('./lib/dwc_fields');
-var _ = require('underscore');
+var _ = require('lodash');
 
 var Media = React.createClass({
     error: function(event){

@@ -8,7 +8,7 @@ var React = require('react')
 var L = require('leaflet/dist/leaflet');
 //provides order for sections
 var RecordPage = require('./react/build/record');
-
+//TODO: rewrite recordset id into page code so you can Async this
 searchServer.esGetRecord('records',$('#recordID').val(),function(resp){
     if(resp=='error'){
         $("#data-container").html('<h3>Record Not Found</h3>');

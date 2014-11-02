@@ -64,14 +64,15 @@ module.exports = React.createClass({displayName: 'exports',
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
         var flist = self.filters();
+        //filter select list 
         _.each(groups,function(val){
-            var flist = [];
+            var fltrs = [];
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop
                 }else{
                     var disabled = flist.indexOf(field.name) === -1 ? '' : 'disabled';
-                    flist.push(
+                    fltrs.push(
                             React.DOM.option({disabled: disabled, value: field.name, key: field.name}, 
                                 field.name
                             )
@@ -80,10 +81,11 @@ module.exports = React.createClass({displayName: 'exports',
             });
             fgroups.push(
               React.DOM.optgroup({label: fields.groupNames[val]}, 
-                "  ", flist
+                "  ", fltrs
               )
             );
         });
+        //filters
         var filters = [];
         _.each(this.state.filters,function(item){
             filters.push(

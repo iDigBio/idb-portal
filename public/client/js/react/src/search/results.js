@@ -70,16 +70,34 @@ module.exports = React.createClass({
 
 
 var ResultsList = React.createClass({
+    getInitialState: function(){
+        return {columns:['genus','specificepithet','collectioncode','datecollected']};
+    },
     render: function(){
-        var columns = ['scientificname','genus','collectioncode','specificepithet','commonname'];
+        var columns = this.state.columns;
+        debugger//['scientificname','genus','collectioncode','specificepithet','commonname'];
         var rows=[];
         var headers=[];
         columns.forEach(function(item){
             var style={width: (Math.floor(100/columns.length))+'%'}
-            headers.push(
-                <th style={style}>{fields.byTerm[item].name}</th>
-            )
-        })
+            if(columns.indexOf(item)===columns.length-1){
+                style.width = (Math.floor(100/columns.length)-4)+'%';
+                headers.push(
+                    <th style={style}>
+                        {fields.byTerm[item].name}
+                        <button className="pull-right">
+                            <i className="glyphicon glyphicon-list"/>
+                        </button>
+                    </th>
+                )
+            }else{
+                headers.push(
+                    <th style={style}>{fields.byTerm[item].name}</th>
+                ) 
+            }
+
+        });
+
         this.props.results.forEach(function(item){
             var tds = [];
             columns.forEach(function(name){

@@ -24,6 +24,7 @@ module.exports = React.createClass({displayName: 'exports',
         var s = _.cloneDeep(this.state.sorting);
         s.splice(parseInt(event.currentTarget.attributes['data-index'].value),1);
         this.setState({sorting: s});
+        this.props.searchChange('sorting',s);
     },
     sortChange: function(event){
         var ind = parseInt(event.currentTarget.attributes['data-index'].value);
@@ -38,8 +39,10 @@ module.exports = React.createClass({displayName: 'exports',
         var options = [], names=this.getSortNames();
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
+        //sort list
         _.each(groups,function(val){
             var flist = [];
+            fgroups.push(React.DOM.option({value: "0"}, "select a field"));
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop

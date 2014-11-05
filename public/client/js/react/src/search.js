@@ -24,7 +24,7 @@ module.exports = React.createClass({
                 fulltext:'',
                 image:false,
                 geopoint:false,
-                sorting:[{name: 'Scientific Name', order: 'asc'}]
+                sorting:[{name: 'scientificname', order: 'asc'}]
             }
         };
     },

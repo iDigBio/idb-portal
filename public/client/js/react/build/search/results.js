@@ -75,7 +75,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
     },
     render: function(){
         var columns = this.state.columns;
-        debugger//['scientificname','genus','collectioncode','specificepithet','commonname'];
+       //['scientificname','genus','collectioncode','specificepithet','commonname'];
         var rows=[];
         var headers=[];
         columns.forEach(function(item){

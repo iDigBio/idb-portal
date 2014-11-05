@@ -47,8 +47,9 @@ module.exports = (function(){
             var sort=[];
             search.sorting.forEach(function(item){
                 var s={}
+            
                 if(!_.isEmpty(item.name)){
-                    s[fields.byName[item.name].term] = item.order;
+                    s[item.name] = item.order;
                 }
                 sort.push(s);
             });

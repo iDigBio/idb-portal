@@ -17,7 +17,7 @@ module.exports = React.createClass({
     },
     addClick: function(event){
         var s = _.cloneDeep(this.state.sorting);
-        s.push({name: false, order:'desc'});
+        s.push({name: false, order:'asc'});
         this.setState({sorting: s});
     },
     removeClick: function(event){
@@ -40,18 +40,21 @@ module.exports = React.createClass({
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
         //sort list
+        fgroups.push(<option value="0">select a field</option>);
         _.each(groups,function(val){
             var flist = [];
-            fgroups.push(<option value="0">select a field</option>);
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled = names.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled='';
+                    if(names.indexOf(field.term) > -1){
+                        disabled='disabled';
+                    } 
                     flist.push(
-                            <option disabled={disabled} value={field.name} key={field.name}>
-                                {field.name}
-                            </option>
+                        <option disabled={disabled} value={field.term} key={field.term}>
+                            {field.name}
+                        </option>
                     );
                 }
             });
@@ -62,27 +65,36 @@ module.exports = React.createClass({
             );
         });
         this.state.sorting.forEach(function(item,ind){
-            var txt='Then by';
-            var rmv=<button onClick={self.removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>;
-            if(ind===0){
-                txt='Sort by';
-                rmv=<span/>;
-            }
             var asc=item.order == 'asc' ? 'selected':'';
             var desc=item.order == 'desc' ?  'selected':'';
-            sorts.push(
-                <div className="option-group">
-                    <label>{txt}</label>
-                    {rmv}
-                    <select className="direction form-control" value={item.order} onChange={self.sortChange} data-index={ind} data-name='order'>
-                        <option value="asc" >Ascending</option>
-                        <option value="desc" >Descending</option>
-                    </select>
-                    <select className="name form-control" onChange={self.sortChange} data-index={ind} data-name='name'>
-                        {fgroups}
-                    </select>
-                </div>
-            )
+            if(ind===0){
+                sorts.push(
+                    <div className="option-group">
+                        <label>Sort by</label>
+                        <select className="direction form-control" value={item.order} onChange={self.sortChange} data-index={ind} data-name='order'>
+                            <option value="asc" selected={asc}>Ascending</option>
+                            <option value="desc" selected={desc}>Descending</option>
+                        </select>
+                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
+                            {fgroups}
+                        </select>
+                    </div>
+                )
+            }else{
+                sorts.push(
+                    <div className="option-group">
+                        <label>Then by</label>
+                        <button onClick={self.removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>
+                        <select className="direction form-control" value={item.order} onChange={self.sortChange} data-index={ind} data-name='order'>
+                            <option value="asc">Ascending</option>
+                            <option value="desc">Descending</option>
+                        </select>
+                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
+                            {fgroups}
+                        </select>
+                    </div>
+                )
+            }
         })
         return (
             <div>

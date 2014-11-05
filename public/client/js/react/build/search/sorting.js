@@ -17,7 +17,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     addClick: function(event){
         var s = _.cloneDeep(this.state.sorting);
-        s.push({name: false, order:'desc'});
+        s.push({name: false, order:'asc'});
         this.setState({sorting: s});
     },
     removeClick: function(event){
@@ -40,18 +40,21 @@ module.exports = React.createClass({displayName: 'exports',
         var fgroups =[];
         var groups = ['taxonomy','specimen','collectionevent','locality'];
         //sort list
+        fgroups.push(React.DOM.option({value: "0"}, "select a field"));
         _.each(groups,function(val){
             var flist = [];
-            fgroups.push(React.DOM.option({value: "0"}, "select a field"));
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled = names.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled='';
+                    if(names.indexOf(field.term) > -1){
+                        disabled='disabled';
+                    } 
                     flist.push(
-                            React.DOM.option({disabled: disabled, value: field.name, key: field.name}, 
-                                field.name
-                            )
+                        React.DOM.option({disabled: disabled, value: field.term, key: field.term}, 
+                            field.name
+                        )
                     );
                 }
             });
@@ -62,27 +65,36 @@ module.exports = React.createClass({displayName: 'exports',
             );
         });
         this.state.sorting.forEach(function(item,ind){
-            var txt='Then by';
-            var rmv=React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"}));
-            if(ind===0){
-                txt='Sort by';
-                rmv=React.DOM.span(null);
-            }
             var asc=item.order == 'asc' ? 'selected':'';
             var desc=item.order == 'desc' ?  'selected':'';
-            sorts.push(
-                React.DOM.div({className: "option-group"}, 
-                    React.DOM.label(null, txt), 
-                    rmv, 
-                    React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
-                        React.DOM.option({value: "asc"}, "Ascending"), 
-                        React.DOM.option({value: "desc"}, "Descending")
-                    ), 
-                    React.DOM.select({className: "name form-control", onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
-                        fgroups
+            if(ind===0){
+                sorts.push(
+                    React.DOM.div({className: "option-group"}, 
+                        React.DOM.label(null, "Sort by"), 
+                        React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
+                            React.DOM.option({value: "asc", selected: asc}, "Ascending"), 
+                            React.DOM.option({value: "desc", selected: desc}, "Descending")
+                        ), 
+                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                            fgroups
+                        )
                     )
                 )
-            )
+            }else{
+                sorts.push(
+                    React.DOM.div({className: "option-group"}, 
+                        React.DOM.label(null, "Then by"), 
+                        React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
+                        React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
+                            React.DOM.option({value: "asc"}, "Ascending"), 
+                            React.DOM.option({value: "desc"}, "Descending")
+                        ), 
+                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                            fgroups
+                        )
+                    )
+                )
+            }
         })
         return (
             React.DOM.div(null, 

@@ -83,7 +83,6 @@ var ResultsList = React.createClass({
         }else{
             columns.splice(columns.indexOf(e.currentTarget.value),1);
         }
-        debugger
         this.setState({columns: columns});
     },
     render: function(){
@@ -130,7 +129,7 @@ var ResultsList = React.createClass({
         //fgroups.push(<option value="0">select a field</option>);
         _.each(groups,function(val){
             list.push(
-                <tr><td>{fields.groupNames[val]}</td></tr>
+                <tr><td className="bold">{fields.groupNames[val]}</td></tr>
             )
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden===1){
@@ -138,12 +137,28 @@ var ResultsList = React.createClass({
                 }else{
                     var disabled='';
                     if(columns.indexOf(field.term) > -1){
+                        var disabled=false;
+                        if(columns.length===1){
+                            disabled=true;
+                        }
                         list.push(
-                            <tr><td><input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked="checked"/></td><td>{field.name}</td></tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked="checked" disabled={disabled}/> {field.name}
+                                    </label>
+                                </td>
+                            </tr>
                         )
                     }else{
                         list.push(
-                            <tr><td><input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" /></td><td>{field.name}</td></tr>
+                            <tr>
+                                <td>
+                                    <label>
+                                        <input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" /> {field.name}
+                                    </label>
+                                </td>
+                            </tr>
                         )                        
                     } 
                 }
@@ -276,18 +291,42 @@ var ResultsLabels = React.createClass({
 var ResultsImages = React.createClass({
     getImageOnlyResults: function(){
         var search = _.cloneDeep(this.props.search),self=this
-        search.image = false,
+        search.image = true,
         query = queryBuilder.makeQuery(search);
-        searchServer.esQuery(query,function(response){
-            self.setProps({results: response.hits.hits});
+        searchServer.esQuery('records',query,function(response){
+            self.setState({results: response.hits.hits});
             self.forceUpdate();
         });
+    },
+    getInitialState: function(){
+        return {results: []};
     },
     errorImage: function(event){
 
     },
+    componentWillMount: function(){
+        if(this.props.search.image){
+            this.setState({results: this.props.results})
+        }else{
+            this.getImageOnlyResults();
+        }
+    },
+    componentWillReceiveProps: function(nextProps){
+        if(this.props.search.image){
+            this.setState({results: this.props.results})
+        }else{
+            this.getImageOnlyResults();
+        }
+    },
+    /*shouldComponentUpdate: function(nextProps,nextState){
+        if(nextProps.search.image){
+            return true;
+        }else{
+            this.getImageOnlyResults();
+            return false;
+        }
+    },*/
     makeImage: function(uuid,specimen){
-
         return (
             <a className="image" href={"/portal/mediarecords/"+uuid}>
                 <img alt="loading..." 
@@ -295,19 +334,17 @@ var ResultsImages = React.createClass({
                 onError={this.errorImage}/>
             </a>
         )
-
     },
     render: function(){
         var images=[],self=this;
-        this.props.results.forEach(function(record){
-
+        this.state.results.forEach(function(record){
             if(_.isArray(record._source.mediarecords)){
                 record._source.mediarecords.forEach(function(uuid){
                     images.push(self.makeImage(uuid,record));
                 })
             }
-            
-        })
+        });
+
         return (
             <div className="panel">
                 {images}

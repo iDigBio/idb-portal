@@ -27,7 +27,6 @@
 @bluegrey: #607D8B;
 @brown: #795548;
 @lightgrey: #ECECEC;
-
 #main,#react-wrapper,#top,body{
     background-color: @bggrey;
     margin:0px;
@@ -35,6 +34,9 @@
 }
 header{
     margin-bottom:0px;
+}
+.bold{
+    font-weight:bold;
 }
 #search-arrow-img{
     width:32px;
@@ -406,6 +408,18 @@ header{
     }
     .total{
         margin-right:10px;
+    }
+    #column-list table{ 
+        width:100px;
+        label{
+            font-weight:normal;
+            input{
+                margin-right:5px;
+            }
+            &:hover{
+                cursor:pointer;
+            }
+        }
     }
     .panel{
         margin:0px auto;

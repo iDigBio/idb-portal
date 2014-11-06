@@ -9,6 +9,9 @@ body {
 header {
   margin-bottom: 0px;
 }
+.bold {
+  font-weight: bold;
+}
 #search-arrow-img {
   width: 32px;
   margin-bottom: 5px;
@@ -351,6 +354,18 @@ header {
 }
 #results .total {
   margin-right: 10px;
+}
+#results #column-list table {
+  width: 100px;
+}
+#results #column-list table label {
+  font-weight: normal;
+}
+#results #column-list table label input {
+  margin-right: 5px;
+}
+#results #column-list table label:hover {
+  cursor: pointer;
 }
 #results .panel {
   margin: 0px auto;

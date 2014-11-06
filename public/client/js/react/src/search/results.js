@@ -16,13 +16,13 @@ module.exports = React.createClass({
     },
     getInitialState: function(){
         this.getResults(this.props.search);
-        return {results: [], view: 'list', total: 0};
+        return {results: [], view: this.props.view, total: 0};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         if(nextState.view!==this.state.view){
             return true;
         }else{
-            return false
+            return false;
         }
         
     },
@@ -31,13 +31,15 @@ module.exports = React.createClass({
         this.getResults(nextProps.search);  
     },
     viewChange: function(event){
-        this.setState({view: event.currentTarget.attributes['data-value'].value})
+        var view = _.cloneDeep(this.state.view);
+        view.type = event.currentTarget.attributes['data-value'].value;
+        this.setState({view: view});
     },
     render: function(){
         var search = this.props.search, self=this, li=[], results;
-        switch(this.state.view){
+        switch(this.state.view.type){
             case 'list':
-                results = <ResultsList results={this.state.results} />;
+                results = <ResultsList results={this.state.results} columns={this.state.view.columns} />;
                 break
             case 'labels':
                 results = <ResultsLabels results={this.state.results} />;
@@ -47,7 +49,7 @@ module.exports = React.createClass({
                 break;
         }
         ['list','labels','images'].forEach(function(item){
-            var cl = item == self.state.view ? 'active' : ''; 
+            var cl = item == self.state.view.type ? 'active' : ''; 
             li.push(
                 <li onClick={self.viewChange} data-value={item} className={cl}>{item}</li>
             )
@@ -66,43 +68,54 @@ module.exports = React.createClass({
     }
 });
 
-
-
-
 var ResultsList = React.createClass({
     getInitialState: function(){
-        return {columns:['genus','specificepithet','collectioncode','datecollected']};
+        if(_.isUndefined(this.props.columns) || _.isEmpty(this.props.columns)){
+            return {columns:['genus','specificepithet','collectioncode','datecollected']};
+        }else{
+            return {columns: this.props.columns};
+        }
+    },
+    columnCheckboxClick: function(e){
+        var columns = _.cloneDeep(this.state.columns);
+        if(e.currentTarget.checked===true){
+            columns.push(e.currentTarget.value);
+        }else{
+            columns.splice(columns.indexOf(e.currentTarget.value),1);
+        }
+        debugger
+        this.setState({columns: columns});
     },
     render: function(){
-        var columns = this.state.columns;
+        var columns = this.state.columns,self=this;
        //['scientificname','genus','collectioncode','specificepithet','commonname'];
         var rows=[];
         var headers=[];
+        //results table
         columns.forEach(function(item){
             var style={width: (Math.floor(100/columns.length))+'%'}
-            if(columns.indexOf(item)===columns.length-1){
-                style.width = (Math.floor(100/columns.length)-4)+'%';
-                headers.push(
-                    <th style={style}>
-                        {fields.byTerm[item].name}
-                        <button className="pull-right">
-                            <i className="glyphicon glyphicon-list"/>
-                        </button>
-                    </th>
-                )
-            }else{
-                headers.push(
-                    <th style={style}>{fields.byTerm[item].name}</th>
-                ) 
-            }
-
+            headers.push(
+                <th style={style}>{fields.byTerm[item].name}</th>
+            ) 
         });
-
+        //add column list button
+        headers.push(
+            <th style={{width: '20px'}}>
+                <button className="pull-right" data-toggle="modal" data-target="#column-list">
+                    <i className="glyphicon glyphicon-list"/>
+                </button>
+            </th>
+        )
         this.props.results.forEach(function(item){
             var tds = [];
-            columns.forEach(function(name){
+            columns.forEach(function(name,ind){
                 var val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
-                tds.push(<td>{val}</td>);
+                if(columns.length-1 === ind){
+                    tds.push(<td colSpan="2">{val}</td>);
+                }else{
+                    tds.push(<td>{val}</td>);
+                }
+                
             })
             rows.push(
                 <tr>
@@ -110,9 +123,56 @@ var ResultsList = React.createClass({
                 </tr>
             );
         })
-       
+        //column selection modal list
+        var list=[];
+        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        //sort list
+        //fgroups.push(<option value="0">select a field</option>);
+        _.each(groups,function(val){
+            list.push(
+                <tr><td>{fields.groupNames[val]}</td></tr>
+            )
+            _.each(fields.byGroup[val],function(field){
+                if(field.hidden===1){
+                    //noop
+                }else{
+                    var disabled='';
+                    if(columns.indexOf(field.term) > -1){
+                        list.push(
+                            <tr><td><input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked="checked"/></td><td>{field.name}</td></tr>
+                        )
+                    }else{
+                        list.push(
+                            <tr><td><input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" /></td><td>{field.name}</td></tr>
+                        )                        
+                    } 
+                }
+            });
+        });
+
         return(
             <div className="panel">
+                <div id="column-list" className="modal fade">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <label>Select List Columns</label>
+                                <button type="button" className="close pull-right" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <table>
+                                    {list}
+                                </table>
+                            </div>
+                            <div className="modal-footer">
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
                 <table className="table table-condensed">
                     <thead>
                         <tr>{headers}</tr>

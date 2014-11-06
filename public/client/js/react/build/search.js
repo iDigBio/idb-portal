@@ -25,6 +25,10 @@ module.exports = React.createClass({displayName: 'exports',
                 image:false,
                 geopoint:false,
                 sorting:[{name: 'scientificname', order: 'asc'}]
+            },
+            view:{
+                columns: ['genus','specificepithet','collectioncode','datecollected'],
+                type: 'list'
             }
         };
     },
@@ -85,7 +89,7 @@ module.exports = React.createClass({displayName: 'exports',
                     ), 
                     React.DOM.div({id: "map"})
                 ), 
-                Results({search: this.state.search, total: 0})
+                Results({search: this.state.search, view: this.state.view, total: 0})
             )
         )
     }

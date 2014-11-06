@@ -16,13 +16,13 @@ module.exports = React.createClass({displayName: 'exports',
     },
     getInitialState: function(){
         this.getResults(this.props.search);
-        return {results: [], view: 'list', total: 0};
+        return {results: [], view: this.props.view, total: 0};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         if(nextState.view!==this.state.view){
             return true;
         }else{
-            return false
+            return false;
         }
         
     },
@@ -31,13 +31,15 @@ module.exports = React.createClass({displayName: 'exports',
         this.getResults(nextProps.search);  
     },
     viewChange: function(event){
-        this.setState({view: event.currentTarget.attributes['data-value'].value})
+        var view = _.cloneDeep(this.state.view);
+        view.type = event.currentTarget.attributes['data-value'].value;
+        this.setState({view: view});
     },
     render: function(){
         var search = this.props.search, self=this, li=[], results;
-        switch(this.state.view){
+        switch(this.state.view.type){
             case 'list':
-                results = ResultsList({results: this.state.results});
+                results = ResultsList({results: this.state.results, columns: this.state.view.columns});
                 break
             case 'labels':
                 results = ResultsLabels({results: this.state.results});
@@ -47,7 +49,7 @@ module.exports = React.createClass({displayName: 'exports',
                 break;
         }
         ['list','labels','images'].forEach(function(item){
-            var cl = item == self.state.view ? 'active' : ''; 
+            var cl = item == self.state.view.type ? 'active' : ''; 
             li.push(
                 React.DOM.li({onClick: self.viewChange, 'data-value': item, className: cl}, item)
             )
@@ -66,43 +68,54 @@ module.exports = React.createClass({displayName: 'exports',
     }
 });
 
-
-
-
 var ResultsList = React.createClass({displayName: 'ResultsList',
     getInitialState: function(){
-        return {columns:['genus','specificepithet','collectioncode','datecollected']};
+        if(_.isUndefined(this.props.columns) || _.isEmpty(this.props.columns)){
+            return {columns:['genus','specificepithet','collectioncode','datecollected']};
+        }else{
+            return {columns: this.props.columns};
+        }
+    },
+    columnCheckboxClick: function(e){
+        var columns = _.cloneDeep(this.state.columns);
+        if(e.currentTarget.checked===true){
+            columns.push(e.currentTarget.value);
+        }else{
+            columns.splice(columns.indexOf(e.currentTarget.value),1);
+        }
+        debugger
+        this.setState({columns: columns});
     },
     render: function(){
-        var columns = this.state.columns;
+        var columns = this.state.columns,self=this;
        //['scientificname','genus','collectioncode','specificepithet','commonname'];
         var rows=[];
         var headers=[];
+        //results table
         columns.forEach(function(item){
             var style={width: (Math.floor(100/columns.length))+'%'}
-            if(columns.indexOf(item)===columns.length-1){
-                style.width = (Math.floor(100/columns.length)-4)+'%';
-                headers.push(
-                    React.DOM.th({style: style}, 
-                        fields.byTerm[item].name, 
-                        React.DOM.button({className: "pull-right"}, 
-                            React.DOM.i({className: "glyphicon glyphicon-list"})
-                        )
-                    )
-                )
-            }else{
-                headers.push(
-                    React.DOM.th({style: style}, fields.byTerm[item].name)
-                ) 
-            }
-
+            headers.push(
+                React.DOM.th({style: style}, fields.byTerm[item].name)
+            ) 
         });
-
+        //add column list button
+        headers.push(
+            React.DOM.th({style: {width: '20px'}}, 
+                React.DOM.button({className: "pull-right", 'data-toggle': "modal", 'data-target': "#column-list"}, 
+                    React.DOM.i({className: "glyphicon glyphicon-list"})
+                )
+            )
+        )
         this.props.results.forEach(function(item){
             var tds = [];
-            columns.forEach(function(name){
+            columns.forEach(function(name,ind){
                 var val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
-                tds.push(React.DOM.td(null, val));
+                if(columns.length-1 === ind){
+                    tds.push(React.DOM.td({colSpan: "2"}, val));
+                }else{
+                    tds.push(React.DOM.td(null, val));
+                }
+                
             })
             rows.push(
                 React.DOM.tr(null, 
@@ -110,9 +123,56 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                 )
             );
         })
-       
+        //column selection modal list
+        var list=[];
+        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        //sort list
+        //fgroups.push(<option value="0">select a field</option>);
+        _.each(groups,function(val){
+            list.push(
+                React.DOM.tr(null, React.DOM.td(null, fields.groupNames[val]))
+            )
+            _.each(fields.byGroup[val],function(field){
+                if(field.hidden===1){
+                    //noop
+                }else{
+                    var disabled='';
+                    if(columns.indexOf(field.term) > -1){
+                        list.push(
+                            React.DOM.tr(null, React.DOM.td(null, React.DOM.input({value: field.term, onChange: self.columnCheckboxClick, type: "checkbox", checked: "checked"})), React.DOM.td(null, field.name))
+                        )
+                    }else{
+                        list.push(
+                            React.DOM.tr(null, React.DOM.td(null, React.DOM.input({value: field.term, onChange: self.columnCheckboxClick, type: "checkbox"})), React.DOM.td(null, field.name))
+                        )                        
+                    } 
+                }
+            });
+        });
+
         return(
             React.DOM.div({className: "panel"}, 
+                React.DOM.div({id: "column-list", className: "modal fade"}, 
+                    React.DOM.div({className: "modal-dialog"}, 
+                        React.DOM.div({className: "modal-content"}, 
+                            React.DOM.div({className: "modal-header"}, 
+                                React.DOM.label(null, "Select List Columns"), 
+                                React.DOM.button({type: "button", className: "close pull-right", 'data-dismiss': "modal"}, 
+                                    React.DOM.span({'aria-hidden': "true"}, "×")
+                                )
+                            ), 
+                            React.DOM.div({className: "modal-body"}, 
+                                React.DOM.table(null, 
+                                    list
+                                )
+                            ), 
+                            React.DOM.div({className: "modal-footer"}
+
+                            )
+                        )
+                    )
+
+                ), 
                 React.DOM.table({className: "table table-condensed"}, 
                     React.DOM.thead(null, 
                         React.DOM.tr(null, headers)

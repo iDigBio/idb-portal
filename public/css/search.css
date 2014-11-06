@@ -349,6 +349,9 @@ header {
   padding-pottom: 6px;
   cursor: auto;
 }
+#results .total {
+  margin-right: 10px;
+}
 #results .panel {
   margin: 0px auto;
   padding: 10px 0px;

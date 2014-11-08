@@ -37,6 +37,11 @@ module.exports = React.createClass({
         search[key]=val;
         this.setState({search: search});
     },
+    viewChange: function(key,val){
+        var view = _.cloneDeep(this.state.view);
+        view[key]=val;
+        this.setState({view: view});        
+    },
     checkClick: function(event){
         this.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
@@ -89,7 +94,7 @@ module.exports = React.createClass({
                     </div>
                     <div id="map"></div>
                 </div>
-                <Results search={this.state.search} view={this.state.view} total={0} />
+                <Results search={this.state.search} />
             </div>
         )
     }

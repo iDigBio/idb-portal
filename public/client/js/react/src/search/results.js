@@ -16,7 +16,10 @@ module.exports = React.createClass({
     },
     getInitialState: function(){
         this.getResults(this.props.search);
-        return {results: [], view: this.props.view, total: 0};
+        if(!localStorage || _.isUndefined(localStorage.viewType)){
+            localStorage.setItem('viewType','list');
+        }
+        return {results: [], view: localStorage.getItem('viewType'), total: 0};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         if(nextState.view!==this.state.view){
@@ -24,22 +27,26 @@ module.exports = React.createClass({
         }else{
             return false;
         }
-        
+    },
+    componentWillMount: function(){
+
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
         this.getResults(nextProps.search);  
     },
     viewChange: function(event){
-        var view = _.cloneDeep(this.state.view);
-        view.type = event.currentTarget.attributes['data-value'].value;
+        var view = event.currentTarget.attributes['data-value'].value;
+        if(localStorage){
+            localStorage.setItem('viewType',view);
+        }
         this.setState({view: view});
     },
     render: function(){
         var search = this.props.search, self=this, li=[], results;
-        switch(this.state.view.type){
+        switch(this.state.view){
             case 'list':
-                results = <ResultsList results={this.state.results} columns={this.state.view.columns} />;
+                results = <ResultsList results={this.state.results} />;
                 break
             case 'labels':
                 results = <ResultsLabels results={this.state.results} />;
@@ -49,7 +56,7 @@ module.exports = React.createClass({
                 break;
         }
         ['list','labels','images'].forEach(function(item){
-            var cl = item == self.state.view.type ? 'active' : ''; 
+            var cl = item == self.state.view ? 'active' : ''; 
             li.push(
                 <li onClick={self.viewChange} data-value={item} className={cl}>{item}</li>
             )
@@ -70,10 +77,12 @@ module.exports = React.createClass({
 
 var ResultsList = React.createClass({
     getInitialState: function(){
-        if(_.isUndefined(this.props.columns) || _.isEmpty(this.props.columns)){
-            return {columns:['genus','specificepithet','collectioncode','datecollected']};
+        if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
+            var cols = ['genus','specificepithet','collectioncode','datecollected'];
+            localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
+            return {columns: cols};
         }else{
-            return {columns: this.props.columns};
+            return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
         }
     },
     columnCheckboxClick: function(e){
@@ -84,6 +93,9 @@ var ResultsList = React.createClass({
             columns.splice(columns.indexOf(e.currentTarget.value),1);
         }
         this.setState({columns: columns});
+        if(localStorage){
+            localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
+        }
     },
     render: function(){
         var columns = this.state.columns,self=this;
@@ -186,7 +198,6 @@ var ResultsList = React.createClass({
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <table className="table table-condensed">
                     <thead>

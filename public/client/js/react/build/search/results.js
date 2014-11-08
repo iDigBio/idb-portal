@@ -63,6 +63,7 @@ module.exports = React.createClass({displayName: 'exports',
         })        
         return(
             React.DOM.div({id: "results", className: "clearfix"}, 
+               
                 React.DOM.ul({id: "results-menu", className: "pull-left"}, 
                     li
                 ), 

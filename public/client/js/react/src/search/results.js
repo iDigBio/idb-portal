@@ -63,6 +63,7 @@ module.exports = React.createClass({
         })        
         return(
             <div id="results" className="clearfix">
+               
                 <ul id="results-menu" className="pull-left">
                     {li}
                 </ul> 

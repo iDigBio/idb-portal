@@ -47,7 +47,7 @@ module.exports = (function(){
             var sort=[];
             search.sorting.forEach(function(item){
                 var s={}
-            
+          
                 if(!_.isEmpty(item.name)){
                     s[item.name] = item.order;
                 }
@@ -63,7 +63,7 @@ module.exports = (function(){
                 and.push({"exists":{"field":"geopoint"}});
             }
             search.filters.forEach(function(filter){
-                var lines = filter.text.content.split('\n');
+                
                 var field = fields.byName[filter.name].term;
                 if(filter.exists || filter.missing){
                     var must = {}, value = filter.exists ? "exists" : "missing";
@@ -71,29 +71,47 @@ module.exports = (function(){
                         "field": field
                     }
                     and.push(must);
-                }else if (lines.length > 1) {
-                    var terms = [];
-                    for (line in lines) {
-                        //use some regex here
-                        //split off extra crap
-                        var word=lines[line];//helpers.strip(lines[line]);
-                        terms.push(word.toLowerCase());
+                }else if (filter.type==='text'){
+                    var lines = filter.text.content.split('\n');
+                    if(lines.length > 1) {
+                        var terms = [];
+                        for (line in lines) {
+                            //use some regex here
+                            //split off extra crap
+                            var word=lines[line];//helpers.strip(lines[line]);
+                            terms.push(word.toLowerCase());
+                        }
+                        var term = {
+                            "execution": "or"
+                        };
+                        term[field] = terms;
+                        //or.or.push({"terms": term}); 
+                        and.push({
+                            "terms": term
+                        });
+                    }else if(!_.isEmpty(filter.text.content)){
+                        var term = {};
+                        term[field] = filter.text.content.toLowerCase();
+                        and.push({
+                            "term": term
+                        });
                     }
-                    var term = {
-                        "execution": "or"
-                    };
-                    term[field] = terms;
-                    //or.or.push({"terms": term}); 
-                    and.push({
-                        "terms": term
-                    });
-                }else if(!_.isEmpty(filter.text.content)){
-                    var term = {};
-                    term[field] = filter.text.content.toLowerCase();
-                    and.push({
-                        "term": term
-                    });
-                }                 
+                }else if(filter.type==='daterange'){
+                    var reg = /\d{4}-\d{1,2}-\d{1,2}/, range={};
+                    range[field]={};
+
+                    if(reg.test(filter.range.start)){
+                        range[field]['gte']=filter.range.start;
+                    }
+                    if(reg.test(filter.range.end)){
+                        range[field]['lte']=filter.range.end;
+                    }
+                    if(!_.isEmpty(range[field])){
+                        and.push({
+                            'range': range
+                        })
+                    }
+                }                
             })
 
             if(and.length > 0){

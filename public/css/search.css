@@ -299,6 +299,19 @@ header {
   margin-right: 5px;
   height: 50px;
 }
+#filters .filter .dates {
+  display: block;
+  float: right;
+}
+#filters .filter .dates .date {
+  width: 129px;
+  display: block;
+  height: 25px;
+  margin: 2px;
+}
+#filters .filter .dates .date:disabled {
+  color: #bbb;
+}
 #filters .filter .presence {
   width: 260px;
   float: right;
@@ -391,6 +404,15 @@ header {
 }
 #results #column-list table label:hover {
   cursor: pointer;
+}
+#results #result-list th {
+  cursor: pointer;
+}
+#results #result-list th i {
+  margin-left: 8px;
+}
+#results #result-list th:hover {
+  background-color: #BFF2F7;
 }
 #results .panel {
   margin: 0px auto;

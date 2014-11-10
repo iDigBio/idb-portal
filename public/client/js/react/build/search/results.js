@@ -46,13 +46,13 @@ module.exports = React.createClass({displayName: 'exports',
         var search = this.props.search, self=this, li=[], results;
         switch(this.state.view){
             case 'list':
-                results = ResultsList({results: this.state.results});
+                results = ResultsList({search: search, results: this.state.results, searchChange: this.props.searchChange});
                 break
             case 'labels':
                 results = ResultsLabels({results: this.state.results});
                 break
             case 'images':
-                results = ResultsImages({search: this.props.search, results: this.state.results});
+                results = ResultsImages({search: search, results: this.state.results});
                 break;
         }
         ['list','labels','images'].forEach(function(item){
@@ -98,6 +98,32 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
             localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
         }
     },
+    sortColumn: function(e){
+        //sorted column sorts the top level sort value in search and new sorting items length
+        //shall not exceed original length
+        var dir, search = _.cloneDeep(this.props.search), name=e.currentTarget.attributes['data-term'].value,
+        sort={name: name}, sorting=search.sorting;
+        if(_.isUndefined(e.currentTarget.attributes['data-sort'])){
+            dir='asc';
+        }else{
+            dir = e.currentTarget.attributes['data-sort'].value == 'asc' ?  'desc': 'asc';
+        }
+        sort.order = dir;
+     
+        var list=[];
+        _.each(sorting,function(item){
+            list.push(item.name);
+        })
+        var ind= list.indexOf(name),len=list.length;
+        if(ind>-1){
+            sorting.splice(ind,1);
+        }
+        sorting.unshift(sort);
+        if(sorting.length>len){
+            sorting.pop();
+        }
+        this.props.searchChange('sorting',sorting);
+    },
     render: function(){
         var columns = this.state.columns,self=this;
        //['scientificname','genus','collectioncode','specificepithet','commonname'];
@@ -105,10 +131,20 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         var headers=[];
         //results table
         columns.forEach(function(item){
-            var style={width: (Math.floor(100/columns.length))+'%'}
-            headers.push(
-                React.DOM.th({style: style}, fields.byTerm[item].name)
-            ) 
+            var style={width: (Math.floor(100/columns.length))+'%'}, sorted=self.props.search.sorting[0];
+            if(sorted.name===item){
+                var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
+                headers.push(
+                    React.DOM.th({style: style, 'data-term': item, 'data-sort': sorted.order, onClick: self.sortColumn}, 
+                        fields.byTerm[item].name, 
+                        React.DOM.i({className: "glyphicon "+icon})
+                    )
+                ) 
+            }else{
+                headers.push(
+                    React.DOM.th({style: style, 'data-term': item, onClick: self.sortColumn}, fields.byTerm[item].name)
+                ) 
+            }
         });
         //add column list button
         headers.push(
@@ -121,7 +157,12 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         this.props.results.forEach(function(item){
             var tds = [];
             columns.forEach(function(name,ind){
-                var val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
+                var val;
+                if(_.isUndefined(fields.byTerm[name].dataterm)){
+                    val = helpers.check(item._source[name]);
+                }else{
+                    val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
+                }
                 if(columns.length-1 === ind){
                     tds.push(React.DOM.td({colSpan: "2"}, val));
                 }else{
@@ -179,7 +220,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         });
 
         return(
-            React.DOM.div({className: "panel"}, 
+            React.DOM.div({id: "result-list", className: "panel"}, 
                 React.DOM.div({id: "column-list", className: "modal fade"}, 
                     React.DOM.div({className: "modal-dialog"}, 
                         React.DOM.div({className: "modal-content"}, 

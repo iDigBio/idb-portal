@@ -17,12 +17,14 @@ module.exports = React.createClass({
         var type = fields.byName[name].type;
         switch(type){
             case 'text':
-                return {name: name, type: 'text', text:{content:'',disabled: false}, exists: false, missing: false};
+                return {name: name, type: type, text:{content:'', disabled: false}, exists: false, missing: false};
+            case 'daterange':
+                return {name: name, type: type, range:{start: '', end: '', disabled: false}, exists: false, missing: false};
         }
     },
     getInitialState: function(){
         var filters=[],self=this;
-        ['Kingdom','Phylum'].forEach(function(item){
+        ['Date Collected','Kingdom','Phylum'].forEach(function(item){
             filters.push(self.newFilterState(item));
         });
         return {filters: filters};
@@ -54,7 +56,9 @@ module.exports = React.createClass({
             case 'text':
                 return(
                     <TextFilter filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>
-                );     
+                ); 
+            case 'daterange':
+                return (<DateRangeFilter filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>);    
         }
     },
 
@@ -204,5 +208,104 @@ var TextFilter = React.createClass({
                 </div>
             </div>
         )
+    }
+});
+
+var DateRangeFilter = React.createClass({
+    propClick: function(event){
+        this.props.removeFilter(event.currentTarget.attributes['data-remove'].value);
+    },
+    dateChange: function(event){
+        var date = event.currentTarget.value;
+        var filter = this.props.filter;//, filter=filters[ind];   
+        filter.range[event.currentTarget.name] = date;
+        this.props.changeFilter(filter);     
+    },
+    showDatePicker: function(event){
+        var d = new Date(),self=this;
+        $(event.currentTarget).datepicker({
+            dateFormat: 'yy-mm-dd',
+            yearRange: '1701:'+d.getFullYear(),
+            changeYear: true,
+            changeMonth: true,
+            onSelect: function(date,obj){
+                var filter = self.props.filter;//, filter=filters[ind];   
+                filter.range[obj.input.context.name] = date;
+                self.props.changeFilter(filter);                  
+            }
+        });
+    },
+    presenceClick: function(event){
+        var filter = this.props.filter;
+        if(event.currentTarget.checked){
+            if(event.currentTarget.value=='exists'){
+                filter.exists = true;
+                filter.missing = false;                
+            }else if(event.currentTarget.value=='missing'){
+                filter.exists = false;
+                filter.missing = true;
+            }
+            filter.range.disabled=true;
+        }else{
+            filter.exists = false;
+            filter.missing = false;
+            filter.range.disabled = false;
+        }
+        this.props.changeFilter(filter);
+    },
+    render: function(){
+        var filter = this.props.filter;
+        var name = filter.name,
+        exists = filter.exists ? 'checked' : '',
+        missing = filter.missing ? 'checked' : '';
+        return(
+            <div className="option-group filter" id={name+'-filter'} key={name}>
+                <i className="glyphicon glyphicon-remove" onClick={this.propClick} data-remove={name}></i>
+                <label className="filter-name">{name}</label>
+                <div className="dates clearfix">
+                    <div className="pull-right">
+                        End: 
+                        <input 
+                            name="end"
+                            type="text" 
+                            className="form-control date"
+                            disabled={filter.range.disabled} 
+                            onChange={this.dateChange} 
+                            onFocus={this.showDatePicker}
+                            value={filter.range.end}
+                            placeholder="yyyy-mm-dd"
+                        />
+                    </div>
+                    <div className="pull-right">
+                        Start: 
+                        <input 
+                            name="start"
+                            type="text" 
+                            className="form-control date"
+                            disabled={filter.range.disabled} 
+                            onChange={this.dateChange} 
+                            onFocus={this.showDatePicker}
+                            value={filter.range.start}
+                            placeholder="yyyy-mm-dd"
+                        />
+                    </div>
+
+                </div>
+                <div className="presence">
+                    <div className="checkbox">
+                        <label>
+                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={exists}/>
+                            Present
+                        </label>
+                    </div>
+                    <div className="checkbox">
+                        <label>
+                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={missing}/>
+                            Missing
+                        </label>
+                    </div>
+                </div>
+            </div>
+        ) 
     }
 })

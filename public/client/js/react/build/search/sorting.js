@@ -16,19 +16,20 @@ module.exports = React.createClass({displayName: 'exports',
         return list;
     },
     addClick: function(event){
-        var s = _.cloneDeep(this.state.sorting);
+        var s = _.cloneDeep(this.props.sorting);
         s.push({name: false, order:'asc'});
         this.setState({sorting: s});
+        this.props.searchChange('sorting',s)
     },
     removeClick: function(event){
-        var s = _.cloneDeep(this.state.sorting);
+        var s = _.cloneDeep(this.props.sorting);
         s.splice(parseInt(event.currentTarget.attributes['data-index'].value),1);
         this.setState({sorting: s});
         this.props.searchChange('sorting',s);
     },
     sortChange: function(event){
         var ind = parseInt(event.currentTarget.attributes['data-index'].value);
-        var sorting = this.state.sorting, sort=sorting[ind];
+        var sorting = this.props.sorting, sort=sorting[ind];
         sort[event.currentTarget.attributes['data-name'].value]=event.currentTarget.value;
         sorting[ind]=sort;
         this.setState({sorting: sorting});
@@ -64,7 +65,7 @@ module.exports = React.createClass({displayName: 'exports',
               )
             );
         });
-        this.state.sorting.forEach(function(item,ind){
+        this.props.sorting.forEach(function(item,ind){
             var asc=item.order == 'asc' ? 'selected':'';
             var desc=item.order == 'desc' ?  'selected':'';
             if(ind===0){

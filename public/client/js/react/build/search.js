@@ -94,7 +94,7 @@ module.exports = React.createClass({displayName: 'exports',
                     ), 
                     React.DOM.div({id: "map"})
                 ), 
-                Results({search: this.state.search})
+                Results({search: this.state.search, searchChange: this.searchChange})
             )
         )
     }

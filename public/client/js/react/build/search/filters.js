@@ -138,6 +138,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         this.props.changeFilter(filter);     
     },
     setAutocomplete: function(event){
+        var self=this;
         $(event.currentTarget).autocomplete({
             source: function(searchString, respCallback) {
                 var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
@@ -166,6 +167,11 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             messages: {
                 noResults: '',
                 results: function() {}
+            },
+            close: function(event,ui){
+                var filter = self.props.filter;//, filter=filters[ind];   
+                filter.text.content = event.currentTarget.value;
+                self.props.changeFilter(filter);                 
             }
         });
     },

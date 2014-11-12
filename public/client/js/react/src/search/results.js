@@ -77,26 +77,36 @@ module.exports = React.createClass({
 });
 
 var ResultsList = React.createClass({
+    
     getInitialState: function(){
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
-            var cols = ['genus','specificepithet','collectioncode','datecollected'];
+            var cols = this.defaultColumns();
             localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
             return {columns: cols};
         }else{
             return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
         }
     },
-    columnCheckboxClick: function(e){
-        var columns = _.cloneDeep(this.state.columns);
-        if(e.currentTarget.checked===true){
-            columns.push(e.currentTarget.value);
-        }else{
-            columns.splice(columns.indexOf(e.currentTarget.value),1);
-        }
+    defaultColumns: function(){
+        return _.clone(['genus','specificepithet','collectioncode','datecollected']);
+    },
+    setColumns: function(columns){
         this.setState({columns: columns});
         if(localStorage){
             localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
         }
+    },
+    columnCheckboxClick: function(e){
+        var columns = _.cloneDeep(this.state.columns);
+        if(e.currentTarget.checked===true){
+            columns.push(e.currentTarget.name);
+        }else{
+            columns.splice(columns.indexOf(e.currentTarget.name),1);
+        }
+        this.setColumns(columns);
+    },
+    resetColumns: function(){
+        this.setColumns(this.defaultColumns());
     },
     sortColumn: function(e){
         //sorted column sorts the top level sort value in search and new sorting items length
@@ -126,6 +136,7 @@ var ResultsList = React.createClass({
     },
     render: function(){
         var columns = this.state.columns,self=this;
+     
        //['scientificname','genus','collectioncode','specificepithet','commonname'];
         var rows=[];
         var headers=[];
@@ -178,7 +189,7 @@ var ResultsList = React.createClass({
         })
         //column selection modal list
         var list=[];
-        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         //sort list
         //fgroups.push(<option value="0">select a field</option>);
         _.each(groups,function(val){
@@ -189,32 +200,22 @@ var ResultsList = React.createClass({
                 if(field.hidden===1){
                     //noop
                 }else{
-                    var disabled='';
+                    var disabled=false,checked=false;
                     if(columns.indexOf(field.term) > -1){
-                        var disabled=false;
+                        checked=true;
                         if(columns.length===1){
                             disabled=true;
                         }
-                        list.push(
-                            <tr>
-                                <td>
-                                    <label>
-                                        <input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked="checked" disabled={disabled}/> {field.name}
-                                    </label>
-                                </td>
-                            </tr>
-                        )
-                    }else{
-                        list.push(
-                            <tr>
-                                <td>
-                                    <label>
-                                        <input value={field.term} onChange={self.columnCheckboxClick} type="checkbox" /> {field.name}
-                                    </label>
-                                </td>
-                            </tr>
-                        )                        
-                    } 
+                    }
+                    list.push(
+                        <tr key={field.term}>
+                            <td>
+                                <label>
+                                    <input name={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked={checked} disabled={disabled} /> {field.name}
+                                </label>
+                            </td>
+                        </tr>
+                    )
                 }
             });
         });
@@ -226,6 +227,9 @@ var ResultsList = React.createClass({
                         <div className="modal-content">
                             <div className="modal-header">
                                 <label>Select List Columns</label>
+                                <button onClick={this.resetColumns} id="reset">
+                                    Reset
+                                </button>
                                 <button type="button" className="close pull-right" data-dismiss="modal">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -284,7 +288,6 @@ var ResultsLabels = React.createClass({
             content.push(
                <span>{helpers.check(raw["dwc:scientificNameAuthorship"], ' ')}</span>
             )
-
         } 
 
         /*
@@ -334,7 +337,7 @@ var ResultsLabels = React.createClass({
             labels.push(self.makeLabel(result));
         })
         return (
-            <div className="panel">
+            <div id="result-labels" className="panel">
                 {labels}
             </div>
         )

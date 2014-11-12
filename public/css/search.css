@@ -393,17 +393,20 @@ header {
   margin-right: 10px;
   font-weight: bolder;
 }
-#results #column-list table {
-  width: 100px;
+#results #result-list #column-list table {
+  width: 210px;
 }
-#results #column-list table label {
+#results #result-list #column-list table label {
   font-weight: normal;
 }
-#results #column-list table label input {
+#results #result-list #column-list table label input {
   margin-right: 5px;
 }
-#results #column-list table label:hover {
+#results #result-list #column-list table label:hover {
   cursor: pointer;
+}
+#results #result-list #reset {
+  margin-left: 10px;
 }
 #results #result-list th {
   cursor: pointer;
@@ -414,20 +417,23 @@ header {
 #results #result-list th:hover {
   background-color: #BFF2F7;
 }
-#results .panel {
-  margin: 0px auto;
-  padding: 10px 0px;
-  background-color: white;
-  border-top: 1px solid #cccccc;
-  width: 100%;
-  float: left;
+#results #result-labels {
+  padding-top: 10px;
 }
-#results .panel .result-label {
+#results #result-labels .result-label {
   width: 15.9%;
   height: 70px;
   border: 1px solid #9e9e9e;
   margin: 5px;
   padding: 5px;
+}
+#results .panel {
+  margin: 0px auto;
+  padding: 0px 0px;
+  background-color: white;
+  border-top: 1px solid #cccccc;
+  width: 100%;
+  float: left;
 }
 #results .panel .image {
   width: 200px;

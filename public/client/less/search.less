@@ -443,19 +443,23 @@ header{
         margin-right:10px;
         font-weight:bolder;
     }
-    #column-list table{ 
-        width:100px;
-        label{
-            font-weight:normal;
-            input{
-                margin-right:5px;
-            }
-            &:hover{
-                cursor:pointer;
+
+    #result-list{
+        #column-list table{ 
+            width:210px;
+            label{
+                font-weight:normal;
+                input{
+                    margin-right:5px;
+                }
+                &:hover{
+                    cursor:pointer;
+                }
             }
         }
-    }
-    #result-list{
+        #reset{
+            margin-left:10px;
+        }
         th{
             i{
                 margin-left:8px;
@@ -466,13 +470,8 @@ header{
             }
         }
     }
-    .panel{
-        margin:0px auto;
-        padding:10px 0px;
-        background-color: white;
-        border-top: @brd;
-        width:100%;
-        float:left;
+    #result-labels{
+        padding-top:10px;
         .result-label{
             width:15.9%;
             height:70px;
@@ -480,6 +479,14 @@ header{
             margin:5px;
             padding:5px;
         }
+    }
+    .panel{
+        margin:0px auto;
+        padding:0px 0px;
+        background-color: white;
+        border-top: @brd;
+        width:100%;
+        float:left;
         .image{
             width:200px;
             height:190px;

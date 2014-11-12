@@ -66,7 +66,7 @@ module.exports = React.createClass({displayName: 'exports',
         var self=this;
        
         var fgroups =[];
-        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         var flist = self.filters();
         //filter select list 
         _.each(groups,function(val){

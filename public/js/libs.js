@@ -19932,7 +19932,7 @@ window.async = require('async');
 //window.React = require('react');
 require('../components/bootstrap/dist/js/bootstrap.min');
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_db2598ad.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_659d38c8.js","/")
 },{"../components/bootstrap/dist/js/bootstrap.min":12,"./js/lib/fields":10,"./js/lib/helpers":11,"async":1,"buffer":2,"jquery":6,"lodash":7,"oMfpAn":5}],10:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /* Fields Module
@@ -19974,21 +19974,21 @@ var flds = {
     },
     "Family": {
         "term": "family",
-        "type": "text",
+        "type": "text-sn",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:family"
     },
     "Scientific Name": {
         "term": "scientificname",
-        "type": "text",
+        "type": "text-sn",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:scientificName"
     },
     "Genus": {
         "term": "genus",
-        "type": "text",
+        "type": "text-sn",
         "default": 1,
         "group": "taxonomy",
         "dataterm": "dwc:genus"
@@ -20102,12 +20102,12 @@ var flds = {
     "Institution Name": {
         "term": "institutionname",
         "type": "text",
-        "group": "collectionevent"
+        "group": "specimen"
     },
     "Institution Code": {
         "term": "institutioncode",
         "type": "text",
-        "group": "collectionevent",
+        "group": "specimen",
         "dataterm": "dwc:institutionCode"
     },
     "Collector": {
@@ -20178,39 +20178,123 @@ var flds = {
         "group": "locality",
         "dataterm": "dwc:maximumDepthInMeters"
     },
-    "Earliest Period": {
-        "term": "earliestperiodorlowestsystem",
-        "type": "text",
-        "group": "locality",
-        "dataterm": "dwc:earliestPeriodOrLowestSystem"
-    },
-    "Latest Period": {
-        "term": "latestperiodorhighestsystem",
-        "type": "text",
-        "group": "locality",
-        "dataterm": "dwc:latestPeriodOrHighestSystem"
-    },
     "Occurence ID":{
         "term": "occurrenceid",
         "type": "text",
-        "group":"collectionevent",
+        "group":"specimen",
         "dataterm": "dwc:occurrenceID"
     },
     "Recordset": {
         "term": "recordset",
         "type": "text",
-        "group": "collectionevent"
+        "group": "specimen"
     },
     "RecordID": {
         "term": "recordid",
         "type": "text",
-        "group": "collectionevent"
+        "group": "specimen"
     },
     "Basis of Record":{
         "term": "basisofrecord",
         "type": "text",
         "dataterm": "dwc:basisOfRecord",
         "group": "specimen"
+    },
+    "Bed": {
+        "term": "bed",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:bed"
+    },
+    "Geological Context Group": {
+        "term": "group",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:group"
+    },
+    "Member": {
+        "term": "member",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:member"
+    },
+    "Formation": {
+        "term": "formation",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:formation"
+    },
+    "Earliest Era": {
+        "term": "earliesteraorlowesterathem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:earliestEraOrLowestErathem"
+    },
+    "Latest Era": {
+        "term": "latesteraorhighesterathem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:latestEraOrHighestErathem"
+    },
+    "Earliest Eon": {
+        "term": "earliesteonorlowesteonothem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:earliestEonOrLowestEonothem"
+    },
+    "Latest Eon": {
+        "term": "latesteonorhighesteonothem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:latestEonOrHighestEonothem"
+    },
+    "Earliest Period": {
+        "term": "earliestperiodorlowestsystem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:earliestPeriodOrLowestSystem"
+    },
+    "Latest Period": {
+        "term": "latestperiodorhighestsystem",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:latestPeriodOrHighestSystem"
+    },
+    "Earliest Epoch": {
+        "term": "earliestepochorlowestseries",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:earliestEpochOrLowestSeries"
+    },
+    "Latest Epoch": {
+        "term": "latestepochorhighestseries",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:latestEpochOrHighestSeries"
+    },
+    "Earliest Age": {
+        "term": "earliestageorloweststage",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:earliestAgeOrLowestStage"
+    },
+    "Latest Age": {
+        "term": "latestageorhigheststage",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:latestAgeOrHighestStage"
+    },
+    "Lowest Biostratigraphic Zone":{
+        "term": "lowestbiostratigraphiczone",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:lowestBiostratigraphicZone"
+    },
+    "Lithostratigraphic Terms": {
+        "term": "lithostratigraphicterms",
+        "type": "text",
+        "group": "paleocontext",
+        "dataterm": "dwc:lithostratigraphicTerms"
     }
 }
 
@@ -20321,7 +20405,7 @@ var dataOrder = {
         "dwc:taxonRank"
     ]
 }
-var type_order = ["taxonomy","specimen","collectionevent","locality","other","media","person"];
+var type_order = ["taxonomy","specimen","collectionevent","locality","paleocontext","other","media","person"];
 var order = [];
 _.each(type_order,function(v){
     order.push(dataOrder[v]);
@@ -20370,7 +20454,7 @@ module.exports = {
     order: order,
     orderByType: dataOrder,
     typeOrder: type_order, 
-    groupNames: {"taxonomy":"Taxonomy","specimen":"Specimen","collectionevent":"Collection Event","locality":"Locality","other":"Other","media":"Media","person":"Person", "paleo": "Paleo"},
+    groupNames: {"taxonomy":"Taxonomy","specimen":"Specimen","collectionevent":"Collection Event","locality":"Locality", "paleocontext": "Paleo Context","other":"Other","media":"Media","person":"Person"},
     byDataTerm: dataterms,
     defaults: defaultFields,
     defaultTerms: defaultTerms,

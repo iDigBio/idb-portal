@@ -66,13 +66,12 @@ module.exports = React.createClass({
         var self=this;
        
         var fgroups =[];
-        var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         var flist = self.filters();
         //filter select list 
-        _.each(groups,function(val){
+        _.each(fields.searchGroups,function(val){
             var fltrs = [];
             _.each(fields.byGroup[val],function(field){
-                if(field.hidden===1){
+                if(field.hidden){
                     //noop
                 }else{
                     var disabled = flist.indexOf(field.name) === -1 ? '' : 'disabled';

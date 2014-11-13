@@ -3,37 +3,6 @@
 ****/
 
 var helpers = module.exports = {
-    // ### setSearchForm
-    // sets all inputs based on values in a es query.
-    // #### Parameters
-    // 1. query: basic search object.
-    setSearchForm: function(query){
-    //set form controls queryBuilder search object
-        //first clear all search inputs
-        $('.search-input:text').val('');
-        $('.search-input:checkbox').prop('checked',false);
-        _.each(query,function(val,key){
-            var split= key.split('-');
-            if(split.length > 1){
-                var type = split[split.length-1];
-                if(type == 'checkbox'){
-                    $('input[name="'+key+'"][value="'+val+'"]').attr('checked','checked');
-                    $('textarea[name^="'+split[0]+'"], input[name^="'+split[0]+'"][type="text"]').attr('disabled','disabled');
-                }else if(type == 'text'){
-                    $(':input[name="'+key+'"]').val(val);
-                }else{
-                    //for range,locrange,geobounds]
-                   $('input[name="'+key+'"]').val(val); 
-                }
-            }else{
-                if(key=='hasImage'&&(val=='on'||val===true)){
-                    $('.search-input[name="hasImage"').attr('checked','checked');
-                }else{
-                    $('.search-input[name="'+key+'"]').val(val);
-                }
-            }
-        });
-    },
 
     check: function (val, prefix, postfix) {
         var acc = [];

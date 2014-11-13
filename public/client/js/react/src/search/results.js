@@ -179,7 +179,6 @@ var ResultsList = React.createClass({
                 }else{
                     tds.push(<td>{val}</td>);
                 }
-                
             })
             rows.push(
                 <tr>
@@ -189,15 +188,15 @@ var ResultsList = React.createClass({
         })
         //column selection modal list
         var list=[];
-        var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         //sort list
         //fgroups.push(<option value="0">select a field</option>);
-        _.each(groups,function(val){
+
+        _.each(fields.searchGroups,function(val){
             list.push(
                 <tr><td className="bold">{fields.groupNames[val]}</td></tr>
             )
             _.each(fields.byGroup[val],function(field){
-                if(field.hidden===1){
+                if(field.hidden){
                     //noop
                 }else{
                     var disabled=false,checked=false;

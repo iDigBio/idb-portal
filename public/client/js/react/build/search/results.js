@@ -9,7 +9,13 @@ module.exports = React.createClass({displayName: 'exports',
     getResults: function(searchState){
         var query = queryBuilder.makeQuery(searchState), self=this;
         searchServer.esQuery('records',query,function(results){
-            self.setState({results: results.hits.hits, total: results.hits.total},function(){
+            var res;
+            if(searchState.from > 0){
+                res = self.state.results.concat(results.hits.hits);
+            }else{
+                res = results.hits.hits;
+            }
+            self.setState({results: res, total: results.hits.total, search: searchState},function(){
                 self.forceUpdate();
             });
         });
@@ -19,7 +25,7 @@ module.exports = React.createClass({displayName: 'exports',
         if(!localStorage || _.isUndefined(localStorage.viewType)){
             localStorage.setItem('viewType','list');
         }
-        return {results: [], view: localStorage.getItem('viewType'), total: 0};
+        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         if(nextState.view!==this.state.view){
@@ -30,6 +36,9 @@ module.exports = React.createClass({displayName: 'exports',
     },
     componentWillMount: function(){
 
+    },
+    componentDidMount: function(){
+        window.onscroll = this.resultsScroll;
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
@@ -42,28 +51,37 @@ module.exports = React.createClass({displayName: 'exports',
         }
         this.setState({view: view});
     },
+    //this is not a synthentic event
+    resultsScroll: function(e){
+        var search = _.cloneDeep(this.state.search);
+        if(this.state.total > search.from + search.size){
+            if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
+                search.from += search.size;
+                this.getResults(search);
+            }
+        }
+    },
     render: function(){
         var search = this.props.search, self=this, li=[], results;
         switch(this.state.view){
             case 'list':
-                results = ResultsList({search: search, results: this.state.results, searchChange: this.props.searchChange});
+                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange});
                 break
             case 'labels':
                 results = ResultsLabels({results: this.state.results});
                 break
             case 'images':
-                results = ResultsImages({search: search, results: this.state.results});
+                results = ResultsImages({search: this.state.search, results: this.state.results});
                 break;
         }
         ['list','labels','images'].forEach(function(item){
             var cl = item == self.state.view ? 'active' : ''; 
             li.push(
-                React.DOM.li({onClick: self.viewChange, 'data-value': item, className: cl}, item)
+                React.DOM.li({onClick: self.viewChange, 'data-value': item, className: cl}, helpers.firstToUpper(item))
             )
         })        
         return(
-            React.DOM.div({id: "results", className: "clearfix"}, 
-               
+            React.DOM.div({id: "results", className: "clearfix", onScroll: this.resultsScroll}, 
                 React.DOM.ul({id: "results-menu", className: "pull-left"}, 
                     li
                 ), 
@@ -349,7 +367,13 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         search.image = true,
         query = queryBuilder.makeQuery(search);
         searchServer.esQuery('records',query,function(response){
-            self.setState({results: response.hits.hits});
+            var results;
+            if(search.from>0){
+                results = self.state.results.concat(response.hits.hits);
+            }else{
+                results = response.hits.hits;
+            }
+            self.setState({results: results});
             self.forceUpdate();
         });
     },

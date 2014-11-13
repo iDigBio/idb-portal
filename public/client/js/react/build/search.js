@@ -24,7 +24,9 @@ module.exports = React.createClass({displayName: 'exports',
                 fulltext:'',
                 image:false,
                 geopoint:false,
-                sorting:[{name: 'scientificname', order: 'asc'}]
+                sorting:[{name: 'genus', order: 'asc'}],
+                from: 0,
+                size: 100
             },
             view:{
                 columns: ['genus','specificepithet','collectioncode','datecollected'],

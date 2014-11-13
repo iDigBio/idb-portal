@@ -40,6 +40,9 @@ var helpers = module.exports = {
     formatNum: function (num){
         return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    firstToUpper: function(str){
+        return str.substr(0,1).toUpperCase() + str.substr(1,str.length-1).toLowerCase();
+    },
     // ### strip
     // remove leading and trailing whitespace and formatting chars
     strip: function(str){

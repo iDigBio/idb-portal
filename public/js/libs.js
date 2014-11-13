@@ -18513,7 +18513,7 @@ window.async = require('async');
 //window.React = require('react');
 require('../components/bootstrap/dist/js/bootstrap.min');
 
-}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_a417df36.js","/")
+}).call(this,require("oMfpAn"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_73cb270b.js","/")
 },{"../components/bootstrap/dist/js/bootstrap.min":12,"./js/lib/fields":9,"./js/lib/helpers":11,"async":1,"buffer":2,"jquery":6,"lodash":7,"oMfpAn":5}],9:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /* Fields Module
@@ -19092,6 +19092,9 @@ var helpers = module.exports = {
     // 1. num: number
     formatNum: function (num){
         return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    },
+    firstToUpper: function(str){
+        return str.substr(0,1).toUpperCase() + str.substr(1,str.length-1).toLowerCase();
     },
     // ### strip
     // remove leading and trailing whitespace and formatting chars

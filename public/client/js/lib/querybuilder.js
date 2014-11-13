@@ -14,8 +14,8 @@ module.exports = (function(){
         // 1. so: search objects 
 		this.makeQuery = function(search){
 		    var query = {
-                "size": 100,
-                "from": 0,
+                "size": search.size,
+                "from": search.from,
                 "query":{},
                 "sort":[{"scientificname":{"order":"asc"}}],
                 "aggs":{

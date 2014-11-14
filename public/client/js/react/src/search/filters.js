@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-var fields = require('../../../lib/fields');
 
 module.exports = React.createClass({
     filterStateChange: function(filterObj){
@@ -228,6 +227,7 @@ var DateRangeFilter = React.createClass({
     },
     showDatePicker: function(event){
         var d = new Date(),self=this;
+        debugger
         $(event.currentTarget).datepicker({
             dateFormat: 'yy-mm-dd',
             yearRange: '1701:'+d.getFullYear(),

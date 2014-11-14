@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-var _ = require('lodash');
 
 module.exports = React.createClass({displayName: 'exports',
     getResults: function(searchState){
@@ -15,7 +14,7 @@ module.exports = React.createClass({displayName: 'exports',
             }else{
                 res = results.hits.hits;
             }
-            self.setState({results: res, total: results.hits.total, search: searchState},function(){
+            self.setState({results: res, total: results.hits.total},function(){
                 self.forceUpdate();
             });
         });
@@ -42,6 +41,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
+        this.setState({search: nextProps.search});
         this.getResults(nextProps.search);  
     },
     viewChange: function(event){
@@ -54,24 +54,26 @@ module.exports = React.createClass({displayName: 'exports',
     //this is not a synthentic event
     resultsScroll: function(e){
         var search = _.cloneDeep(this.state.search);
+
         if(this.state.total > search.from + search.size){
             if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
                 search.from += search.size;
+                this.setState({search: search});
                 this.getResults(search);
             }
         }
     },
     render: function(){
-        var search = this.props.search, self=this, li=[], results;
+        var search = this.props.search, self=this, li=[], results, date=new Date, time=date.getMilliseconds();
         switch(this.state.view){
             case 'list':
-                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange});
+                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange, stamp: time});
                 break
             case 'labels':
-                results = ResultsLabels({results: this.state.results});
+                results = ResultsLabels({results: this.state.results, stamp: time});
                 break
             case 'images':
-                results = ResultsImages({search: this.state.search, results: this.state.results});
+                results = ResultsImages({search: this.state.search, results: this.state.results, stamp: time});
                 break;
         }
         ['list','labels','images'].forEach(function(item){
@@ -152,6 +154,9 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         }
         this.props.searchChange('sorting',sorting);
     },
+    openRecord: function(e){
+        window.open('/portal/records/'+e.currentTarget.id,'_blank');
+    },
     render: function(){
         var columns = this.state.columns,self=this;
      
@@ -199,7 +204,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                 }
             })
             rows.push(
-                React.DOM.tr(null, 
+                React.DOM.tr({id: item._source.uuid, key: item._source.uuid+self.props.stamp, onClick: self.openRecord}, 
                     tds
                 )
             );
@@ -243,7 +248,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                     React.DOM.div({className: "modal-dialog"}, 
                         React.DOM.div({className: "modal-content"}, 
                             React.DOM.div({className: "modal-header"}, 
-                                React.DOM.label(null, "Select List Columns"), 
+                                React.DOM.label(null, "Select Display Columns"), 
                                 React.DOM.button({onClick: this.resetColumns, id: "reset"}, 
                                     "Reset"
                                 ), 
@@ -307,16 +312,25 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
             )
         } 
 
-        /*
+  
         if( data.hasImage ){ 
-            <span class="label-image-holder">
-               if(data.mediarecords.length > 1){ %>
-                    <span class="label-image-count">
-                        <%= data.mediarecords.length %>
-                    </span>
-               } 
-            <img onerror="$(this).attr('src','/portal/img/notavailable.png')" onload="$(this).attr('alt','image thumbnail')" class="pull-right label-image img-rounded" alt=" loading image..." src="https://api.idigbio.org/v1/records/<%= data.uuid %>/media?quality=thumbnail" > 
-            </span>       
+            var imgcount;
+            if(data.mediarecords.length > 1){ 
+                imgcount = (
+                    React.DOM.span({className: "image-count"}, 
+                        data.mediarecords.length
+                    )
+                )
+            }else{
+                imgcount = React.DOM.span(null);
+            } 
+            content.push(
+                React.DOM.span({key: 'media-'+data.uuid+this.props.stamp, className: "image-wrapper"}, 
+                    imgcount, 
+                    React.DOM.img({'data-onerror': "$(this).attr('src','/portal/img/notavailable.png')", 'data-onload': "$(this).attr('alt','image thumbnail')", className: "pull-right label-image img-rounded", alt: " loading image...", src: "https://api.idigbio.org/v1/records/"+data.uuid+"/media?quality=thumbnail"})
+                )  
+            )
+     
          } 
         var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
 
@@ -337,16 +351,20 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
         if ((txt+out).length > 255) {
             out = out.substring(0, out.length-txt.length);// + ' ...';
         }
-        */
+      
         return (
-            React.DOM.div({className: "pull-left result-item result-label", title: "click to view record"}, 
+            React.DOM.div({key: 'label-'+result._source.uuid+this.props.stamp, id: result._source.uuid, className: "pull-left result-item result-label", title: "click to view record", onClick: this.openRecord}, 
                 React.DOM.p(null, 
+                   content, 
                     React.DOM.span({style: {lineHeight: '1em', fontSize:'1em'}}, 
-                        content
+                        out
                     )
                 )
             )
         )
+    },
+    openRecord: function(e){
+        window.open('/portal/records/'+e.currentTarget.id,'_blank');
     },
     render: function(){
         var labels = [],self=this;
@@ -409,7 +427,7 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         return (
             React.DOM.a({className: "image", href: "/portal/mediarecords/"+uuid}, 
                 React.DOM.img({alt: "loading...", 
-                src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=webview", 
+                src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
                 onError: this.errorImage})
             )
         )

@@ -1,10 +1,14 @@
 //required Global libs bundle
 window.$ = jQuery = require('jquery');
-
+require('jquery-ui-browserify');
+window.url = require('./js/lib/url');
 window._ = require('lodash');
 window.helpers = require('./js/lib/helpers');
 window.fields = require('./js/lib/fields');
-
+window.dwc = require('./js/lib/dwc_fields');
+require('./js/lib/searchserver');
+window.queryBuilder = require('./js/lib/querybuilder');
 window.async = require('async');
 //window.React = require('react');
 require('../components/bootstrap/dist/js/bootstrap.min');
+//$.fn.datetimepicker = require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker');

@@ -3,12 +3,11 @@
  */
 
 var React = require('react')
-var dwc = require('./lib/dwc_fields');
-var _ = require('lodash');
-var fields = require('../../lib/fields');
+
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
 var Results = require('./search/results');
+var Download = require('./search/download');
 
 module.exports = React.createClass({
     showPanel: function(event){
@@ -88,9 +87,8 @@ module.exports = React.createClass({
                             <div className="clearfix section" id="sorting">
                                 <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
                             </div>
-
                             <div className="clearfix section" id="download">
-                                <label>Download Current Result Set</label>
+                                <Download />
                             </div>
                         </div>
                     </div>

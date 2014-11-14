@@ -1,5 +1,4 @@
 
-
 @bggrey: #fafafa;
 @bglight: #fefefe;
 @bggreydark: #f0f0f0;
@@ -469,15 +468,67 @@ header{
                 background-color:#BFF2F7;
             }
         }
+        tbody{
+            tr{
+                &:hover{
+                    cursor: pointer;
+                }
+            }
+        }
     }
     #result-labels{
         padding-top:10px;
         .result-label{
-            width:15.9%;
-            height:70px;
-            border:1px solid @grey;
-            margin:5px;
-            padding:5px;
+            //width:15.9%;
+            //height:70px;
+            width:19.65%;
+            height:98px;
+            overflow:hidden;
+            border: 1px solid #bbb; 
+            border-radius:3px; 
+            -webkit-border-radius:3px;
+            -moz-border-radius:3px;
+            background-color:#f5f5f5;
+            margin:3px;
+            padding:3px 5px;
+
+            text-shadow: 0px 1px 0px #fff;
+            /*webkit only */
+            display: -webkit-box;
+            -webkit-line-clamp: 7;
+            -webkit-box-orient: vertical;
+            &:hover{
+                cursor: pointer;
+            }
+            p{
+                margin-top:1px;
+                line-height:1.19em;
+                font-size:.85em;
+                height:102px;
+            }
+            .image-wrapper{
+                .image-count{
+                      font-size:.8em;
+                      position: absolute;
+                      top:3px;
+                      right:5px;
+                      color:white;
+                      padding:2px;
+                      z-index:90;
+                      opacity:.9;
+                      border-top-right-radius: 5px;
+                      background-color:#333;
+                      opacity:.7;                    
+                }
+                img{
+                    margin:3px 5px;
+                    max-height:78px;
+                    max-width:78px;
+                    box-shadow:1px 1px 0px #bbb;
+                    -webkit-box-shadow:1px 1px 0px #bbb;
+                    -moz-box-shadow:1px 1px 0px #bbb;
+                }
+            }
         }
     }
     .panel{

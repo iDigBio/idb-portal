@@ -188,7 +188,7 @@ var ResultsList = React.createClass({
                 </button>
             </th>
         )
-        this.props.results.forEach(function(item){
+        this.props.results.forEach(function(item,index){
             var tds = [];
             columns.forEach(function(name,ind){
                 var val;
@@ -204,7 +204,7 @@ var ResultsList = React.createClass({
                 }
             })
             rows.push(
-                <tr id={item._source.uuid} key={item._source.uuid+self.props.stamp} onClick={self.openRecord}>
+                <tr id={item._source.uuid} key={index} onClick={self.openRecord}>
                     {tds}
                 </tr>
             );
@@ -281,7 +281,7 @@ var ResultsList = React.createClass({
 });
 
 var ResultsLabels = React.createClass({
-    makeLabel: function(result){
+    makeLabel: function(result,id){
         var data = result._source, raw = data.data['idigbio:data'];
         var txt = '';
         var content=[];
@@ -353,7 +353,7 @@ var ResultsLabels = React.createClass({
         }
       
         return (
-            <div key={'label-'+result._source.uuid+this.props.stamp} id={result._source.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
+            <div key={'label-'+id} id={result._source.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
                 <p>
                    {content}
                     <span style={{lineHeight: '1em', fontSize:'1em'}}>
@@ -368,8 +368,8 @@ var ResultsLabels = React.createClass({
     },
     render: function(){
         var labels = [],self=this;
-        this.props.results.forEach(function(result){
-            labels.push(self.makeLabel(result));
+        this.props.results.forEach(function(result,ind){
+            labels.push(self.makeLabel(result,ind));
         })
         return (
             <div id="result-labels" className="panel">

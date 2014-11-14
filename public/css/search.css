@@ -393,6 +393,9 @@ header {
   margin-right: 10px;
   font-weight: bolder;
 }
+#results #result-list .modal-dialog {
+  z-index: 1050;
+}
 #results #result-list #column-list table {
   width: 210px;
 }
@@ -448,6 +451,11 @@ header {
   line-height: 1.19em;
   font-size: .85em;
   height: 102px;
+}
+#results #result-labels .result-label .image-wrapper {
+  position: relative;
+  float: right;
+  display: inline-block;
 }
 #results #result-labels .result-label .image-wrapper .image-count {
   font-size: .8em;

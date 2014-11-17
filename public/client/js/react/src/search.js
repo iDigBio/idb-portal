@@ -79,6 +79,7 @@ module.exports = React.createClass({
                             <ul id="options-menu" onClick={this.showPanel}>
                                 <li className="active" data-panel="filters">Advanced Filters</li>
                                 <li data-panel="sorting">Sorting</li>
+                                <li data-panel="mapping">Mapping</li>
                                 <li data-panel="download">Download &amp; History</li>
                             </ul>
                             <div className="section active" id="filters">

@@ -79,6 +79,7 @@ module.exports = React.createClass({displayName: 'exports',
                             React.DOM.ul({id: "options-menu", onClick: this.showPanel}, 
                                 React.DOM.li({className: "active", 'data-panel': "filters"}, "Advanced Filters"), 
                                 React.DOM.li({'data-panel': "sorting"}, "Sorting"), 
+                                React.DOM.li({'data-panel': "mapping"}, "Mapping"), 
                                 React.DOM.li({'data-panel': "download"}, "Download & History")
                             ), 
                             React.DOM.div({className: "section active", id: "filters"}, 

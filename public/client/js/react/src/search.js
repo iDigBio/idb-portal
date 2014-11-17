@@ -12,7 +12,7 @@ var Download = require('./search/download');
 module.exports = React.createClass({
     showPanel: function(event){
         $('#options-menu .active').removeClass('active');
-        var panel = $(event.target).addClass('active').attr('data-panel');
+        var panel = $(event.currentTarget).addClass('active').attr('data-panel');
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
@@ -76,11 +76,11 @@ module.exports = React.createClass({
                             </div>
                         </div>
                         <div key='filters' id="options" className="clearfix">
-                            <ul id="options-menu" onClick={this.showPanel}>
-                                <li className="active" data-panel="filters">Advanced Filters</li>
-                                <li data-panel="sorting">Sorting</li>
-                                <li data-panel="mapping">Mapping</li>
-                                <li data-panel="download">Download &amp; History</li>
+                            <ul id="options-menu" >
+                                <li className="active" data-panel="filters" onClick={this.showPanel}>Filters</li>
+                                <li data-panel="sorting" onClick={this.showPanel}>Sorting</li>
+                                <li data-panel="mapping" onClick={this.showPanel}>Mapping</li>
+                                <li data-panel="download" onClick={this.showPanel}>Download &amp; History</li>
                             </ul>
                             <div className="section active" id="filters">
                                 <Filters searchChange={this.searchChange}/>

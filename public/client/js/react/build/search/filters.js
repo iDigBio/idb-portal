@@ -2,15 +2,18 @@
  * @jsx React.DOM
  */
 
-var React = require('react');
+var React = require('react/addons')
+var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = React.createClass({displayName: 'exports',
     filterStateChange: function(filterObj){
         var list = this.filters();
         var filters = this.state.filters;
         filters[list.indexOf(filterObj.name)] = filterObj;
-        this.setState({filters: filters});
-        this.props.searchChange('filters',this.state.filters);
+        this.setState({filters: filters},function(){
+            this.props.searchChange('filters',this.state.filters);
+        });
+        
     },
     newFilterState: function(name){
         var type = fields.byName[name].type;
@@ -21,12 +24,31 @@ module.exports = React.createClass({displayName: 'exports',
                 return {name: name, type: type, range:{start: '', end: '', disabled: false}, exists: false, missing: false};
         }
     },
-    getInitialState: function(){
+    defaultFilters: function(){
         var filters=[],self=this;
         ['Date Collected','Kingdom','Phylum'].forEach(function(item){
             filters.push(self.newFilterState(item));
+        });   
+        return filters;
+    },
+    getInitialState: function(){
+        var self=this;
+        return {filters: self.defaultFilters()};
+    },
+    resetFilters: function(){
+        var self=this;
+        this.setState({filters: self.defaultFilters()},function(){
+            self.props.searchChange('filters', self.state.filters);
         });
-        return {filters: filters};
+    },
+    clearFilters: function(){
+        var filters=[],self=this;
+        this.state.filters.forEach(function(item){
+            filters.push(self.newFilterState(item.name));
+        });
+        this.setState({filters: filters},function(){
+            this.props.searchChange('filters',filters);
+        })
     },
     addFilter: function(event){
         //var flist = this.filters();
@@ -54,10 +76,10 @@ module.exports = React.createClass({displayName: 'exports',
         switch(filter.type){
             case 'text':
                 return(
-                    TextFilter({filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange})
+                    TextFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange})
                 ); 
             case 'daterange':
-                return (DateRangeFilter({filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange}));    
+                return (DateRangeFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange}));    
         }
     },
 
@@ -100,10 +122,18 @@ module.exports = React.createClass({displayName: 'exports',
                     React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
                         React.DOM.option({value: "0", defaultValue: true}, "Add a field filter"), 
                         fgroups
+                    ), 
+                    React.DOM.a({className: "btn", onClick: this.clearFilters}, 
+                        "Clear"
+                    ), 
+                    React.DOM.a({className: "btn", onClick: this.resetFilters}, 
+                        "Reset"
                     )
                 ), 
                 React.DOM.div({id: "filters-holder", className: "options-holder"}, 
-                    filters
+                    RCTgroup({transitionName: "filter-trans"}, 
+                        filters
+                    )
                 )
             )
         );

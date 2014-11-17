@@ -1,0 +1,151 @@
+@import "variables.less";
+
+#filters{
+    height:inherit;
+
+    #filter-select{
+        margin:0px;
+        border-bottom-color: #999;
+
+        select{
+            display:inline;
+            width:60%;
+            margin:0px 15px;
+            float:left;
+            border-radius:4px;
+            background-color: white;
+            @media(max-width:1060px){
+                width:50%;
+            }
+            .field-group{
+                margin-left:10px;
+            }
+            option:disabled{
+                color:darkred;
+            }
+            option span{
+
+            }
+            optgroup.field{
+                display:block;
+                margin-left:20px;
+            }
+        }
+        button{
+            float:left;
+        }
+    }
+
+    #filters-holder{
+        overflow-y:scroll;
+        position:relative;
+        height:263px;
+        margin:0px;
+        padding:0px;
+        @media(max-width:1060px){
+            height:233px;
+        }
+        //react RCTgroup 
+        .filter-trans-enter{
+            opacity: 0.01;
+            transition: opacity .4s ease-in;
+        }
+        .filter-trans-enter.filter-trans-enter-active {
+            opacity: 1;
+        }
+        .filter-trans-leave{
+            opacity: 1;
+            transition: opacity .2s ease-in;
+        }
+        .filter-trans-leave.filter-trans-leave-active {
+            opacity: 0.01;
+        }
+        .filter{
+            background: #fafafa; /* Old browsers */
+            background: -moz-linear-gradient(top,  #fafafa 0%, #f0f0f0 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fafafa), color-stop(100%,#f0f0f0)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  #fafafa 0%,#f0f0f0 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  #fafafa 0%,#f0f0f0 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  #fafafa 0%,#f0f0f0 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  #fafafa 0%,#f0f0f0 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fafafa', endColorstr='#f0f0f0',GradientType=0 ); /* IE6-9 */
+                  
+            margin-top:0px;
+            border-right: @brd2;
+            padding:4px;
+            .filter-name{
+                word-wrap:break-all;
+                word-break:break-word;
+                width:20%;
+                font-size:.88em;
+            }
+            .text{
+                position:relative;
+                textarea{
+                    width:260px;
+                    float:right;
+                    margin-right:5px;
+                    height:50px;
+                    @media(max-width:1060px){
+                        width:220px;
+                    }
+                }
+                
+            }
+            .dates{
+                display:block;
+                float:right;
+                input.date{
+                    width:129px;
+                    display:block;
+                    height:25px;
+                    margin:2px;
+                    &:disabled{
+                        color:#bbb;
+                    }
+                    @media(max-width:1060px){
+                        width:110px;
+                    }
+                }            
+            }
+
+            .presence{
+                width:260px;
+                float:right;
+                margin:0px;
+                margin-right:16px;
+                padding:0px;
+                @media(max-width:1060px){
+                    width:220px;
+                }
+                .checkbox{
+                    margin:0px 10px;
+                    padding:0px;
+                    label{
+                        margin:0px;
+                    }
+                }
+                .checkbox:first-of-type{
+                    margin-right:40px;
+                    margin-left:0px;
+                }
+            }
+            .glyphicon{
+                display:inline-block;
+                float:right;
+                &:hover{
+                    cursor:pointer;
+                }
+            }
+            .checkbox{
+                margin:0px 8px 0px 0px;
+                padding: 0px 12px 0px 20px;
+                font-size: .9em;
+                font-weight: bold;
+                label{
+                    font-weight:bold;
+                }
+            }
+        }
+    }
+}

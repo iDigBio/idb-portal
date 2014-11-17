@@ -182,7 +182,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         });
         //add column list button
         headers.push(
-            React.DOM.th({style: {width: '20px'}}, 
+            React.DOM.th({style: {width: '60px'}}, 
                 React.DOM.button({className: "pull-right", 'data-toggle': "modal", 'data-target': "#column-list"}, 
                     React.DOM.i({className: "glyphicon glyphicon-list"})
                 )
@@ -267,7 +267,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                         )
                     )
                 ), 
-                React.DOM.table({className: "table table-condensed"}, 
+                React.DOM.table({id: "data-table", className: "table table-condensed"}, 
                     React.DOM.thead(null, 
                         React.DOM.tr(null, headers)
                     ), 
@@ -357,7 +357,7 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
                 React.DOM.p(null, 
                    content, 
                     React.DOM.span({style: {lineHeight: '1em', fontSize:'1em'}}, 
-                        out
+                        " ", out
                     )
                 )
             )
@@ -380,8 +380,8 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
 });
 
 var ResultsImages = React.createClass({displayName: 'ResultsImages',
-    getImageOnlyResults: function(){
-        var search = _.cloneDeep(this.props.search),self=this
+    getImageOnlyResults: function(search){
+        var self=this, search=_.cloneDeep(search);
         search.image = true,
         query = queryBuilder.makeQuery(search);
         searchServer.esQuery('records',query,function(response){
@@ -396,36 +396,27 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         });
     },
     getInitialState: function(){
-        return {results: []};
+        return {results: this.props.results};
     },
     errorImage: function(event){
 
     },
     componentWillMount: function(){
-        if(this.props.search.image){
-            this.setState({results: this.props.results})
-        }else{
-            this.getImageOnlyResults();
+        if(!this.props.search.image){
+            this.getImageOnlyResults(this.props.search);
         }
     },
     componentWillReceiveProps: function(nextProps){
-        if(this.props.search.image){
-            this.setState({results: this.props.results})
+        if(nextProps.search.image){
+            this.setState({results: nextProps.results})
         }else{
-            this.getImageOnlyResults();
+            this.getImageOnlyResults(nextProps.search);
         }
     },
-    /*shouldComponentUpdate: function(nextProps,nextState){
-        if(nextProps.search.image){
-            return true;
-        }else{
-            this.getImageOnlyResults();
-            return false;
-        }
-    },*/
-    makeImage: function(uuid,specimen){
+
+    makeImage: function(uuid,key){
         return (
-            React.DOM.a({className: "image", href: "/portal/mediarecords/"+uuid}, 
+            React.DOM.a({className: "image", target: "_new", href: "/portal/mediarecords/"+uuid, key: key}, 
                 React.DOM.img({alt: "loading...", 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
                 onError: this.errorImage})
@@ -433,11 +424,12 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         )
     },
     render: function(){
-        var images=[],self=this;
-        this.state.results.forEach(function(record){
+        var images=[],self=this,key=0;
+        this.state.results.forEach(function(record,index){
             if(_.isArray(record._source.mediarecords)){
                 record._source.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record));
+                    images.push(self.makeImage(uuid,key));
+                    key++;
                 })
             }
         });

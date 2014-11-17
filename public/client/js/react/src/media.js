@@ -83,7 +83,7 @@ var Table = React.createClass({
         });
         //add unknown keys to end of list
         var dif = _.difference(Object.keys(this.props.record),order);
-        var merged = order.concat(dif);
+        var merged = order.concat(dif), count=0;
         var regex = /(\bhttps?:\/\/(\S|\w)+)/;
         _.each(order,function(key){
             var name = _.isUndefined(dwc.names[key]) ? key: dwc.names[key];
@@ -96,26 +96,27 @@ var Table = React.createClass({
                     str = val.replace(regex, "<a href=\"$1\">$1</a>");
                 }
                 rows.push(
-                    <tr key={key}>
+                    <tr key={count}>
                         <td className="name">{name}</td>
                         <td className="value" dangerouslySetInnerHTML={{__html: str}}></td>
                     </tr>
                 );                
             }else if(_.isArray(val)){
                 rows.push(
-                    <tr key={key}>
+                    <tr key={count}>
                         <td className="name">{name}</td>
                         <td className="value">{val.join(', ')}</td>
                     </tr>
                 );                 
             }else{
                 rows.push(
-                    <tr key={key}>
+                    <tr key={count}>
                         <td className="name">{name}</td>
                         <td className="value">{val}</td>
                     </tr>
                 );                 
             }
+            count++
         });
 
         return (

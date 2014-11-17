@@ -182,7 +182,7 @@ var ResultsList = React.createClass({
         });
         //add column list button
         headers.push(
-            <th style={{width: '20px'}}>
+            <th style={{width: '60px'}}>
                 <button className="pull-right" data-toggle="modal" data-target="#column-list">
                     <i className="glyphicon glyphicon-list"/>
                 </button>
@@ -267,7 +267,7 @@ var ResultsList = React.createClass({
                         </div>
                     </div>
                 </div>
-                <table className="table table-condensed">
+                <table id="data-table" className="table table-condensed">
                     <thead>
                         <tr>{headers}</tr>
                     </thead>
@@ -357,7 +357,7 @@ var ResultsLabels = React.createClass({
                 <p>
                    {content}
                     <span style={{lineHeight: '1em', fontSize:'1em'}}>
-                        {out}
+                        &nbsp;{out}
                     </span>     
                 </p>
             </div>
@@ -380,8 +380,8 @@ var ResultsLabels = React.createClass({
 });
 
 var ResultsImages = React.createClass({
-    getImageOnlyResults: function(){
-        var search = _.cloneDeep(this.props.search),self=this
+    getImageOnlyResults: function(search){
+        var self=this, search=_.cloneDeep(search);
         search.image = true,
         query = queryBuilder.makeQuery(search);
         searchServer.esQuery('records',query,function(response){
@@ -396,36 +396,27 @@ var ResultsImages = React.createClass({
         });
     },
     getInitialState: function(){
-        return {results: []};
+        return {results: this.props.results};
     },
     errorImage: function(event){
 
     },
     componentWillMount: function(){
-        if(this.props.search.image){
-            this.setState({results: this.props.results})
-        }else{
-            this.getImageOnlyResults();
+        if(!this.props.search.image){
+            this.getImageOnlyResults(this.props.search);
         }
     },
     componentWillReceiveProps: function(nextProps){
-        if(this.props.search.image){
-            this.setState({results: this.props.results})
+        if(nextProps.search.image){
+            this.setState({results: nextProps.results})
         }else{
-            this.getImageOnlyResults();
+            this.getImageOnlyResults(nextProps.search);
         }
     },
-    /*shouldComponentUpdate: function(nextProps,nextState){
-        if(nextProps.search.image){
-            return true;
-        }else{
-            this.getImageOnlyResults();
-            return false;
-        }
-    },*/
-    makeImage: function(uuid,specimen){
+
+    makeImage: function(uuid,key){
         return (
-            <a className="image" href={"/portal/mediarecords/"+uuid}>
+            <a className="image" target="_new" href={"/portal/mediarecords/"+uuid} key={key}>
                 <img alt="loading..." 
                 src={"https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail"}
                 onError={this.errorImage}/>
@@ -433,11 +424,12 @@ var ResultsImages = React.createClass({
         )
     },
     render: function(){
-        var images=[],self=this;
-        this.state.results.forEach(function(record){
+        var images=[],self=this,key=0;
+        this.state.results.forEach(function(record,index){
             if(_.isArray(record._source.mediarecords)){
                 record._source.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record));
+                    images.push(self.makeImage(uuid,key));
+                    key++;
                 })
             }
         });

@@ -12,7 +12,7 @@ var Download = require('./search/download');
 module.exports = React.createClass({displayName: 'exports',
     showPanel: function(event){
         $('#options-menu .active').removeClass('active');
-        var panel = $(event.target).addClass('active').attr('data-panel');
+        var panel = $(event.currentTarget).addClass('active').attr('data-panel');
         $('#options .section').hide();
         $('#options #'+panel).show();
     },
@@ -76,11 +76,11 @@ module.exports = React.createClass({displayName: 'exports',
                             )
                         ), 
                         React.DOM.div({key: "filters", id: "options", className: "clearfix"}, 
-                            React.DOM.ul({id: "options-menu", onClick: this.showPanel}, 
-                                React.DOM.li({className: "active", 'data-panel': "filters"}, "Advanced Filters"), 
-                                React.DOM.li({'data-panel': "sorting"}, "Sorting"), 
-                                React.DOM.li({'data-panel': "mapping"}, "Mapping"), 
-                                React.DOM.li({'data-panel': "download"}, "Download & History")
+                            React.DOM.ul({id: "options-menu"}, 
+                                React.DOM.li({className: "active", 'data-panel': "filters", onClick: this.showPanel}, "Filters"), 
+                                React.DOM.li({'data-panel': "sorting", onClick: this.showPanel}, "Sorting"), 
+                                React.DOM.li({'data-panel': "mapping", onClick: this.showPanel}, "Mapping"), 
+                                React.DOM.li({'data-panel': "download", onClick: this.showPanel}, "Download & History")
                             ), 
                             React.DOM.div({className: "section active", id: "filters"}, 
                                 Filters({searchChange: this.searchChange})

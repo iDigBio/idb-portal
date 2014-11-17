@@ -1,3 +1,160 @@
+#filters {
+  height: inherit;
+}
+#filters #filter-select {
+  margin: 0px;
+  border-bottom-color: #999;
+}
+#filters #filter-select select {
+  display: inline;
+  width: 60%;
+  margin: 0px 15px;
+  float: left;
+  border-radius: 4px;
+  background-color: white;
+}
+@media (max-width: 1060px) {
+  #filters #filter-select select {
+    width: 50%;
+  }
+}
+#filters #filter-select select .field-group {
+  margin-left: 10px;
+}
+#filters #filter-select select option:disabled {
+  color: darkred;
+}
+#filters #filter-select select optgroup.field {
+  display: block;
+  margin-left: 20px;
+}
+#filters #filter-select button {
+  float: left;
+}
+#filters #filters-holder {
+  overflow-y: scroll;
+  position: relative;
+  height: 263px;
+  margin: 0px;
+  padding: 0px;
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder {
+    height: 233px;
+  }
+}
+#filters #filters-holder .filter-trans-enter {
+  opacity: 0.01;
+  transition: opacity 0.4s ease-in;
+}
+#filters #filters-holder .filter-trans-enter.filter-trans-enter-active {
+  opacity: 1;
+}
+#filters #filters-holder .filter-trans-leave {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+#filters #filters-holder .filter-trans-leave.filter-trans-leave-active {
+  opacity: 0.01;
+}
+#filters #filters-holder .filter {
+  background: #fafafa;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa), color-stop(100%, #f0f0f0));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #fafafa 0%, #f0f0f0 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f0f0f0', GradientType=0);
+  /* IE6-9 */
+  margin-top: 0px;
+  border-right: 1px solid #cccccc;
+  padding: 4px;
+}
+#filters #filters-holder .filter .filter-name {
+  word-wrap: break-all;
+  word-break: break-word;
+  width: 20%;
+  font-size: .88em;
+}
+#filters #filters-holder .filter .text {
+  position: relative;
+}
+#filters #filters-holder .filter .text textarea {
+  width: 260px;
+  float: right;
+  margin-right: 5px;
+  height: 50px;
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .text textarea {
+    width: 220px;
+  }
+}
+#filters #filters-holder .filter .dates {
+  display: block;
+  float: right;
+}
+#filters #filters-holder .filter .dates input.date {
+  width: 129px;
+  display: block;
+  height: 25px;
+  margin: 2px;
+}
+#filters #filters-holder .filter .dates input.date:disabled {
+  color: #bbb;
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .dates input.date {
+    width: 110px;
+  }
+}
+#filters #filters-holder .filter .presence {
+  width: 260px;
+  float: right;
+  margin: 0px;
+  margin-right: 16px;
+  padding: 0px;
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .presence {
+    width: 220px;
+  }
+}
+#filters #filters-holder .filter .presence .checkbox {
+  margin: 0px 10px;
+  padding: 0px;
+}
+#filters #filters-holder .filter .presence .checkbox label {
+  margin: 0px;
+}
+#filters #filters-holder .filter .presence .checkbox:first-of-type {
+  margin-right: 40px;
+  margin-left: 0px;
+}
+#filters #filters-holder .filter .glyphicon {
+  display: inline-block;
+  float: right;
+}
+#filters #filters-holder .filter .glyphicon:hover {
+  cursor: pointer;
+}
+#filters #filters-holder .filter .checkbox {
+  margin: 0px 8px 0px 0px;
+  padding: 0px 12px 0px 20px;
+  font-size: .9em;
+  font-weight: bold;
+}
+#filters #filters-holder .filter .checkbox label {
+  font-weight: bold;
+}
 #main,
 #react-wrapper,
 #top,
@@ -64,11 +221,11 @@ header {
   list-style-type: none;
   margin: 5px 5px 1px 15px;
   padding: 0px;
-  width: 100%;
   position: relative;
   z-index: 100;
 }
-#options #options-menu li {
+#options #options-menu li,
+#options #options-menu #advanced-menu li {
   display: inline;
   border: 1px solid #cccccc;
   border-bottom: none;
@@ -160,192 +317,6 @@ header {
   margin: 0px;
   padding: 0px;
 }
-#filters {
-  height: inherit;
-}
-#filters #filter-select {
-  margin: 0px;
-  border-bottom-color: #999;
-}
-#filters #filter-select img {
-  display: inline-block;
-  float: left;
-  height: 45px;
-}
-#filters #filter-select #filter-type {
-  list-style-type: none;
-  width: 140px;
-  display: block;
-  float: left;
-  margin: 2px;
-  margin-left: 8px;
-  margin-right: -2px;
-  padding: 1px;
-  border-left: 1px solid #cccccc;
-  border-top: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  border-radius: 3px 0px 0px 3px;
-  background-color: #fefefe;
-  font-size: .9em;
-  /*li.active{
-                background-color: @bglight;
-                padding-right:4px;
-                border-right: @bglight;
-                z-index:100;
-                margin-right:0px;
-                margin-left:0px;
-                postion:fixed;
-            }*/
-}
-#filters #filter-select #filter-type .filter-type {
-  margin: 2px;
-  padding: 0px;
-}
-#filters #filter-select #filter-type .filter-type label {
-  margin: 0px;
-  padding: 0px;
-}
-#filters #filter-select #filter-type .filter-type label input {
-  margin-right: 5px;
-  margin-top: 4px;
-  margin-left: 5px;
-}
-#filters #filter-select #filter-type li {
-  text-decoration: none;
-  font-size: .85em;
-  font-weight: bold;
-  text-align: left;
-  margin: 1px 0px 2px 0px;
-  padding: 0px 7px;
-  border-radius: 3px 0px 0px 3px;
-  display: inline-block;
-  z-index: 100;
-  width: 120px;
-}
-#filters #filter-select #filter-type li:hover {
-  cursor: pointer;
-}
-#filters #filter-select #filter-selects {
-  padding: 7px 5px 7px 5px;
-  margin-top: 2px;
-  margin-left: 15px;
-  border-top: 1px solid #cccccc;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  border-left: 1px solid #cccccc;
-  display: block;
-  float: left;
-  background-color: #fefefe;
-  border-radius: 4px;
-}
-#filters #filter-select select {
-  display: inline;
-  width: 90%;
-  margin: 0px 15px;
-  float: right;
-  border-radius: 4px;
-  background-color: white;
-}
-#filters #filter-select select .field-group {
-  margin-left: 10px;
-}
-#filters #filter-select select option:disabled {
-  color: darkred;
-}
-#filters #filter-select select optgroup.field {
-  display: block;
-  margin-left: 20px;
-}
-#filters #filters-holder {
-  overflow-y: scroll;
-  position: relative;
-  height: 263px;
-  margin: 0px;
-  padding: 0px;
-}
-#filters .filter {
-  background: #fafafa;
-  /* Old browsers */
-  background: -moz-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
-  /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa), color-stop(100%, #f0f0f0));
-  /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
-  /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
-  /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #fafafa 0%, #f0f0f0 100%);
-  /* IE10+ */
-  background: linear-gradient(to bottom, #fafafa 0%, #f0f0f0 100%);
-  /* W3C */
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='#f0f0f0', GradientType=0);
-  /* IE6-9 */
-  margin-top: 0px;
-  border-right: 1px solid #cccccc;
-  padding: 4px;
-}
-#filters .filter .filter-name {
-  word-wrap: break-all;
-  word-break: break-word;
-  width: 20%;
-  font-size: .88em;
-}
-#filters .filter .text {
-  position: relative;
-}
-#filters .filter .text textarea {
-  width: 260px;
-  float: right;
-  margin-right: 5px;
-  height: 50px;
-}
-#filters .filter .dates {
-  display: block;
-  float: right;
-}
-#filters .filter .dates .date {
-  width: 129px;
-  display: block;
-  height: 25px;
-  margin: 2px;
-}
-#filters .filter .dates .date:disabled {
-  color: #bbb;
-}
-#filters .filter .presence {
-  width: 260px;
-  float: right;
-  margin: 0px;
-  margin-right: 16px;
-  padding: 0px;
-}
-#filters .filter .presence .checkbox {
-  margin: 0px 10px;
-  padding: 0px;
-}
-#filters .filter .presence .checkbox label {
-  margin: 0px;
-}
-#filters .filter .presence .checkbox:first-of-type {
-  margin-right: 40px;
-  margin-left: 0px;
-}
-#filters .filter .glyphicon {
-  display: inline-block;
-  float: right;
-}
-#filters .filter .glyphicon:hover {
-  cursor: pointer;
-}
-#filters .filter .checkbox {
-  margin: 0px 8px 0px 0px;
-  padding: 0px 12px 0px 20px;
-  font-size: .9em;
-  font-weight: bold;
-}
-#filters .filter .checkbox label {
-  font-weight: bold;
-}
 #results {
   margin: auto;
   margin-top: 0px;
@@ -399,6 +370,9 @@ header {
 #results #result-list #column-list table {
   width: 210px;
 }
+#results #result-list #column-list table tr {
+  height: 20px;
+}
 #results #result-list #column-list table label {
   font-weight: normal;
 }
@@ -408,19 +382,32 @@ header {
 #results #result-list #column-list table label:hover {
   cursor: pointer;
 }
-#results #result-list #reset {
+#results #result-list #column-list #reset {
   margin-left: 10px;
 }
-#results #result-list th {
+#results #result-list #data-table {
+  table-layout: fixed;
+}
+#results #result-list #data-table th {
   cursor: pointer;
 }
-#results #result-list th i {
+#results #result-list #data-table th i {
   margin-left: 8px;
 }
-#results #result-list th:hover {
+#results #result-list #data-table th:hover {
   background-color: #BFF2F7;
 }
-#results #result-list tbody tr:hover {
+#results #result-list #data-table tbody tr {
+  height: 30px;
+}
+#results #result-list #data-table tbody tr td {
+  overflow: hidden;
+  height: 30px;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#results #result-list #data-table tbody tr:hover {
   cursor: pointer;
 }
 #results #result-labels {
@@ -507,18 +494,6 @@ header {
   #search {
     width: 400px;
   }
-  #filters select {
-    width: 120px;
-  }
-  #filters #filters-holder {
-    height: 263px;
-  }
-  #filters .filter textarea {
-    width: 250px;
-  }
-  #filters .filter .presence {
-    width: 250px;
-  }
   #map {
     margin-left: 405px;
   }
@@ -529,18 +504,6 @@ header {
   }
   #map {
     margin-left: 380px;
-  }
-  #filters select {
-    width: 120px;
-  }
-  #filters #filters-holder {
-    height: 233px;
-  }
-  #filters .filter textarea {
-    width: 230px;
-  }
-  #filters .filter .presence {
-    width: 230px;
   }
 }
 /*@media(max-width:1160px){

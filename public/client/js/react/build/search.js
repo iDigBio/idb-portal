@@ -8,6 +8,7 @@ var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
 var Results = require('./search/results');
 var Download = require('./search/download');
+var Map = require('./search/map');
 
 module.exports = React.createClass({displayName: 'exports',
     showPanel: function(event){
@@ -99,7 +100,7 @@ module.exports = React.createClass({displayName: 'exports',
                             )
                         )
                     ), 
-                    React.DOM.div({id: "map"})
+                    Map({search: this.state.search})
                 ), 
                 Results({search: this.state.search, searchChange: this.searchChange})
             )

@@ -108,7 +108,7 @@ var ResultsList = React.createClass({
         }
     },
     defaultColumns: function(){
-        return _.clone(['genus','specificepithet','collectioncode','datecollected']);
+        return _.clone(['genus','specificepithet','datecollected','collectioncode']);
     },
     setColumns: function(columns){
         this.setState({columns: columns});

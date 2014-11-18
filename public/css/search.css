@@ -328,6 +328,39 @@
   max-width: 85%;
   box-shadow: 0px 0px 3px #888;
 }
+#sorting {
+  width: 50%;
+  display: block;
+  float: left;
+  min-height: 100px;
+}
+#sorting .option-group-add {
+  text-align: right;
+  padding: 4px 7px;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid #cccccc;
+  margin-top: 0px;
+}
+#sorting label {
+  margin: 2px 10px;
+}
+#sorting .option-group .direction {
+  width: 90px;
+}
+#sorting .option-group .name {
+  width: 200px;
+}
+#sorting .option-group button {
+  float: right;
+  margin: 4px 5px;
+}
+#sorting #sort-group {
+  overflow-y: scroll;
+  position: relative;
+  height: 273px;
+  margin: 0px;
+  padding: 0px;
+}
 #main,
 #react-wrapper,
 #top,
@@ -456,39 +489,6 @@ header {
 }
 #options .option-group .direction {
   width: 25%;
-}
-#sorting {
-  width: 50%;
-  display: block;
-  float: left;
-  min-height: 100px;
-}
-#sorting .option-group-add {
-  text-align: right;
-  padding: 4px 7px;
-  background-color: #f0f0f0;
-  border-bottom: 1px solid #cccccc;
-  margin-top: 0px;
-}
-#sorting label {
-  margin: 2px 10px;
-}
-#sorting .option-group .direction {
-  width: 90px;
-}
-#sorting .option-group .name {
-  width: 200px;
-}
-#sorting .option-group button {
-  float: right;
-  margin: 4px 5px;
-}
-#sorting #sort-group {
-  overflow-y: scroll;
-  position: relative;
-  height: 273px;
-  margin: 0px;
-  padding: 0px;
 }
 @media (max-width: 1360px) {
   #search {

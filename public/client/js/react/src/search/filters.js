@@ -24,9 +24,21 @@ module.exports = React.createClass({
                 return {name: name, type: type, range:{start: '', end: '', disabled: false}, exists: false, missing: false};
         }
     },
+    makeFilter: function(filter){
+        //var type = fltrObj.type, name = fltrObj.name;
+        //var type = 'text';
+        switch(filter.type){
+            case 'text':
+                return(
+                    <TextFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>
+                ); 
+            case 'daterange':
+                return (<DateRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>);    
+        }
+    },
     defaultFilters: function(){
         var filters=[],self=this;
-        ['Date Collected','Kingdom','Phylum'].forEach(function(item){
+        ['Date Collected','Genus','Specific Epithet'].forEach(function(item){
             filters.push(self.newFilterState(item));
         });   
         return filters;
@@ -52,7 +64,11 @@ module.exports = React.createClass({
             filters.push(self.newFilterState(item.name));
         });
         this.setState({filters: filters},function(){
-            this.props.searchChange('filters',filters);
+            this.props.searchChange({
+                'filters': filters,
+                'image': false,
+                "geopoint": false
+            });
         })
     },
     addFilter: function(event){
@@ -75,18 +91,7 @@ module.exports = React.createClass({
         });
         return list;
     },
-    makeFilter: function(filter){
-        //var type = fltrObj.type, name = fltrObj.name;
-        //var type = 'text';
-        switch(filter.type){
-            case 'text':
-                return(
-                    <TextFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>
-                ); 
-            case 'daterange':
-                return (<DateRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterStateChange}/>);    
-        }
-    },
+
 
     render: function(){
         var self=this;
@@ -261,10 +266,17 @@ var DateRangeFilter = React.createClass({
         this.props.changeFilter(filter);     
     },
     showDatePicker: function(event){
-        var d = new Date(),self=this;
+        var d = new Date(), self=this, reg = /\d{4}-\d{1,2}-\d{1,2}/,
+        mindate = new Date('1701-01-01'), maxdate= new Date(d.getFullYear()+'-'+(d.getMonth()+1)+'-'+(d.getDate()+1));
+        if(event.currentTarget.name=='end' && reg.test(this.props.filter.range.start)){
+
+            mindate = new Date(this.props.filter.range.start)
+        }
         $(event.currentTarget).datepicker({
             dateFormat: 'yy-mm-dd',
             yearRange: '1701:'+d.getFullYear(),
+            //minDate: mindate,
+            //maxDate: maxdate,
             changeYear: true,
             changeMonth: true,
             onSelect: function(date,obj){
@@ -301,21 +313,8 @@ var DateRangeFilter = React.createClass({
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <i className="glyphicon glyphicon-remove" onClick={this.propClick} data-remove={name}></i>
                 <label className="filter-name">{name}</label>
-                <div className="dates clearfix">
-                    <div className="pull-right">
-                        End: 
-                        <input 
-                            name="end"
-                            type="text" 
-                            className="form-control date"
-                            disabled={filter.range.disabled} 
-                            onChange={this.dateChange} 
-                            onFocus={this.showDatePicker}
-                            value={filter.range.end}
-                            placeholder="yyyy-mm-dd"
-                        />
-                    </div>
-                    <div className="pull-right">
+                <div className="dates clearfix pull-right">
+                    <div className="pull-left">
                         Start: 
                         <input 
                             name="start"
@@ -328,7 +327,19 @@ var DateRangeFilter = React.createClass({
                             placeholder="yyyy-mm-dd"
                         />
                     </div>
-
+                    <div className="pull-left">
+                        End: 
+                        <input 
+                            name="end"
+                            type="text" 
+                            className="form-control date"
+                            disabled={filter.range.disabled} 
+                            onChange={this.dateChange} 
+                            onFocus={this.showDatePicker}
+                            value={filter.range.end}
+                            placeholder="yyyy-mm-dd"
+                        />
+                    </div>
                 </div>
                 <div className="presence">
                     <div className="checkbox">

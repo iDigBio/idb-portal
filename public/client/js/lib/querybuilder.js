@@ -133,6 +133,23 @@ module.exports = (function(){
 
             return query;
 		}
+
+        this.makeIDBQuery = function(search){
+            var idbq = {};
+            search.filters.forEach(function(item){
+                var term = fields.byName[item.name].term;
+                if(item.exists){
+                    idbq[term]={'type': 'exists'};
+                }else if(item.missing){
+                    idbq[term]={'type': 'missing'};
+                }else if(item.text && !_.isEmpty(item.text.content)){
+                    idbq[term]=item.text.content;
+                }else if(item.range && (!_.isEmpty(item.range.start) || !_.isEmpty(item.range.end))){
+
+                }
+            })
+            return idbq;
+        }
 	    // ### buildAutocompleteQuery
 	    // builds and returns faceted Elastic Search query based on searchObject
 	    // autocomplete is progressive search using all fields with values including active field

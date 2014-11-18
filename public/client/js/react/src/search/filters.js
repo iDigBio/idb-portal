@@ -38,7 +38,12 @@ module.exports = React.createClass({
     resetFilters: function(){
         var self=this;
         this.setState({filters: self.defaultFilters()},function(){
-            self.props.searchChange('filters', self.state.filters);
+            self.props.searchChange({
+                'filters': self.state.filters,
+                'image': false,
+                'geopoint': false
+            });
+            //self.props.searchChange('image', false);
         });
     },
     clearFilters: function(){
@@ -257,7 +262,6 @@ var DateRangeFilter = React.createClass({
     },
     showDatePicker: function(event){
         var d = new Date(),self=this;
-        debugger
         $(event.currentTarget).datepicker({
             dateFormat: 'yy-mm-dd',
             yearRange: '1701:'+d.getFullYear(),

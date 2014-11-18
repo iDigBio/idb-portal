@@ -35,7 +35,13 @@ module.exports = React.createClass({displayName: 'exports',
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
-        search[key]=val;
+        if(typeof key == 'string'){
+            search[key]=val;
+        }else if(typeof key == 'object'){
+            _.each(key,function(v,k){
+                search[k]=v;
+            });
+        }
         this.setState({search: search});
     },
     viewChange: function(key,val){

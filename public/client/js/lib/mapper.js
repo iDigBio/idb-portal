@@ -36,8 +36,8 @@ module.exports = function(elid, options){
         query: function(idbquery){
             //map.removeLayer(idblayer);
             var q = encodeURIComponent(JSON.stringify(idbquery));
-            if(typeof idblayer == 'ILayer'){
-                idb.removeLayer(idblayer);
+            if(typeof idblayer == 'object'){
+                map.removeLayer(idblayer);
             }
             idblayer = L.tileLayer('//beta-search.idigbio.org/v2/mapping/tile/{z}/{x}/{y}.png?rq='+q,{minZoom: 1, maxZoom: 12})
             map.addLayer(idblayer);

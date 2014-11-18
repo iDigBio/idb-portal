@@ -135,7 +135,7 @@ module.exports = (function(){
 		}
 
         this.makeIDBQuery = function(search){
-            var idbq = {};
+            var idbq = {}, reg = /\d{4}-\d{1,2}-\d{1,2}/;
             search.filters.forEach(function(item){
                 var term = fields.byName[item.name].term;
                 if(item.exists){
@@ -143,11 +143,28 @@ module.exports = (function(){
                 }else if(item.missing){
                     idbq[term]={'type': 'missing'};
                 }else if(item.text && !_.isEmpty(item.text.content)){
-                    idbq[term]=item.text.content;
+                    var text = item.text.content.split('\n');
+                    if(text.length>1){
+                        idbq[term] = text;
+                    }else{
+                        idbq[term] = text[0];
+                    }
                 }else if(item.range && (!_.isEmpty(item.range.start) || !_.isEmpty(item.range.end))){
-
+                    idbq[term]={'type':'range'};
+                    if(reg.test(item.range.start)){
+                        idbq[term]['gte'] = item.range.start;
+                    }
+                    if(reg.test(item.range.end)){
+                        idbq[term]['lte'] = item.range.end;
+                    }
                 }
             })
+            if(search.image){
+                idbq['hasImage']=true;
+            }
+            if(search.geopoint){
+                idbq['geopoint']={'type': 'exists'};
+            }
             return idbq;
         }
 	    // ### buildAutocompleteQuery

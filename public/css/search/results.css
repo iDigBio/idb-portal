@@ -88,6 +88,10 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+#results #result-list #data-table tbody tr td span.no-data {
+  color: #aaa;
+  font-style: italic;
+}
 #results #result-list #data-table tbody tr:hover {
   cursor: pointer;
 }

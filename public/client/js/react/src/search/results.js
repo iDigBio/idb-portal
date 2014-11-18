@@ -33,9 +33,6 @@ module.exports = React.createClass({
             return false;
         }
     },
-    componentWillMount: function(){
-
-    },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
     },
@@ -197,6 +194,11 @@ var ResultsList = React.createClass({
                 }else{
                     val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
                 }
+
+                if(_.isEmpty(val)){
+                    val = <span className="no-data">no data</span>;
+                }
+                
                 if(columns.length-1 === ind){
                     tds.push(<td colSpan="2">{val}</td>);
                 }else{

@@ -10,28 +10,27 @@ var Results = require('./search/results');
 var Download = require('./search/download');
 var Map = require('./search/map');
 
-module.exports = React.createClass({
+module.exports = Main = React.createClass({
     showPanel: function(event){
-        $('#options-menu .active').removeClass('active');
-        var panel = $(event.currentTarget).addClass('active').attr('data-panel');
-        $('#options .section').hide();
-        $('#options #'+panel).show();
+        this.setState({panels: event.currentTarget.attributes['data-panel'].value})
+    },
+    defaultSearch: function(){
+        return {
+            filters:[],
+            fulltext:'',
+            image:false,
+            geopoint:false,
+            sorting:[{name: 'genus', order: 'asc'}],
+            from: 0,
+            size: 100
+        };
     },
     getInitialState: function(){
+        if(localStorage && typeof localStorage.panels ==='undefined'){
+            localStorage.setItem('panels','filters');
+        }
         return {
-            search:{
-                filters:[],
-                fulltext:'',
-                image:false,
-                geopoint:false,
-                sorting:[{name: 'genus', order: 'asc'}],
-                from: 0,
-                size: 100
-            },
-            view:{
-                columns: ['genus','specificepithet','collectioncode','datecollected'],
-                type: 'list'
-            }
+            search: this.defaultSearch(), panels: 'filters'
         };
     },
     searchChange: function(key,val){
@@ -58,7 +57,25 @@ module.exports = React.createClass({
         this.searchChange('fulltext',event.currentTarget.value);
     },
     render: function(){
-
+        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
+        Object.keys(panels).forEach(function(item,ind){
+            if(item==self.state.panels){
+                panels[item]='active';
+            }else{
+                panels[item]='';
+            }
+            if(item=='download'){
+                menu.push(
+                    <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>Download &amp; History</li>
+                )
+            }else{
+                menu.push(
+                    <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>{helpers.firstToUpper(item)}</li>
+                )
+            }
+            
+        })
+    
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
@@ -84,18 +101,15 @@ module.exports = React.createClass({
                         </div>
                         <div key='filters' id="options" className="clearfix">
                             <ul id="options-menu" >
-                                <li className="active" data-panel="filters" onClick={this.showPanel}>Filters</li>
-                                <li data-panel="sorting" onClick={this.showPanel}>Sorting</li>
-                                <li data-panel="mapping" onClick={this.showPanel}>Mapping</li>
-                                <li data-panel="download" onClick={this.showPanel}>Download &amp; History</li>
+                                {menu}
                             </ul>
-                            <div className="section active" id="filters">
+                            <div className={"section "+panels.filters} id="filters">
                                 <Filters searchChange={this.searchChange}/>
                             </div>
-                            <div className="clearfix section" id="sorting">
+                            <div className={"clearfix section "+panels.sorting} id="sorting">
                                 <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
                             </div>
-                            <div className="clearfix section" id="download">
+                            <div className={"clearfix section "+panels.download} id="download">
                                 <Download />
                             </div>
                         </div>

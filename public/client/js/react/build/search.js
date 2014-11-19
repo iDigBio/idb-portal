@@ -10,28 +10,27 @@ var Results = require('./search/results');
 var Download = require('./search/download');
 var Map = require('./search/map');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = Main = React.createClass({displayName: 'Main',
     showPanel: function(event){
-        $('#options-menu .active').removeClass('active');
-        var panel = $(event.currentTarget).addClass('active').attr('data-panel');
-        $('#options .section').hide();
-        $('#options #'+panel).show();
+        this.setState({panels: event.currentTarget.attributes['data-panel'].value})
+    },
+    defaultSearch: function(){
+        return {
+            filters:[],
+            fulltext:'',
+            image:false,
+            geopoint:false,
+            sorting:[{name: 'genus', order: 'asc'}],
+            from: 0,
+            size: 100
+        };
     },
     getInitialState: function(){
+        if(localStorage && typeof localStorage.panels ==='undefined'){
+            localStorage.setItem('panels','filters');
+        }
         return {
-            search:{
-                filters:[],
-                fulltext:'',
-                image:false,
-                geopoint:false,
-                sorting:[{name: 'genus', order: 'asc'}],
-                from: 0,
-                size: 100
-            },
-            view:{
-                columns: ['genus','specificepithet','collectioncode','datecollected'],
-                type: 'list'
-            }
+            search: this.defaultSearch(), panels: 'filters'
         };
     },
     searchChange: function(key,val){
@@ -58,7 +57,25 @@ module.exports = React.createClass({displayName: 'exports',
         this.searchChange('fulltext',event.currentTarget.value);
     },
     render: function(){
-
+        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
+        Object.keys(panels).forEach(function(item,ind){
+            if(item==self.state.panels){
+                panels[item]='active';
+            }else{
+                panels[item]='';
+            }
+            if(item=='download'){
+                menu.push(
+                    React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, "Download & History")
+                )
+            }else{
+                menu.push(
+                    React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
+                )
+            }
+            
+        })
+    
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
@@ -84,18 +101,15 @@ module.exports = React.createClass({displayName: 'exports',
                         ), 
                         React.DOM.div({key: "filters", id: "options", className: "clearfix"}, 
                             React.DOM.ul({id: "options-menu"}, 
-                                React.DOM.li({className: "active", 'data-panel': "filters", onClick: this.showPanel}, "Filters"), 
-                                React.DOM.li({'data-panel': "sorting", onClick: this.showPanel}, "Sorting"), 
-                                React.DOM.li({'data-panel': "mapping", onClick: this.showPanel}, "Mapping"), 
-                                React.DOM.li({'data-panel': "download", onClick: this.showPanel}, "Download & History")
+                                menu
                             ), 
-                            React.DOM.div({className: "section active", id: "filters"}, 
+                            React.DOM.div({className: "section "+panels.filters, id: "filters"}, 
                                 Filters({searchChange: this.searchChange})
                             ), 
-                            React.DOM.div({className: "clearfix section", id: "sorting"}, 
+                            React.DOM.div({className: "clearfix section "+panels.sorting, id: "sorting"}, 
                                 Sorting({searchChange: this.searchChange, sorting: this.state.search.sorting})
                             ), 
-                            React.DOM.div({className: "clearfix section", id: "download"}, 
+                            React.DOM.div({className: "clearfix section "+panels.download, id: "download"}, 
                                 Download(null)
                             )
                         )

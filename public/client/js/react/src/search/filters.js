@@ -8,8 +8,8 @@ var RCTgroup = React.addons.CSSTransitionGroup;
 module.exports = React.createClass({
     filterPropsChange: function(filterObj){
         var list = this.filters();
-        var filters = _.cloneDeep(this.props.filters);
-        filters[list.indexOf(filterObj.name)] = _.cloneDeep(filterObj);
+        var filters = this.props.filters;
+        filters[list.indexOf(filterObj.name)] = filterObj;
         //this.setState({filters: filters},function(){
         this.props.searchChange('filters',filters);
         //});

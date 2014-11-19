@@ -8,8 +8,8 @@ var RCTgroup = React.addons.CSSTransitionGroup;
 module.exports = React.createClass({displayName: 'exports',
     filterPropsChange: function(filterObj){
         var list = this.filters();
-        var filters = _.cloneDeep(this.props.filters);
-        filters[list.indexOf(filterObj.name)] = _.cloneDeep(filterObj);
+        var filters = this.props.filters;
+        filters[list.indexOf(filterObj.name)] = filterObj;
         //this.setState({filters: filters},function(){
         this.props.searchChange('filters',filters);
         //});
@@ -43,7 +43,10 @@ module.exports = React.createClass({displayName: 'exports',
         });   
         return filters;
     },
-
+    getInitialState: function(){
+        var self=this;
+        return {filters: self.defaultFilters()};
+    },
     resetFilters: function(){
         var self=this;
         //this.setState({filters: self.defaultFilters()},function(){

@@ -39,10 +39,10 @@ module.exports = Main = React.createClass({
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         if(typeof key == 'string'){
-            search[key]=_.cloneDeep(val);
+            search[key]=val;
         }else if(typeof key == 'object'){
             _.each(key,function(v,k){
-                search[k]=_.cloneDeep(v);
+                search[k]=v;
             });
         }
         this.setState({search: search});

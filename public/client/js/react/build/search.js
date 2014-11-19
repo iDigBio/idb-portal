@@ -39,10 +39,10 @@ module.exports = Main = React.createClass({displayName: 'Main',
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         if(typeof key == 'string'){
-            search[key]=_.cloneDeep(val);
+            search[key]=val;
         }else if(typeof key == 'object'){
             _.each(key,function(v,k){
-                search[k]=_.cloneDeep(v);
+                search[k]=v;
             });
         }
         this.setState({search: search});
@@ -78,7 +78,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
             }
             
         })
-        var search = _.cloneDeep(this.state.search);
+        var search = _.cloneDeep(this.state.search)
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
@@ -107,10 +107,10 @@ module.exports = Main = React.createClass({displayName: 'Main',
                                 menu
                             ), 
                             React.DOM.div({className: "section "+panels.filters, id: "filters"}, 
-                                Filters({searchChange: this.searchChange, filters: search.filters})
+                                Filters({searchChange: this.searchChange, filters: this.state.search.filters})
                             ), 
                             React.DOM.div({className: "clearfix section "+panels.sorting, id: "sorting"}, 
-                                Sorting({searchChange: this.searchChange, sorting: search.sorting})
+                                Sorting({searchChange: this.searchChange, sorting: this.state.search.sorting})
                             ), 
                             React.DOM.div({className: "clearfix section "+panels.download, id: "download"}, 
                                 Download(null)

@@ -9,7 +9,7 @@ module.exports = React.createClass({displayName: 'exports',
     filterStateChange: function(filterObj){
         var list = this.filters();
         var filters = this.state.filters;
-        filters[list.indexOf(filterObj.name)] = filterObj;
+        filters[list.indexOf(filterObj.name)] = _.cloneDeep(filterObj);
         this.setState({filters: filters},function(){
             this.props.searchChange('filters',this.state.filters);
         });

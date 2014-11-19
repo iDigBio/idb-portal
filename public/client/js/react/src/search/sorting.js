@@ -72,12 +72,12 @@ module.exports = React.createClass({
                 sorts.push(
                     <div className="option-group">
                         <label>Sort by</label>
+                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
+                            {fgroups}
+                        </select>
                         <select className="direction form-control" value={item.order} onChange={self.sortChange} data-index={ind} data-name='order'>
                             <option value="asc" selected={asc}>Ascending</option>
                             <option value="desc" selected={desc}>Descending</option>
-                        </select>
-                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
-                            {fgroups}
                         </select>
                     </div>
                 )
@@ -86,12 +86,12 @@ module.exports = React.createClass({
                     <div className="option-group">
                         <label>Then by</label>
                         <button onClick={self.removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>
+                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
+                            {fgroups}
+                        </select>
                         <select className="direction form-control" value={item.order} onChange={self.sortChange} data-index={ind} data-name='order'>
                             <option value="asc">Ascending</option>
                             <option value="desc">Descending</option>
-                        </select>
-                        <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
-                            {fgroups}
                         </select>
                     </div>
                 )
@@ -99,7 +99,7 @@ module.exports = React.createClass({
         })
         return (
             <div>
-                <div className="option-group-add">
+                <div id="sort-add">
                      Add another sort &nbsp;<button onClick={this.addClick}><span className="glyphicon glyphicon-plus"></span></button>
                 </div>
                 <div id="sort-group">

@@ -38,8 +38,10 @@ module.exports = React.createClass({
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
-        this.setState({search: nextProps.search});
-        this.getResults(nextProps.search);  
+        this.setState({search: nextProps.search},function(){
+            this.getResults(nextProps.search); 
+        });
+         
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;
@@ -198,7 +200,7 @@ var ResultsList = React.createClass({
                 if(_.isEmpty(val)){
                     val = <span className="no-data">no data</span>;
                 }
-                
+
                 if(columns.length-1 === ind){
                     tds.push(<td colSpan="2">{val}</td>);
                 }else{

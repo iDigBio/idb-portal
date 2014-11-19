@@ -72,12 +72,12 @@ module.exports = React.createClass({displayName: 'exports',
                 sorts.push(
                     React.DOM.div({className: "option-group"}, 
                         React.DOM.label(null, "Sort by"), 
+                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                            fgroups
+                        ), 
                         React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
                             React.DOM.option({value: "asc", selected: asc}, "Ascending"), 
                             React.DOM.option({value: "desc", selected: desc}, "Descending")
-                        ), 
-                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
-                            fgroups
                         )
                     )
                 )
@@ -86,12 +86,12 @@ module.exports = React.createClass({displayName: 'exports',
                     React.DOM.div({className: "option-group"}, 
                         React.DOM.label(null, "Then by"), 
                         React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
+                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                            fgroups
+                        ), 
                         React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
                             React.DOM.option({value: "asc"}, "Ascending"), 
                             React.DOM.option({value: "desc"}, "Descending")
-                        ), 
-                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
-                            fgroups
                         )
                     )
                 )
@@ -99,7 +99,7 @@ module.exports = React.createClass({displayName: 'exports',
         })
         return (
             React.DOM.div(null, 
-                React.DOM.div({className: "option-group-add"}, 
+                React.DOM.div({id: "sort-add"}, 
                      "Add another sort  ", React.DOM.button({onClick: this.addClick}, React.DOM.span({className: "glyphicon glyphicon-plus"}))
                 ), 
                 React.DOM.div({id: "sort-group"}, 

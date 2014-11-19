@@ -12,8 +12,6 @@ module.exports = function(elid, options){
         reuseTiles: true
     });
 
-    
-    //var mid = _.isString(elid) ? elid : 'map';
     var defaults = {
         center: [0,0],
         zoom: 2,
@@ -27,10 +25,6 @@ module.exports = function(elid, options){
     }
     
     var map = L.map(elid,defaults);
-
-    var loadQuery = function(query){
-
-    } 
     var idblayer;
     var interf = {
         query: function(idbquery){

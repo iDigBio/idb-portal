@@ -2,12 +2,10 @@
  * @jsx React.DOM
  */
 
-var React = require('react');
+var React = require('react/addons')
+var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = React.createClass({displayName: 'exports',
-    getInitialState: function(){
-        return {sorting: this.props.sorting};
-    },
     getSortNames: function(){
         var list=[];
         this.props.sorting.forEach(function(item){
@@ -18,13 +16,13 @@ module.exports = React.createClass({displayName: 'exports',
     addClick: function(event){
         var s = _.cloneDeep(this.props.sorting);
         s.push({name: false, order:'asc'});
-        this.setState({sorting: s});
+        //this.setState({sorting: s});
         this.props.searchChange('sorting',s)
     },
     removeClick: function(event){
         var s = _.cloneDeep(this.props.sorting);
         s.splice(parseInt(event.currentTarget.attributes['data-index'].value),1);
-        this.setState({sorting: s});
+        //this.setState({sorting: s});
         this.props.searchChange('sorting',s);
     },
     sortChange: function(event){
@@ -32,7 +30,7 @@ module.exports = React.createClass({displayName: 'exports',
         var sorting = this.props.sorting, sort=sorting[ind];
         sort[event.currentTarget.attributes['data-name'].value]=event.currentTarget.value;
         sorting[ind]=sort;
-        this.setState({sorting: sorting});
+        //this.setState({sorting: sorting});
         this.props.searchChange('sorting',sorting);
     },
     render: function(){
@@ -70,7 +68,7 @@ module.exports = React.createClass({displayName: 'exports',
             var desc=item.order == 'desc' ?  'selected':'';
             if(ind===0){
                 sorts.push(
-                    React.DOM.div({className: "option-group"}, 
+                    React.DOM.div({className: "option-group", key: ind}, 
                         React.DOM.label(null, "Sort by"), 
                         React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
                             fgroups
@@ -83,7 +81,7 @@ module.exports = React.createClass({displayName: 'exports',
                 )
             }else{
                 sorts.push(
-                    React.DOM.div({className: "option-group"}, 
+                    React.DOM.div({className: "option-group", key: ind}, 
                         React.DOM.label(null, "Then by"), 
                         React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
                         React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
@@ -103,7 +101,9 @@ module.exports = React.createClass({displayName: 'exports',
                      "Add another sort  ", React.DOM.button({onClick: this.addClick}, React.DOM.span({className: "glyphicon glyphicon-plus"}))
                 ), 
                 React.DOM.div({id: "sort-group"}, 
-                    sorts
+                    RCTgroup({transitionName: "sort-trans"}, 
+                        sorts
+                    )
                 )
             )
         )

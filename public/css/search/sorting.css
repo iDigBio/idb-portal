@@ -21,6 +21,20 @@
   margin: 0px;
   padding: 0px;
 }
+#sorting #sort-group .sort-trans-enter {
+  opacity: 0.01;
+  transition: opacity 0.4s ease-in;
+}
+#sorting #sort-group .sort-trans-enter.sort-trans-enter-active {
+  opacity: 1;
+}
+#sorting #sort-group .sort-trans-leave {
+  opacity: 1;
+  transition: opacity 0.2s ease-in;
+}
+#sorting #sort-group .sort-trans-leave.sort-trans-leave-active {
+  opacity: 0.01;
+}
 #sorting #sort-group .option-group label {
   width: 17%;
   margin: 6px 10px 2px 5px;

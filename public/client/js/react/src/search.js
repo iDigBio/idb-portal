@@ -2,7 +2,7 @@
  * @jsx React.DOM
  */
 
-var React = require('react')
+var React = require('react');
 
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
@@ -12,7 +12,10 @@ var Map = require('./search/map');
 
 module.exports = Main = React.createClass({
     showPanel: function(event){
-        this.setState({panels: event.currentTarget.attributes['data-panel'].value})
+        var val = event.currentTarget.attributes['data-panel'].value;
+        this.setState({panels: val},function(){
+            localStorage.setItem('panels',val);
+        })
     },
     defaultSearch: function(){
         return {
@@ -30,16 +33,16 @@ module.exports = Main = React.createClass({
             localStorage.setItem('panels','filters');
         }
         return {
-            search: this.defaultSearch(), panels: 'filters'
+            search: this.defaultSearch(), panels: localStorage.getItem('panels')
         };
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         if(typeof key == 'string'){
-            search[key]=val;
+            search[key]=_.cloneDeep(val);
         }else if(typeof key == 'object'){
             _.each(key,function(v,k){
-                search[k]=v;
+                search[k]=_.cloneDeep(v);
             });
         }
         this.setState({search: search});
@@ -75,7 +78,7 @@ module.exports = Main = React.createClass({
             }
             
         })
-    
+        var search = _.cloneDeep(this.state.search)
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
@@ -99,12 +102,12 @@ module.exports = Main = React.createClass({
                                 </label>
                             </div>
                         </div>
-                        <div key='filters' id="options" className="clearfix">
+                        <div id="options" className="clearfix">
                             <ul id="options-menu" >
                                 {menu}
                             </ul>
                             <div className={"section "+panels.filters} id="filters">
-                                <Filters searchChange={this.searchChange}/>
+                                <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>
                             </div>
                             <div className={"clearfix section "+panels.sorting} id="sorting">
                                 <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
@@ -114,7 +117,7 @@ module.exports = Main = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <Map search={this.state.search} />
+                    <Map search={search} />
                 </div>
                 <Results search={this.state.search} searchChange={this.searchChange}/>
             </div>

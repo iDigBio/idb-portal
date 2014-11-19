@@ -6,16 +6,16 @@ var React = require('react/addons')
 var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = React.createClass({displayName: 'exports',
-    filterStateChange: function(filterObj){
+    filterPropsChange: function(filterObj){
         var list = this.filters();
-        var filters = this.state.filters;
+        var filters = _.cloneDeep(this.props.filters);
         filters[list.indexOf(filterObj.name)] = _.cloneDeep(filterObj);
-        this.setState({filters: filters},function(){
-            this.props.searchChange('filters',this.state.filters);
-        });
+        //this.setState({filters: filters},function(){
+        this.props.searchChange('filters',filters);
+        //});
         
     },
-    newFilterState: function(name){
+    newFilterProps: function(name){
         var type = fields.byName[name].type;
         switch(type){
             case 'text':
@@ -30,63 +30,61 @@ module.exports = React.createClass({displayName: 'exports',
         switch(filter.type){
             case 'text':
                 return(
-                    TextFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange})
+                    TextFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
                 ); 
             case 'daterange':
-                return (DateRangeFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterStateChange}));    
+                return (DateRangeFilter({key: filter.name, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange}));    
         }
     },
     defaultFilters: function(){
         var filters=[],self=this;
         ['Date Collected','Genus','Specific Epithet'].forEach(function(item){
-            filters.push(self.newFilterState(item));
+            filters.push(self.newFilterProps(item));
         });   
         return filters;
     },
-    getInitialState: function(){
-        var self=this;
-        return {filters: self.defaultFilters()};
-    },
+
     resetFilters: function(){
         var self=this;
-        this.setState({filters: self.defaultFilters()},function(){
+        //this.setState({filters: self.defaultFilters()},function(){
             self.props.searchChange({
-                'filters': self.state.filters,
+                'filters': self.defaultFilters(),
                 'image': false,
                 'geopoint': false
             });
             //self.props.searchChange('image', false);
-        });
+        //});
     },
     clearFilters: function(){
         var filters=[],self=this;
-        this.state.filters.forEach(function(item){
-            filters.push(self.newFilterState(item.name));
+        this.props.filters.forEach(function(item){
+            filters.push(self.newFilterProps(item.name));
         });
-        this.setState({filters: filters},function(){
+        //this.setState({filters: filters},function(){
             this.props.searchChange({
                 'filters': filters,
                 'image': false,
                 "geopoint": false
             });
-        })
+        //})
     },
     addFilter: function(event){
         //var flist = this.filters();
-        var cur = this.state.filters;
-        cur.unshift(this.newFilterState(event.currentTarget.value));
-        this.setState({filters: cur});
+        var cur = this.props.filters;
+        cur.unshift(this.newFilterProps(event.currentTarget.value));
+        //this.setState({filters: cur});
+        this.props.searchChange('filters',cur)
     },
     removeFilter: function(name){
-        var cur = this.state.filters, filters=this.filters();
+        var cur = this.props.filters, filters=this.filters();
         cur.splice(filters.indexOf(name),1);
-        this.setState({filters: cur});
-        this.props.searchChange('filters',this.state.filters);
+        //this.setState({filters: cur});
+        this.props.searchChange('filters',cur);
     },
     filters: function(){
         var list = [];
-        
-        _.each(this.state.filters,function(item){
+
+        _.each(this.props.filters,function(item){
             list.push(item.name);
         });
         return list;
@@ -121,7 +119,7 @@ module.exports = React.createClass({displayName: 'exports',
         });
         //filters
         var filters = [];
-        _.each(this.state.filters,function(item){
+        _.each(this.props.filters,function(item){
             filters.push(
                 self.makeFilter(item)
             )

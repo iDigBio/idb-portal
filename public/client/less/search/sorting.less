@@ -25,7 +25,21 @@
         height:273px;
         margin:0px;
         padding:0px; 
-
+        //react RCTgroup 
+        .sort-trans-enter{
+            opacity: 0.01;
+            transition: opacity .4s ease-in;
+        }
+        .sort-trans-enter.sort-trans-enter-active {
+            opacity: 1;
+        }
+        .sort-trans-leave{
+            opacity: 1;
+            transition: opacity .2s ease-in;
+        }
+        .sort-trans-leave.sort-trans-leave-active {
+            opacity: 0.01;
+        }
         .option-group{
             label{
                 width:17%;

@@ -16,14 +16,16 @@ module.exports = React.createClass({displayName: 'exports',
         return false;
     },
     componentWillReceiveProps: function(nextProps){
-        var query = queryBuilder.makeIDBQuery(nextProps.search);
-        map.query(query)
+        var next= queryBuilder.makeIDBQuery(nextProps.search),
+        current=queryBuilder.makeIDBQuery(this.props.search);
+        //debugger
+        if(JSON.stringify(next)!==JSON.stringify(current)){
+            map.query(next);
+        }
     },
     render: function(){
         return (
-            React.DOM.div({id: "map"}
-
-            )
+            React.DOM.div({id: "map"})
         )
     }
 })

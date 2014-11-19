@@ -2,7 +2,7 @@
  * @jsx React.DOM
  */
 
-var React = require('react')
+var React = require('react');
 
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
@@ -12,7 +12,10 @@ var Map = require('./search/map');
 
 module.exports = Main = React.createClass({displayName: 'Main',
     showPanel: function(event){
-        this.setState({panels: event.currentTarget.attributes['data-panel'].value})
+        var val = event.currentTarget.attributes['data-panel'].value;
+        this.setState({panels: val},function(){
+            localStorage.setItem('panels',val);
+        })
     },
     defaultSearch: function(){
         return {
@@ -30,16 +33,16 @@ module.exports = Main = React.createClass({displayName: 'Main',
             localStorage.setItem('panels','filters');
         }
         return {
-            search: this.defaultSearch(), panels: 'filters'
+            search: this.defaultSearch(), panels: localStorage.getItem('panels')
         };
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
         if(typeof key == 'string'){
-            search[key]=val;
+            search[key]=_.cloneDeep(val);
         }else if(typeof key == 'object'){
             _.each(key,function(v,k){
-                search[k]=v;
+                search[k]=_.cloneDeep(v);
             });
         }
         this.setState({search: search});
@@ -75,7 +78,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
             }
             
         })
-    
+        var search = _.cloneDeep(this.state.search);
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
@@ -99,22 +102,22 @@ module.exports = Main = React.createClass({displayName: 'Main',
                                 )
                             )
                         ), 
-                        React.DOM.div({key: "filters", id: "options", className: "clearfix"}, 
+                        React.DOM.div({id: "options", className: "clearfix"}, 
                             React.DOM.ul({id: "options-menu"}, 
                                 menu
                             ), 
                             React.DOM.div({className: "section "+panels.filters, id: "filters"}, 
-                                Filters({searchChange: this.searchChange})
+                                Filters({searchChange: this.searchChange, filters: search.filters})
                             ), 
                             React.DOM.div({className: "clearfix section "+panels.sorting, id: "sorting"}, 
-                                Sorting({searchChange: this.searchChange, sorting: this.state.search.sorting})
+                                Sorting({searchChange: this.searchChange, sorting: search.sorting})
                             ), 
                             React.DOM.div({className: "clearfix section "+panels.download, id: "download"}, 
                                 Download(null)
                             )
                         )
                     ), 
-                    Map({search: this.state.search})
+                    Map({search: search})
                 ), 
                 Results({search: this.state.search, searchChange: this.searchChange})
             )

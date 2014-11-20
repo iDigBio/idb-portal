@@ -35,7 +35,7 @@ module.exports = (function(){
 
             var and = [];//main filter
             var ranges = {}; //collects various range inputs to be added to the and filter
-            var geobounds = {}; //collects geobounds field values
+            
             var fulltext = helpers.strip(search.fulltext);
             /*query["sort"][so["sortName"]]={"order": so["sortDir"]};
             //always sort genus and specificepithet together
@@ -114,6 +114,41 @@ module.exports = (function(){
                 }                
             })
 
+            var geobounds = {}; //collects geobounds field values
+            _.each(search.bounds,function(val,key){
+                _.each(val, function(v,k){
+                    if(v && _.isEmpty(geobounds)){
+                        geobounds={
+                            top_left:{
+                                lat: 89.99999,
+                                lon: -180.0
+                            },
+                            bottom_right:{
+                                lat: -90.0,
+                                lon: 179.99999
+                            }
+                        }
+                    }
+                    if(v){
+                        geobounds[key][k]=parseFloat(v);
+                    }
+                })
+            });
+            //compile geobounds query
+            if(!_.isEmpty(geobounds)){
+                if(geobounds.top_left.lat>89.99999){
+                    geobounds.top_left.lat=89.99999;
+                }
+                if(geobounds.bottom_right.lon>179.99999){
+                    geobounds.bottom_right.lon=179.99999;
+                }
+                var bounds = {"geo_bounding_box": {
+                        "geopoint": geobounds
+                    }
+                }
+                and.push(bounds);
+            }
+
             if(and.length > 0){
                 _.extend(query.query, {"filtered": {"filter": {}}} );
                 query.query.filtered.filter.and = and; 
@@ -159,6 +194,26 @@ module.exports = (function(){
                     }
                 }
             })
+            var geobounds = {}; //collects geobounds field values
+            _.each(search.bounds,function(val,key){
+                _.each(val, function(v,k){
+                    if(v && _.isEmpty(geobounds)){
+                        geobounds={
+                            top_left:{
+                                lat: 89.99999,
+                                lon: -180.0
+                            },
+                            bottom_right:{
+                                lat: -90.0,
+                                lon: 179.99999
+                            }
+                        }
+                    }
+                    if(v){
+                        geobounds[key][k]=parseFloat(v);
+                    }
+                })
+            });
             if(search.image){
                 idbq['hasImage']=true;
             }

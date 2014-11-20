@@ -26,7 +26,18 @@ module.exports = Main = React.createClass({
             geopoint:false,
             sorting:[{name: 'genus', order: 'asc'}],
             from: 0,
-            size: 100
+            size: 100,
+
+            bounds:{
+                top_left:{
+                    lat: false,
+                    lon: false
+                },
+                bottom_right:{
+                    lat: false,
+                    lon: false
+                }
+            }
         };
     },
     getInitialState: function(){
@@ -114,7 +125,7 @@ module.exports = Main = React.createClass({
                                 <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
                             </div>
                             <div className={"clearfix section "+panels.mapping} id="mapping">
-                                <Mapping searchChange={this.searchChange} search={this.state.search} />
+                                <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />
                             </div>
                             <div className={"clearfix section "+panels.download} id="download">
                                 <Download />

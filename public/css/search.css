@@ -400,17 +400,19 @@
   display: block;
   float: left;
 }
+#mapping-options h5 {
+  font-weight: bold;
+  margin-left: 20px;
+}
 #mapping-options .ordinates {
   margin: 0px auto;
-  width: 80%;
   margin-left: 5%;
   float: left;
   width: 100%;
 }
 #mapping-options .ordinates label.title {
   float: left;
-  width: 100%;
-  margin: 0px 3px;
+  margin: 22px 3px 5px 3px;
   padding: 0px;
 }
 #mapping-options .ordinates .ordinate {

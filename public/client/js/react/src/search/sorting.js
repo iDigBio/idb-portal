@@ -37,7 +37,7 @@ module.exports = React.createClass({
         var sorts=[],self=this;
         var options = [], names=this.getSortNames();
         var fgroups =[];
-        var groups = ['taxonomy','specimen','collectionevent','locality'];
+        var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         //sort list
         fgroups.push(<option value="0">select a field</option>);
         _.each(groups,function(val){

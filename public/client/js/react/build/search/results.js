@@ -223,7 +223,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                 React.DOM.tr(null, React.DOM.td({className: "bold"}, fields.groupNames[val]))
             )
             _.each(fields.byGroup[val],function(field){
-                if(field.hidden){
+                if(field.hidden && !field.results){
                     //noop
                 }else{
                     var disabled=false,checked=false;

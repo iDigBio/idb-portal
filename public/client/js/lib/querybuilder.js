@@ -100,11 +100,25 @@ module.exports = (function(){
                     var reg = /\d{4}-\d{1,2}-\d{1,2}/, range={};
                     range[field]={};
 
-                    if(reg.test(filter.range.start)){
-                        range[field]['gte']=filter.range.start;
+                    if(reg.test(filter.range.gte)){
+                        range[field]['gte']=filter.range.gte;
                     }
-                    if(reg.test(filter.range.end)){
-                        range[field]['lte']=filter.range.end;
+                    if(reg.test(filter.range.lte)){
+                        range[field]['lte']=filter.range.lte;
+                    }
+                    if(!_.isEmpty(range[field])){
+                        and.push({
+                            'range': range
+                        })
+                    }
+                }else if(filter.type==='numericrange'){
+                    var range={};
+                    range[field]={};
+                    if(filter.range.gte){
+                        range[field]['gte']=parseFloat(filter.range.gte);
+                    }
+                    if(filter.range.lte){
+                        range[field]['lte']=parseFloat(filter.range.lte);
                     }
                     if(!_.isEmpty(range[field])){
                         and.push({
@@ -184,13 +198,22 @@ module.exports = (function(){
                     }else{
                         idbq[term] = text[0];
                     }
-                }else if(item.range && (!_.isEmpty(item.range.start) || !_.isEmpty(item.range.end))){
+                }else if(item.range && (!_.isEmpty(item.range.gte) || !_.isEmpty(item.range.lte))){
                     idbq[term]={'type':'range'};
-                    if(reg.test(item.range.start)){
-                        idbq[term]['gte'] = item.range.start;
-                    }
-                    if(reg.test(item.range.end)){
-                        idbq[term]['lte'] = item.range.end;
+                    if(item.type=='daterange'){
+                        if(reg.test(item.range.gte)){
+                            idbq[term]['gte'] = item.range.gte;
+                        }
+                        if(reg.test(item.range.lte)){
+                            idbq[term]['lte'] = item.range.lte;
+                        }                        
+                    }else if(item.type=='numericrange'){
+                        if(item.range.gte){
+                            idbq[term]['gte'] = item.range.gte;
+                        }
+                        if(item.range.lte){
+                            idbq[term]['lte'] = item.range.lte;
+                        }  
                     }
                 }
             })
@@ -217,12 +240,11 @@ module.exports = (function(){
             });
             if(!_.isEmpty(geobounds)){
                 idbq['geopoint'] = geobounds;
+            }else if(search.geopoint){
+                idbq['geopoint']={'type': 'exists'};
             }
             if(search.image){
                 idbq['hasImage']=true;
-            }
-            if(search.geopoint){
-                idbq['geopoint']={'type': 'exists'};
             }
             return idbq;
         }

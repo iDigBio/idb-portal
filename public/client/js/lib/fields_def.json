@@ -72,27 +72,21 @@
         "group": "taxonomy",
         "dataterm": "dwc:vernacularName"
     },
-    "Latitude/Longitude Bounds": {
-        "columnLabel": "Lat / Lon",
-        "term": "geopoint",
-        "type": "geobounds",
-        "group": "locality",
-        "sortable": false,
-        "defaults": {"top_left":{"lat":89.99999,"lon":-180},"bottom_right":{"lat":-90,"lon": 179.99999}}
-    },
-    "Lat" : {
+    "Latitude" : {
         "term": "lat",
         "dataterm": "dwc:decimalLatitude",
         "type": "text",
         "group": "locality",
-        "hidden": true
+        "hidden": true,
+        "results": true  
     },
-    "Lon": {
+    "Longitude": {
         "term": "lon",
         "dataterm": "dwc:decimalLongitude",
         "type": "text",
         "group": "locality",
-        "hidden": true
+        "hidden": true,
+        "results": true
     },
     "Country": {
         "term": "country",
@@ -205,28 +199,27 @@
         "dataterm": "idigbio:collectionName",
         "hidden": true
     },
-
     "Minimum Elevation": {
         "term": "minelevation",
-        "type": "locrange",
+        "type": "numericrange",
         "group": "locality",
         "dataterm": "dwc:minimumElevationInMeters"
     },
     "Maximum Elevation": {
         "term": "maxelevation", 
-        "type": "locrange",
+        "type": "numericrange",
         "group": "locality",
         "dataterm": "dwc:maximumElevationInMeters" 
     },
     "Minimum Depth": {
         "term": "mindepth",
-        "type": "locrange",
+        "type": "numericrange",
         "group": "locality",
         "dataterm": "dwc:minimumDepthInMeters"
     },
     "Maximum Depth": {
         "term": "maxdepth",
-        "type": "locrange",
+        "type": "numericrange",
         "group": "locality",
         "dataterm": "dwc:maximumDepthInMeters"
     },

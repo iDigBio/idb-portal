@@ -90,7 +90,7 @@ module.exports = Main = React.createClass({
             }
             
         })
-        var search = _.cloneDeep(this.state.search)
+        //var search = _.cloneDeep(this.state.search)
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
@@ -132,7 +132,7 @@ module.exports = Main = React.createClass({
                             </div>
                         </div>
                     </div>
-                    <Map search={search} />
+                    <Map search={this.state.search} />
                 </div>
                 <Results search={this.state.search} searchChange={this.searchChange}/>
             </div>

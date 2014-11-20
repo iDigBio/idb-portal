@@ -7,6 +7,7 @@ var mapper = require('../../../lib/mapper');
 
 var map; 
 module.exports = React.createClass({
+    currentQuery: '',
     componentDidMount: function(){
         map = mapper('map');
         var query = queryBuilder.makeIDBQuery(this.props.search);
@@ -16,12 +17,13 @@ module.exports = React.createClass({
         return false;
     },
     componentWillReceiveProps: function(nextProps){
-        var next= queryBuilder.makeIDBQuery(nextProps.search),
-        current=queryBuilder.makeIDBQuery(this.props.search);
+        var q = queryBuilder.makeIDBQuery(nextProps.search);
+        var next=JSON.stringify(q);
         //debugger
-        if(JSON.stringify(next)!==JSON.stringify(current)){
-            map.query(next);
+        if(next!==this.currentQuery){
+            map.query(q);
         }
+        this.currentQuery=next;
     },
     render: function(){
         return (

@@ -1,0 +1,27 @@
+#mapping-options {
+  width: 100%;
+  display: block;
+  float: left;
+}
+#mapping-options .ordinates {
+  margin: 0px auto;
+  width: 80%;
+  margin-left: 5%;
+  float: left;
+  width: 100%;
+}
+#mapping-options .ordinates label.title {
+  float: left;
+  width: 100%;
+  margin: 0px 3px;
+  padding: 0px;
+}
+#mapping-options .ordinates .ordinate {
+  width: 100px;
+  float: left;
+  margin: 2px 5px;
+}
+#mapping-options .ordinates .ordinate input.coordinate {
+  height: 27px;
+  width: 100px;
+}

@@ -6,6 +6,7 @@ var React = require('react');
 
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
+var Mapping = require('./search/mapping');
 var Results = require('./search/results');
 var Download = require('./search/download');
 var Map = require('./search/map');
@@ -111,6 +112,9 @@ module.exports = Main = React.createClass({
                             </div>
                             <div className={"clearfix section "+panels.sorting} id="sorting">
                                 <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
+                            </div>
+                            <div className={"clearfix section "+panels.mapping} id="mapping">
+                                <Mapping searchChange={this.searchChange} search={this.state.search} />
                             </div>
                             <div className={"clearfix section "+panels.download} id="download">
                                 <Download />

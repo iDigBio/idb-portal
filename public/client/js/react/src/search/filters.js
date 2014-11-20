@@ -33,7 +33,9 @@ module.exports = React.createClass({
                     <TextFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 ); 
             case 'daterange':
-                return (<DateRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>);    
+                return (
+                    <DateRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                );    
         }
     },
     defaultFilters: function(){

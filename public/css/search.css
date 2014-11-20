@@ -91,7 +91,7 @@
   width: 260px;
   float: right;
   margin-right: 5px;
-  height: 50px;
+  height: 54px;
 }
 @media (max-width: 1060px) {
   #filters #filters-holder .filter .text textarea {
@@ -105,7 +105,7 @@
 #filters #filters-holder .filter .dates input.date {
   width: 129px;
   display: block;
-  height: 25px;
+  height: 30px;
   margin: 2px;
 }
 #filters #filters-holder .filter .dates input.date:disabled {
@@ -394,6 +394,33 @@
 #sorting #sort-group .option-group button {
   float: right;
   margin: 4px 2px;
+}
+#mapping-options {
+  width: 100%;
+  display: block;
+  float: left;
+}
+#mapping-options .ordinates {
+  margin: 0px auto;
+  width: 80%;
+  margin-left: 5%;
+  float: left;
+  width: 100%;
+}
+#mapping-options .ordinates label.title {
+  float: left;
+  width: 100%;
+  margin: 0px 3px;
+  padding: 0px;
+}
+#mapping-options .ordinates .ordinate {
+  width: 100px;
+  float: left;
+  margin: 2px 5px;
+}
+#mapping-options .ordinates .ordinate input.coordinate {
+  height: 27px;
+  width: 100px;
 }
 #main,
 #react-wrapper,

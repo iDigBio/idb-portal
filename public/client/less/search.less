@@ -13,6 +13,10 @@
 header{
     margin-bottom:0px;
 }
+input::-webkit-input-placeholder{
+   color: red;
+}
+
 .bold{
     font-weight:bold;
 }
@@ -71,18 +75,19 @@ header{
         list-style-type: none;
         margin:5px 5px 1px 15px;
         padding:0px;
-        
+
         position:relative;
-        z-index:100;
+        z-index:10;
 
         li, #advanced-menu li{
             display: inline;
             border: @brd2;
             border-bottom: none;
             margin:0px 2px;
-            padding:3px 6px;
+            padding:3px 6px 3px 6px;
             border-radius:3px 3px 0px 0px;
             background-color: white;
+            z-index:1;
         }
 
         li:hover{
@@ -103,7 +108,9 @@ header{
         border-top: @brd2;
         border-radius:none;
         margin:0px;
+        magin-top:3px;
         min-height:240px;
+        z-index:20;
         &.active{
             display:block;
         }

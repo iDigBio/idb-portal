@@ -18,16 +18,31 @@ module.exports = React.createClass({
             }
         }
     },
+    resetBounds: function(){
+        var b = this.currentBounds();
+        b.top_left.lat=false;
+        b.top_left.lon=false;
+        b.bottom_right.lat=false;
+        b.bottom_right.lon=false;
+        this.props.searchChange('bounds',b);
+    },
     degreeChange: function(event){
         var bounds = this.currentBounds();
-        bounds[event.currentTarget.attributes['data-corner'].value][event.currentTarget.attributes['data-name'].value]=event.currentTarget.value;
+        var val = event.currentTarget.value;
+        if(_.isEmpty(helpers.strip(val))){
+            val = false;
+        }
+        bounds[event.currentTarget.attributes['data-corner'].value][event.currentTarget.attributes['data-name'].value]=val;
         this.props.searchChange('bounds',bounds);
     },
     render: function(){
         var bounds = this.props.bounds;
         return(
             <div className="option-group" id="mapping-options"> 
-                <h5>Lat/Lon Bounding Box</h5>
+                <span className="title">Lat/Lon Bounding Box</span>
+                <a className="btn" onClick={this.resetBounds}>
+                    Reset
+                </a>
                 <div className="ordinates clearfix">
                     <label className="title">NorthWest</label>
                     <div className="pull-left ordinate">

@@ -199,6 +199,7 @@ module.exports = (function(){
                 _.each(val, function(v,k){
                     if(v && _.isEmpty(geobounds)){
                         geobounds={
+                            type: "geo_bounding_box",
                             top_left:{
                                 lat: 89.99999,
                                 lon: -180.0
@@ -214,6 +215,9 @@ module.exports = (function(){
                     }
                 })
             });
+            if(!_.isEmpty(geobounds)){
+                idbq['geopoint'] = geobounds;
+            }
             if(search.image){
                 idbq['hasImage']=true;
             }

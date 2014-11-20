@@ -3,7 +3,7 @@
   display: block;
   float: left;
 }
-#mapping-options h5 {
+#mapping-options .title {
   font-weight: bold;
   margin-left: 20px;
 }

@@ -400,7 +400,7 @@
   display: block;
   float: left;
 }
-#mapping-options h5 {
+#mapping-options .title {
   font-weight: bold;
   margin-left: 20px;
 }
@@ -434,6 +434,9 @@ body {
 }
 header {
   margin-bottom: 0px;
+}
+input::-webkit-input-placeholder {
+  color: red;
 }
 .bold {
   font-weight: bold;
@@ -491,7 +494,7 @@ header {
   margin: 5px 5px 1px 15px;
   padding: 0px;
   position: relative;
-  z-index: 100;
+  z-index: 10;
 }
 #options #options-menu li,
 #options #options-menu #advanced-menu li {
@@ -499,9 +502,10 @@ header {
   border: 1px solid #cccccc;
   border-bottom: none;
   margin: 0px 2px;
-  padding: 3px 6px;
+  padding: 3px 6px 3px 6px;
   border-radius: 3px 3px 0px 0px;
   background-color: white;
+  z-index: 1;
 }
 #options #options-menu li:hover {
   cursor: pointer;
@@ -520,7 +524,9 @@ header {
   border-top: 1px solid #cccccc;
   border-radius: none;
   margin: 0px;
+  magin-top: 3px;
   min-height: 240px;
+  z-index: 20;
 }
 #options .section.active {
   display: block;

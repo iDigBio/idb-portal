@@ -230,12 +230,17 @@ var TextFilter = React.createClass({
         var name = filter.name,
         exists = filter.exists ? 'checked' : '',
         missing = filter.missing ? 'checked' : '';
-    
+        var syn = <span/>,cl='text';
+        if(fields.byName[name].synonyms){
+            syn=<a >Add EOL Synonyms</a>;
+            cl+=' syn'
+        }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name}></i>
                 <label className="filter-name">{name}</label>
-                <div className="text">
+                <div className={cl}>
+                {syn}
                     <textarea className="form-control" name={name} data-name={name}
                         placeholder={fields.byName[name].dataterm} 
                         disabled={filter.text.disabled} 
@@ -244,6 +249,7 @@ var TextFilter = React.createClass({
                         value={filter.text.content}
                     >
                     </textarea>
+                    
                 </div>
                 <div className="presence">
                     <div className="checkbox">

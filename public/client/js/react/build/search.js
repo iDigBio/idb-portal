@@ -18,34 +18,35 @@ module.exports = Main = React.createClass({displayName: 'Main',
             localStorage.setItem('panels',val);
         })
     },
-    defaultSearch: function(){
-        return {
-            filters:[],
-            fulltext:'',
-            image:false,
-            geopoint:false,
-            sorting:[{name: 'genus', order: 'asc'}],
-            from: 0,
-            size: 100,
-
-            bounds:{
-                top_left:{
-                    lat: false,
-                    lon: false
-                },
-                bottom_right:{
-                    lat: false,
-                    lon: false
+    statics: {
+        defaultSearch: function(){
+            return {
+                filters:[],
+                fulltext:'',
+                image:false,
+                geopoint:false,
+                sorting:[{name: 'genus', order: 'asc'}],
+                from: 0,
+                size: 100,
+                bounds:{
+                    top_left:{
+                        lat: false,
+                        lon: false
+                    },
+                    bottom_right:{
+                        lat: false,
+                        lon: false
+                    }
                 }
-            }
-        };
+            };
+        }
     },
     getInitialState: function(){
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
         }
         return {
-            search: this.defaultSearch(), panels: localStorage.getItem('panels')
+            search: Main.defaultSearch(), panels: localStorage.getItem('panels')
         };
     },
     searchChange: function(key,val){

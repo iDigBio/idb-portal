@@ -18,7 +18,7 @@ module.exports = React.createClass({
                 self.forceUpdate();
             });
         });
-    },
+    }, 
     getInitialState: function(){
         this.getResults(this.props.search);
         if(!localStorage || _.isUndefined(localStorage.viewType)){

@@ -47,7 +47,8 @@
     "request": "*",
     "less": "*",
     "bootstrap": "*",
-    "jquery-ui-browserify": "*"
+    "jquery-ui-browserify": "*",
+    "pouchdb": "*"
   },
   "devDependencies": {
     "assert": "*",

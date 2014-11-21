@@ -98,6 +98,28 @@
     width: 220px;
   }
 }
+#filters #filters-holder .filter .text.syn textarea {
+  width: 200px;
+  margin-right: 0px;
+}
+#filters #filters-holder .filter .text.syn a {
+  display: block;
+  float: right;
+  width: 60px;
+  height: 54px;
+  font-size: .8em;
+  line-height: .9em;
+  margin: 0px 5px 0px 1px;
+  text-shadow: 1px 1px 1px white;
+  text-align: justify;
+  background-color: #f0f0f0;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  padding: 14px 2px;
+}
+#filters #filters-holder .filter .text.syn a:hover {
+  cursor: pointer;
+}
 #filters #filters-holder .filter .dates {
   display: block;
   float: right;
@@ -500,7 +522,6 @@ input::-webkit-input-placeholder {
 #options #options-menu #advanced-menu li {
   display: inline;
   border: 1px solid #cccccc;
-  border-bottom: none;
   margin: 0px 2px;
   padding: 3px 6px 3px 6px;
   border-radius: 3px 3px 0px 0px;

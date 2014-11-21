@@ -230,12 +230,17 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         var name = filter.name,
         exists = filter.exists ? 'checked' : '',
         missing = filter.missing ? 'checked' : '';
-    
+        var syn = React.DOM.span(null),cl='text';
+        if(fields.byName[name].synonyms){
+            syn=React.DOM.a(null, "Add EOL Synonyms");
+            cl+=' syn'
+        }
         return(
             React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
                 React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.props.removeFilter, 'data-remove': name}), 
                 React.DOM.label({className: "filter-name"}, name), 
-                React.DOM.div({className: "text"}, 
+                React.DOM.div({className: cl}, 
+                syn, 
                     React.DOM.textarea({className: "form-control", name: name, 'data-name': name, 
                         placeholder: fields.byName[name].dataterm, 
                         disabled: filter.text.disabled, 
@@ -244,6 +249,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
                         value: filter.text.content
                     }
                     )
+                    
                 ), 
                 React.DOM.div({className: "presence"}, 
                     React.DOM.div({className: "checkbox"}, 

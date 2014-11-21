@@ -465,7 +465,7 @@ input::-webkit-input-placeholder {
   border-right: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
   border-top: 1px solid #cccccc;
-  box-shadow: 1px 1px 1px #ddd;
+  box-shadow: 0px 0px 1px #ccc;
   display: inline-block;
 }
 #search #search-any {

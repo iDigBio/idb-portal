@@ -156,6 +156,26 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
     openRecord: function(e){
         window.open('/portal/records/'+e.currentTarget.id,'_blank');
     },
+    setSortable: function(){
+        var self=this;
+        $('#results-headers').sortable({
+            update: function(event,ui){
+                var headers = this;
+                var cols = $(this).sortable('toArray');
+                $(headers).sortable('destroy');
+                self.setColumns(cols);
+
+            },
+            items: "> .data-column",
+            containment: 'parent'
+        });
+    },
+    componentDidMount: function(){
+        //this.setSortable();
+    },
+    componentDidUpdate: function(){
+        //this.setSortable();
+    },
     render: function(){
         var columns = this.state.columns,self=this;
      
@@ -168,14 +188,14 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
             if(sorted.name===item){
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
                 headers.push(
-                    React.DOM.th({style: style, 'data-term': item, 'data-sort': sorted.order, onClick: self.sortColumn}, 
+                    React.DOM.th({id: item, className: "data-column", style: style, 'data-term': item, 'data-sort': sorted.order, onClick: self.sortColumn}, 
                         fields.byTerm[item].name, 
                         React.DOM.i({className: "glyphicon "+icon})
                     )
                 ) 
             }else{
                 headers.push(
-                    React.DOM.th({style: style, 'data-term': item, onClick: self.sortColumn}, fields.byTerm[item].name)
+                    React.DOM.th({id: item, className: "data-column", style: style, 'data-term': item, onClick: self.sortColumn}, fields.byTerm[item].name)
                 ) 
             }
         });
@@ -273,7 +293,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                 ), 
                 React.DOM.table({id: "data-table", className: "table table-condensed"}, 
                     React.DOM.thead(null, 
-                        React.DOM.tr(null, headers)
+                        React.DOM.tr({id: "results-headers"}, headers)
                     ), 
                     React.DOM.tbody(null, 
                         rows

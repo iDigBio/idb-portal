@@ -28,13 +28,21 @@ module.exports = function(elid, options){
     var idblayer;
     var interf = {
         query: function(idbquery){
-            //map.removeLayer(idblayer);
-            var q = encodeURIComponent(JSON.stringify(idbquery));
-            if(typeof idblayer == 'object'){
-                map.removeLayer(idblayer);
-            }
-            idblayer = L.tileLayer('//beta-search.idigbio.org/v2/mapping/tile/{z}/{x}/{y}.png?rq='+q,{minZoom: 1, maxZoom: 12})
-            map.addLayer(idblayer);
+            var q = JSON.stringify({rq: idbquery});
+            $.ajax('//beta-search.idigbio.org/v2/mapping/',{
+                data: q,
+                success: function(resp){
+                    console.log(resp.shortCode)
+                    if(typeof idblayer == 'object'){
+                        map.removeLayer(idblayer);
+                    }
+                    idblayer = L.tileLayer(resp.tiles,{minZoom: 1, maxZoom: 12})
+                    map.addLayer(idblayer);
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'POST'
+            })
         }
     }
 

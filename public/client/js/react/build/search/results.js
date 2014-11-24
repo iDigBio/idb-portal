@@ -4,9 +4,12 @@
 
 var React = require('react');
 
+
 module.exports = React.createClass({displayName: 'exports',
     getResults: function(searchState){
         var query = queryBuilder.makeQuery(searchState), self=this;
+        //_.defer(function(){
+
         searchServer.esQuery('records',query,function(results){
             var res;
             if(searchState.from > 0){
@@ -18,7 +21,9 @@ module.exports = React.createClass({displayName: 'exports',
                 self.forceUpdate();
             });
         });
-    },
+  
+        //});
+    }, 
     getInitialState: function(){
         this.getResults(this.props.search);
         if(!localStorage || _.isUndefined(localStorage.viewType)){
@@ -41,7 +46,6 @@ module.exports = React.createClass({displayName: 'exports',
         this.setState({search: nextProps.search},function(){
             this.getResults(nextProps.search); 
         });
-         
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;
@@ -63,16 +67,16 @@ module.exports = React.createClass({displayName: 'exports',
         }
     },
     render: function(){
-        var search = this.props.search, self=this, li=[], results, date=new Date, time=date.getMilliseconds();
+        var search = this.props.search, self=this, li=[], results;
         switch(this.state.view){
             case 'list':
-                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange, stamp: time});
+                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange});
                 break
             case 'labels':
-                results = ResultsLabels({results: this.state.results, stamp: time});
+                results = ResultsLabels({results: this.state.results});
                 break
             case 'images':
-                results = ResultsImages({search: this.state.search, results: this.state.results, stamp: time});
+                results = ResultsImages({search: this.state.search, results: this.state.results});
                 break;
         }
         ['list','labels','images'].forEach(function(item){
@@ -107,7 +111,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         }
     },
     defaultColumns: function(){
-        return _.clone(['genus','specificepithet','datecollected','collectioncode']);
+        return ['genus','specificepithet','datecollected','collectioncode'];
     },
     setColumns: function(columns){
         this.setState({columns: columns});
@@ -437,13 +441,36 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
             this.getImageOnlyResults(nextProps.search);
         }
     },
+    makeImageText: function(data){
 
-    makeImage: function(uuid,key){
+    },
+    makeImage: function(uuid,data,key){
+        var count = data.mediarecords.indexOf(uuid)+1 + ' of '+ data.mediarecords.length;
+        var text=[], specimen = data.data['idigbio:data'];
+        if(typeof specimen["dwc:scientificName"] == 'string') { 
+            text.push(helpers.check(specimen["dwc:scientificName"]));
+            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));          
+        }else{  
+            text.push(helpers.check(specimen["dwc:genus"]));
+            text.push(helpers.check(specimen["dwc:specificEpithet"]));
+            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));
+        } 
+        text.push(helpers.check(specimen["dwc:inistitutionCode"]));
+        text.push(helpers.check(specimen["dwc:eventDate"]));
+        var clean = text.filter(function(i){
+            return !_.isEmpty(i);
+        })
         return (
             React.DOM.a({className: "image", target: "_new", href: "/portal/mediarecords/"+uuid, key: key}, 
+                React.DOM.span({className: "img-count"}, count), 
                 React.DOM.img({alt: "loading...", 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
-                onError: this.errorImage})
+                onError: this.errorImage}), 
+                React.DOM.div({className: "gallery-image-text"}, 
+                    React.DOM.div({className: "image-text"}, 
+                        clean.join(', ')
+                    )
+                )
             )
         )
     },
@@ -452,14 +479,14 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         this.state.results.forEach(function(record,index){
             if(_.isArray(record._source.mediarecords)){
                 record._source.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,key));
+                    images.push(self.makeImage(uuid,record._source,key));
                     key++;
                 })
             }
         });
 
         return (
-            React.DOM.div({className: "panel"}, 
+            React.DOM.div({id: "results-images", className: "panel"}, 
                 images
             )
         )

@@ -1,3 +1,5 @@
+var request = require('request');
+
 module.exports = function(app, config) {
 
     //home route
@@ -10,6 +12,20 @@ module.exports = function(app, config) {
     app.all('*', function(req, res, next) {
         res.expose(config.searchServer, 'searchServer');
         next();
+    });
+    app.get('/eol_api/*', function(req,res){
+        var url;
+        if (req.originalUrl.slice(0,7) == "/portal") {
+            url = "http://eol.org/api" + req.originalUrl.slice(15)
+        } else {
+            url = "http://eol.org/api" + req.originalUrl.slice(8)
+        }
+        //console.log(url);
+        request.get({
+            url: url
+        },function (error, response, body) {
+            res.send(response.body);
+        });
     });
     app.get('/', home.index);
     app.get('/search*', search.searchBackbone);

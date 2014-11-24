@@ -7,13 +7,12 @@ var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = React.createClass({
     filterPropsChange: function(filterObj){
-        var list = this.filters();
+        var list = this.filters(),self=this;
         var filters = this.props.filters;
         filters[list.indexOf(filterObj.name)] = filterObj;
         //this.setState({filters: filters},function(){
+        //_.defer(this.props.searchChange,'filters',filters);
         this.props.searchChange('filters',filters);
-        //});
-        
     },
     newFilterProps: function(name){
         var type = fields.byName[name].type;
@@ -180,7 +179,7 @@ var TextFilter = React.createClass({
         this.props.changeFilter(filter);
     },
     textType: function(event){
-        var text = event.currentTarget.value;
+        var text = event.currentTarget.value, self=this;
         var filter = this.props.filter;//, filter=filters[ind];   
         filter.text.content = text;
         this.props.changeFilter(filter);     
@@ -219,11 +218,66 @@ var TextFilter = React.createClass({
             select: function(event,ui){
                 var filter = self.props.filter;//, filter=filters[ind];   
                 var cont = filter.text.content.split('\n');
-                cont.push(ui.item.value);
+                cont[cont.length-1] = ui.item.value;
                 filter.text.content = cont.join('\n');
                 self.props.changeFilter(filter);                 
             }
         });
+    },
+    getSynonyms: function(event){
+        event.preventDefault();
+        var text = this.props.filter.text.content.split('\n'),self=this;
+        debugger
+        //dont run search for blank text
+        if(!_.isEmpty(text[0].trim())){
+            //$(event.currentTarget).attr('disabled','disabled');
+            //$(event.currentTarget).find('.syn-loader').show();
+            var output = [];
+            async.each(text,function(item,callback){
+                var val = helpers.strip(item);
+                if(val.length > 0){
+                    output.push(val);
+                    $.ajax({
+                        url: '/portal/eol_api/search/1.0.json?page=1&q='+val, //'http://eol.org/api/search/1.0.json?page=1&q='+val,
+                        type: 'GET',
+                        crossDomain: true,
+                        dataType: 'jsonp',
+                        success: function(resp) { 
+                            debugger
+                            if(resp.results.length > 0){
+                                var rd = 2; //results index depth to search
+                                for(var i=0;i<=rd;i++){
+                                    if(!_.isUndefined(resp.results[i])){
+                                        var res = resp.results[i].content.split(';');
+                                        res.forEach(function(it,ind){
+                                            var syn = helpers.strip(it.toLowerCase());
+                                            if(text.indexOf(syn)=== -1){
+                                                output.push(syn);
+                                            }
+                                        });
+                                    }
+                                }
+                            }
+                            callback();
+                        },
+                        error: function(e,f){
+                            debugger 
+                            console.log('synonym lookup failed'); 
+                            callback();
+                        }
+                    });                     
+                }else{
+                    callback();
+                }
+            },function(err){
+                //ta.val(output.join('\n'));
+                var filter = self.props.filter;
+                filter.text.content = output.join('\n');
+                self.props.changeFilter(filter);
+                //$(event.currentTarget).find('.syn-loader').hide();
+                //$(event.currentTarget).removeAttr('disabled');
+            });            
+        }        
     },
     render: function(){
         var filter = this.props.filter;
@@ -232,7 +286,7 @@ var TextFilter = React.createClass({
         missing = filter.missing ? 'checked' : '';
         var syn = <span/>,cl='text';
         if(fields.byName[name].synonyms){
-            syn=<a >Add EOL Synonyms</a>;
+            syn=<a onClick={this.getSynonyms}>Add EOL Synonyms</a>;
             cl+=' syn'
         }
         return(

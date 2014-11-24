@@ -206,7 +206,7 @@
   font-weight: bold;
   border: 1px solid #cccccc;
   border-bottom: none;
-  padding: 4px 8px;
+  padding: 4px 8px 4px 8px;
   border-radius: 3px 3px 0px 0px;
   cursor: pointer;
   background-color: #c0e4b3;
@@ -328,6 +328,48 @@
   box-shadow: 1px 1px 0px #bbb;
   -webkit-box-shadow: 1px 1px 0px #bbb;
   -moz-box-shadow: 1px 1px 0px #bbb;
+}
+#results #results-images {
+  padding-top: 10px;
+}
+#results #results-images .image {
+  height: 230px;
+  width: 260px;
+  background-color: #f0f0f0;
+  margin: 3px;
+  float: left;
+  border-radius: 0px;
+  border: 1px solid #cccccc;
+  position: relative;
+}
+#results #results-images .image .img-count {
+  display: block;
+  float: right;
+  color: white;
+  margin: 0px 0px;
+  padding: 1px 3px;
+  position: relative;
+  z-index: 10;
+  font-size: .80em;
+  font-weight: bold;
+  background-color: #888;
+  opacity: .7;
+}
+#results #results-images .image .gallery-image-text {
+  width: 100%;
+  min-height: 50px;
+  background-color: #555;
+  opacity: .8;
+  /*display:none;*/
+  line-height: 1.1em;
+  position: absolute;
+  bottom: 0px;
+  color: white;
+  font-size: 1em;
+  border-radius: 0px;
+}
+#results #results-images .image .gallery-image-text .image-text {
+  margin: 3px 8px;
 }
 #results .panel {
   margin: 0px auto;

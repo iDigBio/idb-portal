@@ -30,17 +30,21 @@ module.exports = React.createClass({displayName: 'exports',
             });
         }
         return (
-            React.DOM.div({id: "raw", className: "modal hide fade", tabIndex: "-1", role: "dialog", 'aria-labelledby': "apiModalLabel", 'aria-hidden': "true"}, 
-                React.DOM.div({className: "modal-header"}, 
-                    React.DOM.button({type: "button", className: "close", 'data-dismiss': "modal", 'aria-hidden': "true"}, "×"), 
-                    React.DOM.h4({id: "apiModalLabel"}, "Raw API Data")
-                ), 
-                React.DOM.div({className: "modal-body"}, 
-                    React.DOM.p({id: "raw-body", dangerouslySetInnerHTML: {__html: formatJSON(this.props.data)}}
+            React.DOM.div({id: "raw", className: "modal fade", tabIndex: "-1", role: "dialog", 'aria-labelledby': "apiModalLabel", 'aria-hidden': "true"}, 
+                React.DOM.div({className: "modal-dialog"}, 
+                    React.DOM.div({className: "modal-content"}, 
+                        React.DOM.div({className: "modal-header"}, 
+                            React.DOM.button({type: "button", className: "close", 'data-dismiss': "modal", 'aria-hidden': "true"}, "×"), 
+                            React.DOM.h4({id: "apiModalLabel"}, "Raw API Data")
+                        ), 
+                        React.DOM.div({className: "modal-body"}, 
+                            React.DOM.p({id: "raw-body", dangerouslySetInnerHTML: {__html: formatJSON(this.props.data)}}
+                            )
+                        ), 
+                        React.DOM.div({className: "modal-footer"}, 
+                            React.DOM.button({className: "btn pull-left", 'data-dismiss': "modal", 'aria-hidden': "true"}, "Close")
+                        )
                     )
-                ), 
-                React.DOM.div({className: "modal-footer"}, 
-                    React.DOM.button({className: "btn pull-left", 'data-dismiss': "modal", 'aria-hidden': "true"}, "Close")
                 )
             ) 
         )

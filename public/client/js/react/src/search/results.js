@@ -6,7 +6,7 @@ var React = require('react');
 
 
 module.exports = React.createClass({
-    getResults: function(searchState){
+    /*getResults: function(searchState){
         var query = queryBuilder.makeQuery(searchState), self=this;
         //_.defer(function(){
 
@@ -23,9 +23,9 @@ module.exports = React.createClass({
         });
   
         //});
-    }, 
+    },*/ 
     getInitialState: function(){
-        this.getResults(this.props.search);
+        //this.getResults();
         if(!localStorage || _.isUndefined(localStorage.viewType)){
             localStorage.setItem('viewType','list');
         }
@@ -38,13 +38,39 @@ module.exports = React.createClass({
             return false;
         }
     },
+    componentWillMount: function(){
+        var self=this;
+        this.lastQueryTime = 0;
+        /*this results getter attempts to minimize excessive results queries with lots of key strokes
+        and ensures that the last key press results in the proper set of results as responses can be out of 
+        order*/
+        this.getResults = _.debounce(function(){
+            var d = new Date, searchState = self.state.search, query = queryBuilder.makeQuery(searchState);
+            var now = d.getTime();
+            self.lastQueryTime = now;
+            searchServer.esQuery('records',query,function(results){
+                if(now>= self.lastQueryTime){
+                    var res;
+                    if(searchState.from > 0){
+                        res = self.state.results.concat(results.hits.hits);
+                    }else{
+                        res = results.hits.hits;
+                    }
+                    self.setState({results: res, total: results.hits.total},function(){
+                        self.forceUpdate();
+                    });
+                }
+            });
+        },300,{leading: true, trailing: true});
+    },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
+        this.getResults();
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
         this.setState({search: nextProps.search},function(){
-            this.getResults(nextProps.search); 
+            this.getResults(); 
         });
     },
     viewChange: function(event){
@@ -61,8 +87,9 @@ module.exports = React.createClass({
         if(this.state.total > search.from + search.size){
             if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
                 search.from += search.size;
-                this.setState({search: search});
-                this.getResults(search);
+                this.setState({search: search},function(){
+                   this.getResults(); 
+                }); 
             }
         }
     },

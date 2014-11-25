@@ -30,17 +30,21 @@ module.exports = React.createClass({
             });
         }
         return (
-            <div id="raw" className="modal hide fade" tabIndex="-1" role="dialog" aria-labelledby="apiModalLabel" aria-hidden="true">
-                <div className="modal-header">
-                    <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h4 id="apiModalLabel">Raw API Data</h4>
-                </div>
-                <div className="modal-body">
-                    <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(this.props.data)}}>
-                    </p>
-                </div>
-                <div className="modal-footer">
-                    <button className="btn pull-left" data-dismiss="modal" aria-hidden="true">Close</button>
+            <div id="raw" className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="apiModalLabel" aria-hidden="true">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 id="apiModalLabel">Raw API Data</h4>
+                        </div>
+                        <div className="modal-body">
+                            <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(this.props.data)}}>
+                            </p>
+                        </div>
+                        <div className="modal-footer">
+                            <button className="btn pull-left" data-dismiss="modal" aria-hidden="true">Close</button>
+                        </div>
+                    </div>                    
                 </div>
             </div> 
         )

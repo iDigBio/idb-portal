@@ -9,6 +9,8 @@ window.dwc = require('./js/lib/dwc_fields');
 require('./js/lib/searchserver');
 window.queryBuilder = require('./js/lib/querybuilder');
 window.async = require('async');
+var SearchHistory = require('./js/lib/history');
+window.searchHistory = new SearchHistory;
 //window.React = require('react');
 require('../components/bootstrap/dist/js/bootstrap.min');
 //$.fn.datetimepicker = require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker');

@@ -3,13 +3,13 @@
  */
 
 var React = require('react');
-var mapper = require('../../../lib/mapper');
+var IDBMap = require('../../../lib/mapper');
 
 var map; 
 module.exports = React.createClass({
     currentQuery: '',
     componentDidMount: function(){
-        map = mapper('map');
+        map = new IDBMap('map');
         var query = queryBuilder.makeIDBQuery(this.props.search);
         map.query(query)
     },
@@ -21,9 +21,10 @@ module.exports = React.createClass({
         var next=JSON.stringify(q);
         //debugger
         if(next!==this.currentQuery){
+            this.currentQuery=next;
             map.query(q);
         }
-        this.currentQuery=next;
+        
     },
     render: function(){
         return (

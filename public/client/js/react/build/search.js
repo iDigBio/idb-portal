@@ -45,8 +45,14 @@ module.exports = Main = React.createClass({displayName: 'Main',
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
         }
+        var search;
+        if(searchHistory.history.length > 0){
+            search = searchHistory.history[0];
+        }else{
+            search = Main.defaultSearch();
+        }
         return {
-            search: Main.defaultSearch(), panels: localStorage.getItem('panels')
+            search: search, panels: localStorage.getItem('panels')
         };
     },
     searchChange: function(key,val){
@@ -59,6 +65,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
             });
         }
         this.setState({search: search});
+        searchHistory.push(search);
     },
     viewChange: function(key,val){
         var view = _.cloneDeep(this.state.view);
@@ -129,7 +136,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
                                 Mapping({searchChange: this.searchChange, bounds: this.state.search.bounds})
                             ), 
                             React.DOM.div({className: "clearfix section "+panels.download, id: "download"}, 
-                                Download(null)
+                                Download({search: this.state.search, searchChange: this.searchChange})
                             )
                         )
                     ), 

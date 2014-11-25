@@ -3,8 +3,11 @@ var L = require('leaflet/dist/leaflet');
 
 //elid: string name of element id;
 //options: object map of settings
-
-module.exports = function(elid, options){
+/*
+*Map object
+*initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
+***/
+module.exports = IDBMap =  function(elid, options){
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap contributors',
         minZoom: 0, 
@@ -12,7 +15,7 @@ module.exports = function(elid, options){
         reuseTiles: true
     });
 
-    var defaults = {
+    this.defaults = {
         center: [0,0],
         zoom: 2,
         layers: [base],
@@ -21,30 +24,34 @@ module.exports = function(elid, options){
         zoomControl: false
     };
     if(_.isObject(options)){
-        _.merge(defaults,options);
+        _.merge(this.defaults,options);
     }
     
-    var map = L.map(elid,defaults);
+    this.map = L.map(elid,this.defaults);
+    this.currentQueryTime = 0;
     var idblayer;
-    var interf = {
-        query: function(idbquery){
-            var q = JSON.stringify({rq: idbquery});
-            $.ajax('//beta-search.idigbio.org/v2/mapping/',{
-                data: q,
-                success: function(resp){
-                    console.log(resp.shortCode)
+    
+    this.query = function(idbquery){
+        var q = JSON.stringify({rq: idbquery}),self=this, d = new Date;
+        var time = d.getTime();
+        self.currentQueryTime=time;
+        $.ajax('//beta-search.idigbio.org/v2/mapping/',{
+            data: q,
+            success: function(resp){
+                //console.log(resp.shortCode)
+                //make sure last query run is the last one that renders
+                //as responses can be out of order
+                if(time>=self.currentQueryTime){
                     if(typeof idblayer == 'object'){
-                        map.removeLayer(idblayer);
+                        self.map.removeLayer(idblayer);
                     }
                     idblayer = L.tileLayer(resp.tiles,{minZoom: 1, maxZoom: 12})
-                    map.addLayer(idblayer);
-                },
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'POST'
-            })
-        }
+                    self.map.addLayer(idblayer);                    
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'POST'
+        })
     }
-
-    return interf; 
 }

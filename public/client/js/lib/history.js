@@ -1,4 +1,5 @@
 module.exports = function(){
+    //initialize history on new [function name]
     this.history=[],self=this;
     (function(){
         if(!_.isUndefined(localStorage)){
@@ -27,6 +28,7 @@ module.exports = function(){
         this.history[0]=_.cloneDeep(searchstate);
         this.save();
     }
+    
     this.clear = function(){
         this.history = [];
         localStorage.setItem('history',JSON.stringify({hstates: []}));

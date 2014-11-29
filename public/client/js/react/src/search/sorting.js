@@ -36,34 +36,37 @@ module.exports = React.createClass({
     render: function(){
         var sorts=[],self=this;
         var options = [], names=this.getSortNames();
-        var fgroups =[];
+        
         var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
         //sort list
-        fgroups.push(<option value="0">select a field</option>);
-        _.each(groups,function(val){
-            var flist = [];
-            _.each(fields.byGroup[val],function(field){
-                if(field.hidden===1){
-                    //noop
-                }else{
-                    var disabled='';
-                    if(names.indexOf(field.term) > -1){
-                        disabled='disabled';
-                    } 
-                    flist.push(
-                        <option disabled={disabled} value={field.term} key={field.term}>
-                            {field.name}
-                        </option>
-                    );
-                }
-            });
-            fgroups.push(
-              <optgroup label={fields.groupNames[val]}>
-                &nbsp;&nbsp;{flist}
-              </optgroup>
-            );
-        });
+     
+
         this.props.sorting.forEach(function(item,ind){
+            var fgroups =[];
+            fgroups.push(<option value="0">select a field</option>);
+            _.each(groups,function(val){
+                var flist = [];
+                _.each(fields.byGroup[val],function(field){
+                    if(field.hidden===1){
+                        //noop
+                    }else{
+                        var disabled='';
+                        if(names.indexOf(field.term) > -1){
+                            disabled='disabled';
+                        } 
+                        flist.push(
+                            <option disabled={disabled} value={field.term} key={field.term}>
+                                {field.name}
+                            </option>
+                        );
+                    }
+                });
+                fgroups.push(
+                  <optgroup label={fields.groupNames[val]}>
+                    &nbsp;&nbsp;{flist}
+                  </optgroup>
+                );
+            });
             var asc=item.order == 'asc' ? 'selected':'';
             var desc=item.order == 'desc' ?  'selected':'';
             if(ind===0){

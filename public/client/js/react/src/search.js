@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
 var Mapping = require('./search/mapping');
@@ -96,28 +95,27 @@ module.exports = Main = React.createClass({
                     <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>{helpers.firstToUpper(item)}</li>
                 )
             }
-            
         })
         //var search = _.cloneDeep(this.state.search)
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
-                    <div key='fulltext' id="search" className="clearfix">
+                    <div id="search" className="clearfix">
                         <div id="search-any" className="clearfix">
                             <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
                             <div className="input-group">
-                                <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} />
+                                <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} value={this.state.search.fulltext}/>
                                 <a className="btn input-group-addon">Go</a>
                             </div>
                             <div className="checkbox">
                                 <label>
-                                    <input type="checkbox" name="image" onChange={this.checkClick} checked={this.state.search.image ? 'checked':''}/>
+                                    <input type="checkbox" name="image" onChange={this.checkClick} checked={this.state.search.image}/>
                                     Must have image
                                 </label>
                             </div>
                             <div className="checkbox">
                                 <label>
-                                    <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.state.search.geopoint ? 'checked':''}/>
+                                    <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.state.search.geopoint}/>
                                     Must have map point
                                 </label>
                             </div>

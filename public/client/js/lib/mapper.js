@@ -23,7 +23,7 @@ module.exports = IDBMap =  function(elid, options){
         boxZoom: false,
         zoomControl: false
     };
-    if(_.isObject(options)){
+    if(typeof options == 'object'){
         _.merge(this.defaults,options);
     }
     

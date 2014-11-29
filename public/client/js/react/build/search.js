@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-
 var Filters = require('./search/filters');
 var Sorting = require('./search/sorting');
 var Mapping = require('./search/mapping');
@@ -96,28 +95,27 @@ module.exports = Main = React.createClass({displayName: 'Main',
                     React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
                 )
             }
-            
         })
         //var search = _.cloneDeep(this.state.search)
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
-                    React.DOM.div({key: "fulltext", id: "search", className: "clearfix"}, 
+                    React.DOM.div({id: "search", className: "clearfix"}, 
                         React.DOM.div({id: "search-any", className: "clearfix"}, 
                             React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), " Start Searching"), 
                             React.DOM.div({className: "input-group"}, 
-                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType}), 
+                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.state.search.fulltext}), 
                                 React.DOM.a({className: "btn input-group-addon"}, "Go")
                             ), 
                             React.DOM.div({className: "checkbox"}, 
                                 React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: "image", onChange: this.checkClick, checked: this.state.search.image ? 'checked':''}), 
+                                    React.DOM.input({type: "checkbox", name: "image", onChange: this.checkClick, checked: this.state.search.image}), 
                                     "Must have image"
                                 )
                             ), 
                             React.DOM.div({className: "checkbox"}, 
                                 React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.state.search.geopoint ? 'checked':''}), 
+                                    React.DOM.input({type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.state.search.geopoint}), 
                                     "Must have map point"
                                 )
                             )

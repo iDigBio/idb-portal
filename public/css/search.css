@@ -274,6 +274,17 @@
 #results #result-list #data-table tbody tr:hover {
   cursor: pointer;
 }
+#results #result-list #data-table tbody tr.no-results-row {
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  height: 50px;
+  font-size: 1.2em;
+  border-bottom: 1px solid #cccccc;
+}
+#results #result-list #data-table tbody tr.no-results-row td {
+  padding: 20px;
+}
 #results #result-labels {
   padding-top: 10px;
 }

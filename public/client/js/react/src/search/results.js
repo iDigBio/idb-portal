@@ -264,6 +264,10 @@ var ResultsList = React.createClass({
                 </tr>
             );
         })
+
+        if(rows.length===0){
+            rows.push(<tr className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
+        }
         //column selection modal list
         var list=[];
         //sort list

@@ -28,7 +28,12 @@ module.exports = React.createClass({displayName: 'exports',
     sortChange: function(event){
         var ind = parseInt(event.currentTarget.attributes['data-index'].value);
         var sorting = this.props.sorting, sort=sorting[ind];
-        sort[event.currentTarget.attributes['data-name'].value]=event.currentTarget.value;
+        if(event.currentTarget.value==='0'){
+            sort[event.currentTarget.attributes['data-name'].value]=false;
+        }else{
+            sort[event.currentTarget.attributes['data-name'].value]=event.currentTarget.value;
+        }
+        
         sorting[ind]=sort;
         //this.setState({sorting: sorting});
         this.props.searchChange('sorting',sorting);

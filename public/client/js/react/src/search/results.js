@@ -386,7 +386,7 @@ var ResultsLabels = React.createClass({
             content.push(
                 <span key={'media-'+data.uuid+this.props.stamp} className="image-wrapper">
                     {imgcount}
-                    <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image img-rounded" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+data.uuid+"/media?quality=thumbnail"} /> 
+                    <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+data.uuid+"/media?quality=thumbnail"} /> 
                 </span>  
             )
      

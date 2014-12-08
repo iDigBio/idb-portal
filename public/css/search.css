@@ -328,7 +328,7 @@
   padding: 2px;
   z-index: 90;
   opacity: .9;
-  border-top-right-radius: 5px;
+  border-top-right-radius: 3px;
   background-color: #333;
   opacity: .7;
 }
@@ -336,9 +336,11 @@
   margin: 3px 5px;
   max-height: 78px;
   max-width: 78px;
-  box-shadow: 1px 1px 0px #bbb;
-  -webkit-box-shadow: 1px 1px 0px #bbb;
-  -moz-box-shadow: 1px 1px 0px #bbb;
+  /*box-shadow:1px 1px 0px #bbb;
+                    -webkit-box-shadow:1px 1px 0px #bbb;
+                    -moz-box-shadow:1px 1px 0px #bbb;*/
+  border: 1px solid #cccccc;
+  border-radius: 3px;
 }
 #results #results-images {
   padding-top: 10px;
@@ -469,6 +471,17 @@
 #sorting #sort-group .option-group button {
   float: right;
   margin: 4px 2px;
+}
+#download {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+#download .form-control.history-select {
+  margin-left: 10px;
+  width: 80%;
+}
+#download .form-control.history-select option {
+  overflow: ellipses;
 }
 #mapping-options {
   width: 100%;

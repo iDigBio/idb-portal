@@ -1,0 +1,11 @@
+#download {
+  padding: 10px;
+  background-color: #f0f0f0;
+}
+#download .form-control.history-select {
+  margin-left: 10px;
+  width: 80%;
+}
+#download .form-control.history-select option {
+  overflow: ellipses;
+}

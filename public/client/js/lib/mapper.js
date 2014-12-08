@@ -21,7 +21,7 @@ module.exports = IDBMap =  function(elid, options){
         layers: [base],
         scrollWheelZoom: true,
         boxZoom: false,
-        zoomControl: false
+        zoomControl: true
     };
     if(typeof options == 'object'){
         _.merge(this.defaults,options);

@@ -1,4 +1,5 @@
 var express = require('express');
+var expose = require('express-expose');
 var cons = require('consolidate');
 var swig = swig = require('swig');
 var RedisStore = require('connect-redis')(express);

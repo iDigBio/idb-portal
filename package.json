@@ -20,7 +20,7 @@
   "dependencies": {
     "express": "3.0.3",
     "lodash": "*",
-    "express-expose": "*",
+    "express-expose": "0.3.3",
     "consolidate": "*",
     "swig": "*",
     "openid": "*",

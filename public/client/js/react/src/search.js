@@ -19,8 +19,9 @@ module.exports = Main = React.createClass({
     },
     statics: {
         defaultSearch: function(){
+            var filters = Filters.defaultFilters();
             return {
-                filters:[],
+                filters: filters,
                 fulltext:'',
                 image:false,
                 geopoint:false,

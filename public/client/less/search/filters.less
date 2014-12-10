@@ -2,7 +2,17 @@
 
 #filters{
     height:inherit;
-
+    position:relative;
+    #filter-scroller{
+        width:96.5%;
+        height:30px;
+        opacity:.6;
+        background-color: #666;
+        display: block;
+        position:absolute;
+        bottom:0px;
+        left:0px;
+    }
     #filter-select{
         margin:0px;
         border-bottom-color: #999;
@@ -30,6 +40,9 @@
                 display:block;
                 margin-left:20px;
             }
+            option.default{
+                font-weight:bold;
+            }
         }
         button{
             float:left;
@@ -39,12 +52,14 @@
     #filters-holder{
         overflow-y:scroll;
         position:relative;
-        height:263px;
+        height:290px;
         margin:0px;
         padding:0px;
         @media(max-width: @screenmed){
             height:233px;
         }
+
+
         //react RCTgroup 
         .filter-trans-enter{
             opacity: 0.01;

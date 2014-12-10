@@ -6,7 +6,7 @@ var React = require('react');
 
 module.exports = React.createClass({displayName: 'exports',
     queryToSentence: function(query){
-        var q = _.clone(query);
+        var q = query;
         var parts = [], sort = '';
         if(!_.isEmpty(q.fulltext)){
             parts.push('Contains text '+q.fulltext+'.');

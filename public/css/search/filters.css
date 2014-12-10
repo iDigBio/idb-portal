@@ -1,5 +1,16 @@
 #filters {
   height: inherit;
+  position: relative;
+}
+#filters #filter-scroller {
+  width: 96.5%;
+  height: 30px;
+  opacity: .6;
+  background-color: #666;
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
 }
 #filters #filter-select {
   margin: 0px;
@@ -28,13 +39,16 @@
   display: block;
   margin-left: 20px;
 }
+#filters #filter-select select option.default {
+  font-weight: bold;
+}
 #filters #filter-select button {
   float: left;
 }
 #filters #filters-holder {
   overflow-y: scroll;
   position: relative;
-  height: 263px;
+  height: 290px;
   margin: 0px;
   padding: 0px;
 }

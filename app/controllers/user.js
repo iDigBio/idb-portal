@@ -1,8 +1,7 @@
 
 var https = require('https');
 var http = require('http');
-;
-var _ = require('lodash')
+var _ = require('lodash');
 var openid = require('openid');
 
 

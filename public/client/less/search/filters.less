@@ -1,17 +1,28 @@
 @import "variables.less";
 
 #filters{
-    height:inherit;
+    
     position:relative;
     #filter-scroller{
-        width:96.5%;
+        width:434px;
         height:30px;
-        opacity:.6;
+        opacity:.8;
         background-color: #666;
         display: block;
         position:absolute;
         bottom:0px;
         left:0px;
+       
+        text-align: center;
+        color:#fdfdfd;
+        font-weight:bold;
+        padding:4px;
+        i{
+          margin:5px 10%;
+        }
+        &:hover{
+            cursor: pointer;
+        }
     }
     #filter-select{
         margin:0px;
@@ -51,10 +62,11 @@
 
     #filters-holder{
         overflow-y:scroll;
-        position:relative;
+      
         height:290px;
         margin:0px;
         padding:0px;
+        padding-bottom:30px;
         @media(max-width: @screenmed){
             height:233px;
         }

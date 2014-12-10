@@ -107,10 +107,18 @@ module.exports = React.createClass({displayName: 'exports',
         })
         return (
             React.DOM.div(null, 
-                React.DOM.div(null, 
-                    React.DOM.label(null, "History:"), 
+                React.DOM.div({className: "sub"}, 
+                    React.DOM.label(null, "History"), 
                     React.DOM.select({className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
                         options
+                    )
+                ), 
+                React.DOM.div({className: "sub"}, 
+                    React.DOM.label(null, "Download Current Result Set"), 
+                    
+                    React.DOM.div({className: "input-group"}, 
+                        React.DOM.input({type: "email", className: "form-control email", placeholder: "enter an email to download"}), 
+                        React.DOM.a({className: "btn input-group-addon"}, "Download")
                     )
                 )
             )

@@ -107,11 +107,19 @@ module.exports = React.createClass({
         })
         return (
             <div>
-                <div>
-                    <label>History:</label>
+                <div className="sub">
+                    <label>History</label>
                     <select className="form-control history-select" onChange={this.historySelect} value="0">
                         {options}
                     </select>
+                </div>
+                <div className="sub">
+                    <label>Download Current Result Set</label>
+                    
+                    <div className="input-group">
+                        <input type="email" className="form-control email" placeholder="enter an email to download"/>
+                        <a className="btn input-group-addon">Download</a>
+                    </div>
                 </div>
             </div>
         )

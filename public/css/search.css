@@ -1,16 +1,25 @@
 #filters {
-  height: inherit;
   position: relative;
 }
 #filters #filter-scroller {
-  width: 96.5%;
+  width: 434px;
   height: 30px;
-  opacity: .6;
+  opacity: .8;
   background-color: #666;
   display: block;
   position: absolute;
   bottom: 0px;
   left: 0px;
+  text-align: center;
+  color: #fdfdfd;
+  font-weight: bold;
+  padding: 4px;
+}
+#filters #filter-scroller i {
+  margin: 5px 10%;
+}
+#filters #filter-scroller:hover {
+  cursor: pointer;
 }
 #filters #filter-select {
   margin: 0px;
@@ -47,10 +56,10 @@
 }
 #filters #filters-holder {
   overflow-y: scroll;
-  position: relative;
   height: 290px;
   margin: 0px;
   padding: 0px;
+  padding-bottom: 30px;
 }
 @media (max-width: 1060px) {
   #filters #filters-holder {
@@ -490,8 +499,13 @@
   padding: 10px;
   background-color: #f0f0f0;
 }
+#download .sub {
+  margin: 10px;
+}
+#download .sub .input-group {
+  width: 80%;
+}
 #download .form-control.history-select {
-  margin-left: 10px;
   width: 80%;
 }
 #download .form-control.history-select option {
@@ -589,17 +603,16 @@ input::-webkit-input-placeholder {
   width: 100%;
   margin: 0px;
   padding: 0px;
-  heiht: inherit;
+  height: inherit;
 }
 #options #options-menu {
   list-style-type: none;
   margin: 5px 5px 1px 15px;
   padding: 0px;
   position: relative;
-  z-index: 10;
+  z-index: 22;
 }
-#options #options-menu li,
-#options #options-menu #advanced-menu li {
+#options #options-menu li {
   display: inline;
   border: 1px solid #cccccc;
   margin: 0px 2px;

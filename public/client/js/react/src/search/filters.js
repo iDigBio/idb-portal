@@ -39,18 +39,19 @@ module.exports = Filters = React.createClass({
     makeFilter: function(filter){
         //var type = fltrObj.type, name = fltrObj.name;
         //var type = 'text';
+        var key= filter.name;// + Date.now();
         switch(filter.type){
             case 'text':
                 return(
-                    <TextFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <TextFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 ); 
             case 'daterange':
                 return (
-                    <DateRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <DateRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
             case 'numericrange':
                 return (
-                    <NumericRangeFilter key={filter.name} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <NumericRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
         }
     },
@@ -100,6 +101,12 @@ module.exports = Filters = React.createClass({
         });
         return list;
     },
+    scrollFilters: function(){
+        $('#filters-holder').animate({
+            scrollTop: $('#filters-holder').height()
+        });
+        return false;
+    },
     render: function(){
         var self=this;
        
@@ -121,7 +128,7 @@ module.exports = Filters = React.createClass({
                 }
             });
             fgroups.push(
-              <optgroup label={fields.groupNames[val]}>
+              <optgroup key={val} label={fields.groupNames[val]}>
                 &nbsp;&nbsp;{fltrs}
               </optgroup>
             );
@@ -134,7 +141,7 @@ module.exports = Filters = React.createClass({
             )
         })
 
-        var scrollDisplay = 'block';
+        var scrollDisplay = 'none';
         if(filters.length>3){
             scrollDisplay='block';
         }
@@ -153,11 +160,15 @@ module.exports = Filters = React.createClass({
                     </a>
                 </div>
                 <div id="filters-holder" className="options-holder">
-                    <RCTgroup transitionName="filter-trans">
+                   
                         {filters}
-                    </RCTgroup>
+                   
                 </div>
-                <div id="filter-scroller" style={{'display': scrollDisplay }}></div>
+                <div id="filter-scroller"  onClick={this.scrollFilters}>
+                    <span style={{'display': scrollDisplay }}>
+                        &darr; Scroll To Bottom &darr;
+                    </span>
+                </div>
             </div>
         );
     }

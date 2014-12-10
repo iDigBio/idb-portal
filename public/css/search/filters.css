@@ -1,16 +1,25 @@
 #filters {
-  height: inherit;
   position: relative;
 }
 #filters #filter-scroller {
-  width: 96.5%;
+  width: 434px;
   height: 30px;
-  opacity: .6;
+  opacity: .8;
   background-color: #666;
   display: block;
   position: absolute;
   bottom: 0px;
   left: 0px;
+  text-align: center;
+  color: #fdfdfd;
+  font-weight: bold;
+  padding: 4px;
+}
+#filters #filter-scroller i {
+  margin: 5px 10%;
+}
+#filters #filter-scroller:hover {
+  cursor: pointer;
 }
 #filters #filter-select {
   margin: 0px;
@@ -47,10 +56,10 @@
 }
 #filters #filters-holder {
   overflow-y: scroll;
-  position: relative;
   height: 290px;
   margin: 0px;
   padding: 0px;
+  padding-bottom: 30px;
 }
 @media (max-width: 1060px) {
   #filters #filters-holder {

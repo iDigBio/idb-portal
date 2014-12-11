@@ -194,7 +194,9 @@ var Downloader = React.createClass({displayName: 'Downloader',
                 React.DOM.div({className: "input-group"}, 
                     React.DOM.span({className: "input-group-addon"}, "Email:"), 
                     React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 
-                    React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled}, "Go")
+                    React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled, title: "click to start download"}, 
+                        React.DOM.i({className: "glyphicon glyphicon-download"})
+                    )
                 ), 
                 React.DOM.span(null, "Approx. generation time: ", this.state.time)
             )

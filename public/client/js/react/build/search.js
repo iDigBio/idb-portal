@@ -106,7 +106,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
                             React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), " Start Searching"), 
                             React.DOM.div({className: "input-group"}, 
                                 React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.state.search.fulltext}), 
-                                React.DOM.a({className: "btn input-group-addon"}, "Go")
+                                React.DOM.a({className: "btn input-group-addon"}, React.DOM.i({className: "glyphicon glyphicon-search"}))
                             ), 
                             React.DOM.div({className: "checkbox"}, 
                                 React.DOM.label(null, 

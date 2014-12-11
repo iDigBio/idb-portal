@@ -106,7 +106,7 @@ module.exports = Main = React.createClass({
                             <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
                             <div className="input-group">
                                 <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} value={this.state.search.fulltext}/>
-                                <a className="btn input-group-addon">Go</a>
+                                <a className="btn input-group-addon"><i className="glyphicon glyphicon-search"></i></a>
                             </div>
                             <div className="checkbox">
                                 <label>

@@ -248,7 +248,7 @@
   font-weight: bolder;
 }
 #results #result-list .modal-dialog {
-  z-index: 1050;
+  z-index: 3050;
 }
 #results #result-list #column-list table {
   width: 210px;
@@ -503,10 +503,10 @@
   margin: 10px;
 }
 #download .sub .input-group {
-  width: 80%;
+  width: 100%;
 }
 #download .form-control.history-select {
-  width: 80%;
+  width: 100%;
 }
 #download .form-control.history-select option {
   overflow: ellipses;

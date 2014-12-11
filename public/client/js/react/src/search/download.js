@@ -97,38 +97,7 @@ module.exports = React.createClass({
         var q = searchHistory.history[val];
         this.props.searchChange(q);
     },
-    startDownload: function(){
-        var self=this;
-        self.dlstatus = true;
-        var email = $('#email').val();
-        var q = queryBuilder.makeIDBQuery(this.props.search);
-        if (email == "") {
-            $('#download-email').addClass("invalid")
-            $('#download-email').focus()
-        } else {
-            $('#download-button').attr("disabled", "disabled");
-            $('#time-estimate img').show();
-            var req = function(){
-                $.post(url('protocol')+"://csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
-                    var surl = url('protocol') + '://'+ url('hostname',data.status_url) + url('path',data.status_url);
-                    var statusFunc = function() {
-                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
-                            if(data.complete && data.task_status == "SUCCESS") {
-                                $("#time-estimate").html("<a href='" + data.download_url + "'>Ready, Click to Download</a>");
-                                self.dlstatus = false;
-                            } else {
-                                if(self.dlstatus===true){
-                                    setTimeout(statusFunc, 5000);
-                                }
-                            }
-                        }).fail(statusFunc);
-                    }
-                    setTimeout(statusFunc, 5000);
-                }).fail(req);                   
-            }
-            req();
-        }        
-    },
+
     render: function(){
         var options = [],self=this, time='';
 
@@ -155,7 +124,7 @@ module.exports = React.createClass({
 
 var Downloader = React.createClass({
     getInitialState: function(){
-        return {time: 'calculating'}
+        return {time: 'calculating', disabled: false}
     },
     componentDidMount: function(){
         this.getDownloadTime(this.props.search);
@@ -166,29 +135,66 @@ var Downloader = React.createClass({
     getDownloadTime: function(search){
         var self=this;
         //debugger
-        searchServer.esBasic('get','/idigbio/records/_count',queryBuilder.makeIDBQuery(search), function(resp){
-            var time = Math.floor((parseInt(resp.count) / 10000) * 7);
-            time = time < 10 ? 10 : time;//always lag time for download
-            var timehour = Math.floor(time / 3600);
-            var timemin = Math.floor(time / 60) % 60;
-            var timesec = (time % 60);
-            self.setState({time: timehour + ':'+timemin+':'+timesec},function(){
-                self.forceUpdate();
-            });      
-        })
+        var q = queryBuilder.makeQuery(search);
+        $.post('//search.idigbio.org/idigbio/records/_count',JSON.stringify({query: q.query}),function(resp){
+                var state;
+                if(resp.count===0){
+                    state = {time: 'not available', disabled: true};
+                }else{
+                    var time = Math.floor((resp.count / 10000) * 7);
+                    time = time < 10 ? 10 : time;//always lag time for download
+                    var timehour = Math.floor(time / 3600);
+                    var timemin = Math.floor(time / 60) % 60;
+                    var timesec = (time % 60);
+                    state = {time: timehour + ':'+timemin+':'+timesec, disabled: false};
+                }
+                self.setState(state,function(){
+                    self.forceUpdate();
+                });      
+            }
+        )
     },
-    shouldComponentUpdate: function(){
-        //return false;
+    startDownload: function(){
+        var self=this;
+        self.dlstatus = true;
+        var email = $('#email').val();
+        var q = queryBuilder.makeIDBQuery(this.props.search);
+        if (email == "") {
+            $('#download-email').addClass("invalid")
+            $('#download-email').focus()
+        } else {
+            $('#download-button').attr("disabled", "disabled");
+            $('#time-estimate img').show();
+            var req = function(){
+                $.post("//csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    var surl = '//'+ url('hostname',data.status_url) + url('path',data.status_url);
+                    var statusFunc = function() {
+                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                            if(data.complete && data.task_status == "SUCCESS") {
+                                $("#time-estimate").html("<a href='" + data.download_url + "'>Ready, Click to Download</a>");
+                                self.dlstatus = false;
+                            } else {
+                                if(self.dlstatus===true){
+                                    setTimeout(statusFunc, 5000);
+                                }
+                            }
+                        }).fail(statusFunc);
+                    }
+                    setTimeout(statusFunc, 5000);
+                }).fail(req);                   
+            }
+            req();
+        }        
     },
     render: function(){
-
+      
         return (
             <div className="sub">
                 <label>Download Current Result Set</label>
-                
                 <div className="input-group">
-                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download"/>
-                    <a className="btn input-group-addon" onClick={this.startDownload}>Go</a>
+                    <span className="input-group-addon">Email:</span>
+                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={this.state.disabled}/>
+                    <a className="btn input-group-addon" onClick={this.startDownload} disabled={this.state.disabled}>Go</a>
                 </div>
                 <span>Approx. generation time: {this.state.time}</span>
             </div>

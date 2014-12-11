@@ -6,10 +6,10 @@
   margin: 10px;
 }
 #download .sub .input-group {
-  width: 80%;
+  width: 100%;
 }
 #download .form-control.history-select {
-  width: 80%;
+  width: 100%;
 }
 #download .form-control.history-select option {
   overflow: ellipses;

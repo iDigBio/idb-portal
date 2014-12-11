@@ -97,6 +97,38 @@ module.exports = React.createClass({
         var q = searchHistory.history[val];
         this.props.searchChange(q);
     },
+    startDownload: function(){
+        var self=this;
+        self.dlstatus = true;
+        var email = $('#email').val();
+        var q = queryBuilder.makeIDBQuery(this.props.search);
+        if (email == "") {
+            $('#download-email').addClass("invalid")
+            $('#download-email').focus()
+        } else {
+            $('#download-button').attr("disabled", "disabled");
+            $('#time-estimate img').show();
+            var req = function(){
+                $.post(url('protocol')+"://csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    var surl = url('protocol') + '://'+ url('hostname',data.status_url) + url('path',data.status_url);
+                    var statusFunc = function() {
+                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                            if(data.complete && data.task_status == "SUCCESS") {
+                                $("#time-estimate").html("<a href='" + data.download_url + "'>Ready, Click to Download</a>");
+                                self.dlstatus = false;
+                            } else {
+                                if(self.dlstatus===true){
+                                    setTimeout(statusFunc, 5000);
+                                }
+                            }
+                        }).fail(statusFunc);
+                    }
+                    setTimeout(statusFunc, 5000);
+                }).fail(req);                   
+            }
+            req();
+        }        
+    },
     render: function(){
         var options = [],self=this;
 
@@ -108,7 +140,7 @@ module.exports = React.createClass({
         return (
             <div>
                 <div className="sub">
-                    <label>History</label>
+                    <label>Current Search</label>
                     <select className="form-control history-select" onChange={this.historySelect} value="0">
                         {options}
                     </select>
@@ -117,9 +149,10 @@ module.exports = React.createClass({
                     <label>Download Current Result Set</label>
                     
                     <div className="input-group">
-                        <input type="email" className="form-control email" placeholder="enter an email to download"/>
-                        <a className="btn input-group-addon">Download</a>
+                        <input id="email" type="email" className="form-control email" placeholder="enter an email to download"/>
+                        <a className="btn input-group-addon" onClick={this.startDownload}>Go</a>
                     </div>
+                    <span>Approx. generation time: {time}</span>
                 </div>
             </div>
         )

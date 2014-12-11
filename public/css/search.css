@@ -2,14 +2,15 @@
   position: relative;
 }
 #filters #filter-scroller {
-  width: 434px;
+  width: 100%;
   height: 30px;
   opacity: .8;
   background-color: #666;
   display: block;
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
+  /*position:absolute;
+        bottom:0px;
+        left:0px;
+       */
   text-align: center;
   color: #fdfdfd;
   font-weight: bold;
@@ -56,10 +57,9 @@
 }
 #filters #filters-holder {
   overflow-y: scroll;
-  height: 290px;
+  height: 260px;
   margin: 0px;
   padding: 0px;
-  padding-bottom: 30px;
 }
 @media (max-width: 1060px) {
   #filters #filters-holder {

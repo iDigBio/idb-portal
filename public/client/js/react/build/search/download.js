@@ -130,7 +130,9 @@ module.exports = React.createClass({displayName: 'exports',
         }        
     },
     render: function(){
-        var options = [],self=this;
+        var options = [],self=this, time='';
+
+        //get count 
 
         searchHistory.history.forEach(function(item,ind){
             options.push(
@@ -145,16 +147,51 @@ module.exports = React.createClass({displayName: 'exports',
                         options
                     )
                 ), 
-                React.DOM.div({className: "sub"}, 
-                    React.DOM.label(null, "Download Current Result Set"), 
-                    
-                    React.DOM.div({className: "input-group"}, 
-                        React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download"}), 
-                        React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload}, "Go")
-                    ), 
-                    React.DOM.span(null, "Approx. generation time: ", time)
-                )
+                Downloader({search: this.props.search, time: "calculating"})
             )
         )
     }
 });
+
+var Downloader = React.createClass({displayName: 'Downloader',
+    getInitialState: function(){
+        return {time: 'calculating'}
+    },
+    componentDidMount: function(){
+        this.getDownloadTime(this.props.search);
+    },
+    componentWillReceiveProps: function(nextProps){
+        this.getDownloadTime(nextProps.search);
+    },
+    getDownloadTime: function(search){
+        var self=this;
+        //debugger
+        searchServer.esBasic('get','/idigbio/records/_count',queryBuilder.makeIDBQuery(search), function(resp){
+            var time = Math.floor((parseInt(resp.count) / 10000) * 7);
+            time = time < 10 ? 10 : time;//always lag time for download
+            var timehour = Math.floor(time / 3600);
+            var timemin = Math.floor(time / 60) % 60;
+            var timesec = (time % 60);
+            self.setState({time: timehour + ':'+timemin+':'+timesec},function(){
+                self.forceUpdate();
+            });      
+        })
+    },
+    shouldComponentUpdate: function(){
+        //return false;
+    },
+    render: function(){
+
+        return (
+            React.DOM.div({className: "sub"}, 
+                React.DOM.label(null, "Download Current Result Set"), 
+                
+                React.DOM.div({className: "input-group"}, 
+                    React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download"}), 
+                    React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload}, "Go")
+                ), 
+                React.DOM.span(null, "Approx. generation time: ", this.state.time)
+            )
+        )
+    }
+})

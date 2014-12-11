@@ -130,7 +130,9 @@ module.exports = React.createClass({
         }        
     },
     render: function(){
-        var options = [],self=this;
+        var options = [],self=this, time='';
+
+        //get count 
 
         searchHistory.history.forEach(function(item,ind){
             options.push(
@@ -145,16 +147,51 @@ module.exports = React.createClass({
                         {options}
                     </select>
                 </div>
-                <div className="sub">
-                    <label>Download Current Result Set</label>
-                    
-                    <div className="input-group">
-                        <input id="email" type="email" className="form-control email" placeholder="enter an email to download"/>
-                        <a className="btn input-group-addon" onClick={this.startDownload}>Go</a>
-                    </div>
-                    <span>Approx. generation time: {time}</span>
-                </div>
+                <Downloader search={this.props.search} time="calculating" />
             </div>
         )
     }
 });
+
+var Downloader = React.createClass({
+    getInitialState: function(){
+        return {time: 'calculating'}
+    },
+    componentDidMount: function(){
+        this.getDownloadTime(this.props.search);
+    },
+    componentWillReceiveProps: function(nextProps){
+        this.getDownloadTime(nextProps.search);
+    },
+    getDownloadTime: function(search){
+        var self=this;
+        //debugger
+        searchServer.esBasic('get','/idigbio/records/_count',queryBuilder.makeIDBQuery(search), function(resp){
+            var time = Math.floor((parseInt(resp.count) / 10000) * 7);
+            time = time < 10 ? 10 : time;//always lag time for download
+            var timehour = Math.floor(time / 3600);
+            var timemin = Math.floor(time / 60) % 60;
+            var timesec = (time % 60);
+            self.setState({time: timehour + ':'+timemin+':'+timesec},function(){
+                self.forceUpdate();
+            });      
+        })
+    },
+    shouldComponentUpdate: function(){
+        //return false;
+    },
+    render: function(){
+
+        return (
+            <div className="sub">
+                <label>Download Current Result Set</label>
+                
+                <div className="input-group">
+                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download"/>
+                    <a className="btn input-group-addon" onClick={this.startDownload}>Go</a>
+                </div>
+                <span>Approx. generation time: {this.state.time}</span>
+            </div>
+        )
+    }
+})

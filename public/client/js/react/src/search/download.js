@@ -109,7 +109,7 @@ module.exports = React.createClass({
             )
         })
         return (
-            <div>
+            <div className="clearfix section active" id="download">
                 <div className="sub">
                     <label>Current Search</label>
                     <select className="form-control history-select" onChange={this.historySelect} value="0">
@@ -124,15 +124,15 @@ module.exports = React.createClass({
 
 var Downloader = React.createClass({
     getInitialState: function(){
-        return {time: 'calculating', disabled: false}
+        return {time: 'calculating', disabled: false};
     },
     componentDidMount: function(){
-        this.getDownloadTime(this.props.search);
+        this.setDownloadTime(this.props.search);
     },
     componentWillReceiveProps: function(nextProps){
-        this.getDownloadTime(nextProps.search);
+        this.setDownloadTime(nextProps.search);
     },
-    getDownloadTime: function(search){
+    setDownloadTime: function(search){
         var self=this;
         //debugger
         var q = queryBuilder.makeQuery(search);
@@ -148,9 +148,7 @@ var Downloader = React.createClass({
                     var timesec = (time % 60);
                     state = {time: timehour + ':'+timemin+':'+timesec, disabled: false};
                 }
-                self.setState(state,function(){
-                    self.forceUpdate();
-                });      
+                self.setState(state);      
             }
         )
     },
@@ -190,15 +188,15 @@ var Downloader = React.createClass({
       
         return (
             <div className="sub">
-                <label>Download Current Result Set</label>
+                <label>Download Results CSV</label> - <span>Approx. time: {this.state.time}</span>
                 <div className="input-group">
-                    <span className="input-group-addon">Email:</span>
+                    <span className="input-group-addon">Email</span>
                     <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={this.state.disabled}/>
                     <a className="btn input-group-addon" onClick={this.startDownload} disabled={this.state.disabled} title="click to start download">
                         <i className="glyphicon glyphicon-download"></i>
                     </a>
                 </div>
-                <span>Approx. generation time: {this.state.time}</span>
+                
             </div>
         )
     }

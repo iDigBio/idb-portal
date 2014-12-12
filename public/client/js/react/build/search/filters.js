@@ -146,7 +146,7 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
             scrollDisplay='block';
         }
         return (
-            React.DOM.div(null, 
+            React.DOM.div({className: "section active", id: "filters"}, 
                 React.DOM.div({className: "option-group", id: "filter-select"}, 
                     React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
                         React.DOM.option({value: "0", defaultValue: true, className: "default"}, "Add a field"), 
@@ -160,9 +160,9 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
                     )
                 ), 
                 React.DOM.div({id: "filters-holder", className: "options-holder"}, 
-                   
+                    RCTgroup({transitionName: "filter-trans"}, 
                         filters
-                   
+                    )
                 ), 
                 React.DOM.div({id: "filter-scroller", onClick: this.scrollFilters}, 
                     React.DOM.span({style: {'display': scrollDisplay}}, 

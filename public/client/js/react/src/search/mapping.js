@@ -38,55 +38,57 @@ module.exports = React.createClass({
     render: function(){
         var bounds = this.props.bounds;
         return(
-            <div className="option-group" id="mapping-options"> 
-                <span className="title">Lat/Lon Bounding Box</span>
-                <a className="btn" onClick={this.resetBounds}>
-                    Reset
-                </a>
-                <div className="ordinates clearfix">
-                    <label className="title">NorthWest</label>
-                    <div className="pull-left ordinate">
-                        Lat:
-                        <input type="text" 
-                            onChange={this.degreeChange} 
-                            value={!bounds.top_left.lat ? '' : bounds.top_left.lat} 
-                            placeholder="90.0"
-                            data-corner="top_left" 
-                            data-name="lat" 
-                            className="coordinate form-control"/>
+            <div className="clearfix section active" id="mapping">
+                <div className="option-group" id="mapping-options"> 
+                    <span className="title">Lat/Lon Bounding Box</span>
+                    <a className="btn" onClick={this.resetBounds}>
+                        Reset
+                    </a>
+                    <div className="ordinates clearfix">
+                        <label className="title">NorthWest</label>
+                        <div className="pull-left ordinate">
+                            Lat:
+                            <input type="text" 
+                                onChange={this.degreeChange} 
+                                value={!bounds.top_left.lat ? '' : bounds.top_left.lat} 
+                                placeholder="90.0"
+                                data-corner="top_left" 
+                                data-name="lat" 
+                                className="coordinate form-control"/>
+                        </div>
+                        <div className="ordinate">
+                            Lon:
+                            <input type="text" 
+                                onChange={this.degreeChange} 
+                                value={!bounds.top_left.lon ? '' : bounds.top_left.lon} 
+                                placeholder="-180.0"
+                                data-corner="top_left" 
+                                data-name="lon" 
+                                className="coordinate form-control" />
+                        </div>
                     </div>
-                    <div className="ordinate">
-                        Lon:
-                        <input type="text" 
-                            onChange={this.degreeChange} 
-                            value={!bounds.top_left.lon ? '' : bounds.top_left.lon} 
-                            placeholder="-180.0"
-                            data-corner="top_left" 
-                            data-name="lon" 
-                            className="coordinate form-control" />
-                    </div>
-                </div>
-                <div className="ordinates clearfix">
-                    <label className="title">SouthEast</label>
-                    <div className="pull-left ordinate">
-                        Lat:
-                        <input type="text" 
-                            onChange={this.degreeChange} 
-                            value={!bounds.bottom_right.lat ? '' : bounds.bottom_right.lat} 
-                            placeholder="-90.0"
-                            data-corner="bottom_right" 
-                            data-name="lat" 
-                            className="coordinate form-control"/>
-                    </div>
-                    <div className="ordinate">
-                        Lon:
-                        <input type="text" 
-                            onChange={this.degreeChange} 
-                            value={!bounds.bottom_right.lon ? '' : bounds.bottom_right.lon} 
-                            placeholder="180.0"
-                            data-corner="bottom_right" 
-                            data-name="lon" 
-                            className="coordinate form-control" />
+                    <div className="ordinates clearfix">
+                        <label className="title">SouthEast</label>
+                        <div className="pull-left ordinate">
+                            Lat:
+                            <input type="text" 
+                                onChange={this.degreeChange} 
+                                value={!bounds.bottom_right.lat ? '' : bounds.bottom_right.lat} 
+                                placeholder="-90.0"
+                                data-corner="bottom_right" 
+                                data-name="lat" 
+                                className="coordinate form-control"/>
+                        </div>
+                        <div className="ordinate">
+                            Lon:
+                            <input type="text" 
+                                onChange={this.degreeChange} 
+                                value={!bounds.bottom_right.lon ? '' : bounds.bottom_right.lon} 
+                                placeholder="180.0"
+                                data-corner="bottom_right" 
+                                data-name="lon" 
+                                className="coordinate form-control" />
+                        </div>
                     </div>
                 </div>
             </div>

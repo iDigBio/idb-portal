@@ -97,6 +97,21 @@ module.exports = Main = React.createClass({
                 )
             }
         })
+        var panel;
+        switch(this.state.panels){
+            case 'filters':
+                panel = <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>;
+                break;
+            case 'sorting':
+                panel = <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>;
+                break;
+            case 'mapping':
+                panel = <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />;
+                break;
+            case 'download':
+                panel = <Download search={this.state.search} searchChange={this.searchChange} />;
+                break;
+        }
         //var search = _.cloneDeep(this.state.search)
         return(
             <div id='react-wrapper'>
@@ -125,18 +140,7 @@ module.exports = Main = React.createClass({
                             <ul id="options-menu" >
                                 {menu}
                             </ul>
-                            <div className={"section "+panels.filters} id="filters">
-                                <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>
-                            </div>
-                            <div className={"clearfix section "+panels.sorting} id="sorting">
-                                <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>
-                            </div>
-                            <div className={"clearfix section "+panels.mapping} id="mapping">
-                                <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />
-                            </div>
-                            <div className={"clearfix section "+panels.download} id="download">
-                                <Download search={this.state.search} searchChange={this.searchChange} />
-                            </div>
+                            {panel}
                         </div>
                     </div>
                     <Map search={this.state.search} />

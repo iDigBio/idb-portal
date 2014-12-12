@@ -109,7 +109,7 @@ module.exports = React.createClass({displayName: 'exports',
             )
         })
         return (
-            React.DOM.div(null, 
+            React.DOM.div({className: "clearfix section active", id: "download"}, 
                 React.DOM.div({className: "sub"}, 
                     React.DOM.label(null, "Current Search"), 
                     React.DOM.select({className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
@@ -124,15 +124,15 @@ module.exports = React.createClass({displayName: 'exports',
 
 var Downloader = React.createClass({displayName: 'Downloader',
     getInitialState: function(){
-        return {time: 'calculating', disabled: false}
+        return {time: 'calculating', disabled: false};
     },
     componentDidMount: function(){
-        this.getDownloadTime(this.props.search);
+        this.setDownloadTime(this.props.search);
     },
     componentWillReceiveProps: function(nextProps){
-        this.getDownloadTime(nextProps.search);
+        this.setDownloadTime(nextProps.search);
     },
-    getDownloadTime: function(search){
+    setDownloadTime: function(search){
         var self=this;
         //debugger
         var q = queryBuilder.makeQuery(search);
@@ -148,9 +148,7 @@ var Downloader = React.createClass({displayName: 'Downloader',
                     var timesec = (time % 60);
                     state = {time: timehour + ':'+timemin+':'+timesec, disabled: false};
                 }
-                self.setState(state,function(){
-                    self.forceUpdate();
-                });      
+                self.setState(state);      
             }
         )
     },
@@ -190,15 +188,15 @@ var Downloader = React.createClass({displayName: 'Downloader',
       
         return (
             React.DOM.div({className: "sub"}, 
-                React.DOM.label(null, "Download Current Result Set"), 
+                React.DOM.label(null, "Download Results CSV"), " - ", React.DOM.span(null, "Approx. time: ", this.state.time), 
                 React.DOM.div({className: "input-group"}, 
-                    React.DOM.span({className: "input-group-addon"}, "Email:"), 
+                    React.DOM.span({className: "input-group-addon"}, "Email"), 
                     React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 
                     React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled, title: "click to start download"}, 
                         React.DOM.i({className: "glyphicon glyphicon-download"})
                     )
-                ), 
-                React.DOM.span(null, "Approx. generation time: ", this.state.time)
+                )
+                
             )
         )
     }

@@ -146,7 +146,7 @@ module.exports = Filters = React.createClass({
             scrollDisplay='block';
         }
         return (
-            <div>
+            <div className="section active" id="filters">
                 <div className="option-group" id="filter-select">
                     <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
                         <option value="0" defaultValue className="default">Add a field</option>
@@ -160,9 +160,9 @@ module.exports = Filters = React.createClass({
                     </a>
                 </div>
                 <div id="filters-holder" className="options-holder">
-                   
+                    <RCTgroup transitionName="filter-trans">
                         {filters}
-                   
+                    </RCTgroup>
                 </div>
                 <div id="filter-scroller"  onClick={this.scrollFilters}>
                     <span style={{'display': scrollDisplay }}>

@@ -61,7 +61,7 @@ module.exports = React.createClass({displayName: 'exports',
                     });
                 }
             });
-        },300,{leading: true, trailing: true});
+        },300,{leading: false, trailing: true});
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;

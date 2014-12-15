@@ -87,15 +87,15 @@ module.exports = Main = React.createClass({displayName: 'Main',
             }else{
                 panels[item]='';
             }
-            if(item=='download'){
+            /*if(item=='download'){
                 menu.push(
-                    React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, "Download & History")
+                    <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>Download &amp; History</li>
                 )
-            }else{
+            }else{*/
                 menu.push(
                     React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
                 )
-            }
+            //}
         })
         var panel;
         switch(this.state.panels){

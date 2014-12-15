@@ -177,9 +177,13 @@ module.exports = Filters = React.createClass({
 var TextFilter = React.createClass({
     componentWillMount: function(){
         var self = this;
+        //function for limiting execution of consecutive key strokes
         this.debouncedTextType = _.debounce(function(){
             self.props.changeFilter(self.props.filter); 
-        },100,{leading: false, trailing: true});
+        },500,{leading: false, trailing: true});
+    },
+    getInitialState: function(){
+        return {text: this.props.filter.text.content}
     },
     presenceClick: function(event){
         var filter = this.props.filter;
@@ -203,8 +207,11 @@ var TextFilter = React.createClass({
         var text = event.currentTarget.value, self=this;
         var filter = this.props.filter;//, filter=filters[ind];   
         filter.text.content = text;
-        //this.debouncedTextType();
-        this.props.changeFilter(filter);
+        this.setState({text: text},function(){
+            this.debouncedTextType();
+        })
+        //
+        //this.props.changeFilter(filter);
     },
     setAutocomplete: function(event){
         var self=this;
@@ -320,7 +327,7 @@ var TextFilter = React.createClass({
                         disabled={filter.text.disabled} 
                         onChange={this.textType} 
                         onFocus={this.setAutocomplete}
-                        value={filter.text.content}
+                        value={this.state.text}
                     >
                     </textarea>
                     

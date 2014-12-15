@@ -23,7 +23,7 @@ module.exports = React.createClass({displayName: 'exports',
         });
   
         //});
-    },*/ 
+    },*/
     getInitialState: function(){
         //this.getResults();
         if(!localStorage || _.isUndefined(localStorage.viewType)){
@@ -61,16 +61,16 @@ module.exports = React.createClass({displayName: 'exports',
                     });
                 }
             });
-        },300,{leading: false, trailing: true});
+        },300,{leading: true, trailing: true});
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
-        this.getResults();
+        this.getResults(this.props.search);
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
         this.setState({search: nextProps.search},function(){
-            this.getResults(); 
+            this.getResults(nextProps.search); 
         });
     },
     viewChange: function(event){

@@ -124,13 +124,81 @@ module.exports = React.createClass({displayName: 'exports',
 
 var Downloader = React.createClass({displayName: 'Downloader',
     getInitialState: function(){
-        return {time: 'calculating', disabled: false};
+        var downloads;
+        if(localStorage){
+            if(localStorage.downloads){
+                downloads = JSON.parse(localStorage.getItem('downloads')).downloads;
+            }else{
+                localStorage.setItem('downloads', JSON.stringify({downloads: []}));
+                downloads = [];
+            }
+            this.setState({downloads: downloads});
+        }
+        return {time: 'calculating', disabled: false, downloads: downloads};
+    },
+    componentWillMount: function(){
+
+        var self=this;
+
+        this.checkDownloadStatus = function(){
+            var downloads = _.map(self.state.downloads,function(item){
+                return item.query_hash;
+            });
+            var update = self.state.downloads, pendings=false;
+            async.each(self.state.downloads,function(item,callback){
+                if(item.complete === false){
+                    var surl = '//'+ url('hostname',item.status_url) + url('path',item.status_url);
+                    
+                    var statusFunc = function() {
+                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                            if(data.complete) {
+                                self.updateDownload(data);
+                            }else{
+                                pendings = true;
+                            }
+                            callback();
+                        }).fail(statusFunc);
+                    }
+                    statusFunc();              
+                }else{
+                    callback();
+                }
+            },function(err){
+                if(pendings){
+                    setTimeout(function(){
+                        self.checkDownloadStatus();
+                    },5000)
+                }
+            })
+        }   
     },
     componentDidMount: function(){
         this.setDownloadTime(this.props.search);
+        this.checkDownloadStatus();
     },
     componentWillReceiveProps: function(nextProps){
         this.setDownloadTime(nextProps.search);
+    },
+    addDownload: function(obj){
+        var downloads = this.state.downloads;
+        downloads.unshift(obj);
+        this.setState({downloads: downloads});
+        if(localStorage){
+            localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
+        }
+        this.checkDownloadStatus();
+    },
+    updateDownload: function(obj){
+        var downloads = this.state.downloads;
+        var update = _.map(downloads, function(item){
+            return item.query_hash;
+        })
+        downloads[update.indexOf(obj.query_hash)]=obj;
+        this.setState({downloads: downloads});
+        if(localStorage){
+            localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
+        }
+        this.checkDownloadStatus();         
     },
     setDownloadTime: function(search){
         var self=this;
@@ -161,13 +229,16 @@ var Downloader = React.createClass({displayName: 'Downloader',
             $('#download-email').addClass("invalid")
             $('#download-email').focus()
         } else {
-            $('#download-button').attr("disabled", "disabled");
-            $('#time-estimate img').show();
+            //this.setState('disabled', true);
             var req = function(){
                 $.post("//csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
-                    var surl = '//'+ url('hostname',data.status_url) + url('path',data.status_url);
+                    
+                    self.addDownload(data);
+                    /*var surl = '//'+ url('hostname',data.status_url) + url('path',data.status_url);
+                    
                     var statusFunc = function() {
                         $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                            debugger
                             if(data.complete && data.task_status == "SUCCESS") {
                                 $("#time-estimate").html("<a href='" + data.download_url + "'>Ready, Click to Download</a>");
                                 self.dlstatus = false;
@@ -178,7 +249,7 @@ var Downloader = React.createClass({displayName: 'Downloader',
                             }
                         }).fail(statusFunc);
                     }
-                    setTimeout(statusFunc, 5000);
+                    setTimeout(statusFunc, 5000);*/
                 }).fail(req);                   
             }
             req();
@@ -186,6 +257,21 @@ var Downloader = React.createClass({displayName: 'Downloader',
     },
     render: function(){
       
+        var downloads = _.map(this.state.downloads,function(item){
+
+            if(item.complete){
+
+                return React.DOM.li(null, 
+                        "Complete:", 
+                        React.DOM.a({href: item.download_url}, "Click To Download")
+                      )
+            }else{
+                return React.DOM.li(null, 
+                        "Pending:"
+                        )
+            }
+        })
+
         return (
             React.DOM.div({className: "sub"}, 
                 React.DOM.label(null, "Download Results CSV"), " - ", React.DOM.span(null, "Approx. time: ", this.state.time), 
@@ -195,8 +281,10 @@ var Downloader = React.createClass({displayName: 'Downloader',
                     React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled, title: "click to start download"}, 
                         React.DOM.i({className: "glyphicon glyphicon-download"})
                     )
+                ), 
+                React.DOM.ul({id: "downloads-available"}, 
+                    downloads
                 )
-                
             )
         )
     }

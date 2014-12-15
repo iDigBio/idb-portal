@@ -106,10 +106,12 @@ module.exports = React.createClass({displayName: 'exports',
         }
 
         return (
-            React.DOM.div({id: "provider-info"}, 
-                React.DOM.h4({className: "title"}, "Record Provided By"), 
-                rows, 
-                con
+            React.DOM.div({id: "provider-wrapper", className: "clearfix"}, 
+                React.DOM.h4({className: "title"}, "Data provided by"), 
+                React.DOM.div({id: "provider-info", className: "clearfix"}, 
+                    rows, 
+                    con
+                )
             )
         );
     }

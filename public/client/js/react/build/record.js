@@ -149,11 +149,9 @@ var Gallery = React.createClass({displayName: 'Gallery',
         
             return (
                 React.DOM.div({id: "gallery-wrapper"}, 
-                    React.DOM.div({id: "images", className: "clearfix"}, 
-                        React.DOM.h4({className: "title"}, "Associated Media"), 
-                        React.DOM.div({id: "gallery"}, 
-                            imgs
-                        )
+                    React.DOM.h4({className: "title"}, "Media"), 
+                    React.DOM.div({id: "gallery"}, 
+                        imgs
                     )
                 )
             );
@@ -170,12 +168,15 @@ var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
 
         return (
-            React.DOM.div({id: "action-buttons"}, 
-                React.DOM.a({href: "/portal/recordsets/"+this.props.data.recordset}, 
-                    React.DOM.button({className: "btn btn-material-indigo"}, "Go To Recordset")
-                ), 
-                React.DOM.button({'data-target': "#raw", 'data-toggle': "modal", className: "btn btn-material-lightblue"}, 
-                    "View Raw Data"
+            React.DOM.div({id: "actions"}, 
+                React.DOM.h4({className: "title"}, " Links"), 
+                React.DOM.div({id: "action-buttons"}, 
+                    React.DOM.a({href: "/portal/recordsets/"+this.props.data.recordset}, 
+                        React.DOM.button({className: "btn btn-material-indigo"}, "Go To Recordset")
+                    ), 
+                    React.DOM.button({'data-target': "#raw", 'data-toggle': "modal", className: "btn btn-material-lightblue"}, 
+                        "View Raw Data"
+                    )
                 )
             )
         )
@@ -216,28 +217,25 @@ module.exports = Page = React.createClass({displayName: 'Page',
             React.DOM.div({className: "container-fluid"}, 
                 React.DOM.div({className: "row-fluid"}, 
                     React.DOM.div({className: "span12"}, 
-                        React.DOM.h1({id: "title", className: "clearfix"}, 
-                            Title({data: this.props.record._source.data['idigbio:data']})
-                        ), 
+
                         React.DOM.div({id: "data-container", className: "clearfix"}, 
+                            React.DOM.h1({id: "title", className: "clearfix"}, 
+                                Title({data: this.props.record._source.data['idigbio:data']})
+                            ), 
                             React.DOM.div({id: "data-content"}, 
                                 Record({record: record, data: this.props.record})
                             ), 
-                            React.DOM.div({id: "data-meta"}, 
-                                React.DOM.div({id: "actions"}, 
-                                    Buttons({data: this.props.record._source})
-                                ), 
-                                
+                            React.DOM.div({id: "data-meta", className: "clearfix"}, 
                                 Gallery({data: this.props.record._source}), 
-                                    
+                                Buttons({data: this.props.record._source}), 
                                 React.DOM.div({id: "map", className: "clearfix"}, 
                                     React.DOM.h4({className: "title"}, "Specimen Georeference"), 
-                                    React.DOM.div({id: "map-box"})
+                                    React.DOM.div({id: "map-wrapper"}, 
+                                        React.DOM.div({id: "map-box"})
+                                    )
                                 )
                             ), 
-                            React.DOM.div({id: "collection", className: "clearfix"}, 
-                                Provider({data: this.props.provider})
-                            )
+                            Provider({data: this.props.provider})
                         )
                     )
                 ), 

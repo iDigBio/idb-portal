@@ -1,4 +1,4 @@
-@import "variables.less";
+@import "../variables.less";
 
 #filters{
     
@@ -119,8 +119,11 @@
                 }
                 &.syn{
                     textarea{
-                        width:200px;
+                        width:199px;
                         margin-right:0px;
+                        @media(max-width: @screenmed){
+                            width: 160px;
+                        }
                     }
                     a{
                         display:block;

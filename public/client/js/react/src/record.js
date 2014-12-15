@@ -148,12 +148,10 @@ var Gallery = React.createClass({
             })
         
             return (
-                <div id="gallery-wrapper">
-                    <div id="images" className="clearfix">
-                        <h4 className="title">Associated Media</h4>
-                        <div id="gallery">
-                            {imgs}
-                        </div>
+                <div id="gallery-wrapper">       
+                    <h4 className="title">Media</h4>
+                    <div id="gallery">
+                        {imgs}
                     </div>
                 </div>
             );
@@ -170,13 +168,16 @@ var Buttons = React.createClass({
     render: function(){
 
         return (
-            <div id="action-buttons">
-                <a href={"/portal/recordsets/"+this.props.data.recordset}>
-                    <button className="btn btn-material-indigo">Go To Recordset</button>
-                </a>
-                <button data-target="#raw" data-toggle="modal" className="btn btn-material-lightblue">
-                    View Raw Data
-                </button>
+            <div id="actions">
+                <h4 className="title"> Links</h4>
+                <div id="action-buttons">
+                    <a href={"/portal/recordsets/"+this.props.data.recordset}>
+                        <button className="btn btn-material-indigo">Go To Recordset</button>
+                    </a>
+                    <button data-target="#raw" data-toggle="modal" className="btn btn-material-lightblue">
+                        View Raw Data
+                    </button>
+                </div>
             </div>
         )
     }
@@ -216,28 +217,25 @@ module.exports = Page = React.createClass({
             <div className="container-fluid">
                 <div className="row-fluid">
                     <div className="span12">   
-                        <h1 id="title" className="clearfix">
-                            <Title data={this.props.record._source.data['idigbio:data']}/>
-                        </h1>
+
                         <div id="data-container" className="clearfix">
+                            <h1 id="title" className="clearfix">
+                                <Title data={this.props.record._source.data['idigbio:data']}/>
+                            </h1>
                             <div id="data-content">
                                 <Record record={record} data={this.props.record} />
                             </div>
-                            <div id="data-meta">
-                                <div id="actions">
-                                    <Buttons data={this.props.record._source} />
-                                </div>
-                                
+                            <div id="data-meta" className="clearfix">
                                 <Gallery data={this.props.record._source} />
-                                    
+                                <Buttons data={this.props.record._source} /> 
                                 <div id="map" className="clearfix">
                                     <h4 className="title">Specimen Georeference</h4>
-                                    <div id="map-box"></div>
+                                    <div id="map-wrapper">
+                                        <div id="map-box"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div id="collection" className="clearfix">
-                                <Provider data={this.props.provider} />
-                            </div>
+                            <Provider data={this.props.provider} />
                         </div>
                     </div>
                 </div>

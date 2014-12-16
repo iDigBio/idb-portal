@@ -169,7 +169,7 @@ var Buttons = React.createClass({
 
         return (
             <div id="actions">
-                <h4 className="title"> Links</h4>
+                <h4 className="title">Actions</h4>
                 <div id="action-buttons">
                     <a href={"/portal/recordsets/"+this.props.data.recordset}>
                         <button className="btn btn-material-indigo">Go To Recordset</button>

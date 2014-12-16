@@ -79,7 +79,7 @@ body {
   position: relative;
   display: inline-block;
   padding: 6px 6px 6px 6px;
-  color: #009688;
+  color: #999;
   cursor: pointer;
   letter-spacing: .01em;
   text-decoration: none;
@@ -94,7 +94,7 @@ body {
   background-color: white;
   border-bottom: 4px solid #6aaa51;
   cursor: default;
-  color: #666;
+  color: #555;
 }
 #data-container #data-content #record-container .record {
   display: relative;

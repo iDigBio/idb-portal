@@ -189,7 +189,7 @@ body {
   padding: 2px 0px 2px 5px;
 }
 #data-container #data-meta #actions {
-  margin-top: 20px;
+  bottom-top: 20px;
 }
 #data-container #data-meta #actions #action-buttons {
   padding: 10px 5px;
@@ -225,6 +225,7 @@ body {
 }
 #data-container #data-meta #gallery-wrapper {
   margin-top: 0px;
+  margin-bottom: 10px;
 }
 #data-container #data-meta #gallery-wrapper #gallery {
   width: 98%;

@@ -37,7 +37,6 @@ module.exports = Main = React.createClass({displayName: 'Main',
         }
     },
     getInitialState: function(){
-
         var search;
         if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
@@ -60,60 +59,12 @@ module.exports = Main = React.createClass({displayName: 'Main',
         this.setState({search: search});
         searchHistory.push(search);
     },
-    viewChange: function(key,val){
-        var view = _.cloneDeep(this.state.view);
-        view[key]=val;
-        this.setState({view: view});        
-    },
-    checkClick: function(event){
-        this.searchChange(event.currentTarget.name, event.currentTarget.checked);
-        return true;
-    },
-    textType: function(event){
-        this.searchChange('fulltext',event.currentTarget.value);
-    },
     render: function(){
-
-        /*var panel;
-
-        switch(this.state.panels){
-            case 'filters':
-                panel = <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>;
-                break;
-            case 'sorting':
-                panel = <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>;
-                break;
-            case 'mapping':
-                panel = <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />;
-                break;
-            case 'download':
-                panel = <Download search={this.state.search} searchChange={this.searchChange} />;
-                break;
-        }*/
-        //var search = _.cloneDeep(this.state.search)
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
                     React.DOM.div({id: "search", className: "clearfix"}, 
-                        React.DOM.div({id: "search-any", className: "clearfix"}, 
-                            React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), " Start Searching"), 
-                            React.DOM.div({className: "input-group"}, 
-                                React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.state.search.fulltext}), 
-                                React.DOM.a({className: "btn input-group-addon"}, React.DOM.i({className: "glyphicon glyphicon-search"}))
-                            ), 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: "image", onChange: this.checkClick, checked: this.state.search.image}), 
-                                    "Must have image"
-                                )
-                            ), 
-                            React.DOM.div({className: "checkbox"}, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.state.search.geopoint}), 
-                                    "Must have map point"
-                                )
-                            )
-                        ), 
+                        SearchAny({search: this.state.search, searchChange: this.searchChange}), 
                         OptionsPanel({search: this.state.search, searchChange: this.searchChange})
                     ), 
                     Map({search: this.state.search})
@@ -123,6 +74,40 @@ module.exports = Main = React.createClass({displayName: 'Main',
         )
     }
 });
+
+var SearchAny = React.createClass({displayName: 'SearchAny',
+    checkClick: function(event){
+        this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
+        return true;
+    },
+    textType: function(event){
+        this.props.searchChange('fulltext',event.currentTarget.value);
+    },
+    render: function(){
+
+        return(
+            React.DOM.div({id: "search-any", className: "clearfix"}, 
+                React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching"), 
+                React.DOM.div({className: "input-group"}, 
+                    React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.props.search.fulltext}), 
+                    React.DOM.a({className: "btn input-group-addon"}, React.DOM.i({className: "glyphicon glyphicon-search"}))
+                ), 
+                React.DOM.div({className: "checkbox"}, 
+                    React.DOM.label(null, 
+                        React.DOM.input({type: "checkbox", name: "image", onChange: this.checkClick, checked: this.props.search.image}), 
+                        "Must have image"
+                    )
+                ), 
+                React.DOM.div({className: "checkbox"}, 
+                    React.DOM.label(null, 
+                        React.DOM.input({type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.props.search.geopoint}), 
+                        "Must have map point"
+                    )
+                )
+            )
+        )
+    }
+})
 
 var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
     getInitialState: function(){
@@ -145,7 +130,6 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
             }else{
                 panels[item]='';
             }
-
             menu.push(
                 React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
             )

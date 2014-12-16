@@ -58,7 +58,7 @@ var Buttons = React.createClass({
         );
 
         el.push(
-            <a href="#raw" data-toggle="modal" className="btn button" key={'raw-data'}>
+            <a href="#raw" data-toggle="modal" data-target="#raw" className="btn button" key={'raw-data'}>
                 View Raw Data
             </a>            
         );
@@ -120,9 +120,11 @@ var Table = React.createClass({
         });
 
         return (
-            <table>
-                {rows}
-            </table>
+            <div id="meta-table">
+                <table>
+                    {rows}
+                </table>
+            </div>
         );
     }
 });
@@ -147,7 +149,9 @@ var Group = React.createClass({
             return (
                 <div id="other-images" className="clearfix">
                     <h4 className="title">Other Media</h4>
-                    {imgs}
+                    <div id="images-wrapper">
+                        {imgs}
+                    </div>
                 </div>
             )
         }else{
@@ -202,6 +206,7 @@ module.exports = React.createClass({
                             
                             <div id="data-meta" className="clearfix">
                                 <div id="actions">
+                                    <h4 className="title">Actions</h4>
                                     <Buttons links={source.data['idigbio:links']} />
                                 </div>
                                 <div id="data-table" className="clearfix">

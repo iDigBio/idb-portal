@@ -1,3 +1,5 @@
+@import 'variables.less';
+
 h3{
     color:#333;
     font-size:1.63em;
@@ -15,28 +17,100 @@ h3{
 #contacts{
     margin-top:15px;
 }
-#actions{
-    text-align:center;
-}
-#actions, #data-table, #collection, #data-content,#other-images{
-    border-radius:4px;
-    border:1px solid #ddd;
-    background-color:#f6f6f6;
-    box-shadow:0px 1px 0px #aaa;
-    margin:5px;
-}
+
 #collection{
     line-height: 1.25em;
     color:#333;
     text-shadow:0px 1px 0px #fff;
 }
+#container{
+    margin-top:20px;
+}
 #data-container{
     max-width:1600px;
-    margin: 10px auto;
-    padding:10px;
-    background-color:#f9f9f9;
-    border:1px solid #dedede;
-    border-radius:4px;
+    margin: 5px auto;
+
+    border-top:@brd;
+
+    #data-content{
+        //background-color:#f6f6f6;
+        background-color:@lightgrey;
+        margin:10px 0px;
+    }
+    #data-meta{
+        width:34%;
+        float:right;
+        #actions{
+            margin:20px 0px;
+            #action-buttons{
+                border-top:@brd;
+                padding-top:10px;
+                .button{
+                    display:inline-block;
+                    margin:2px 5px;
+                    border-radius:2px;
+                    background-color:@idbgreen;
+                    color:#efe;
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);                    
+                }
+            }
+        }
+        #data-table{
+            #meta-table{
+                border-top:@brd;
+                table{
+                    display:block;
+                    margin:5px;
+                    width:100%;
+
+                    tbody tr{
+
+                        td{
+                            padding:1px;
+                            width:50%;
+                            &.value{
+                                width:50%;
+                                overflow:hidden;
+                                white-space: pre-line;
+                                word-break: break-word;
+                                a{
+                                    overflow:hidden;
+                                    white-space: pre-line;
+                                }
+                            }
+                            &.name{
+                                font-weight:bold;
+                                width:50%;
+                            }
+                        }
+                    }
+                }
+            }            
+        }
+
+    }
+    #other-images{
+        text-align: left;
+        #images-wrapper{
+            border-top:@brd;
+            margin:10px auto;
+            .gallery-image{
+                display:relative;
+                max-height:100px;
+                margin:5px;
+                border:@brd;
+                box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);           
+                padding:4px;
+                max-width:90%;
+            }
+        }
+    }
+    #provider-wrapper{
+        #provider-info{
+            border-top:@brd;
+            padding:5px;
+        }
+    }
 }
 #data-content{
     text-align: center;
@@ -45,21 +119,7 @@ h3{
     width:64%;
     float:left;
 }
-#data-meta{
-    width:34%;
-    float:right;
-}
-#data-table table{
-    margin:10px;
-}
-.gallery-image{
-    display:relative;
-    max-height:100px;
-    margin:5px;
-    box-shadow:0px 0px 2px #666;
-    padding:4px;
-    max-width:90%;
-}
+
 .logo{
     max-width:50px;
     margin:5px 5px 0px 0px;
@@ -73,30 +133,19 @@ h3{
     margin:4px 0px;
 }
 h1.title{
-    font-size:1.75em;
-   
+    font-size:1.65em;
 }
 h4.title{
-    text-align: center;
+ 
     margin:5px;
-    font-size:1.1em;
+    font-size:1.3em;
 }
 #title{
     margin:auto auto;
     max-width:1600px;
     color:#333;
 }
-.value, .value a{
-    display:inline-block;
-    word-wrap:break-all;
-    word-break:break-word;
-    overflow:hidden;
-    white-space: pre-line;
-}
-.name{
-    font-weight:bold;
-    width:160px;
-}
+
 #media-wrapper{
     width:90%;
     margin:auto auto;
@@ -113,13 +162,7 @@ h4.title{
     display:block;
     margin:5px;
 }
-#other-images{
 
-    text-align: center;
-}
-#provider-info{
-    margin:10px;
-}
 /*
 #actions, #media-wrapper, #data-table, #collection{
     border-radius:4px;
@@ -186,7 +229,7 @@ h4.title{
 }*/
 
 @media(max-width: 1000px){
-    #data-content, #data-table, #actions, #collection{
+    #data-content, #actions, #collection{
         width:100%;
         float:none;
         margin:5px;

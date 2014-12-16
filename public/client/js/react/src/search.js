@@ -37,7 +37,6 @@ module.exports = Main = React.createClass({
         }
     },
     getInitialState: function(){
-
         var search;
         if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
@@ -60,60 +59,12 @@ module.exports = Main = React.createClass({
         this.setState({search: search});
         searchHistory.push(search);
     },
-    viewChange: function(key,val){
-        var view = _.cloneDeep(this.state.view);
-        view[key]=val;
-        this.setState({view: view});        
-    },
-    checkClick: function(event){
-        this.searchChange(event.currentTarget.name, event.currentTarget.checked);
-        return true;
-    },
-    textType: function(event){
-        this.searchChange('fulltext',event.currentTarget.value);
-    },
     render: function(){
-
-        /*var panel;
-
-        switch(this.state.panels){
-            case 'filters':
-                panel = <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>;
-                break;
-            case 'sorting':
-                panel = <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>;
-                break;
-            case 'mapping':
-                panel = <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />;
-                break;
-            case 'download':
-                panel = <Download search={this.state.search} searchChange={this.searchChange} />;
-                break;
-        }*/
-        //var search = _.cloneDeep(this.state.search)
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
                     <div id="search" className="clearfix">
-                        <div id="search-any" className="clearfix">
-                            <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/> Start Searching</h3>
-                            <div className="input-group">
-                                <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} value={this.state.search.fulltext}/>
-                                <a className="btn input-group-addon"><i className="glyphicon glyphicon-search"></i></a>
-                            </div>
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" name="image" onChange={this.checkClick} checked={this.state.search.image}/>
-                                    Must have image
-                                </label>
-                            </div>
-                            <div className="checkbox">
-                                <label>
-                                    <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.state.search.geopoint}/>
-                                    Must have map point
-                                </label>
-                            </div>
-                        </div>
+                        <SearchAny search={this.state.search} searchChange={this.searchChange} />
                         <OptionsPanel search={this.state.search} searchChange={this.searchChange}/>
                     </div>
                     <Map search={this.state.search} />
@@ -123,6 +74,40 @@ module.exports = Main = React.createClass({
         )
     }
 });
+
+var SearchAny = React.createClass({
+    checkClick: function(event){
+        this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
+        return true;
+    },
+    textType: function(event){
+        this.props.searchChange('fulltext',event.currentTarget.value);
+    },
+    render: function(){
+
+        return(
+            <div id="search-any" className="clearfix">
+                <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching</h3>
+                <div className="input-group">
+                    <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} value={this.props.search.fulltext}/>
+                    <a className="btn input-group-addon"><i className="glyphicon glyphicon-search"></i></a>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name="image" onChange={this.checkClick} checked={this.props.search.image}/>
+                        Must have image
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.props.search.geopoint}/>
+                        Must have map point
+                    </label>
+                </div>
+            </div>
+        )
+    }
+})
 
 var OptionsPanel = React.createClass({
     getInitialState: function(){
@@ -145,7 +130,6 @@ var OptionsPanel = React.createClass({
             }else{
                 panels[item]='';
             }
-
             menu.push(
                 <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>{helpers.firstToUpper(item)}</li>
             )

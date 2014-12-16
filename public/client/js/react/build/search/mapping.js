@@ -38,7 +38,7 @@ module.exports = React.createClass({displayName: 'exports',
     render: function(){
         var bounds = this.props.bounds;
         return(
-            React.DOM.div({className: "clearfix section active", id: "mapping"}, 
+            React.DOM.div({className: "clearfix section "+this.props.active, id: "mapping"}, 
                 React.DOM.div({className: "option-group", id: "mapping-options"}, 
                     React.DOM.span({className: "title"}, "Lat/Lon Bounding Box"), 
                     React.DOM.a({className: "btn", onClick: this.resetBounds}, 

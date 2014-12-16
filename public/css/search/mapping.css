@@ -1,29 +1,30 @@
-#mapping-options {
+#mapping-options.option-group {
   width: 100%;
   display: block;
   float: left;
+  margin-top: 20px;
 }
-#mapping-options .title {
+#mapping-options.option-group .title {
   font-weight: bold;
-  margin-left: 20px;
+  margin: 20px 20px;
 }
-#mapping-options .ordinates {
+#mapping-options.option-group .ordinates {
   margin: 0px auto;
   margin-left: 5%;
   float: left;
   width: 100%;
 }
-#mapping-options .ordinates label.title {
+#mapping-options.option-group .ordinates label.title {
   float: left;
   margin: 22px 3px 5px 3px;
   padding: 0px;
 }
-#mapping-options .ordinates .ordinate {
+#mapping-options.option-group .ordinates .ordinate {
   width: 100px;
   float: left;
   margin: 2px 5px;
 }
-#mapping-options .ordinates .ordinate input.coordinate {
+#mapping-options.option-group .ordinates .ordinate input.coordinate {
   height: 27px;
   width: 100px;
 }

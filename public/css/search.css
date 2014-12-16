@@ -34,7 +34,7 @@
   border-radius: 4px;
   background-color: white;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filter-select select {
     width: 50%;
   }
@@ -61,7 +61,7 @@
   margin: 0px;
   padding: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder {
     height: 233px;
   }
@@ -116,7 +116,7 @@
   margin-right: 5px;
   height: 54px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .text textarea {
     width: 220px;
   }
@@ -125,7 +125,7 @@
   width: 199px;
   margin-right: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .text.syn textarea {
     width: 160px;
   }
@@ -161,7 +161,7 @@
 #filters #filters-holder .filter .dates input.date:disabled {
   color: #bbb;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .dates input.date {
     width: 110px;
   }
@@ -173,7 +173,7 @@
   margin-right: 16px;
   padding: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .presence {
     width: 220px;
   }
@@ -482,7 +482,7 @@
   width: 23%;
   float: left;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #sorting #sort-group .option-group .direction {
     width: 20%;
   }
@@ -491,7 +491,7 @@
   float: left;
   width: 42%;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #sorting #sort-group .option-group .name {
     width: 40%;
   }
@@ -501,15 +501,59 @@
   margin: 4px 2px;
 }
 #download {
-  padding: 10px;
+  padding: 0px;
   background-color: #f0f0f0;
   border-bottom: 1px solid #cccccc;
+  margin: 0px;
 }
-#download .sub {
-  margin: 10px;
+#download .sub#current {
+  margin: 15px;
 }
 #download .sub .input-group {
   width: 100%;
+}
+#download #downloader {
+  margin: 15px;
+}
+#download #downloads-section {
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #cccccc;
+  margin: 0px;
+}
+#download #downloads-section label {
+  margin: 10px 15px 5px 15px;
+}
+#download #downloads-section table {
+  border-top: 1px solid #cccccc;
+  display: block;
+  overflow: scroll;
+  width: 100%;
+  height: 130px;
+  margin: 3px 0px;
+}
+#download #downloads-section table td {
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 60%;
+  padding: 2px 15px;
+}
+#download #downloads-section table td.status {
+  width: 40%;
+}
+#download #downloads-section table td.title {
+  width: 60%;
+  max-width: 280px;
+}
+@media (max-width: 1060px) {
+  #download #downloads-section table {
+    height: 100px;
+  }
+  #download #downloads-section table td.title {
+    max-width: 200px;
+  }
 }
 #download .form-control.history-select {
   width: 100%;
@@ -517,32 +561,33 @@
 #download .form-control.history-select option {
   overflow: ellipses;
 }
-#mapping-options {
+#mapping-options.option-group {
   width: 100%;
   display: block;
   float: left;
+  margin-top: 20px;
 }
-#mapping-options .title {
+#mapping-options.option-group .title {
   font-weight: bold;
-  margin-left: 20px;
+  margin: 20px 20px;
 }
-#mapping-options .ordinates {
+#mapping-options.option-group .ordinates {
   margin: 0px auto;
   margin-left: 5%;
   float: left;
   width: 100%;
 }
-#mapping-options .ordinates label.title {
+#mapping-options.option-group .ordinates label.title {
   float: left;
   margin: 22px 3px 5px 3px;
   padding: 0px;
 }
-#mapping-options .ordinates .ordinate {
+#mapping-options.option-group .ordinates .ordinate {
   width: 100px;
   float: left;
   margin: 2px 5px;
 }
-#mapping-options .ordinates .ordinate input.coordinate {
+#mapping-options.option-group .ordinates .ordinate input.coordinate {
   height: 27px;
   width: 100px;
 }

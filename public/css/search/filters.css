@@ -34,7 +34,7 @@
   border-radius: 4px;
   background-color: white;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filter-select select {
     width: 50%;
   }
@@ -61,7 +61,7 @@
   margin: 0px;
   padding: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder {
     height: 233px;
   }
@@ -116,7 +116,7 @@
   margin-right: 5px;
   height: 54px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .text textarea {
     width: 220px;
   }
@@ -125,7 +125,7 @@
   width: 199px;
   margin-right: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .text.syn textarea {
     width: 160px;
   }
@@ -161,7 +161,7 @@
 #filters #filters-holder .filter .dates input.date:disabled {
   color: #bbb;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .dates input.date {
     width: 110px;
   }
@@ -173,7 +173,7 @@
   margin-right: 16px;
   padding: 0px;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #filters #filters-holder .filter .presence {
     width: 220px;
   }

@@ -32,7 +32,8 @@ module.exports = React.createClass({
         return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search};
     },
     shouldComponentUpdate: function(nextProps, nextState){
-        if(nextState.view!==this.state.view){
+        //
+        if(nextState.view!==this.state.view ){
             return true;
         }else{
             return false;
@@ -69,9 +70,12 @@ module.exports = React.createClass({
     },
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
-        this.setState({search: nextProps.search},function(){
-            this.getResults(nextProps.search); 
-        });
+        var isNewSearch =  JSON.stringify(this.props.search) !== JSON.stringify(nextProps.search);
+      
+            this.setState({search: nextProps.search},function(){
+                this.getResults(nextProps.search); 
+            });
+        
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;

@@ -1,13 +1,57 @@
 #download {
-  padding: 10px;
+  padding: 0px;
   background-color: #f0f0f0;
   border-bottom: 1px solid #cccccc;
+  margin: 0px;
 }
-#download .sub {
-  margin: 10px;
+#download .sub#current {
+  margin: 15px;
 }
 #download .sub .input-group {
   width: 100%;
+}
+#download #downloader {
+  margin: 15px;
+}
+#download #downloads-section {
+  width: 100%;
+  background-color: white;
+  border-top: 1px solid #cccccc;
+  margin: 0px;
+}
+#download #downloads-section label {
+  margin: 10px 15px 5px 15px;
+}
+#download #downloads-section table {
+  border-top: 1px solid #cccccc;
+  display: block;
+  overflow: scroll;
+  width: 100%;
+  height: 130px;
+  margin: 3px 0px;
+}
+#download #downloads-section table td {
+  overflow: hidden;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 60%;
+  padding: 2px 15px;
+}
+#download #downloads-section table td.status {
+  width: 40%;
+}
+#download #downloads-section table td.title {
+  width: 60%;
+  max-width: 280px;
+}
+@media (max-width: 1060px) {
+  #download #downloads-section table {
+    height: 100px;
+  }
+  #download #downloads-section table td.title {
+    max-width: 200px;
+  }
 }
 #download .form-control.history-select {
   width: 100%;

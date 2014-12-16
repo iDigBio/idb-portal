@@ -43,7 +43,7 @@
   width: 23%;
   float: left;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #sorting #sort-group .option-group .direction {
     width: 20%;
   }
@@ -52,7 +52,7 @@
   float: left;
   width: 42%;
 }
-@media (max-width: 1024px) {
+@media (max-width: 1060px) {
   #sorting #sort-group .option-group .name {
     width: 40%;
   }

@@ -11,12 +11,7 @@ var Download = require('./search/download');
 var Map = require('./search/map');
 
 module.exports = Main = React.createClass({displayName: 'Main',
-    showPanel: function(event){
-        var val = event.currentTarget.attributes['data-panel'].value;
-        this.setState({panels: val},function(){
-            localStorage.setItem('panels',val);
-        })
-    },
+
     statics: {
         defaultSearch: function(){
             var filters = Filters.defaultFilters();
@@ -42,9 +37,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
         }
     },
     getInitialState: function(){
-        if(localStorage && typeof localStorage.panels ==='undefined'){
-            localStorage.setItem('panels','filters');
-        }
+
         var search;
         if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
@@ -52,7 +45,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
             search = Main.defaultSearch();
         }
         return {
-            search: search, panels: localStorage.getItem('panels')
+            search: search
         };
     },
     searchChange: function(key,val){
@@ -80,38 +73,23 @@ module.exports = Main = React.createClass({displayName: 'Main',
         this.searchChange('fulltext',event.currentTarget.value);
     },
     render: function(){
-        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
-        Object.keys(panels).forEach(function(item,ind){
-            if(item==self.state.panels){
-                panels[item]='active';
-            }else{
-                panels[item]='';
-            }
-            /*if(item=='download'){
-                menu.push(
-                    <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>Download &amp; History</li>
-                )
-            }else{*/
-                menu.push(
-                    React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
-                )
-            //}
-        })
-        var panel;
+
+        /*var panel;
+
         switch(this.state.panels){
             case 'filters':
-                panel = Filters({searchChange: this.searchChange, filters: this.state.search.filters});
+                panel = <Filters searchChange={this.searchChange} filters={this.state.search.filters}/>;
                 break;
             case 'sorting':
-                panel = Sorting({searchChange: this.searchChange, sorting: this.state.search.sorting});
+                panel = <Sorting searchChange={this.searchChange} sorting={this.state.search.sorting}/>;
                 break;
             case 'mapping':
-                panel = Mapping({searchChange: this.searchChange, bounds: this.state.search.bounds});
+                panel = <Mapping searchChange={this.searchChange} bounds={this.state.search.bounds} />;
                 break;
             case 'download':
-                panel = Download({search: this.state.search, searchChange: this.searchChange});
+                panel = <Download search={this.state.search} searchChange={this.searchChange} />;
                 break;
-        }
+        }*/
         //var search = _.cloneDeep(this.state.search)
         return(
             React.DOM.div({id: "react-wrapper"}, 
@@ -136,16 +114,51 @@ module.exports = Main = React.createClass({displayName: 'Main',
                                 )
                             )
                         ), 
-                        React.DOM.div({id: "options", className: "clearfix"}, 
-                            React.DOM.ul({id: "options-menu"}, 
-                                menu
-                            ), 
-                            panel
-                        )
+                        OptionsPanel({search: this.state.search, searchChange: this.searchChange})
                     ), 
                     Map({search: this.state.search})
                 ), 
                 Results({search: this.state.search, searchChange: this.searchChange})
+            )
+        )
+    }
+});
+
+var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
+    getInitialState: function(){
+        if(localStorage && typeof localStorage.panels ==='undefined'){
+            localStorage.setItem('panels','filters');
+        }
+        return {panels: localStorage.getItem('panels')}
+    },
+    showPanel: function(event){
+        var val = event.currentTarget.attributes['data-panel'].value;
+        this.setState({panels: val},function(){
+            localStorage.setItem('panels',val);
+        })
+    },
+    render: function(){
+        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
+        Object.keys(panels).forEach(function(item,ind){
+            if(item==self.state.panels){
+                panels[item]='active';
+            }else{
+                panels[item]='';
+            }
+
+            menu.push(
+                React.DOM.li({key: ind, className: panels[item], 'data-panel': item, onClick: self.showPanel}, helpers.firstToUpper(item))
+            )
+        })
+        return (
+            React.DOM.div({id: "options", className: "clearfix"}, 
+                React.DOM.ul({id: "options-menu"}, 
+                    menu
+                ), 
+                Filters({searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
+                Sorting({searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
+                Mapping({searchChange: this.props.searchChange, bounds: this.props.search.bounds, active: panels.mapping}), 
+                Download({search: this.props.search, searchChange: this.props.searchChange, active: panels.download})
             )
         )
     }

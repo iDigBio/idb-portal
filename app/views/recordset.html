@@ -23,21 +23,15 @@
 {% block content %}
 <input type="hidden" value="{{ id }}" id="recordsetID">
 <div id="main" class="container-fluid" style="margin:0px;">
-    <div id="container">
-        <div id="title"></div>
-        <div id="react-wrapper">
-              {% autoescape false %}
-              {{ content }}
-              {% endautoescape %}
-        </div> 
-    </div>
+    {% autoescape false %}
+    {{ content }}
+    {% endautoescape %}
 </div>
 {% endblock %} 
 
 {% block appblock %}
-<script type="text/template" id="frame">
+  {% parent %}
 
-</script>
-<script type="text/javascript" src="/portal/js/app.js"></script>
+  <script type="text/javascript" src="/portal/components/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>
 {% endblock %}
 {% block scriptblock %} {% endblock %}

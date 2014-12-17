@@ -5,9 +5,6 @@ h3 {
 h4.title {
   font-size: 1.3em;
 }
-h1 {
-  font-size: 1.65em;
-}
 body {
   min-height: 800px;
 }
@@ -27,11 +24,9 @@ body {
   right: 0;
   margin: auto;
 }
-.justify {
-  text-align: justify;
-}
 #raw-body {
   white-space: pre;
+  overflow: auto;
 }
 .section-hide {
   display: none;
@@ -50,9 +45,14 @@ body {
   margin: 10px 0px;
   max-width: 1600px;
   color: #666;
-  border-bottom: 1px solid #cccccc;
   font-weight: bold;
   padding-bottom: 5px;
+  font-size: 31px;
+}
+#data-container #title .title-addition {
+  font-size: .65em;
+  margin: 0px 15px;
+  color: #999;
 }
 #data-container #data-content {
   width: 65%;
@@ -148,12 +148,16 @@ body {
   }
 }
 #data-container #provider-wrapper h4.title {
-  margin-left: 10px;
+  margin-left: 0px;
   margin-top: 10px;
 }
 #data-container #provider-wrapper #provider-info {
   border-top: 1px solid #cccccc;
-  padding: 5px 10px;
+  padding: 5px 0px;
+}
+#data-container #provider-wrapper #provider-info .title {
+  margin-top: 10px;
+  color: #555;
 }
 #data-container #provider-wrapper #provider-info .logo {
   max-height: 45px;
@@ -162,8 +166,15 @@ body {
   padding: 4px;
   float: left;
 }
+#data-container #provider-wrapper #provider-info .justify {
+  text-align: justify;
+  line-height: 1.3em;
+}
 #data-container #provider-wrapper #provider-info #contacts {
   margin-top: 15px;
+}
+#data-container #provider-wrapper #provider-info #contacts .title {
+  margin-bottom: 10px;
 }
 #data-container #provider-wrapper #provider-info #contacts .contact,
 #data-container #provider-wrapper #provider-info #contacts .contact li {
@@ -172,9 +183,13 @@ body {
   width: 170px;
   word-break: break-word;
 }
+#data-container #provider-wrapper #provider-info #contacts .contact {
+  padding-left: 0px;
+  margin-right: 15px;
+}
 #data-container #data-meta {
   margin-top: 40px;
-  width: 35%;
+  width: 34%;
   float: right;
 }
 @media (max-width: 1060px) {
@@ -184,23 +199,21 @@ body {
 }
 #data-container #data-meta h4.title {
   margin: 0px;
-  margin-left: 5px;
+  margin-left: 0px;
   width: 98.5%;
   padding: 2px 0px 2px 5px;
 }
 #data-container #data-meta #actions {
-  bottom-top: 20px;
+  margin-bottom: 30px;
 }
 #data-container #data-meta #actions #action-buttons {
-  padding: 10px 5px;
-  margin-bottom: 30px;
+  padding: 0px 0px;
   width: 98%;
   margin: auto auto;
-  border-top: 1px solid #cccccc;
 }
 #data-container #data-meta #actions #action-buttons button {
   display: inline-block;
-  margin: 2px 5px;
+  margin: 2px 10px 4px 0px;
   border-radius: 2px;
   background-color: #6aaa51;
   color: #efe;
@@ -214,6 +227,7 @@ body {
 }
 #data-container #data-meta #map .title {
   margin-left: 0px;
+  padding-left: 0px;
 }
 #data-container #data-meta #map #map-wrapper {
   border-top: 1px solid #cccccc;
@@ -231,7 +245,7 @@ body {
   width: 98%;
   margin: auto auto;
   border-top: 1px solid #cccccc;
-  padding: 10px 5px;
+  padding: 10px 0px;
 }
 #data-container #data-meta #gallery-wrapper #gallery .gallery-image {
   display: relative;

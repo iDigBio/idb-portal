@@ -96,7 +96,7 @@ var FieldsTable = React.createClass({
 var Title = React.createClass({
     render: function(){
         return(
-            <label><span className="title">Recordset:</span> {this.props.key}</label>
+            <h1 id="title"><span>Recordset:</span> {this.props.key}</h1>
         );
     }
 });
@@ -112,11 +112,13 @@ var Description = React.createClass({
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
-            <p className="description">
+            <div id="description">
+                <p>
                 {logo}
                 <span dangerouslySetInnerHTML={{__html: desc}}>
                 </span>
-            </p>
+                </p>
+            </div>
         )
     }
 });
@@ -130,9 +132,13 @@ var Last = React.createClass({
 var Buttons = React.createClass({
     render: function(){
         return(
-            <div className="wrapper buttons">
-                <a href={'/portal/search?recordset='+this.props.key} className="btn button">Search This Recordset</a>
-                <a href="#raw" data-toggle="modal" className="btn button">View Raw Data</a>
+            <div id="buttons">
+                <a href={'/portal/search?recordset='+this.props.key} className="btn button">
+                   <button className="btn">Search This Recordset</button>
+                </a>
+                <button data-target="#raw" data-toggle="modal" className="btn button">
+                    View Raw Data
+                </button>
             </div>
         )
     }
@@ -174,7 +180,7 @@ var Contacts = React.createClass({
             var phone = check(contact.phone);
             var role = check(contact.role);
             return (
-                <ul className="pull-left contact">
+                <ul className="contact">
                     <li>{name}</li>
                     <li>{role}</li>
                     <li><a href={'mailto: '+email}>{email}</a></li>
@@ -201,12 +207,9 @@ var Contacts = React.createClass({
         }
 
         return (
-            <div>
-                {link}
-                <div className="wrapper">
-                    <div className="info">Contacts</div>
-                    {contacts}
-                </div>
+            <div id="contacts" className="clearfix">
+                <h4 className="title">Contacts</h4>
+                {contacts}
             </div>
         )
     }
@@ -219,46 +222,30 @@ module.exports = React.createClass({
         var data = this.props.recordset._source.data['idigbio:data'];
         return (
             <div id="container">
-                <div id="title">
-                    <Title key={data.collection_name} />
-                </div>
-                <div id="content" className="clearfix">
-                    <div id="left"className="wrapper">
-                        <div id="description" className="clearfix">
-                            <Description data={data} />
+                <Title key={data.collection_name} />
+                <Description data={data} />
+                <Buttons key={data['idigbio:uuid']} />
+                <div id="info" className="clearfix">
+                    <div className="wrapper">
+                        <div className="info">Last Update: 
+                            <span id="last">
+                                &nbsp;<Last key={data.update.substring(0,10)} />
+                            </span>
                         </div>
-                        <div id="fields" className="clearfix">
-                            <FieldsTable missing={this.props.missing} stotal={this.props.stotal} />
-                        </div> 
-                    </div>
-                    <div id="right" className="wrapper">
-                        <div id="info" className="clearfix">
-                            <div className="wrapper">
-                                <div className="info">Last Update: 
-                                    <span id="last">
-                                        &nbsp;<Last key={data.update.substring(0,10)} />
-                                    </span>
-                                </div>
-                                <div className="info">Total Specimen Records: 
-                                    <span id="specimen-total">
-                                        &nbsp;<Total key={'Specimen'} total={formatNum(this.props.stotal)} />
-                                    </span>
-                                </div>
-                                <div className="info">Total Media Records:
-                                    <span id="media-total">
-                                        &nbsp;<Total key={'Media'} total={formatNum(this.props.mtotal)} />
-                                    </span>
-                                </div>
-                            </div>
-                            <div id="buttons" className="wrapper">
-                                <Buttons key={data['idigbio:uuid']} />
-                            </div>
+                        <div className="info">Total Specimen Records: 
+                            <span id="specimen-total">
+                                &nbsp;<Total key={'Specimen'} total={formatNum(this.props.stotal)} />
+                            </span>
                         </div>
-                        <div id="contacts" className="clearfix">
-                            <Contacts data={data} />
+                        <div className="info">Total Media Records:
+                            <span id="media-total">
+                                &nbsp;<Total key={'Media'} total={formatNum(this.props.mtotal)} />
+                            </span>
                         </div>
                     </div>
                 </div>
+                <Contacts data={data} />
+                <FieldsTable missing={this.props.missing} stotal={this.props.stotal} />
                 <Raw data={data} />
             </div>
         )

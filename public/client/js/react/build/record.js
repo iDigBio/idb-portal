@@ -105,9 +105,9 @@ var Title = React.createClass({displayName: 'Title',
         if(_.isEmpty(title)){
             title = 'No Name';
         } 
-        var author = '';
+        //var author = '';
         if(_.has(data,'dwc:scientificNameAuthorship')){
-            author = ', '+data['dwc:scientificNameAuthorship'];
+            info.push(data['dwc:scientificNameAuthorship']);
         }
         //build info ids,inst
         ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
@@ -117,10 +117,11 @@ var Title = React.createClass({displayName: 'Title',
         }) 
 
         return (
-            React.DOM.div(null, 
+            React.DOM.h1({id: "title", className: "clearfix"}, 
                 React.DOM.em(null, title), 
-                author, " ", 
-                info.join(', ')
+                React.DOM.span({className: "title-addition"}, 
+                    info.join(', ')
+                )
             )
         );       
     }
@@ -168,8 +169,8 @@ var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
 
         return (
-            React.DOM.div({id: "actions"}, 
-                React.DOM.h4({className: "title"}, "Actions"), 
+            React.DOM.div({id: "actions", className: "clearfix"}, 
+                
                 React.DOM.div({id: "action-buttons"}, 
                     React.DOM.a({href: "/portal/recordsets/"+this.props.data.recordset}, 
                         React.DOM.button({className: "btn"}, "Go To Recordset")
@@ -219,15 +220,13 @@ module.exports = Page = React.createClass({displayName: 'Page',
                     React.DOM.div({className: "span12"}, 
 
                         React.DOM.div({id: "data-container", className: "clearfix"}, 
-                            React.DOM.h1({id: "title", className: "clearfix"}, 
-                                Title({data: this.props.record._source.data['idigbio:data']})
-                            ), 
+                            Title({data: this.props.record._source.data['idigbio:data']}), 
                             React.DOM.div({id: "data-content"}, 
                                 Record({record: record, data: this.props.record})
                             ), 
                             React.DOM.div({id: "data-meta", className: "clearfix"}, 
-                                Gallery({data: this.props.record._source}), 
                                 Buttons({data: this.props.record._source}), 
+                                Gallery({data: this.props.record._source}), 
                                 React.DOM.div({id: "map", className: "clearfix"}, 
                                     React.DOM.h4({className: "title"}, "Specimen Georeference"), 
                                     React.DOM.div({id: "map-wrapper"}, 

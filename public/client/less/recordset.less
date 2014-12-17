@@ -1,26 +1,69 @@
+@import 'variables.less';
+
 #container{
     max-width:1600px;
     margin:auto;
-}
-#content{
-    margin: 10px auto;
-    padding:10px;
-    background-color:#f8f8f8;
-    border:1px solid #ddd;
-    border-radius:4px;
-    box-shadow:0px 1px 0px #aaa;
-}
-.contact, .contact li{
-    text-decoration: none;
-    list-style-type: none;
-    min-width:180px;
-    word-break:break-word;
+    #title{
+        font-size: 1.75em;
+        font-weight: bold;
+        color:#666;
+    }
+    #description,#fields-table{
+        float:left;
+        width:64%;
+    }
+    #buttons,#info,#contacts{
+        float:right;
+        width:34%;
+    }
+    #description{
+        p{
+            margin:0px;
+            text-align: justify;
+            background-color:@lightgrey;
+            border-top:@brd;
+            border-bottom: @brd;
+            padding:5px 10px;
+            min-height: 170px;
+        }
+        display:block;
+        clear:both;
+    }
+    #fields-table{
+        margin-top:15px;
+    }
+    #buttons{
+        .button{
 
+        }
+        button{
+            display:inline-block;
+            margin:2px 10px 4px 0px;
+            border-radius:2px;
+            background-color:@idbgreen;
+            color:#efe;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+        }
+    }
+    #info{
+        padding:0px;
+    }
+    #contacts{
+        
+        .contact, .contact li{
+            text-decoration: none;
+            list-style-type: none;
+            min-width:180px;
+            word-break:break-word;
+        }
+        .contact{
+            float:left;
+            padding-left:0px;
+        }
+    }
 }
-.description{
-    text-align:justify;
-    line-height: 1.25em;
-}
+
+
 .last{
     margin-left:20px;
 }
@@ -79,56 +122,29 @@ td.record-count{
 .buttons{
     text-align:center;
 }
-#title{
-    width:100%;
-    margin:25px 0px;
-}
+
 #title label{
     font-size: 1.7em;
     letter-spacing: 0.0em;
     font-weight:bold;
     color:#333;
 }
-#description{
-    width:100%;
-    float:left;
-}
-#description p{
-    margin:10px;
-}
-#fields{
-    width:100%;
-    float:left;
-}
-#fields-table{
-    margin:10px;
-}
+
 .info{
     font-weight: bold;
     font-size:1.02em;
 }
-.cotact{
-    margin-left:0px;
-}
-#info,#contacts,#results-map{
-    width:100%;
-    float:right;
-}
-#info .wrapper,#contacts .wrapper{
+
+
+#info .wrapper{
     margin:10px;
 }
 #info .info{
     margin-bottom:5px;
 }
-#description, #fields, #info, #contacts, #results-map{
-    border-radius:4px;
-    border:1px solid #ddd;
-    background-color:#efefef;
-    box-shadow:0px 1px 0px #aaa;
-    margin:5px;
-}
+
 #fields,#description{
-    background-color:#fbfbfb;
+   
     color:#444;
 }
 #field-loader{
@@ -139,24 +155,18 @@ td.record-count{
     width:100%;
     margin:10px;
 }
-#left{
-    float:left;
-    width:64%;
-}
+
 #right{
     float:right;
     width:34%;
 }
 
 @media(max-width:900px){
-    #description,#fields,#info,#contacts{
+    #description,#fields{
         width:98%;
         float:none;
     }
-    #left,#right{
-        width:100%;
-        float:none;
-    }
+
     #title{
         margin:20px 0px;
     }

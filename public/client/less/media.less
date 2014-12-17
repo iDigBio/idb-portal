@@ -25,25 +25,39 @@ h3{
 }
 #container{
     margin-top:20px;
+    #title{
+        margin:auto auto;
+        max-width:1600px;
+        color:#666;
+        font-size:31px;
+        font-weight: bold;
+        .authors{
+            font-size: .7em;
+            margin-left:15px;
+            color:#999;
+        }
+    }
 }
 #data-container{
     max-width:1600px;
     margin: 5px auto;
 
-    border-top:@brd;
+    
 
     #data-content{
         //background-color:#f6f6f6;
         background-color:@lightgrey;
         margin:10px 0px;
+        border-top:@brd;
+        border-bottom:@brd;
     }
     #data-meta{
         width:34%;
         float:right;
         #actions{
-            margin:20px 0px;
+            margin:0px 0px 30px 0px;
             #action-buttons{
-                border-top:@brd;
+                //border-top:@brd;
                 padding-top:10px;
                 .button{
                     display:inline-block;
@@ -109,6 +123,12 @@ h3{
         #provider-info{
             border-top:@brd;
             padding:5px;
+            .title{
+                margin:10px 0px;
+            }
+            .contact{
+                padding-left:0px;
+            }
         }
     }
 }
@@ -140,11 +160,7 @@ h4.title{
     margin:5px;
     font-size:1.3em;
 }
-#title{
-    margin:auto auto;
-    max-width:1600px;
-    color:#333;
-}
+
 
 #media-wrapper{
     width:90%;
@@ -162,7 +178,10 @@ h4.title{
     display:block;
     margin:5px;
 }
-
+#raw-body{
+    white-space: pre;
+    overflow:scroll;
+}
 /*
 #actions, #media-wrapper, #data-table, #collection{
     border-radius:4px;

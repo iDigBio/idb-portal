@@ -96,7 +96,7 @@ var FieldsTable = React.createClass({displayName: 'FieldsTable',
 var Title = React.createClass({displayName: 'Title',
     render: function(){
         return(
-            React.DOM.label(null, React.DOM.span({className: "title"}, "Recordset:"), " ", this.props.key)
+            React.DOM.h1({id: "title"}, React.DOM.span(null, "Recordset:"), " ", this.props.key)
         );
     }
 });
@@ -112,9 +112,11 @@ var Description = React.createClass({displayName: 'Description',
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
-            React.DOM.p({className: "description"}, 
+            React.DOM.div({id: "description"}, 
+                React.DOM.p(null, 
                 logo, 
                 React.DOM.span({dangerouslySetInnerHTML: {__html: desc}}
+                )
                 )
             )
         )
@@ -130,9 +132,13 @@ var Last = React.createClass({displayName: 'Last',
 var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
         return(
-            React.DOM.div({className: "wrapper buttons"}, 
-                React.DOM.a({href: '/portal/search?recordset='+this.props.key, className: "btn button"}, "Search This Recordset"), 
-                React.DOM.a({href: "#raw", 'data-toggle': "modal", className: "btn button"}, "View Raw Data")
+            React.DOM.div({id: "buttons"}, 
+                React.DOM.a({href: '/portal/search?recordset='+this.props.key, className: "btn button"}, 
+                   React.DOM.button({className: "btn"}, "Search This Recordset")
+                ), 
+                React.DOM.button({'data-target': "#raw", 'data-toggle': "modal", className: "btn button"}, 
+                    "View Raw Data"
+                )
             )
         )
     }
@@ -174,7 +180,7 @@ var Contacts = React.createClass({displayName: 'Contacts',
             var phone = check(contact.phone);
             var role = check(contact.role);
             return (
-                React.DOM.ul({className: "pull-left contact"}, 
+                React.DOM.ul({className: "contact"}, 
                     React.DOM.li(null, name), 
                     React.DOM.li(null, role), 
                     React.DOM.li(null, React.DOM.a({href: 'mailto: '+email}, email)), 
@@ -201,12 +207,9 @@ var Contacts = React.createClass({displayName: 'Contacts',
         }
 
         return (
-            React.DOM.div(null, 
-                link, 
-                React.DOM.div({className: "wrapper"}, 
-                    React.DOM.div({className: "info"}, "Contacts"), 
-                    contacts
-                )
+            React.DOM.div({id: "contacts", className: "clearfix"}, 
+                React.DOM.h4({className: "title"}, "Contacts"), 
+                contacts
             )
         )
     }
@@ -219,46 +222,30 @@ module.exports = React.createClass({displayName: 'exports',
         var data = this.props.recordset._source.data['idigbio:data'];
         return (
             React.DOM.div({id: "container"}, 
-                React.DOM.div({id: "title"}, 
-                    Title({key: data.collection_name})
-                ), 
-                React.DOM.div({id: "content", className: "clearfix"}, 
-                    React.DOM.div({id: "left", className: "wrapper"}, 
-                        React.DOM.div({id: "description", className: "clearfix"}, 
-                            Description({data: data})
-                        ), 
-                        React.DOM.div({id: "fields", className: "clearfix"}, 
-                            FieldsTable({missing: this.props.missing, stotal: this.props.stotal})
-                        )
-                    ), 
-                    React.DOM.div({id: "right", className: "wrapper"}, 
-                        React.DOM.div({id: "info", className: "clearfix"}, 
-                            React.DOM.div({className: "wrapper"}, 
-                                React.DOM.div({className: "info"}, "Last Update:",  
-                                    React.DOM.span({id: "last"}, 
-                                        " ", Last({key: data.update.substring(0,10)})
-                                    )
-                                ), 
-                                React.DOM.div({className: "info"}, "Total Specimen Records:",  
-                                    React.DOM.span({id: "specimen-total"}, 
-                                        " ", Total({key: 'Specimen', total: formatNum(this.props.stotal)})
-                                    )
-                                ), 
-                                React.DOM.div({className: "info"}, "Total Media Records:", 
-                                    React.DOM.span({id: "media-total"}, 
-                                        " ", Total({key: 'Media', total: formatNum(this.props.mtotal)})
-                                    )
-                                )
-                            ), 
-                            React.DOM.div({id: "buttons", className: "wrapper"}, 
-                                Buttons({key: data['idigbio:uuid']})
+                Title({key: data.collection_name}), 
+                Description({data: data}), 
+                Buttons({key: data['idigbio:uuid']}), 
+                React.DOM.div({id: "info", className: "clearfix"}, 
+                    React.DOM.div({className: "wrapper"}, 
+                        React.DOM.div({className: "info"}, "Last Update:",  
+                            React.DOM.span({id: "last"}, 
+                                " ", Last({key: data.update.substring(0,10)})
                             )
                         ), 
-                        React.DOM.div({id: "contacts", className: "clearfix"}, 
-                            Contacts({data: data})
+                        React.DOM.div({className: "info"}, "Total Specimen Records:",  
+                            React.DOM.span({id: "specimen-total"}, 
+                                " ", Total({key: 'Specimen', total: formatNum(this.props.stotal)})
+                            )
+                        ), 
+                        React.DOM.div({className: "info"}, "Total Media Records:", 
+                            React.DOM.span({id: "media-total"}, 
+                                " ", Total({key: 'Media', total: formatNum(this.props.mtotal)})
+                            )
                         )
                     )
                 ), 
+                Contacts({data: data}), 
+                FieldsTable({missing: this.props.missing, stotal: this.props.stotal}), 
                 Raw({data: data})
             )
         )

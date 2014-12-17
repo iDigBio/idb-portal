@@ -105,9 +105,9 @@ var Title = React.createClass({
         if(_.isEmpty(title)){
             title = 'No Name';
         } 
-        var author = '';
+        //var author = '';
         if(_.has(data,'dwc:scientificNameAuthorship')){
-            author = ', '+data['dwc:scientificNameAuthorship'];
+            info.push(data['dwc:scientificNameAuthorship']);
         }
         //build info ids,inst
         ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
@@ -117,11 +117,12 @@ var Title = React.createClass({
         }) 
 
         return (
-            <div>
+            <h1 id="title" className="clearfix">
                 <em>{title}</em>
-                {author}&nbsp;
-                {info.join(', ')}
-            </div>
+                <span className="title-addition">
+                    {info.join(', ')}
+                </span>
+            </h1>
         );       
     }
 });
@@ -168,8 +169,8 @@ var Buttons = React.createClass({
     render: function(){
 
         return (
-            <div id="actions">
-                <h4 className="title">Actions</h4>
+            <div id="actions" className="clearfix">
+                
                 <div id="action-buttons">
                     <a href={"/portal/recordsets/"+this.props.data.recordset}>
                         <button className="btn">Go To Recordset</button>
@@ -219,15 +220,13 @@ module.exports = Page = React.createClass({
                     <div className="span12">   
 
                         <div id="data-container" className="clearfix">
-                            <h1 id="title" className="clearfix">
-                                <Title data={this.props.record._source.data['idigbio:data']}/>
-                            </h1>
+                            <Title data={this.props.record._source.data['idigbio:data']}/>
                             <div id="data-content">
                                 <Record record={record} data={this.props.record} />
                             </div>
                             <div id="data-meta" className="clearfix">
-                                <Gallery data={this.props.record._source} />
                                 <Buttons data={this.props.record._source} /> 
+                                <Gallery data={this.props.record._source} />
                                 <div id="map" className="clearfix">
                                     <h4 className="title">Specimen Georeference</h4>
                                     <div id="map-wrapper">

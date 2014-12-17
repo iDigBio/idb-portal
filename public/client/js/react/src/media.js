@@ -166,7 +166,7 @@ var Raw = require('./shared/raw');
 module.exports = React.createClass({
     render: function(){
         var source = this.props.mediarecord._source;
-        var name ='';
+        var name ='',info=[];
         if(_.has(this.props.record, '_source')){
             var data = this.props.record._source['data']['idigbio:data'];
             var title = '';
@@ -182,22 +182,27 @@ module.exports = React.createClass({
             if(_.isEmpty(title)){
                 title = 'No Name';
             } 
-            var author = '';
+
             if(_.has(data,'dwc:scientificNameAuthorship')){
-                author = ', '+data['dwc:scientificNameAuthorship'];
+                info.push(data['dwc:scientificNameAuthorship']);
             }
-            name = '<em>'+title+'</em>'+author;             
+            //build info ids,inst
+            ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
+                if(_.has(data,item)){
+                    info.push(data[item]);
+                }
+            }) 
+            name = '<em>'+title+'</em><span class="authors">'+info.join(', ')+'</span>';             
         }
 
         return (
             <div className="container-fluid">
                 <div className="row-fluid">
                     <div className="span12" id="container">   
-                        <div id="title" className="clearfix">
-                            <h1 className="title">Media Record:&nbsp; 
-                                <span dangerouslySetInnerHTML={{__html: name}}></span>
-                            </h1>
-                        </div>
+                        <h1 id="title">
+                            <span dangerouslySetInnerHTML={{__html: name}}></span>
+                        </h1>
+
                         <div id="data-container" className="clearfix">
                             <div id="data-content">
                                 <Media key={source.uuid} data={source.data['idigbio:data']} />
@@ -206,7 +211,7 @@ module.exports = React.createClass({
                             
                             <div id="data-meta" className="clearfix">
                                 <div id="actions">
-                                    <h4 className="title">Actions</h4>
+                                   
                                     <Buttons links={source.data['idigbio:links']} />
                                 </div>
                                 <div id="data-table" className="clearfix">

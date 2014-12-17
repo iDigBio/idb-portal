@@ -166,7 +166,7 @@ var Raw = require('./shared/raw');
 module.exports = React.createClass({displayName: 'exports',
     render: function(){
         var source = this.props.mediarecord._source;
-        var name ='';
+        var name ='',info=[];
         if(_.has(this.props.record, '_source')){
             var data = this.props.record._source['data']['idigbio:data'];
             var title = '';
@@ -182,22 +182,27 @@ module.exports = React.createClass({displayName: 'exports',
             if(_.isEmpty(title)){
                 title = 'No Name';
             } 
-            var author = '';
+
             if(_.has(data,'dwc:scientificNameAuthorship')){
-                author = ', '+data['dwc:scientificNameAuthorship'];
+                info.push(data['dwc:scientificNameAuthorship']);
             }
-            name = '<em>'+title+'</em>'+author;             
+            //build info ids,inst
+            ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
+                if(_.has(data,item)){
+                    info.push(data[item]);
+                }
+            }) 
+            name = '<em>'+title+'</em><span class="authors">'+info.join(', ')+'</span>';             
         }
 
         return (
             React.DOM.div({className: "container-fluid"}, 
                 React.DOM.div({className: "row-fluid"}, 
                     React.DOM.div({className: "span12", id: "container"}, 
-                        React.DOM.div({id: "title", className: "clearfix"}, 
-                            React.DOM.h1({className: "title"}, "Media Record: ",  
-                                React.DOM.span({dangerouslySetInnerHTML: {__html: name}})
-                            )
+                        React.DOM.h1({id: "title"}, 
+                            React.DOM.span({dangerouslySetInnerHTML: {__html: name}})
                         ), 
+
                         React.DOM.div({id: "data-container", className: "clearfix"}, 
                             React.DOM.div({id: "data-content"}, 
                                 Media({key: source.uuid, data: source.data['idigbio:data']})
@@ -206,7 +211,7 @@ module.exports = React.createClass({displayName: 'exports',
                             
                             React.DOM.div({id: "data-meta", className: "clearfix"}, 
                                 React.DOM.div({id: "actions"}, 
-                                    React.DOM.h4({className: "title"}, "Actions"), 
+                                   
                                     Buttons({links: source.data['idigbio:links']})
                                 ), 
                                 React.DOM.div({id: "data-table", className: "clearfix"}, 

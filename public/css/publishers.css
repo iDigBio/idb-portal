@@ -1,0 +1,16 @@
+table {
+  width: 100%;
+}
+.table thead th.statcol,
+#statstable .statcol {
+  text-align: center;
+}
+td {
+  text-align: left;
+}
+th.top-header {
+  text-align: center;
+}
+.table tbody tr td.valcol {
+  text-align: right;
+}

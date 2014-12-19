@@ -8,6 +8,13 @@
         font-weight: bold;
         color:#666;
     }
+    h2.title{
+        border-bottom:@brd;
+        font-size:1.3em;
+        color: #555;
+        font-weight: bold;
+        padding-bottom:5px;        
+    }
     #description,#fields-table{
         float:left;
         width:64%;
@@ -25,20 +32,48 @@
             border-bottom: @brd;
             padding:5px 10px;
             min-height: 170px;
+            .logo{
+                max-width:100px;
+                max-height:100px;
+                margin:0px 10px 2px 0px;
+                float:left;
+                padding:4px;
+                border:1px solid #ccc;
+                background-color: white;
+            }
         }
         display:block;
         clear:both;
     }
     #fields-table{
         margin-top:15px;
+        .blurb{
+            margin-bottom:15px;
+        }
+        h4{
+            border-bottom:@brd;
+            font-size:1.3em;
+            color: #555;
+            font-weight: bold;
+            padding-bottom:5px;
+        }
+
+        .tablesorter-blue th, .tablesorter-blue thead td{
+            background-color: @idbgreen;
+            text-shadow:none;
+            color:white;
+            font-weight:bold;
+        }
     }
     #buttons{
-        .button{
-
+        padding:0px;
+        margin-bottom:15px;
+        .btn{
+            
         }
         button{
             display:inline-block;
-            margin:2px 10px 4px 0px;
+            margin:0px 10px 4px 0px;
             border-radius:2px;
             background-color:@idbgreen;
             color:#efe;
@@ -47,6 +82,8 @@
     }
     #info{
         padding:0px;
+        margin-bottom:15px;
+
     }
     #contacts{
         
@@ -67,15 +104,7 @@
 .last{
     margin-left:20px;
 }
-.logo{
-    max-width:100px;
-    max-height:100px;
-    margin:0px 10px 2px 10px;
-    float:left;
-    padding:4px;
-    border:1px solid #ccc;
-    background-color: white;
-}
+
 
 h3{
     font-size: 1.5em;
@@ -133,14 +162,6 @@ td.record-count{
 .info{
     font-weight: bold;
     font-size:1.02em;
-}
-
-
-#info .wrapper{
-    margin:10px;
-}
-#info .info{
-    margin-bottom:5px;
 }
 
 #fields,#description{

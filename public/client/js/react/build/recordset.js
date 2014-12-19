@@ -72,9 +72,8 @@ var FieldsTable = React.createClass({displayName: 'FieldsTable',
         var sty = {'text-align': 'center'};
         return (
             React.DOM.div({id: "fields-table"}, 
-                React.DOM.h4({className: "pull-left"}, "Specimen Fields Used for Search"), 
-                React.DOM.h5({className: "pull-right"}, "Total Records: ", formatNum(this.props.stotal)), 
-                React.DOM.div({className: "pull-left"}, "This table represents the fields in specimen records that are used for iDigBio ", React.DOM.a({href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
+                React.DOM.h2({className: "title"}, "Specimen Fields Used for Search"), 
+                React.DOM.div({className: "blurb"}, "This table represents the fields in specimen records that are used for iDigBio ", React.DOM.a({href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
                  "records that provide the field."), 
                 React.DOM.table({className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.DOM.thead(null, 
@@ -131,10 +130,11 @@ var Last = React.createClass({displayName: 'Last',
 
 var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
+        var search = JSON.stringify({recordset: this.props.key})
         return(
             React.DOM.div({id: "buttons"}, 
-                React.DOM.a({href: '/portal/search?recordset='+this.props.key, className: "btn button"}, 
-                   React.DOM.button({className: "btn"}, "Search This Recordset")
+                React.DOM.a({href: '/portal/search?search='+search}, 
+                   React.DOM.button({className: "btn button"}, "Search This Recordset")
                 ), 
                 React.DOM.button({'data-target': "#raw", 'data-toggle': "modal", className: "btn button"}, 
                     "View Raw Data"
@@ -208,7 +208,7 @@ var Contacts = React.createClass({displayName: 'Contacts',
 
         return (
             React.DOM.div({id: "contacts", className: "clearfix"}, 
-                React.DOM.h4({className: "title"}, "Contacts"), 
+                React.DOM.h2({className: "title"}, "Contacts"), 
                 contacts
             )
         )
@@ -220,18 +220,14 @@ var Raw = require('./shared/raw');
 module.exports = React.createClass({displayName: 'exports',
     render: function(){
         var data = this.props.recordset._source.data['idigbio:data'];
+        var id = this.props.recordset._source.data['idigbio:uuid'];
         return (
             React.DOM.div({id: "container"}, 
                 Title({key: data.collection_name}), 
                 Description({data: data}), 
-                Buttons({key: data['idigbio:uuid']}), 
+                Buttons({key: id}), 
                 React.DOM.div({id: "info", className: "clearfix"}, 
                     React.DOM.div({className: "wrapper"}, 
-                        React.DOM.div({className: "info"}, "Last Update:",  
-                            React.DOM.span({id: "last"}, 
-                                " ", Last({key: data.update.substring(0,10)})
-                            )
-                        ), 
                         React.DOM.div({className: "info"}, "Total Specimen Records:",  
                             React.DOM.span({id: "specimen-total"}, 
                                 " ", Total({key: 'Specimen', total: formatNum(this.props.stotal)})
@@ -240,6 +236,11 @@ module.exports = React.createClass({displayName: 'exports',
                         React.DOM.div({className: "info"}, "Total Media Records:", 
                             React.DOM.span({id: "media-total"}, 
                                 " ", Total({key: 'Media', total: formatNum(this.props.mtotal)})
+                            )
+                        ), 
+                        React.DOM.div({className: "info"}, "Last Update:",  
+                            React.DOM.span({id: "last"}, 
+                                " ", Last({key: data.update.substring(0,10)})
                             )
                         )
                     )

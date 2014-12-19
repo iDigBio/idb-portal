@@ -64,7 +64,7 @@ module.exports = (function(){
             }
             search.filters.forEach(function(filter){
                 
-                var field = fields.byName[filter.name].term;
+                var field = filter.name;//fields.byName[filter.name].term;
                 if(filter.exists || filter.missing){
                     var must = {}, value = filter.exists ? "exists" : "missing";
                     must[value]={
@@ -186,7 +186,7 @@ module.exports = (function(){
         this.makeIDBQuery = function(search){
             var idbq = {}, reg = /\d{4}-\d{1,2}-\d{1,2}/;
             search.filters.forEach(function(item){
-                var term = fields.byName[item.name].term;
+                var term = item.name;//fields.byName[item.name].term;
                 if(item.exists){
                     idbq[term]={'type': 'exists'};
                 }else if(item.missing){

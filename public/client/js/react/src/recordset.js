@@ -72,9 +72,8 @@ var FieldsTable = React.createClass({
         var sty = {'text-align': 'center'};
         return (
             <div id="fields-table">
-                <h4 className="pull-left">Specimen Fields Used for Search</h4>
-                <h5 className="pull-right">Total Records: {formatNum(this.props.stotal)}</h5>
-                <div className="pull-left">This table represents the fields in specimen records that are used for iDigBio <a href="/portal/search">search</a>. The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of 
+                <h2 className="title">Specimen Fields Used for Search</h2>
+                <div className="blurb">This table represents the fields in specimen records that are used for iDigBio <a href="/portal/search">search</a>. The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of 
                  records that provide the field.</div>
                 <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                     <thead>
@@ -131,10 +130,11 @@ var Last = React.createClass({
 
 var Buttons = React.createClass({
     render: function(){
+        var search = JSON.stringify({recordset: this.props.key})
         return(
             <div id="buttons">
-                <a href={'/portal/search?recordset='+this.props.key} className="btn button">
-                   <button className="btn">Search This Recordset</button>
+                <a href={'/portal/search?search='+search}>
+                   <button className="btn button">Search This Recordset</button>
                 </a>
                 <button data-target="#raw" data-toggle="modal" className="btn button">
                     View Raw Data
@@ -208,7 +208,7 @@ var Contacts = React.createClass({
 
         return (
             <div id="contacts" className="clearfix">
-                <h4 className="title">Contacts</h4>
+                <h2 className="title">Contacts</h2>
                 {contacts}
             </div>
         )
@@ -220,18 +220,14 @@ var Raw = require('./shared/raw');
 module.exports = React.createClass({
     render: function(){
         var data = this.props.recordset._source.data['idigbio:data'];
+        var id = this.props.recordset._source.data['idigbio:uuid'];
         return (
             <div id="container">
                 <Title key={data.collection_name} />
                 <Description data={data} />
-                <Buttons key={data['idigbio:uuid']} />
+                <Buttons key={id} />
                 <div id="info" className="clearfix">
                     <div className="wrapper">
-                        <div className="info">Last Update: 
-                            <span id="last">
-                                &nbsp;<Last key={data.update.substring(0,10)} />
-                            </span>
-                        </div>
                         <div className="info">Total Specimen Records: 
                             <span id="specimen-total">
                                 &nbsp;<Total key={'Specimen'} total={formatNum(this.props.stotal)} />
@@ -240,6 +236,11 @@ module.exports = React.createClass({
                         <div className="info">Total Media Records:
                             <span id="media-total">
                                 &nbsp;<Total key={'Media'} total={formatNum(this.props.mtotal)} />
+                            </span>
+                        </div>
+                        <div className="info">Last Update: 
+                            <span id="last">
+                                &nbsp;<Last key={data.update.substring(0,10)} />
                             </span>
                         </div>
                     </div>

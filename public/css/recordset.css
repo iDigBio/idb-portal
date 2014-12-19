@@ -7,6 +7,13 @@
   font-weight: bold;
   color: #666;
 }
+#container h2.title {
+  border-bottom: 1px solid #cccccc;
+  font-size: 1.3em;
+  color: #555;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
 #container #description,
 #container #fields-table {
   float: left;
@@ -31,12 +38,42 @@
   padding: 5px 10px;
   min-height: 170px;
 }
+#container #description p .logo {
+  max-width: 100px;
+  max-height: 100px;
+  margin: 0px 10px 2px 0px;
+  float: left;
+  padding: 4px;
+  border: 1px solid #ccc;
+  background-color: white;
+}
 #container #fields-table {
   margin-top: 15px;
 }
+#container #fields-table .blurb {
+  margin-bottom: 15px;
+}
+#container #fields-table h4 {
+  border-bottom: 1px solid #cccccc;
+  font-size: 1.3em;
+  color: #555;
+  font-weight: bold;
+  padding-bottom: 5px;
+}
+#container #fields-table .tablesorter-blue th,
+#container #fields-table .tablesorter-blue thead td {
+  background-color: #6aaa51;
+  text-shadow: none;
+  color: white;
+  font-weight: bold;
+}
+#container #buttons {
+  padding: 0px;
+  margin-bottom: 15px;
+}
 #container #buttons button {
   display: inline-block;
-  margin: 2px 10px 4px 0px;
+  margin: 0px 10px 4px 0px;
   border-radius: 2px;
   background-color: #6aaa51;
   color: #efe;
@@ -44,6 +81,7 @@
 }
 #container #info {
   padding: 0px;
+  margin-bottom: 15px;
 }
 #container #contacts .contact,
 #container #contacts .contact li {
@@ -58,15 +96,6 @@
 }
 .last {
   margin-left: 20px;
-}
-.logo {
-  max-width: 100px;
-  max-height: 100px;
-  margin: 0px 10px 2px 10px;
-  float: left;
-  padding: 4px;
-  border: 1px solid #ccc;
-  background-color: white;
 }
 h3 {
   font-size: 1.5em;
@@ -121,12 +150,6 @@ td.record-count {
 .info {
   font-weight: bold;
   font-size: 1.02em;
-}
-#info .wrapper {
-  margin: 10px;
-}
-#info .info {
-  margin-bottom: 5px;
 }
 #fields,
 #description {

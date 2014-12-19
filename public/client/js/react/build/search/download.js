@@ -20,7 +20,7 @@ module.exports = Downloads = React.createClass({displayName: 'Downloads',
             }
 
             _.each(q.filters,function(filter){
-                var type = filter.type, name = filter.name;
+                var type = filter.type, name = fields.byTerm[filter.name].name;//filter.name;
                 if(filter.exists || filter.missing){
                     parts.push(name + ' is '+(filter.exists ? 'present' : 'missing')+'.');
                 }else if(type=='text' && !_.isEmpty(filter.text.content)){

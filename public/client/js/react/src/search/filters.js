@@ -7,20 +7,20 @@ var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = Filters = React.createClass({
     statics: {
-        newFilterProps: function(name){
-            var type = fields.byName[name].type;
+        newFilterProps: function(term){
+            var type = fields.byTerm[term].type;
             switch(type){
                 case 'text':
-                    return {name: name, type: type, text:{content:'', disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, text:{content:'', disabled: false}, exists: false, missing: false};
                 case 'daterange':
-                    return {name: name, type: type, range:{gte: '', lte: '', disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, range:{gte: '', lte: '', disabled: false}, exists: false, missing: false};
                 case 'numericrange':
-                    return {name: name, type: type, range:{gte: false, lte: false, disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, range:{gte: false, lte: false, disabled: false}, exists: false, missing: false};
             }
         },
         defaultFilters: function(){
             var filters=[],self=this;
-            ['Date Collected','Genus','Specific Epithet'].forEach(function(item){
+            ['datecollected','genus','specificepithet'].forEach(function(item){
                 filters.push(Filters.newFilterProps(item));
             });   
             return filters;
@@ -87,9 +87,9 @@ module.exports = Filters = React.createClass({
         this.props.searchChange('filters',cur)
     },
     removeFilter: function(event){
-        var name = event.currentTarget.attributes['data-remove'].value;
+        var term = event.currentTarget.attributes['data-remove'].value;
         var cur = this.props.filters, filters=this.filters();
-        cur.splice(filters.indexOf(name),1);
+        cur.splice(filters.indexOf(term),1);
         //this.setState({filters: cur});
         this.props.searchChange('filters',cur);
     },
@@ -119,9 +119,9 @@ module.exports = Filters = React.createClass({
                 if(field.hidden){
                     //noop
                 }else{
-                    var disabled = flist.indexOf(field.name) === -1 ? '' : 'disabled';
+                    var disabled = flist.indexOf(field.term) === -1 ? '' : 'disabled';
                     fltrs.push(
-                            <option disabled={disabled} value={field.name} key={field.name}>
+                            <option disabled={disabled} value={field.term} key={field.term}>
                                 {field.name}
                             </option>
                     );
@@ -214,6 +214,7 @@ var TextFilter = React.createClass({
         //this.props.changeFilter(filter);
     },
     componentWillReceiveProps: function(nextProps){
+  
         this.setState({text: nextProps.filter.text.content});
     },
     setAutocomplete: function(event){
@@ -223,13 +224,13 @@ var TextFilter = React.createClass({
                 var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
                 last = split[split.length-1].toLowerCase(),
-                field = fields.byName[name].term,
+                //field = fields.byTerm[name].term,
                 query = {"aggs":{},"from":0,"size":0};
-                query.aggs["static_"+field]={"terms":{"field":field,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
+                query.aggs["static_"+name]={"terms":{"field":name,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
         
                 searchServer.esQuery('records', query, function(resp) {
                     var list = [];
-                    $.each(resp.aggregations['static_' + field]['buckets'], function(index, obj) {
+                    $.each(resp.aggregations['static_' + name]['buckets'], function(index, obj) {
                         list.push(obj.key);
                     });
                     respCallback(list);
@@ -250,10 +251,13 @@ var TextFilter = React.createClass({
             select: function(event,ui){
                 var filter = self.props.filter;//, filter=filters[ind];   
                 var cont = filter.text.content.split('\n');
-                cont[cont.length-1] = ui.item.value;
+           
+                cont[cont.length-1] = ui.item.label;
+
                 filter.text.content = cont.join('\n');
                 self.props.changeFilter(filter);                 
             }
+            
         });
     },
     getSynonyms: function(event){
@@ -311,22 +315,22 @@ var TextFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter;
-        var name = filter.name,
+        var name = filter.name, label = fields.byTerm[name].name,
         exists = filter.exists ? 'checked' : '',
         missing = filter.missing ? 'checked' : '';
         var syn = <span/>,cl='text';
-        if(fields.byName[name].synonyms){
+        if(fields.byTerm[name].synonyms){
             syn=<a onClick={this.getSynonyms}>Add EOL Synonyms</a>;
             cl+=' syn'
         }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name} title="click to remove this filter"></i>
-                <label className="filter-name">{name}</label>
+                <label className="filter-name">{label}</label>
                 <div className={cl}>
                 {syn}
                     <textarea className="form-control" name={name} data-name={name}
-                        placeholder={fields.byName[name].dataterm} 
+                        placeholder={fields.byTerm[name].dataterm} 
                         disabled={filter.text.disabled} 
                         onChange={this.textType} 
                         onFocus={this.setAutocomplete}
@@ -398,13 +402,13 @@ var DateRangeFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter;
-        var name = filter.name,
+        var name = filter.name, label = fields.byTerm[name].name,
         exists = filter.exists ,
         missing = filter.missing;
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name}  title="click to remove this filter"></i>
-                <label className="filter-name">{name}</label>
+                <label className="filter-name">{label}</label>
                 <div className="dates clearfix pull-right">
                     <div className="pull-left">
                         Start: 
@@ -483,13 +487,13 @@ var NumericRangeFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter;
-        var name = filter.name,
+        var name = filter.name, label = fields.byTerm[name].name
         exists = filter.exists ,
         missing = filter.missing ;
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name}  title="click to remove this filter"></i>
-                <label className="filter-name">{name}</label>
+                <label className="filter-name">{label}</label>
 
                 <div className="dates clearfix pull-right">
                     <div className="pull-left">

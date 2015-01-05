@@ -38,7 +38,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
     },
     getInitialState: function(){
         //DEV SETTING
-            localStorage.clear();
+            //localStorage.clear();
         //
         var search;
         if(searchHistory.history.length > 0){

@@ -228,7 +228,7 @@ module.exports = Page = React.createClass({
                                 <Buttons data={this.props.record._source} /> 
                                 <Gallery data={this.props.record._source} />
                                 <div id="map" className="clearfix">
-                                    <h4 className="title">Specimen Georeference</h4>
+                                    <h4 className="title">Georeference Data</h4>
                                     <div id="map-wrapper">
                                         <div id="map-box"></div>
                                     </div>

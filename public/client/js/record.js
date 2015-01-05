@@ -45,6 +45,7 @@ searchServer.esGetRecord('records',$('#recordID').val(),function(resp){
                 L.marker(point).addTo(map);
                 map.panTo(point).setZoom(5); 
             } 
+            //$('ul.tabs').tabs();
         }); 
     }
 });

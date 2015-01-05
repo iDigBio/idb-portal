@@ -192,38 +192,37 @@ module.exports = React.createClass({
                     info.push(data[item]);
                 }
             }) 
-            name = '<em>'+title+'</em><span class="authors">'+info.join(', ')+'</span>';             
+
+            name =  <h1 id="title" className="clearfix">
+                <em>{title}</em>
+                <span className="title-addition">
+                    {info.join(', ')}
+                </span>
+            </h1>
+            //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
         }
 
         return (
             <div className="container-fluid">
                 <div className="row-fluid">
                     <div className="span12" id="container">   
-                        <h1 id="title">
-                            <span dangerouslySetInnerHTML={{__html: name}}></span>
-                        </h1>
-
                         <div id="data-container" className="clearfix">
+                            {name}
                             <div id="data-content">
                                 <Media key={source.uuid} data={source.data['idigbio:data']} />
-
                             </div>
-                            
                             <div id="data-meta" className="clearfix">
-                                <div id="actions">
-                                   
+                                <div id="actions"> 
                                     <Buttons links={source.data['idigbio:links']} />
                                 </div>
                                 <div id="data-table" className="clearfix">
                                     <h4 className="title">Media Metadata</h4>
                                     <Table record={source.data['idigbio:data']} />
                                 </div>
-                                
                             </div>
                             <Group record={this.props.record} key={source.uuid}/>
-                            <div id="collection" className="clearfix">
-                                <Provider data={this.props.provider} />
-                            </div>
+                            <Provider data={this.props.provider} />
+                            
                         </div>
                     </div>
                 </div>

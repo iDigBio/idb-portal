@@ -2,6 +2,9 @@ h3 {
   color: #333;
   font-size: 1.63em;
 }
+.justify {
+  text-align: justify;
+}
 .button {
   margin: 5px;
   display: inline-block;
@@ -24,11 +27,17 @@ h3 {
   margin-top: 20px;
 }
 #container #title {
-  margin: auto auto;
+  margin: 10px 0px;
   max-width: 1600px;
   color: #666;
-  font-size: 31px;
   font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 30px;
+}
+#container #title .title-addition {
+  font-size: .65em;
+  margin: 0px 15px;
+  color: #999;
 }
 #container #title .authors {
   font-size: .7em;
@@ -40,17 +49,37 @@ h3 {
   margin: 5px auto;
 }
 #data-container #data-content {
+  width: 65%;
+  float: left;
   background-color: #ececec;
   margin: 10px 0px;
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
 }
+@media (max-width: 992px) {
+  #data-container #data-content {
+    width: 100%;
+    float: none;
+  }
+}
 #data-container #data-meta {
   width: 34%;
   float: right;
 }
+@media (max-width: 992px) {
+  #data-container #data-meta {
+    width: 100%;
+    float: none;
+  }
+}
 #data-container #data-meta #actions {
   margin: 0px 0px 30px 0px;
+}
+@media (max-width: 992px) {
+  #data-container #data-meta #actions {
+    width: 100%;
+    float: none;
+  }
 }
 #data-container #data-meta #actions #action-buttons {
   padding-top: 10px;
@@ -91,6 +120,14 @@ h3 {
 }
 #data-container #other-images {
   text-align: left;
+  width: 64%;
+  float: left;
+}
+@media (max-width: 992px) {
+  #data-container #other-images {
+    width: 100%;
+    float: none;
+  }
 }
 #data-container #other-images #images-wrapper {
   border-top: 1px solid #cccccc;
@@ -105,6 +142,16 @@ h3 {
   padding: 4px;
   max-width: 90%;
 }
+#data-container #provider-wrapper {
+  width: 64%;
+  float: left;
+}
+@media (max-width: 992px) {
+  #data-container #provider-wrapper {
+    width: 100%;
+    float: none;
+  }
+}
 #data-container #provider-wrapper #provider-info {
   border-top: 1px solid #cccccc;
   padding: 5px;
@@ -117,12 +164,6 @@ h3 {
 }
 #data-content {
   text-align: center;
-}
-#data-content,
-#collection,
-#other-images {
-  width: 64%;
-  float: left;
 }
 .logo {
   max-width: 50px;
@@ -228,27 +269,10 @@ h4.title {
     white-space: pre-line;
 }*/
 @media (max-width: 1000px) {
-  #data-content,
-  #actions,
-  #collection {
-    width: 100%;
-    float: none;
-    margin: 5px;
-  }
-  #data-meta {
-    margin-top: 5px;
-    width: 100%;
-    float: none;
-  }
   #media-wrapper {
     margin: 6px 6px;
   }
   #react-wrapper {
     margin: 0px 10px;
-  }
-  #other-images {
-    float: none;
-    margin: 5px 0px 5px 5px;
-    width: 100%;
   }
 }

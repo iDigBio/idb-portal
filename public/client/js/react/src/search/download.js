@@ -284,12 +284,12 @@ var Downloader = React.createClass({
             var sentence = item.sentence ? item.sentence : 'no label';
             if(item.complete){
 
-                return <tr title={sentence}>
+                return <tr className="dl-row" title={sentence}>
                          <td className="title">{sentence}</td>
                          <td className="status"><a href={item.download_url}>Click To Download</a></td>
                       </tr>
             }else{
-                return <tr title={sentence}>
+                return <tr className="dl-row" title={sentence}>
                         <td className="title">{sentence}</td>
                         <td className="status pending">pending</td>
                     </tr>
@@ -299,7 +299,7 @@ var Downloader = React.createClass({
         return (
             <div className="sub">
                 <div id="downloader">
-                    <label>Download Results CSV</label> - <span>Approx. time: {this.state.time}</span>
+                    <label>Download CSV</label> - <span>Approx. time: {this.state.time}</span>
                     <div className="input-group">
                         <span className="input-group-addon">Email</span>
                         <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={this.state.disabled}/>
@@ -310,8 +310,13 @@ var Downloader = React.createClass({
                 </div>
                 <div id="downloads-section" className="clearfix">
                     <label>Available Downloads</label>
-                    <table id="downloads-available" className="clearfix">
-                        {downloads}
+                    <table id="downloads-available">
+                        <thead>
+                            <tr><th className="title">Search</th><th className="status">Status</th></tr>
+                        </thead>
+                        <tbody>
+                            {downloads}
+                        </tbody>
                     </table>
                 </div>
             </div>

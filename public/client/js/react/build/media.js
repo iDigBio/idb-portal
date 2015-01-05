@@ -192,38 +192,37 @@ module.exports = React.createClass({displayName: 'exports',
                     info.push(data[item]);
                 }
             }) 
-            name = '<em>'+title+'</em><span class="authors">'+info.join(', ')+'</span>';             
+
+            name =  React.DOM.h1({id: "title", className: "clearfix"}, 
+                React.DOM.em(null, title), 
+                React.DOM.span({className: "title-addition"}, 
+                    info.join(', ')
+                )
+            )
+            //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
         }
 
         return (
             React.DOM.div({className: "container-fluid"}, 
                 React.DOM.div({className: "row-fluid"}, 
                     React.DOM.div({className: "span12", id: "container"}, 
-                        React.DOM.h1({id: "title"}, 
-                            React.DOM.span({dangerouslySetInnerHTML: {__html: name}})
-                        ), 
-
                         React.DOM.div({id: "data-container", className: "clearfix"}, 
+                            name, 
                             React.DOM.div({id: "data-content"}, 
                                 Media({key: source.uuid, data: source.data['idigbio:data']})
-
                             ), 
-                            
                             React.DOM.div({id: "data-meta", className: "clearfix"}, 
                                 React.DOM.div({id: "actions"}, 
-                                   
                                     Buttons({links: source.data['idigbio:links']})
                                 ), 
                                 React.DOM.div({id: "data-table", className: "clearfix"}, 
                                     React.DOM.h4({className: "title"}, "Media Metadata"), 
                                     Table({record: source.data['idigbio:data']})
                                 )
-                                
                             ), 
                             Group({record: this.props.record, key: source.uuid}), 
-                            React.DOM.div({id: "collection", className: "clearfix"}, 
-                                Provider({data: this.props.provider})
-                            )
+                            Provider({data: this.props.provider})
+                            
                         )
                     )
                 ), 

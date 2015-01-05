@@ -81,17 +81,21 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
     },
     addFilter: function(event){
         //var flist = this.filters();
+        event.preventDefault();
         var cur = this.props.filters;
         cur.unshift(Filters.newFilterProps(event.currentTarget.value));
         //this.setState({filters: cur});
-        this.props.searchChange('filters',cur)
+        this.props.searchChange('filters',cur);
+        return false;
     },
     removeFilter: function(event){
+        event.preventDefault();
         var term = event.currentTarget.attributes['data-remove'].value;
         var cur = this.props.filters, filters=this.filters();
         cur.splice(filters.indexOf(term),1);
         //this.setState({filters: cur});
         this.props.searchChange('filters',cur);
+        return false;
     },
     filters: function(){
         var list = [];
@@ -325,7 +329,9 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         }
         return(
             React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.props.removeFilter, 'data-remove': name, title: "click to remove this filter"}), 
+                React.DOM.a({className: "remove", href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
+                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+                ), 
                 React.DOM.label({className: "filter-name"}, label), 
                 React.DOM.div({className: cl}, 
                 syn, 
@@ -407,7 +413,9 @@ var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
         missing = filter.missing;
         return(
             React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.props.removeFilter, 'data-remove': name, title: "click to remove this filter"}), 
+                React.DOM.a({className: "remove", href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
+                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+                ), 
                 React.DOM.label({className: "filter-name"}, label), 
                 React.DOM.div({className: "dates clearfix pull-right"}, 
                     React.DOM.div({className: "pull-left"}, 
@@ -492,7 +500,9 @@ var NumericRangeFilter = React.createClass({displayName: 'NumericRangeFilter',
         missing = filter.missing ;
         return(
             React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.i({className: "glyphicon glyphicon-remove", onClick: this.props.removeFilter, 'data-remove': name, title: "click to remove this filter"}), 
+                React.DOM.a({href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
+                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+                ), 
                 React.DOM.label({className: "filter-name"}, label), 
 
                 React.DOM.div({className: "dates clearfix pull-right"}, 

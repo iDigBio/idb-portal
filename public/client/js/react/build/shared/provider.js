@@ -107,7 +107,7 @@ module.exports = React.createClass({displayName: 'exports',
 
         return (
             React.DOM.div({id: "provider-wrapper", className: "clearfix"}, 
-                React.DOM.h4({className: "title"}, "Data provided by"), 
+                React.DOM.h4({className: "title"}, "Data Provided By"), 
                 React.DOM.div({id: "provider-info", className: "clearfix"}, 
                     rows, 
                     con

@@ -4,7 +4,9 @@ h3{
     color:#333;
     font-size:1.63em;
 }
-
+.justify{
+    text-align:justify;
+}
 .button{
     margin:5px;
     display:inline-block;
@@ -26,11 +28,18 @@ h3{
 #container{
     margin-top:20px;
     #title{
-        margin:auto auto;
+        margin:10px 0px;
         max-width:1600px;
         color:#666;
-        font-size:31px;
-        font-weight: bold;
+     
+        font-weight:bold;
+        padding-bottom:5px;
+        font-size:30px;
+        .title-addition{
+            font-size:.65em;
+            margin:0px 15px;
+            color:#999;
+        }
         .authors{
             font-size: .7em;
             margin-left:15px;
@@ -42,20 +51,32 @@ h3{
     max-width:1600px;
     margin: 5px auto;
 
-    
-
     #data-content{
         //background-color:#f6f6f6;
+        width:65%;
+        float:left;
         background-color:@lightgrey;
         margin:10px 0px;
         border-top:@brd;
         border-bottom:@brd;
+        @media(max-width: @screenmed){
+            width: 100%;
+            float: none;
+        }
     }
     #data-meta{
         width:34%;
         float:right;
+        @media(max-width: @screenmed){
+            width: 100%;
+            float: none;
+        }
         #actions{
             margin:0px 0px 30px 0px;
+            @media(max-width: @screenmed){
+                width: 100%;
+                float: none;
+            }
             #action-buttons{
                 //border-top:@brd;
                 padding-top:10px;
@@ -76,9 +97,7 @@ h3{
                     display:block;
                     margin:5px;
                     width:100%;
-
                     tbody tr{
-
                         td{
                             padding:1px;
                             width:50%;
@@ -105,6 +124,12 @@ h3{
     }
     #other-images{
         text-align: left;
+        width:64%;
+        float:left;
+        @media(max-width: @screenmed){
+            width: 100%;
+            float: none;
+        }
         #images-wrapper{
             border-top:@brd;
             margin:10px auto;
@@ -119,7 +144,13 @@ h3{
             }
         }
     }
-    #provider-wrapper{
+    #provider-wrapper{ 
+        width:64%;
+        float:left;
+        @media(max-width: @screenmed){
+            width: 100%;
+            float: none;
+        }
         #provider-info{
             border-top:@brd;
             padding:5px;
@@ -135,10 +166,7 @@ h3{
 #data-content{
     text-align: center;
 }
-#data-content,#collection,#other-images{
-    width:64%;
-    float:left;
-}
+
 
 .logo{
     max-width:50px;
@@ -248,26 +276,14 @@ h4.title{
 }*/
 
 @media(max-width: 1000px){
-    #data-content, #actions, #collection{
-        width:100%;
-        float:none;
-        margin:5px;
-    }
-    #data-meta{
-        margin-top:5px;
-        width:100%;
-        float:none;
-    }
+
+
     #media-wrapper{
         margin:6px 6px;
     }
     #react-wrapper{
      margin:0px 10px;
    }
-   #other-images{
-      float:none;
-      margin:5px 0px 5px 5px;
-      width:100%;
-   }
+
 }
 

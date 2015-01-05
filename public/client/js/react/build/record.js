@@ -228,7 +228,7 @@ module.exports = Page = React.createClass({displayName: 'Page',
                                 Buttons({data: this.props.record._source}), 
                                 Gallery({data: this.props.record._source}), 
                                 React.DOM.div({id: "map", className: "clearfix"}, 
-                                    React.DOM.h4({className: "title"}, "Specimen Georeference"), 
+                                    React.DOM.h4({className: "title"}, "Georeference Data"), 
                                     React.DOM.div({id: "map-wrapper"}, 
                                         React.DOM.div({id: "map-box"})
                                     )

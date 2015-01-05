@@ -2,6 +2,8 @@
 {% block headblock %}
 <link rel="stylesheet" type="text/css" href="/portal/components/leaflet/dist/leaflet.css" />
 <link rel="stylesheet" type="text/css" href="/portal/css/record.css">
+{% block cssblock %}
+{% endblock %}
 {% if record._source.mediarecords -%}
 <meta property="og:image" content="https://api.idigbio.org/v1/mediarecords/{{ record._source.mediarecords[0] }}/media?quality=webview" />
 {% else %}
@@ -29,4 +31,3 @@
       {% endautoescape %}
 </div>       
 {% endblock %}
-

@@ -34,7 +34,7 @@
   border-radius: 4px;
   background-color: white;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filter-select select {
     width: 50%;
   }
@@ -61,7 +61,7 @@
   margin: 0px;
   padding: 0px;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filters-holder {
     height: 233px;
   }
@@ -116,7 +116,7 @@
   margin-right: 5px;
   height: 54px;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filters-holder .filter .text textarea {
     width: 220px;
   }
@@ -125,7 +125,7 @@
   width: 199px;
   margin-right: 0px;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filters-holder .filter .text.syn textarea {
     width: 160px;
   }
@@ -161,7 +161,7 @@
 #filters #filters-holder .filter .dates input.date:disabled {
   color: #bbb;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filters-holder .filter .dates input.date {
     width: 110px;
   }
@@ -173,7 +173,7 @@
   margin-right: 16px;
   padding: 0px;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #filters #filters-holder .filter .presence {
     width: 220px;
   }
@@ -189,12 +189,10 @@
   margin-right: 40px;
   margin-left: 0px;
 }
-#filters #filters-holder .filter .glyphicon {
-  display: inline-block;
+#filters #filters-holder .filter .remove {
   float: right;
-}
-#filters #filters-holder .filter .glyphicon:hover {
-  cursor: pointer;
+  display: inline-block;
+  color: #333;
 }
 #filters #filters-holder .filter .checkbox {
   margin: 0px 8px 0px 0px;
@@ -482,7 +480,7 @@
   width: 23%;
   float: left;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #sorting #sort-group .option-group .direction {
     width: 20%;
   }
@@ -491,7 +489,7 @@
   float: left;
   width: 42%;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #sorting #sort-group .option-group .name {
     width: 40%;
   }
@@ -526,18 +524,30 @@
 }
 #download #downloads-section table {
   border-top: 1px solid #cccccc;
-  display: block;
-  overflow: scroll;
+  height: 100px;
   width: 100%;
-  height: 130px;
   margin: 3px 0px;
+}
+#download #downloads-section table tbody {
+  overflow: scroll;
+}
+#download #downloads-section table th {
+  padding: 0 15px;
+}
+#download #downloads-section table th.title {
+  width: 60%;
+}
+#download #downloads-section table th.status {
+  width: 40%;
+}
+#download #downloads-section table tr.dl-row {
+  height: 25px;
 }
 #download #downloads-section table td {
   overflow: hidden;
   word-wrap: break-word;
   text-overflow: ellipsis;
   white-space: nowrap;
-  width: 60%;
   padding: 2px 15px;
 }
 #download #downloads-section table td.status {
@@ -547,7 +557,7 @@
   width: 60%;
   max-width: 280px;
 }
-@media (max-width: 1060px) {
+@media (max-width: 992px) {
   #download #downloads-section table {
     height: 100px;
   }

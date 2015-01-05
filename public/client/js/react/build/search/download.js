@@ -284,12 +284,12 @@ var Downloader = React.createClass({displayName: 'Downloader',
             var sentence = item.sentence ? item.sentence : 'no label';
             if(item.complete){
 
-                return React.DOM.tr({title: sentence}, 
+                return React.DOM.tr({className: "dl-row", title: sentence}, 
                          React.DOM.td({className: "title"}, sentence), 
                          React.DOM.td({className: "status"}, React.DOM.a({href: item.download_url}, "Click To Download"))
                       )
             }else{
-                return React.DOM.tr({title: sentence}, 
+                return React.DOM.tr({className: "dl-row", title: sentence}, 
                         React.DOM.td({className: "title"}, sentence), 
                         React.DOM.td({className: "status pending"}, "pending")
                     )
@@ -299,7 +299,7 @@ var Downloader = React.createClass({displayName: 'Downloader',
         return (
             React.DOM.div({className: "sub"}, 
                 React.DOM.div({id: "downloader"}, 
-                    React.DOM.label(null, "Download Results CSV"), " - ", React.DOM.span(null, "Approx. time: ", this.state.time), 
+                    React.DOM.label(null, "Download CSV"), " - ", React.DOM.span(null, "Approx. time: ", this.state.time), 
                     React.DOM.div({className: "input-group"}, 
                         React.DOM.span({className: "input-group-addon"}, "Email"), 
                         React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 
@@ -310,8 +310,13 @@ var Downloader = React.createClass({displayName: 'Downloader',
                 ), 
                 React.DOM.div({id: "downloads-section", className: "clearfix"}, 
                     React.DOM.label(null, "Available Downloads"), 
-                    React.DOM.table({id: "downloads-available", className: "clearfix"}, 
-                        downloads
+                    React.DOM.table({id: "downloads-available"}, 
+                        React.DOM.thead(null, 
+                            React.DOM.tr(null, React.DOM.th({className: "title"}, "Search"), React.DOM.th({className: "status"}, "Status"))
+                        ), 
+                        React.DOM.tbody(null, 
+                            downloads
+                        )
                     )
                 )
             )

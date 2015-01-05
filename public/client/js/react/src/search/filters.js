@@ -81,17 +81,21 @@ module.exports = Filters = React.createClass({
     },
     addFilter: function(event){
         //var flist = this.filters();
+        event.preventDefault();
         var cur = this.props.filters;
         cur.unshift(Filters.newFilterProps(event.currentTarget.value));
         //this.setState({filters: cur});
-        this.props.searchChange('filters',cur)
+        this.props.searchChange('filters',cur);
+        return false;
     },
     removeFilter: function(event){
+        event.preventDefault();
         var term = event.currentTarget.attributes['data-remove'].value;
         var cur = this.props.filters, filters=this.filters();
         cur.splice(filters.indexOf(term),1);
         //this.setState({filters: cur});
         this.props.searchChange('filters',cur);
+        return false;
     },
     filters: function(){
         var list = [];
@@ -325,7 +329,9 @@ var TextFilter = React.createClass({
         }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
-                <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name} title="click to remove this filter"></i>
+                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
+                    <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+                </a>
                 <label className="filter-name">{label}</label>
                 <div className={cl}>
                 {syn}
@@ -407,7 +413,9 @@ var DateRangeFilter = React.createClass({
         missing = filter.missing;
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
-                <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name}  title="click to remove this filter"></i>
+                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
+                    <i className="glyphicon glyphicon-remove"   title="click to remove this filter"></i>
+                </a>
                 <label className="filter-name">{label}</label>
                 <div className="dates clearfix pull-right">
                     <div className="pull-left">
@@ -492,7 +500,9 @@ var NumericRangeFilter = React.createClass({
         missing = filter.missing ;
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
-                <i className="glyphicon glyphicon-remove" onClick={this.props.removeFilter} data-remove={name}  title="click to remove this filter"></i>
+                <a href="#" onClick={this.props.removeFilter} data-remove={name}>
+                    <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+                </a>
                 <label className="filter-name">{label}</label>
 
                 <div className="dates clearfix pull-right">

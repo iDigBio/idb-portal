@@ -134,7 +134,9 @@ var OptionsPanel = React.createClass({
                 panels[item]='';
             }
             menu.push(
-                <li key={ind} className={panels[item]} data-panel={item} onClick={self.showPanel}>{helpers.firstToUpper(item)}</li>
+                <li key={ind}>
+                    <a className={panels[item]} href="#" onClick={self.showPanel} data-panel={item}>{helpers.firstToUpper(item)}</a>
+                </li>
             )
         })
         return (

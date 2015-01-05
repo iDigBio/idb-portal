@@ -665,22 +665,26 @@ input::-webkit-input-placeholder {
 }
 #options #options-menu li {
   display: inline;
-  border: 1px solid #cccccc;
   margin: 0px 2px;
+}
+#options #options-menu li a {
+  text-decoration: none;
+  color: #333;
+  border: 1px solid #cccccc;
   padding: 3px 6px 3px 6px;
   border-radius: 3px 3px 0px 0px;
   background-color: white;
   z-index: 1;
 }
-#options #options-menu li:hover {
+#options #options-menu li a:hover {
   cursor: pointer;
 }
-#options #options-menu li.active {
+#options #options-menu li a.active {
   background-color: #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 3px;
 }
-#options #options-menu li.active:hover {
+#options #options-menu li a.active:hover {
   cursor: auto;
 }
 #options .section {

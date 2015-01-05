@@ -82,26 +82,27 @@ input::-webkit-input-placeholder{
 
         li{
             display: inline;
-            border: @brd2;
-            
             margin:0px 2px;
-
-            padding:3px 6px 3px 6px;
-            border-radius:3px 3px 0px 0px;
-            background-color: white;
-            z-index:1;
-        }
-
-        li:hover{
-            cursor:pointer;
-        }
-        li.active{
-            background-color: @bggreydark;
-            border-bottom:1px solid @bggreydark;
-            padding-bottom:3px; 
-        }
-        li.active:hover{
-            cursor:auto;
+            a{
+                text-decoration: none;
+                color:#333;
+                border: @brd2;
+                padding:3px 6px 3px 6px;
+                border-radius:3px 3px 0px 0px;
+                background-color: white;
+                z-index:1;
+                &:hover{
+                    cursor:pointer;
+                }
+                &.active{
+                    background-color: @bggreydark;
+                    border-bottom:1px solid @bggreydark;
+                    padding-bottom:3px; 
+                }
+                &.active:hover{
+                    cursor:auto;
+                }
+            }
         }
     }
     .section{

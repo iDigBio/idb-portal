@@ -120,10 +120,12 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
         return {panels: localStorage.getItem('panels')}
     },
     showPanel: function(event){
+        event.preventDefault();
         var val = event.currentTarget.attributes['data-panel'].value;
         this.setState({panels: val},function(){
             localStorage.setItem('panels',val);
         })
+        return false 
     },
     render: function(){
         var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};

@@ -279,21 +279,22 @@ var Downloader = React.createClass({displayName: 'Downloader',
         }        
     },
     render: function(){
-      
+        var key=0;
         var downloads = _.map(this.state.downloads,function(item){
             var sentence = item.sentence ? item.sentence : 'no label';
             if(item.complete){
 
-                return React.DOM.tr({className: "dl-row", title: sentence}, 
+                return React.DOM.tr({key: sentence, className: "dl-row", title: sentence}, 
                          React.DOM.td({className: "title"}, sentence), 
                          React.DOM.td({className: "status"}, React.DOM.a({href: item.download_url}, "Click To Download"))
                       )
             }else{
-                return React.DOM.tr({className: "dl-row", title: sentence}, 
+                return React.DOM.tr({key: sentence, className: "dl-row", title: sentence}, 
                         React.DOM.td({className: "title"}, sentence), 
                         React.DOM.td({className: "status pending"}, "pending")
                     )
             }
+            key++;
         })
 
         return (
@@ -310,13 +311,15 @@ var Downloader = React.createClass({displayName: 'Downloader',
                 ), 
                 React.DOM.div({id: "downloads-section", className: "clearfix"}, 
                     React.DOM.label(null, "Available Downloads"), 
-                    React.DOM.table({id: "downloads-available"}, 
+                    React.DOM.table({id: "download-header"}, 
                         React.DOM.thead(null, 
                             React.DOM.tr(null, React.DOM.th({className: "title"}, "Search"), React.DOM.th({className: "status"}, "Status"))
-                        ), 
-                        React.DOM.tbody(null, 
-                            downloads
                         )
+                    ), 
+                    React.DOM.table({id: "downloads-available"}, 
+                       
+                            downloads
+                      
                     )
                 )
             )

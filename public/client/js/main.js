@@ -2,6 +2,8 @@
 *MAIN iDigBio Portal client-side app file.
 *this provides initial routing for per page app execution.
 *****/
+"use strict"
+
 $(document).ready(function(){
 	var path = url(1) == 'portal' ? url(2) : url(1);
 	switch(path){

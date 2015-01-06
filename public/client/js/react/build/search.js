@@ -40,15 +40,33 @@ module.exports = Main = React.createClass({displayName: 'Main',
         //DEV SETTING
             //localStorage.clear();
         //
-        var search;
-        if(searchHistory.history.length > 0){
+        var search,params;
+        if(url('?search')){
+            params = JSON.parse(decodeURIComponent(url('?search')))
+            var filters=[],filter;
+            _.each(params, function(val,key){
+                filter = Filters.newFilterProps(key);
+                var value;
+                if(filter.type=='text'){
+                    if(_.isArray(val)){
+                        value = val.join('\n');
+                    }else{
+                        value = val;
+                    }
+                    filter.text.content = value;
+                }
+                if(filter.type=='range'){
+
+                }
+            })
+            search = Main.defaultSearch();
+            search.filters = [filter];
+        }else if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
         }else{
             search = Main.defaultSearch();
         }
-        return {
-            search: search
-        };
+        return {search: search};
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);

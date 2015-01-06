@@ -279,21 +279,22 @@ var Downloader = React.createClass({
         }        
     },
     render: function(){
-      
+        var key=0;
         var downloads = _.map(this.state.downloads,function(item){
             var sentence = item.sentence ? item.sentence : 'no label';
             if(item.complete){
 
-                return <tr className="dl-row" title={sentence}>
+                return <tr key={sentence} className="dl-row" title={sentence}>
                          <td className="title">{sentence}</td>
                          <td className="status"><a href={item.download_url}>Click To Download</a></td>
                       </tr>
             }else{
-                return <tr className="dl-row" title={sentence}>
+                return <tr key={sentence} className="dl-row" title={sentence}>
                         <td className="title">{sentence}</td>
                         <td className="status pending">pending</td>
                     </tr>
             }
+            key++;
         })
 
         return (
@@ -310,13 +311,15 @@ var Downloader = React.createClass({
                 </div>
                 <div id="downloads-section" className="clearfix">
                     <label>Available Downloads</label>
-                    <table id="downloads-available">
+                    <table id="download-header">
                         <thead>
                             <tr><th className="title">Search</th><th className="status">Status</th></tr>
                         </thead>
-                        <tbody>
+                    </table>
+                    <table id="downloads-available">
+                       
                             {downloads}
-                        </tbody>
+                      
                     </table>
                 </div>
             </div>

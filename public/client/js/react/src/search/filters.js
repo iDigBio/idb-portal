@@ -317,9 +317,7 @@ var TextFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter,disabled=false;
-        var name = filter.name, label = fields.byTerm[name].name,
-        exists = filter.exists ? 'checked' : '',
-        missing = filter.missing ? 'checked' : '';
+        var name = filter.name, label = fields.byTerm[name].name;
         var syn = <span/>,cl='text';
         if(fields.byTerm[name].synonyms){
             syn=<a onClick={this.getSynonyms}>Add EOL Synonyms</a>;
@@ -349,13 +347,13 @@ var TextFilter = React.createClass({
                 <div className="presence">
                     <div className="checkbox">
                         <label>
-                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={exists}/>
+                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={filter.exists}/>
                             Present
                         </label>
                     </div>
                     <div className="checkbox">
                         <label>
-                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={missing}/>
+                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={filter.missing}/>
                             Missing
                         </label>
                     </div>

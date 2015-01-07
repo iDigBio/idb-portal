@@ -11,11 +11,11 @@ module.exports = Filters = React.createClass({
             var type = fields.byTerm[term].type;
             switch(type){
                 case 'text':
-                    return {name: term, type: type, text:{content:'', disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, text:{content:''}, exists: false, missing: false};
                 case 'daterange':
-                    return {name: term, type: type, range:{gte: '', lte: '', disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, range:{gte: '', lte: ''}, exists: false, missing: false};
                 case 'numericrange':
-                    return {name: term, type: type, range:{gte: false, lte: false, disabled: false}, exists: false, missing: false};
+                    return {name: term, type: type, range:{gte: false, lte: false}, exists: false, missing: false};
             }
         },
         defaultFilters: function(){
@@ -199,11 +199,9 @@ var TextFilter = React.createClass({
                 filter.exists = false;
                 filter.missing = true;
             }
-            filter.text.disabled=true;
         }else{
             filter.exists = false;
             filter.missing = false;
-            filter.text.disabled = false;
         }
         this.props.changeFilter(filter);
     },
@@ -318,7 +316,7 @@ var TextFilter = React.createClass({
         }        
     },
     render: function(){
-        var filter = this.props.filter;
+        var filter = this.props.filter,disabled=false;
         var name = filter.name, label = fields.byTerm[name].name,
         exists = filter.exists ? 'checked' : '',
         missing = filter.missing ? 'checked' : '';
@@ -326,6 +324,9 @@ var TextFilter = React.createClass({
         if(fields.byTerm[name].synonyms){
             syn=<a onClick={this.getSynonyms}>Add EOL Synonyms</a>;
             cl+=' syn'
+        }
+        if(filter.exists || filter.missing){
+            disabled=true;
         }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
@@ -337,7 +338,7 @@ var TextFilter = React.createClass({
                 {syn}
                     <textarea className="form-control" name={name} data-name={name}
                         placeholder={fields.byTerm[name].dataterm} 
-                        disabled={filter.text.disabled} 
+                        disabled={disabled} 
                         onChange={this.textType} 
                         onFocus={this.setAutocomplete}
                         value={this.state.text}
@@ -398,11 +399,9 @@ var DateRangeFilter = React.createClass({
                 filter.exists = false;
                 filter.missing = true;
             }
-            filter.range.disabled=true;
         }else{
             filter.exists = false;
             filter.missing = false;
-            filter.range.disabled = false;
         }
         this.props.changeFilter(filter);
     },
@@ -410,7 +409,11 @@ var DateRangeFilter = React.createClass({
         var filter = this.props.filter;
         var name = filter.name, label = fields.byTerm[name].name,
         exists = filter.exists ,
-        missing = filter.missing;
+        missing = filter.missing,
+        disabled = false;
+        if(exists || missing){
+            disabled=true;
+        }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
                 <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
@@ -424,7 +427,7 @@ var DateRangeFilter = React.createClass({
                             name="gte"
                             type="text" 
                             className="form-control date"
-                            disabled={filter.range.disabled} 
+                            disabled={disabled} 
                             onChange={this.dateChange} 
                             onFocus={this.showDatePicker}
                             value={filter.range.gte}
@@ -437,7 +440,7 @@ var DateRangeFilter = React.createClass({
                             name="lte"
                             type="text" 
                             className="form-control date"
-                            disabled={filter.range.disabled} 
+                            disabled={disabled} 
                             onChange={this.dateChange} 
                             onFocus={this.showDatePicker}
                             value={filter.range.lte}
@@ -475,11 +478,9 @@ var NumericRangeFilter = React.createClass({
                 filter.exists = false;
                 filter.missing = true;
             }
-            filter.range.disabled=true;
         }else{
             filter.exists = false;
             filter.missing = false;
-            filter.range.disabled = false;
         }
         this.props.changeFilter(filter);
     },
@@ -497,10 +498,14 @@ var NumericRangeFilter = React.createClass({
         var filter = this.props.filter;
         var name = filter.name, label = fields.byTerm[name].name
         exists = filter.exists ,
-        missing = filter.missing ;
+        missing = filter.missing,
+        disabled = false;
+        if(exists || missing){
+            disabled=true;
+        }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
-                <a href="#" onClick={this.props.removeFilter} data-remove={name}>
+                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
                     <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
                 </a>
                 <label className="filter-name">{label}</label>
@@ -512,7 +517,7 @@ var NumericRangeFilter = React.createClass({
                             name="gte"
                             type="text" 
                             className="form-control date"
-                            disabled={filter.range.disabled} 
+                            disabled={disabled} 
                             onChange={this.valueChange} 
                             value={filter.range.gte ?  filter.range.gte : ''}
                         />
@@ -523,7 +528,7 @@ var NumericRangeFilter = React.createClass({
                             name="lte"
                             type="text" 
                             className="form-control date"
-                            disabled={filter.range.disabled} 
+                            disabled={disabled} 
                             onChange={this.valueChange} 
                             value={filter.range.lte ? filter.range.lte : ''}
                         />

@@ -42,30 +42,41 @@ module.exports = Main = React.createClass({displayName: 'Main',
         //
         var search,params;
         if(url('?search')){
+            search = Main.defaultSearch();
             params = JSON.parse(decodeURIComponent(url('?search')))
             var filters=[],filter;
             _.each(params, function(val,key){
                 filter = Filters.newFilterProps(key);
-                var value;
-                if(filter.type=='text'){
+                var value, type = filter.type;
+                if(_.isBoolean(val)){
+                    if(val){
+                        filter.exists = true;
+                    }else{
+                        filter.missing = true;
+                    }
+                }else if(type=='text'){
                     if(_.isArray(val)){
                         value = val.join('\n');
                     }else{
                         value = val;
                     }
                     filter.text.content = value;
+                }else if(type=='daterange' || type=='numericrange'){
+                    if(_.isObject(val)){
+                        _.each(val,function(v,k){
+                            filter.range[k]=v;
+                        });
+                    }
                 }
-                if(filter.type=='range'){
-
-                }
+                filters.push(filter);
             })
-            search = Main.defaultSearch();
-            search.filters = [filter];
+            search.filters = filters;
         }else if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
         }else{
             search = Main.defaultSearch();
         }
+        searchHistory.push(search);
         return {search: search};
     },
     searchChange: function(key,val){

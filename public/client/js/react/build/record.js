@@ -63,7 +63,7 @@ var Section = React.createClass({displayName: 'Section',
 var Record = React.createClass({displayName: 'Record',
     render: function(){
         var has = [];
-        var sorder = ['taxonomy','specimen','collectionevent','locality','other'];
+        var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
         var record =[],tabs=[],self=this;
         _.each(this.props.record,function(val,key){
             record.push(Section({fields: val, key: key, data: self.props.data}));

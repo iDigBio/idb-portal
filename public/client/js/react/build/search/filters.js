@@ -11,7 +11,7 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
             var type = fields.byTerm[term].type;
             switch(type){
                 case 'text':
-                    return {name: term, type: type, text:{content:''}, exists: false, missing: false};
+                    return {name: term, type: type, text:'', exists: false, missing: false};
                 case 'daterange':
                     return {name: term, type: type, range:{gte: '', lte: ''}, exists: false, missing: false};
                 case 'numericrange':
@@ -187,7 +187,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
         },500,{leading: false, trailing: true});
     },
     getInitialState: function(){
-        return {text: this.props.filter.text.content}
+        return {text: this.props.filter.text}
     },
     presenceClick: function(event){
         var filter = this.props.filter;
@@ -208,7 +208,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     textType: function(event){
         var text = event.currentTarget.value, self=this;
         var filter = this.props.filter;//, filter=filters[ind];   
-        filter.text.content = text;
+        filter.text = text;
         this.setState({text: text},function(){
             this.debouncedTextType();
         })
@@ -217,7 +217,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     },
     componentWillReceiveProps: function(nextProps){
   
-        this.setState({text: nextProps.filter.text.content});
+        this.setState({text: nextProps.filter.text});
     },
     setAutocomplete: function(event){
         var self=this;
@@ -252,11 +252,11 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             },
             select: function(event,ui){
                 var filter = self.props.filter;//, filter=filters[ind];   
-                var cont = filter.text.content.split('\n');
+                var cont = filter.text.split('\n');
            
                 cont[cont.length-1] = ui.item.label;
 
-                filter.text.content = cont.join('\n');
+                filter.text = cont.join('\n');
                 self.props.changeFilter(filter);                 
             }
             
@@ -264,7 +264,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     },
     getSynonyms: function(event){
         event.preventDefault();
-        var text = this.props.filter.text.content.split('\n'),self=this;
+        var text = this.props.filter.text.split('\n'),self=this;
         //dont run search for blank text
         if(!_.isEmpty(text[0].trim())){
             //$(event.currentTarget).attr('disabled','disabled');
@@ -308,7 +308,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
             },function(err){
                 //ta.val(output.join('\n'));
                 var filter = self.props.filter;
-                filter.text.content = output.join('\n');
+                filter.text = output.join('\n');
                 self.props.changeFilter(filter);
                 //$(event.currentTarget).find('.syn-loader').hide();
                 //$(event.currentTarget).removeAttr('disabled');

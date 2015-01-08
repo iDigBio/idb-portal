@@ -72,7 +72,7 @@ module.exports = (function(){
                     }
                     and.push(must);
                 }else if (filter.type==='text'){
-                    var lines = filter.text.content.split('\n');
+                    var lines = filter.text.split('\n');
                     if(lines.length > 1) {
                         var terms = [];
                         for (line in lines) {
@@ -89,9 +89,9 @@ module.exports = (function(){
                         and.push({
                             "terms": term
                         });
-                    }else if(!_.isEmpty(filter.text.content)){
+                    }else if(!_.isEmpty(filter.text)){
                         var term = {};
-                        term[field] = filter.text.content.toLowerCase();
+                        term[field] = filter.text.toLowerCase();
                         and.push({
                             "term": term
                         });
@@ -191,8 +191,8 @@ module.exports = (function(){
                     idbq[term]={'type': 'exists'};
                 }else if(item.missing){
                     idbq[term]={'type': 'missing'};
-                }else if(item.text && !_.isEmpty(item.text.content)){
-                    var text = item.text.content.split('\n');
+                }else if(item.text && !_.isEmpty(item.text)){
+                    var text = item.text.split('\n');
                     if(text.length>1){
                         idbq[term] = text;
                     }else{

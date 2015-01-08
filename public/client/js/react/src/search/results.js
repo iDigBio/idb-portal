@@ -115,7 +115,12 @@ module.exports = React.createClass({
             li.push(
                 <li onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
             )
-        })        
+        })
+        if(this.state.search.from + this.state.search.size < this.state.total){
+            $('footer').hide();
+        }else{
+            $('footer').show();
+        }        
         return(
             <div id="results" className="clearfix" onScroll={this.resultsScroll}>
                 <ul id="results-menu" className="pull-left">

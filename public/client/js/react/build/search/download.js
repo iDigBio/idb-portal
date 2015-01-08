@@ -23,8 +23,8 @@ module.exports = Downloads = React.createClass({displayName: 'Downloads',
                 var type = filter.type, name = fields.byTerm[filter.name].name;//filter.name;
                 if(filter.exists || filter.missing){
                     parts.push(name + ' is '+(filter.exists ? 'present' : 'missing')+'.');
-                }else if(type=='text' && !_.isEmpty(filter.text.content)){
-                    var lines = filter.text.content.split('\n'),words='';
+                }else if(type=='text' && !_.isEmpty(filter.text)){
+                    var lines = filter.text.split('\n'),words='';
                     if(lines.length>1){
                         words = '(' + lines.join(' or ') + ').';
                     }else{

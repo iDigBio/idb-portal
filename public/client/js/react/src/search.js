@@ -37,9 +37,7 @@ module.exports = Main = React.createClass({
         }
     },
     getInitialState: function(){
-        //DEV SETTING
-            //localStorage.clear();
-        //
+
         var search,params;
         if(url('?search')){
             search = Main.defaultSearch();
@@ -60,7 +58,7 @@ module.exports = Main = React.createClass({
                     }else{
                         value = val;
                     }
-                    filter.text.content = value;
+                    filter.text = value;
                 }else if(type=='daterange' || type=='numericrange'){
                     if(_.isObject(val)){
                         _.each(val,function(v,k){

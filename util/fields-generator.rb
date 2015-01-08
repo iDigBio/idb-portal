@@ -25,6 +25,6 @@ CSV.parse(resp.body, :headers => true) do |row|
   output['names'][row['field_dwc_term']] = row['field_label'] 
 end
 
-File.open('../client/js/react/src/lib/dwc_fields.js','w') do |file|
+File.open('../public/client/js/lib/dwc_fields.js','w') do |file|
   file.write "module.exports = " << output.to_json
 end

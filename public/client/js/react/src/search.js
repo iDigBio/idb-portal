@@ -39,41 +39,51 @@ module.exports = Main = React.createClass({
     getInitialState: function(){
 
         var search,params;
-        if(url('?search')){
+        if(url('?rq')){
+            var rq = JSON.parse(decodeURIComponent(url('?rq')));
             search = Main.defaultSearch();
-            params = JSON.parse(decodeURIComponent(url('?search')))
             var filters=[],filter;
-            _.each(params, function(val,key){
-                filter = Filters.newFilterProps(key);
-                var value, type = filter.type;
-                if(_.isBoolean(val)){
-                    if(val){
-                        filter.exists = true;
-                    }else{
-                        filter.missing = true;
+            _.forOwn(rq,function(v,k){
+                
+                if(k==='data'){
+                    if(_.isObject(v) && _.isString(v.type) && v.type === 'fulltext'){
+                        search.fulltext = v.value;
                     }
-                }else if(type=='text'){
-                    if(_.isArray(val)){
-                        value = val.join('\n');
-                    }else{
-                        value = val;
+                }else if(k==='hasImage' && _.isBoolean(v)){
+                    search.image = v;
+                }else if(k==='geopoint' && _.isObject(v)){
+                    if(v.type === 'geo_bounding_box'){
+                        delete v.type
+                        _.assign(search.bounds, v);
+                    }else if(v.type === 'exists' || v.type === 'missing'){
+                        search.geopoint = v.type === 'exists' ? true : false;
                     }
-                    filter.text = value;
-                }else if(type=='daterange' || type=='numericrange'){
-                    if(_.isObject(val)){
-                        _.each(val,function(v,k){
-                            filter.range[k]=v;
-                        });
+                }else if(_.isObject(fields.byTerm[k])){
+                    filter = Filters.newFilterProps(k);
+                    if(_.isObject(v) && _.isString(v.type)){
+                        if(v.type === 'exists' || v.type === 'missing'){
+                            filter[v.type] = true;
+                        }else if(v.type === 'range'){
+                            delete v.type;
+                            _.assign(filter.range,v);
+                        }
+                    }else if(_.isString(v)){
+                        filter.text = v;
+                    }else if(_.isArray(v)){
+                        filter.text = v.join('\n');
                     }
+                    filters.push(filter);                   
                 }
-                filters.push(filter);
             })
-            search.filters = filters;
+            if(filters.length > 0){
+                search.filters = filters;
+            }
         }else if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
         }else{
             search = Main.defaultSearch();
         }
+     
         searchHistory.push(search);
         return {search: search};
     },

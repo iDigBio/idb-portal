@@ -107,7 +107,7 @@ module.exports = Downloads = React.createClass({displayName: 'Downloads',
 
         searchHistory.history.forEach(function(item,ind){
             options.push(
-                React.DOM.option({value: ind}, Downloads.queryToSentence(item))
+                React.DOM.option({key: 'download-'+ind, value: ind}, Downloads.queryToSentence(item))
             )
         })
         return (
@@ -247,7 +247,7 @@ var Downloader = React.createClass({displayName: 'Downloader',
         var self=this;
         self.dlstatus = true;
         var email = $('#email').val();
-        var q = queryBuilder.makeIDBQuery(this.props.search);
+        var q = queryBuilder.makeDownloadQuery(this.props.search);
         if (email == "") {
             $('#download-email').addClass("invalid")
             $('#download-email').focus()
@@ -255,24 +255,7 @@ var Downloader = React.createClass({displayName: 'Downloader',
             //this.setState('disabled', true);
             var req = function(){
                 $.post("//csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
-                    
                     self.addDownload(data,self.props.search);
-                    /*var surl = '//'+ url('hostname',data.status_url) + url('path',data.status_url);
-                    
-                    var statusFunc = function() {
-                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
-                            debugger
-                            if(data.complete && data.task_status == "SUCCESS") {
-                                $("#time-estimate").html("<a href='" + data.download_url + "'>Ready, Click to Download</a>");
-                                self.dlstatus = false;
-                            } else {
-                                if(self.dlstatus===true){
-                                    setTimeout(statusFunc, 5000);
-                                }
-                            }
-                        }).fail(statusFunc);
-                    }
-                    setTimeout(statusFunc, 5000);*/
                 }).fail(req);                   
             }
             req();

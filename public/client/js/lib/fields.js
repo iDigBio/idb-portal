@@ -159,7 +159,7 @@ _.each(flds, function(value, key) {
    
 });
 //add special atts here //they only need look by term 
-fieldst['hasImage'] = {"name": 'Has Image', "term": 'hasImage'};  
+//fieldst['hasImage'] = {"name": 'Has Image', "term": 'hasImage'};  
 //fieldst['recordset'] = {"name": 'Recordset', "term": 'recordset'};
 //
 module.exports = {

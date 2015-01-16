@@ -133,7 +133,7 @@ var Buttons = React.createClass({
         var search = JSON.stringify({recordset: this.props.key})
         return(
             <div id="buttons">
-                <a href={'/portal/search?search='+search}>
+                <a href={'/portal/search?rq='+search}>
                    <button className="btn button">Search This Recordset</button>
                 </a>
                 <button data-target="#raw" data-toggle="modal" className="btn button">

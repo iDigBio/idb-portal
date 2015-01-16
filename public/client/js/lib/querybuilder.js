@@ -37,13 +37,6 @@ module.exports = (function(){
             var ranges = {}; //collects various range inputs to be added to the and filter
             
             var fulltext = helpers.strip(search.fulltext);
-            /*query["sort"][so["sortName"]]={"order": so["sortDir"]};
-            //always sort genus and specificepithet together
-            if(so["sortName"]=='specificepithet'){
-                query["sort"]["genus"]={"order": so["sortDir"]};
-            }else if(so["sortName"]=='genus'){
-                query["sort"]["specificepithet"]={"order": so["sortDir"]};
-            }*/
             var sort=[];
             search.sorting.forEach(function(item){
                 var s={}
@@ -72,24 +65,28 @@ module.exports = (function(){
                     }
                     and.push(must);
                 }else if (filter.type==='text'){
-                    var lines = filter.text.split('\n');
+                    var lines = helpers.strip(filter.text).split('\n');
                     if(lines.length > 1) {
                         var terms = [];
                         for (line in lines) {
                             //use some regex here
                             //split off extra crap
                             var word=lines[line];//helpers.strip(lines[line]);
-                            terms.push(word.toLowerCase());
+                            if(!_.isEmpty(helpers.strip(word))){
+                                terms.push(word.toLowerCase());
+                            }
                         }
                         var term = {
                             "execution": "or"
                         };
                         term[field] = terms;
                         //or.or.push({"terms": term}); 
-                        and.push({
-                            "terms": term
-                        });
-                    }else if(!_.isEmpty(filter.text)){
+                        if(terms.length>0){
+                            and.push({
+                                "terms": term
+                            });
+                        }
+                    }else if(!_.isEmpty(helpers.strip(filter.text))){
                         var term = {};
                         term[field] = filter.text.toLowerCase();
                         and.push({
@@ -183,7 +180,8 @@ module.exports = (function(){
             return query;
 		}
 
-        this.makeIDBQuery = function(search){
+
+        this.buildQueryShim = function(search){
             var idbq = {}, reg = /\d{4}-\d{1,2}-\d{1,2}/;
             search.filters.forEach(function(item){
                 var term = item.name;//fields.byName[item.name].term;
@@ -225,10 +223,10 @@ module.exports = (function(){
                             type: "geo_bounding_box",
                             top_left:{
                                 lat: 89.99999,
-                                lon: -180.0
+                                lon: -179.99999
                             },
                             bottom_right:{
-                                lat: -90.0,
+                                lat: -89.99999,
                                 lon: 179.99999
                             }
                         }
@@ -248,6 +246,32 @@ module.exports = (function(){
             }
             return idbq;
         }
+
+        this.makeDownloadQuery = function(search){
+            return this.buildQueryShim(search);
+        };
+
+        this.makeSearchQuery = function(search){
+            var params = {};
+            params["rq"] = this.buildQueryShim(search);
+            var sort=[];
+            search.sorting.forEach(function(item){
+                var s={}
+                if(!_.isEmpty(item.name)){
+                    s[item.name] = item.order;
+                }
+                sort.push(s);
+            });
+            if(!_.isEmpty(sort)){
+                params["sort"] = sort;
+            }
+            params["limit"]=search.size;
+            params["offset"]=search.from;
+
+            return params;
+        }
+
+
 
 	}
 	return new QueryBuilder;

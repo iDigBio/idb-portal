@@ -8,16 +8,27 @@ var IDBMap = require('../../../lib/mapper');
 var map; 
 module.exports = React.createClass({displayName: 'exports',
     currentQuery: '',
+    makeMapQuery: function(settings){
+        var params = {};
+        params["rq"] = queryBuilder.buildQueryShim(settings.search);
+        if(_.has(settings,'style')){
+            params["style"]=settings.style;
+        }
+        if(_.has(settings,'type')){
+            params['type']=settings.type
+        }
+        return params;
+    },
     componentDidMount: function(){
         map = new IDBMap('map');
-        var query = queryBuilder.makeIDBQuery(this.props.search);
+        var query = this.makeMapQuery({search: this.props.search});
         map.query(query)
     },
     shouldComponentUpdate: function(){
         return false;
     },
     componentWillReceiveProps: function(nextProps){
-        var q = queryBuilder.makeIDBQuery(nextProps.search);
+        var q = this.makeMapQuery({search: nextProps.search });
         var next=JSON.stringify(q);
         //debugger
         if(next!==this.currentQuery){

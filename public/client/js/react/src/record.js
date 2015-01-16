@@ -5,6 +5,7 @@
 var React = require('react')
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
+var fields = require('../../lib/fields');
 
 var Tab = React.createClass({
     showSection: function(event){
@@ -41,13 +42,21 @@ var Row = React.createClass({
 
 var Section = React.createClass({
     render: function(){
-        var rows = [];
-        var data = this.props.data._source.data['idigbio:data'];
+        var rows = [],self=this;
+        var data = this.props.data;
         
-        _.each(this.props.fields,function(fld){
-            if(_.isString(data[fld])){
-                rows.push(<Row key={fld} data={data}/>);
-            } 
+        _.each(data, function(fld){
+            var key = Object.keys(fld)[0];
+            console.log(self.props.key + '-'+key);
+            var name = _.isUndefined(dwc.names[key]) ? key : dwc.names[key];
+            var regex = /(https?:\/\/(\S|\w)+)/;
+            var str = fld[key].replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
+            rows.push( 
+                <tr key={key} className="data-row">
+                    <td className="field-name">{name}</td>
+                    <td className="field-value" dangerouslySetInnerHTML={{__html: str}}></td>
+                </tr>
+            ); 
         });
         
         return (
@@ -65,16 +74,12 @@ var Record = React.createClass({
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
         var record =[],tabs=[],self=this;
-        _.each(this.props.record,function(val,key){
-            record.push(<Section fields={val} key={key} data={self.props.data}/>);
-        });
-
-        var reckeys = Object.keys(this.props.record);
-        _.each(sorder,function(sec){
-            if(reckeys.indexOf(sec)!==-1){
-                tabs.push(<Tab key={sec}/>)
-            }
-        });
+        sorder.forEach(function(sec){
+            if(_.has(self.props.record,sec)){
+                tabs.push(<Tab key={'tab-'+sec}/>)
+                record.push(<Section key={'sec-'+sec} data={self.props.record[sec]}/>);
+            } 
+        })
 
         return (
             <div id="record-container">
@@ -190,43 +195,59 @@ var Raw = require('./shared/raw');
 
 module.exports = Page = React.createClass({
     render: function(){
-        var data = this.props.record._source.data['idigbio:data'];//resp._source.data['idigbio:data'];
-        var has = [];
+        var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
+        var has = [],canonical={};
         var record = {};
+
+        //build canonical dictionary
+        //first adding indexTerms which are most correct
+        _.forOwn(index,function(v,k){
+            if(_.has(fields.byTerm,k) && k != 'hasImage'){
+                canonical[fields.byTerm[k].dataterm]=v;
+            }
+        })
+        //then add raw data that isn't supplied by indexTerms
+        _.defaults(canonical,data);
+
         _.each(dwc.order,function(val,key){
             _.each(dwc.order[key],function(fld){
-                if(_.has(data,fld)){
+                if(_.has(canonical,fld)){
                     if(_.has(record,key)===false){
                         record[key]=[]
                     } 
-                    record[key].push(fld);
+                    var datum={};
+                    datum[fld]=canonical[fld];
+                    record[key].push(datum);
                     has.push(fld);
                 }
             });
         });
         //add unidentified values to other section
-        var dif = _.difference(Object.keys(data), has);
+        var dif = _.difference(Object.keys(canonical), has);
         _.each(dif,function(item){
             if(item.indexOf('idigbio:')===-1){
                 if(_.isUndefined(record['other'])){
                     record['other']=[];
-                }            
-                record['other'].push(item);
+                }     
+                var datum={};
+                datum[item]=canonical[item];       
+                record['other'].push(datum);
             }
         });
+       
         return (
             <div className="container-fluid">
                 <div className="row-fluid">
                     <div className="span12">   
 
                         <div id="data-container" className="clearfix">
-                            <Title data={this.props.record._source.data['idigbio:data']}/>
+                            <Title data={canonical}/>
                             <div id="data-content">
-                                <Record record={record} data={this.props.record} />
+                                <Record record={record} />
                             </div>
                             <div id="data-meta" className="clearfix">
-                                <Buttons data={this.props.record._source} /> 
-                                <Gallery data={this.props.record._source} />
+                                <Buttons data={index} /> 
+                                <Gallery data={index} />
                                 <div id="map" className="clearfix">
                                     <h4 className="title">Georeference Data</h4>
                                     <div id="map-wrapper">
@@ -238,7 +259,7 @@ module.exports = Page = React.createClass({
                         </div>
                     </div>
                 </div>
-                <Raw data={this.props.record._source.data['idigbio:data']} />
+                <Raw data={data} />
             </div>
         )
     }

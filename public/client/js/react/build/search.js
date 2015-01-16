@@ -41,9 +41,10 @@ module.exports = Main = React.createClass({displayName: 'Main',
     getInitialState: function(){
 
         var search;
-        if(url('?rq')){
+        if(url('?rq') || url('?sort')){
             search = Main.defaultSearch();
             paramsParser(search);
+            window.history.pushState({},'search',url('path'));
         }else if(searchHistory.history.length > 0){
             search = searchHistory.history[0];
         }else{

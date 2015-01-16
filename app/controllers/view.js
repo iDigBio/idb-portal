@@ -28,12 +28,14 @@ module.exports = function(app, config) {
 		},
 		record: function(req,res){
 			var id = req.params.id;
-			var base = 'http://search.idigbio.org/idigbio/';
+			var base = 'https://beta-search.idigbio.org/v2/view/';
 			//var Page = React.renderComponentToString(RecordPage({record: record, provider: recordset}));
 			request.get({"url": base+'records/'+id, "json": true}, function(err, resp, body){
-				if(body.found){
+		
+				if(body.uuid){
 					var record = body;
-					request.get({"url": base+'recordsets/'+record._source.recordset, "json": true}, function(err, resp, body){
+					request.get({"url": base+'recordsets/'+record.indexTerms.recordset, "json": true}, function(err, resp, body){
+					
 						var recordset = body;
 						var React = require('react');
 						var Page = React.renderComponentToString(RecordPage({record: record, provider: recordset}));

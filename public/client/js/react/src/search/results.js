@@ -5,7 +5,7 @@
 var React = require('react');
 
 
-module.exports = React.createClass({
+module.exports = Results =  React.createClass({
     /*getResults: function(searchState){
         var query = queryBuilder.makeQuery(searchState), self=this;
         //_.defer(function(){
@@ -46,9 +46,32 @@ module.exports = React.createClass({
         and ensures that the last key press results in the proper set of results as responses can be out of 
         order*/
         this.getResults = _.debounce(function(){
-            var d = new Date, searchState = self.state.search, query = queryBuilder.makeQuery(searchState);
+            var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
             self.lastQueryTime = now;
+            $.ajax('//beta-search.idigbio.org/v2/search/',{
+                data: JSON.stringify(query),
+                success: function(response){
+                    //console.log(resp.shortCode)
+                    //make sure last query run is the last one that renders
+                    //as responses can be out of order
+                    if(now>= self.lastQueryTime){
+                        var res;
+                        if(searchState.from > 0){
+                            res = self.state.results.concat(response.items);
+                        }else{
+                            res = response.items;
+                        }
+                        self.setState({results: res, total: response.itemCount},function(){
+                            self.forceUpdate();
+                        });
+                    }
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'POST'
+            });
+            /*
             searchServer.esQuery('records',query,function(results){
                 if(now>= self.lastQueryTime){
                     var res;
@@ -61,7 +84,7 @@ module.exports = React.createClass({
                         self.forceUpdate();
                     });
                 }
-            });
+            });*/
         },300,{leading: true, trailing: true});
     },
     componentDidMount: function(){
@@ -113,7 +136,7 @@ module.exports = React.createClass({
         ['list','labels','images'].forEach(function(item){
             var cl = item == self.state.view ? 'active' : ''; 
             li.push(
-                <li onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
+                <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
             )
         })
         if(this.state.search.from + this.state.search.size < this.state.total){
@@ -228,20 +251,20 @@ var ResultsList = React.createClass({
             if(sorted.name===item){
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
                 headers.push(
-                    <th id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={self.sortColumn}>
+                    <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={self.sortColumn}>
                         {fields.byTerm[item].name}
                         <i className={"glyphicon "+icon}></i>
                     </th>
                 ) 
             }else{
                 headers.push(
-                    <th id={item} className="data-column" style={style} data-term={item} onClick={self.sortColumn}>{fields.byTerm[item].name}</th>
+                    <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} onClick={self.sortColumn}>{fields.byTerm[item].name}</th>
                 ) 
             }
         });
         //add column list button
         headers.push(
-            <th style={{width: '60px'}}>
+            <th key={'header-select'} style={{width: '60px'}}>
                 <button className="pull-right" data-toggle="modal" data-target="#column-list">
                     <i className="glyphicon glyphicon-list"/>
                 </button>
@@ -252,9 +275,9 @@ var ResultsList = React.createClass({
             columns.forEach(function(name,ind){
                 var val;
                 if(_.isUndefined(fields.byTerm[name].dataterm)){
-                    val = helpers.check(item._source[name]);
+                    val = helpers.check(item.indexTerms[name]);
                 }else{
-                    val = helpers.check(item._source.data['idigbio:data'][fields.byTerm[name].dataterm]);
+                    val = helpers.check(item.data[fields.byTerm[name].dataterm]);
                 }
 
                 if(_.isEmpty(val)){
@@ -262,20 +285,20 @@ var ResultsList = React.createClass({
                 }
 
                 if(columns.length-1 === ind){
-                    tds.push(<td colSpan="2">{val}</td>);
+                    tds.push(<td key={'row-'+index+'-cell-'+ind} colSpan="2">{val}</td>);
                 }else{
-                    tds.push(<td>{val}</td>);
+                    tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
                 }
             })
             rows.push(
-                <tr id={item._source.uuid} key={index} onClick={self.openRecord}>
+                <tr id={item.uuid} key={'row-'+index} onClick={self.openRecord}>
                     {tds}
                 </tr>
             );
         })
 
         if(rows.length===0){
-            rows.push(<tr className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
+            rows.push(<tr key={'row-no-results'} className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
         }
         //column selection modal list
         var list=[];
@@ -284,7 +307,7 @@ var ResultsList = React.createClass({
 
         _.each(fields.searchGroups,function(val){
             list.push(
-                <tr><td className="bold">{fields.groupNames[val]}</td></tr>
+                <tr key={val}><td className="bold">{fields.groupNames[val]}</td></tr>
             )
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden && !field.results){
@@ -298,7 +321,7 @@ var ResultsList = React.createClass({
                         }
                     }
                     list.push(
-                        <tr key={field.term}>
+                        <tr key={'column-select-'+field.term}>
                             <td>
                                 <label>
                                     <input name={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked={checked} disabled={disabled} /> {field.name}
@@ -350,7 +373,7 @@ var ResultsList = React.createClass({
 
 var ResultsLabels = React.createClass({
     makeLabel: function(result,id){
-        var data = result._source, raw = data.data['idigbio:data'];
+        var data = result.indexTerms, raw = result.data;
         var txt = '';
         var content=[];
         if(typeof data.scientificname == 'string') { 
@@ -393,9 +416,9 @@ var ResultsLabels = React.createClass({
                 imgcount = <span/>;
             } 
             content.push(
-                <span key={'media-'+data.uuid+this.props.stamp} className="image-wrapper">
+                <span key={'media-'+result.uuid+this.props.stamp} className="image-wrapper">
                     {imgcount}
-                    <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+data.uuid+"/media?quality=thumbnail"} /> 
+                    <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"} /> 
                 </span>  
             )
      
@@ -421,7 +444,7 @@ var ResultsLabels = React.createClass({
         }
       
         return (
-            <div key={'label-'+id} id={result._source.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
+            <div key={'label-'+id} id={result.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
                 <p>
                    {content}
                     <span style={{lineHeight: '1em', fontSize:'1em'}}>
@@ -437,7 +460,7 @@ var ResultsLabels = React.createClass({
     render: function(){
         var labels = [],self=this;
         this.props.results.forEach(function(result,ind){
-            labels.push(self.makeLabel(result,ind));
+            labels.push(self.makeLabel(result,'label-'+ind));
         })
         return (
             <div id="result-labels" className="panel">
@@ -449,7 +472,7 @@ var ResultsLabels = React.createClass({
 
 var ResultsImages = React.createClass({
     getImageOnlyResults: function(search){
-        var self=this, search=_.cloneDeep(search);
+        /*var self=this, search=_.cloneDeep(search);
         search.image = true,
         query = queryBuilder.makeQuery(search);
         searchServer.esQuery('records',query,function(response){
@@ -461,6 +484,34 @@ var ResultsImages = React.createClass({
             }
             self.setState({results: results});
             self.forceUpdate();
+        });*/
+
+        var d = new Date, self=this, searchState = _.cloneDeep(search);
+        searchState.image=true;
+        var query = queryBuilder.makeSearchQuery(searchState);
+        var now = d.getTime();
+        self.lastQueryTime = now;
+        $.ajax('//beta-search.idigbio.org/v2/search/',{
+            data: JSON.stringify(query),
+            success: function(response){
+                //console.log(resp.shortCode)
+                //make sure last query run is the last one that renders
+                //as responses can be out of order
+                if(now>= self.lastQueryTime){
+                    var res;
+                    if(searchState.from > 0){
+                        res = self.state.results.concat(response.items);
+                    }else{
+                        res = response.items;
+                    }
+                    self.setState({results: res},function(){
+                        self.forceUpdate();
+                    });
+                }
+            },
+            dataType: 'json',
+            contentType: 'application/json',
+            type: 'POST'
         });
     },
     getInitialState: function(){
@@ -484,9 +535,9 @@ var ResultsImages = React.createClass({
     makeImageText: function(data){
 
     },
-    makeImage: function(uuid,data,key){
-        var count = data.mediarecords.indexOf(uuid)+1 + ' of '+ data.mediarecords.length;
-        var text=[], specimen = data.data['idigbio:data'];
+    makeImage: function(uuid,record,key){
+        var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
+        var text=[], specimen = record.data;
         if(typeof specimen["dwc:scientificName"] == 'string') { 
             text.push(helpers.check(specimen["dwc:scientificName"]));
             text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));          
@@ -501,7 +552,7 @@ var ResultsImages = React.createClass({
             return !_.isEmpty(i);
         })
         return (
-            <a className="image" target="_new" href={"/portal/mediarecords/"+uuid} key={key}>
+            <a className="image" target="_new" href={"/portal/mediarecords/"+uuid} key={'image-'+key}>
                 <span className="img-count">{count}</span>
                 <img alt="loading..." 
                 src={"https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail"}
@@ -517,9 +568,9 @@ var ResultsImages = React.createClass({
     render: function(){
         var images=[],self=this,key=0;
         this.state.results.forEach(function(record,index){
-            if(_.isArray(record._source.mediarecords)){
-                record._source.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record._source,key));
+            if(_.isArray(record.indexTerms.mediarecords)){
+                record.indexTerms.mediarecords.forEach(function(uuid){
+                    images.push(self.makeImage(uuid,record,key));
                     key++;
                 })
             }

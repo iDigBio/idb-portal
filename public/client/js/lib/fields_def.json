@@ -129,7 +129,8 @@
     "Date Collected": {
         "term": "datecollected",
         "type": "daterange",
-        "group": "collectionevent"
+        "group": "collectionevent",
+        "dataterm": "dwc:eventDate"
     },
     "Locality": {
         "term": "locality",

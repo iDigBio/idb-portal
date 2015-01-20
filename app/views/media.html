@@ -3,15 +3,15 @@
 <link rel="stylesheet" type="text/css" href="/portal/css/media.css">
 <meta property="og:image" content="https://api.idigbio.org/v1/mediarecords/{{ id }}/media?quality=webview" />
 <meta property="og:site_name" content="iDigBio Specimen Portal" />
-{% if record._source.scientificname -%}
-<meta property="og:title" content="iDigBio Media Record | {{ record._source.scientificname|capitalize }}" />
+{% if record.indexTerms.scientificname -%}
+<meta property="og:title" content="iDigBio Media Record | {{ record.indexTerms.scientificname|capitalize }}" />
 {% else %}
 <meta property="og:title" content="iDigBio Media Record" />
 {% endif %}
-{% if recordset._source.data['idigbio:data'].collection_description %}
-<meta property="og:description" content="{{ recordset._source.data['idigbio:data'].collection_description }}" />
-{% elseif recordset._source.data['idigbio:data'].collection_name %}
-<meta property="og:description" content="{{ recordset._source.data['idigbio:data'].collection_name }}" />
+{% if mediarecord.attribution.description %}
+<meta property="og:description" content="{{ mediarecord.attribution.description }}" />
+{% elseif mediarecord.attribution.name %}
+<meta property="og:description" content="{{ mediarecord.attribution.name }}" />
 {% endif %}
 <meta property="og:url" content="https://{{ user.host }}/portal/mediarecords/{{ id }}" />
 {% endblock %} 

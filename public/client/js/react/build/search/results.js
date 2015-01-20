@@ -6,24 +6,7 @@ var React = require('react');
 
 
 module.exports = Results =  React.createClass({displayName: 'Results',
-    /*getResults: function(searchState){
-        var query = queryBuilder.makeQuery(searchState), self=this;
-        //_.defer(function(){
 
-        searchServer.esQuery('records',query,function(results){
-            var res;
-            if(searchState.from > 0){
-                res = self.state.results.concat(results.hits.hits);
-            }else{
-                res = results.hits.hits;
-            }
-            self.setState({results: res, total: results.hits.total},function(){
-                self.forceUpdate();
-            });
-        });
-  
-        //});
-    },*/
     getInitialState: function(){
         //this.getResults();
         if(!localStorage || _.isUndefined(localStorage.viewType)){
@@ -71,20 +54,7 @@ module.exports = Results =  React.createClass({displayName: 'Results',
                 contentType: 'application/json',
                 type: 'POST'
             });
-            /*
-            searchServer.esQuery('records',query,function(results){
-                if(now>= self.lastQueryTime){
-                    var res;
-                    if(searchState.from > 0){
-                        res = self.state.results.concat(results.hits.hits);
-                    }else{
-                        res = results.hits.hits;
-                    }
-                    self.setState({results: res, total: results.hits.total},function(){
-                        self.forceUpdate();
-                    });
-                }
-            });*/
+
         },300,{leading: true, trailing: true});
     },
     componentDidMount: function(){

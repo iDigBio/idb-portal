@@ -65,28 +65,27 @@ module.exports = React.createClass({displayName: 'exports',
                 )
             );
         }     
-
-        var data = this.props.data._source.data['idigbio:data'];
-
-        if(_.has(data,'collection_name')){
+        //console.log(this.props.data)
+        var data = this.props.data;
+        if(_.has(data,'name')){
             rows.push(
-                React.DOM.div({className: "title"}, data.collection_name)
+                React.DOM.div({key: "title", className: "title"}, data.name)
             )
         }
-        if(_.has(data,'logo_url') && !_.isEmpty(data.logo_url)){
-            rows.push(React.DOM.img({className: "logo", src: data.logo_url, onError: this.noLogo}))
+        if(_.has(data,'logo') && !_.isEmpty(data.logo)){
+            rows.push(React.DOM.img({key: "logo", className: "logo", src: data.logo, onError: this.noLogo}))
         }
-        if(_.has(data,'institution_web_address')){
+        if(_.has(data,'url')){
             rows.push(
-                React.DOM.a({href: data.institution_web_address}, 
-                    data.institution_web_address
+                React.DOM.a({key: "link", href: data.url}, 
+                    data.url
                 )
             )
         }
-        if(_.has(data,'collection_description')){
-            var desc = _.unescape(data.collection_description);
+        if(_.has(data,'description')){
+            var desc = _.unescape(data.description);
             rows.push(
-                React.DOM.div({className: "justify", dangerouslySetInnerHTML: {__html: desc}})
+                React.DOM.div({key: "description", className: "justify", dangerouslySetInnerHTML: {__html: desc}})
             )
         }
 

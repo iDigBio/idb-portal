@@ -34,22 +34,18 @@ module.exports = function(app, config) {
 		
 				if(body.uuid){
 					var record = body;
-					request.get({"url": base+'recordsets/'+record.indexTerms.recordset, "json": true}, function(err, resp, body){
-					
-						var recordset = body;
-						var React = require('react');
-						var Page = React.renderComponentToString(RecordPage({record: record, provider: recordset}));
-						//
-						res.render('record', {
-							activemenu: 'search',
-							id: req.params.id,
-							user: req.user,
-							token: req.session._csrf,
-							record: record,
-							content: Page,
-							recordset: recordset
-						});	
-					});					
+					var React = require('react');
+					//console.log(recordset)
+					var Page = React.renderComponentToString(RecordPage({record: record}));
+					//
+					res.render('record', {
+						activemenu: 'search',
+						id: req.params.id,
+						user: req.user,
+						token: req.session._csrf,
+						record: record,
+						content: Page
+					});			
 				}else{
 					res.status(404);
 					res.render('404', {
@@ -63,37 +59,19 @@ module.exports = function(app, config) {
 		},
 
 		media: function(req,res){
+			//var qu = {size:1,from:0,query:{term:{uuid: id}}};
 			var id = req.params.id;
-			var qu = {size:1,from:0,query:{term:{uuid: id}}};
-			var base = 'http://search.idigbio.org/idigbio/';
+			var base = 'https://beta-search.idigbio.org/v2/view/';
 			var recordset, name='';
 			
-			request.post({ "url": base+'mediarecords/_search', "body": qu, "json": true}, function(err, resp, body){
-				if(body.hits.total === 1){
-					var mediarecord = body.hits.hits[0];
+			request.get({"url": base+'mediarecords/'+id, "json": true}, function(err, resp, body){
+				if(body.uuid){
+					var mediarecord = body;
 					var record = {};
-					async.parallel([
-						function(callback){
-							request.get({url: base+'recordsets/'+mediarecord._source.recordset, "json": true}, function(err, resp, body){
-
-								recordset = body;
-								callback();
-							});	
-						},
-						function(callback){
-							if(_.has(mediarecord._source,'records')){
-								request.get({url: base+'records/'+mediarecord._source.records[0], "json": true},function(err, resp, body){
-				                    record = body;
-									callback();
-								});
-							}else{
-								callback();
-							}
-						}
-					], function(){
+					var render = function(){
 
 						var React = require('react');
-						var Page = React.renderComponentToString(MediaPage({mediarecord: mediarecord, provider: recordset, record: record}));
+						var Page = React.renderComponentToString(MediaPage({mediarecord: mediarecord, record: record}));
 			           
 			            res.render('media', {
 			                activemenu: 'search',
@@ -102,9 +80,17 @@ module.exports = function(app, config) {
 			                token: req.session._csrf,
 			                content: Page,
 			                record: record,
-			                recordset: recordset
+			                mediarecord: mediarecord
 			            }); 					
-					});					
+					}
+					if(_.has(mediarecord.indexTerms,'records')){
+						request.get({url: base+'records/'+mediarecord.indexTerms.records[0], "json": true},function(err, resp, body){
+		                    record = body;
+							render();
+						});
+					}else{
+						render();
+					}					
 				}else{
 					res.status(404);
 		            res.render('404', {

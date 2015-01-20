@@ -16,10 +16,14 @@ var Tab = React.createClass({
         $('#'+$(event.currentTarget).attr('data-tab')).removeClass('section-hide');
     },
     render: function(){
+        var cl = "tab";
+        if(this.props.active){
+            cl="tab active";
+        }
         return (
-            <li className='tab' data-tab={this.props.key} onClick={this.showSection}>
-                <a href={'#'+this.props.key}>
-                    {dwc.names[this.props.key]}
+            <li className={cl} data-tab={this.props.name} onClick={this.showSection}>
+                <a href={'#'+this.props.name}>
+                    {dwc.names[this.props.name]}
                 </a>
             </li>
         );
@@ -47,20 +51,26 @@ var Section = React.createClass({
         
         _.each(data, function(fld){
             var key = Object.keys(fld)[0];
-            console.log(self.props.key + '-'+key);
             var name = _.isUndefined(dwc.names[key]) ? key : dwc.names[key];
             var regex = /(https?:\/\/(\S|\w)+)/;
-            var str = fld[key].replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
+            console.log('key is: ' +key)
+            var val = fld[key];
+            if(_.isString(val)){
+               val = val.replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
+            }
             rows.push( 
                 <tr key={key} className="data-row">
                     <td className="field-name">{name}</td>
-                    <td className="field-value" dangerouslySetInnerHTML={{__html: str}}></td>
+                    <td className="field-value" dangerouslySetInnerHTML={{__html: val}}></td>
                 </tr>
             ); 
         });
-        
+        var cl = "section section-hide";
+        if(this.props.active){
+            cl="section";
+        }
         return (
-            <div id={this.props.key} className="section section-hide" >
+            <div id={this.props.name} className={cl} >
                 <table className="record-table">
                     {rows}
                 </table>
@@ -74,10 +84,16 @@ var Record = React.createClass({
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
         var record =[],tabs=[],self=this;
-        sorder.forEach(function(sec){
+        var cnt = 0;
+        sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
-                tabs.push(<Tab key={'tab-'+sec}/>)
-                record.push(<Section key={'sec-'+sec} data={self.props.record[sec]}/>);
+                var active=false;
+                if(cnt===0){
+                    active=true;
+                }
+                tabs.push(<Tab key={'tab-'+sec} name={sec} active={active} />)
+                record.push(<Section key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
+                cnt++;
             } 
         })
 
@@ -202,7 +218,7 @@ module.exports = Page = React.createClass({
         //build canonical dictionary
         //first adding indexTerms which are most correct
         _.forOwn(index,function(v,k){
-            if(_.has(fields.byTerm,k) && k != 'hasImage'){
+            if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
                 canonical[fields.byTerm[k].dataterm]=v;
             }
         })
@@ -241,7 +257,7 @@ module.exports = Page = React.createClass({
                     <div className="span12">   
 
                         <div id="data-container" className="clearfix">
-                            <Title data={canonical}/>
+                            <Title data={data}/>
                             <div id="data-content">
                                 <Record record={record} />
                             </div>
@@ -255,7 +271,7 @@ module.exports = Page = React.createClass({
                                     </div>
                                 </div>
                             </div>
-                            <Provider data={this.props.provider} />
+                            <Provider data={this.props.record.attribution} />
                         </div>
                     </div>
                 </div>

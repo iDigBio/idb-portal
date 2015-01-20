@@ -34,9 +34,8 @@ var Media = React.createClass({displayName: 'Media',
 var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
         var el=[];
-        if(_.has(this.props.links,'record')){
-            var rid = this.props.links.record[0].split('/');
-            var link = '/portal/records/'+rid[rid.length-1];
+        if(_.has(this.props.data,'records')){
+            var link = '/portal/records/'+this.props.data.records[0];
             el.push(
                 React.DOM.a({className: "btn button", href: link, key: link}, 
                     "Go To Specimen Record"
@@ -47,9 +46,7 @@ var Buttons = React.createClass({displayName: 'Buttons',
                 React.DOM.span({className: "no-assoc"}, "Media is not associated with any record")
             )
         }
-
-        var rsid = this.props.links.recordset[0].split('/');
-        var rlink = '/portal/recordsets/'+rsid[rsid.length-1];
+        var rlink = '/portal/recordsets/'+this.props.data.recordset;
 
         el.push(
             React.DOM.a({className: "btn button", href: rlink, key: rlink}, 
@@ -134,9 +131,9 @@ var Group = React.createClass({displayName: 'Group',
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
     },
     render: function(){
-        if(_.has(this.props.record, '_source') && this.props.record._source.mediarecords.length > 1){
+        if(_.has(this.props.record, 'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
             var imgs = [];
-            var media = this.props.record._source.mediarecords;
+            var media = this.props.record.indexTerms.mediarecords;
             for(id in media){
                 if(media[id] != this.props.key){
                     imgs.push(
@@ -165,10 +162,10 @@ var Raw = require('./shared/raw');
 
 module.exports = React.createClass({displayName: 'exports',
     render: function(){
-        var source = this.props.mediarecord._source;
+        var source = this.props.mediarecord;
         var name ='',info=[];
-        if(_.has(this.props.record, '_source')){
-            var data = this.props.record._source['data']['idigbio:data'];
+        if(_.has(this.props.record, 'indexTerms')){
+            var data = this.props.record.data;
             var title = '';
             //build title
             if(_.has(data,'dwc:scientificName')) { 
@@ -209,24 +206,24 @@ module.exports = React.createClass({displayName: 'exports',
                         React.DOM.div({id: "data-container", className: "clearfix"}, 
                             name, 
                             React.DOM.div({id: "data-content"}, 
-                                Media({key: source.uuid, data: source.data['idigbio:data']})
+                                Media({key: source.uuid, data: source.data})
                             ), 
                             React.DOM.div({id: "data-meta", className: "clearfix"}, 
                                 React.DOM.div({id: "actions"}, 
-                                    Buttons({links: source.data['idigbio:links']})
+                                    Buttons({data: source.indexTerms})
                                 ), 
                                 React.DOM.div({id: "data-table", className: "clearfix"}, 
                                     React.DOM.h4({className: "title"}, "Media Metadata"), 
-                                    Table({record: source.data['idigbio:data']})
+                                    Table({record: source.data})
                                 )
                             ), 
                             Group({record: this.props.record, key: source.uuid}), 
-                            Provider({data: this.props.provider})
+                            Provider({data: this.props.mediarecord.attribution})
                             
                         )
                     )
                 ), 
-                Raw({data: source.data['idigbio:data']})
+                Raw({data: source.data})
             )
         )
     }

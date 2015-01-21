@@ -22,7 +22,7 @@ module.exports = Main = React.createClass({
                 fulltext:'',
                 image:false,
                 geopoint:false,
-                sorting:[{name: 'genus', order: 'asc'}],
+                sorting:[],
                 from: 0,
                 size: 100,
                 bounds:{
@@ -90,6 +90,9 @@ var SearchAny = React.createClass({
     textType: function(event){
         this.props.searchChange('fulltext',event.currentTarget.value);
     },
+    resetSearch: function(){
+        this.props.searchChange(Main.defaultSearch());
+    },
     render: function(){
 
         return(
@@ -97,7 +100,7 @@ var SearchAny = React.createClass({
                 <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching</h3>
                 <div className="input-group">
                     <input type="text" className="form-control" placeholder="search any field" onChange={this.textType} value={this.props.search.fulltext}/>
-                    <a className="btn input-group-addon"><i className="glyphicon glyphicon-search"></i></a>
+                    <a className="btn input-group-addon" onClick={this.resetSearch}><i className="glyphicon glyphicon-refresh"></i></a>
                 </div>
                 <div className="checkbox">
                     <label>
@@ -131,6 +134,7 @@ var OptionsPanel = React.createClass({
         })
         return false 
     },
+
     render: function(){
         var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
         Object.keys(panels).forEach(function(item,ind){
@@ -140,7 +144,7 @@ var OptionsPanel = React.createClass({
                 panels[item]='';
             }
             menu.push(
-                <li key={ind}>
+                <li key={ind} className="tab">
                     <a className={panels[item]} href="#" onClick={self.showPanel} data-panel={item}>{helpers.firstToUpper(item)}</a>
                 </li>
             )

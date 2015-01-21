@@ -16,6 +16,8 @@ var Media = React.createClass({
             link = this.props.data['ac:accessURI'];
         }else if(_.has(this.props.data,'ac:bestQualityAccessURI')){
             link = this.props.data['ac:bestQualityAccessURI'];
+        }else if(_.has(this.props.data, 'dcterms:identifier')){
+            link = this.props.data['dcterms:identifier'];
         }
 
         return (

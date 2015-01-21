@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-
+var InfiniteScroll = require('react-infinite-scroll')(React);
 
 module.exports = Results =  React.createClass({displayName: 'Results',
 
@@ -12,7 +12,7 @@ module.exports = Results =  React.createClass({displayName: 'Results',
         if(!localStorage || _.isUndefined(localStorage.viewType)){
             localStorage.setItem('viewType','list');
         }
-        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search};
+        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search, hasMore: false};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         //
@@ -39,13 +39,17 @@ module.exports = Results =  React.createClass({displayName: 'Results',
                     //make sure last query run is the last one that renders
                     //as responses can be out of order
                     if(now>= self.lastQueryTime){
-                        var res;
+                        var res, more=false;
                         if(searchState.from > 0){
                             res = self.state.results.concat(response.items);
                         }else{
                             res = response.items;
                         }
-                        self.setState({results: res, total: response.itemCount},function(){
+
+                        if(response.itemCount > (searchState.from+searchState.size)){
+                            more=true;
+                        }
+                        self.setState({results: res, total: response.itemCount, hasMore: more},function(){
                             self.forceUpdate();
                         });
                     }
@@ -90,6 +94,16 @@ module.exports = Results =  React.createClass({displayName: 'Results',
             }
         }
     },
+    loadMoreResults: function(){
+        var search = _.cloneDeep(this.state.search);
+
+        if(this.state.total > search.from + search.size){
+            search.from += search.size;
+            this.setState({search: search},function(){
+               this.getResults(); 
+            }); 
+        }
+    },
     render: function(){
         var search = this.props.search, self=this, li=[], results;
         switch(this.state.view){
@@ -122,7 +136,9 @@ module.exports = Results =  React.createClass({displayName: 'Results',
                 React.DOM.div({className: "pull-right total"}, 
                     "Total: ", helpers.formatNum(parseInt(this.state.total))
                 ), 
+
                 results
+
             )
         )
     }
@@ -216,8 +232,9 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         var rows=[];
         var headers=[];
         //results table
+        var sorted = _.isEmpty(self.props.search.sorting) ? {name: undefined} : self.props.search.sorting[0];
+        var style={width: (Math.floor(100/columns.length))+'%'};
         columns.forEach(function(item){
-            var style={width: (Math.floor(100/columns.length))+'%'}, sorted=self.props.search.sorting[0];
             if(sorted.name===item){
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
                 headers.push(
@@ -522,7 +539,7 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
             return !_.isEmpty(i);
         })
         return (
-            React.DOM.a({className: "image", target: "_new", href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
+            React.DOM.a({className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
                 React.DOM.span({className: "img-count"}, count), 
                 React.DOM.img({alt: "loading...", 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 

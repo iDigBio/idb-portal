@@ -78,6 +78,7 @@ module.exports = React.createClass({
                 sorts.push(
                     <div className="option-group" key={ind}>
                         <label>Sort by</label>
+                        <button onClick={self.removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>
                         <select className="name form-control" value={item.name} onChange={self.sortChange} data-index={ind} data-name='name'>
                             {fgroups}
                         </select>

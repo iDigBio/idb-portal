@@ -183,6 +183,12 @@ module.exports = (function(){
 
         this.buildQueryShim = function(search){
             var idbq = {}, reg = /\d{4}-\d{1,2}-\d{1,2}/;
+            if(!_.isEmpty(search.fulltext)){
+                idbq["data"]={
+                    "type":"fulltext",
+                    "value": search.fulltext
+                }
+            }
             search.filters.forEach(function(item){
                 var term = item.name;//fields.byName[item.name].term;
                 if(item.exists){
@@ -215,6 +221,7 @@ module.exports = (function(){
                     }
                 }
             })
+
             var geobounds = {}; //collects geobounds field values
             _.each(search.bounds,function(val,key){
                 _.each(val, function(v,k){

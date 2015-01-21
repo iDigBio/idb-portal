@@ -22,7 +22,7 @@ module.exports = Main = React.createClass({displayName: 'Main',
                 fulltext:'',
                 image:false,
                 geopoint:false,
-                sorting:[{name: 'genus', order: 'asc'}],
+                sorting:[],
                 from: 0,
                 size: 100,
                 bounds:{
@@ -90,6 +90,9 @@ var SearchAny = React.createClass({displayName: 'SearchAny',
     textType: function(event){
         this.props.searchChange('fulltext',event.currentTarget.value);
     },
+    resetSearch: function(){
+        this.props.searchChange(Main.defaultSearch());
+    },
     render: function(){
 
         return(
@@ -97,7 +100,7 @@ var SearchAny = React.createClass({displayName: 'SearchAny',
                 React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching"), 
                 React.DOM.div({className: "input-group"}, 
                     React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.props.search.fulltext}), 
-                    React.DOM.a({className: "btn input-group-addon"}, React.DOM.i({className: "glyphicon glyphicon-search"}))
+                    React.DOM.a({className: "btn input-group-addon", onClick: this.resetSearch}, React.DOM.i({className: "glyphicon glyphicon-refresh"}))
                 ), 
                 React.DOM.div({className: "checkbox"}, 
                     React.DOM.label(null, 
@@ -131,6 +134,7 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
         })
         return false 
     },
+
     render: function(){
         var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
         Object.keys(panels).forEach(function(item,ind){
@@ -140,7 +144,7 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
                 panels[item]='';
             }
             menu.push(
-                React.DOM.li({key: ind}, 
+                React.DOM.li({key: ind, className: "tab"}, 
                     React.DOM.a({className: panels[item], href: "#", onClick: self.showPanel, 'data-panel': item}, helpers.firstToUpper(item))
                 )
             )

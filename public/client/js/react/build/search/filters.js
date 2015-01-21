@@ -55,18 +55,7 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
                 );  
         }
     },
-    resetFilters: function(){
-        var self=this;
-        //this.setState({filters: self.defaultFilters()},function(){
-            self.props.searchChange({
-                'filters': Filters.defaultFilters(),
-                'image': false,
-                'geopoint': false,
-                'fulltext': ''
-            });
-            //self.props.searchChange('image', false);
-        //});
-    },
+
     clearFilters: function(){
         var filters=[],self=this;
         this.props.filters.forEach(function(item){
@@ -159,9 +148,6 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
                     ), 
                     React.DOM.a({className: "btn", onClick: this.clearFilters}, 
                         "Clear"
-                    ), 
-                    React.DOM.a({className: "btn", onClick: this.resetFilters}, 
-                        "Reset"
                     )
                 ), 
                 React.DOM.div({id: "filters-holder", className: "options-holder"}, 

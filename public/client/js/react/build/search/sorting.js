@@ -78,6 +78,7 @@ module.exports = React.createClass({displayName: 'exports',
                 sorts.push(
                     React.DOM.div({className: "option-group", key: ind}, 
                         React.DOM.label(null, "Sort by"), 
+                        React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
                         React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
                             fgroups
                         ), 

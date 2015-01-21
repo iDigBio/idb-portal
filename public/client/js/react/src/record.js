@@ -53,7 +53,6 @@ var Section = React.createClass({
             var key = Object.keys(fld)[0];
             var name = _.isUndefined(dwc.names[key]) ? key : dwc.names[key];
             var regex = /(https?:\/\/(\S|\w)+)/;
-            console.log('key is: ' +key)
             var val = fld[key];
             if(_.isString(val)){
                val = val.replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");

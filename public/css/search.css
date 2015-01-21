@@ -695,11 +695,11 @@ input::-webkit-input-placeholder {
   position: relative;
   z-index: 22;
 }
-#options #options-menu li {
+#options #options-menu li.tab {
   display: inline;
   margin: 0px 2px;
 }
-#options #options-menu li a {
+#options #options-menu li.tab a {
   text-decoration: none;
   color: #333;
   border: 1px solid #cccccc;
@@ -708,16 +708,19 @@ input::-webkit-input-placeholder {
   background-color: white;
   z-index: 1;
 }
-#options #options-menu li a:hover {
+#options #options-menu li.tab a:hover {
   cursor: pointer;
 }
-#options #options-menu li a.active {
+#options #options-menu li.tab a.active {
   background-color: #f0f0f0;
   border-bottom: 1px solid #f0f0f0;
   padding-bottom: 3px;
 }
-#options #options-menu li a.active:hover {
+#options #options-menu li.tab a.active:hover {
   cursor: auto;
+}
+#options #reset-button {
+  float: right;
 }
 #options .section {
   display: none;

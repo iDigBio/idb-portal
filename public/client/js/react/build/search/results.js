@@ -3,7 +3,6 @@
  */
 
 var React = require('react');
-var InfiniteScroll = require('react-infinite-scroll')(React);
 
 module.exports = Results =  React.createClass({displayName: 'Results',
 

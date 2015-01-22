@@ -29,7 +29,7 @@ module.exports = IDBMap =  function(elid, options){
     }
     //init map
     this.map = L.map(elid,this.defaults);
-    this.map.addControl(new ExpandButton());
+    this.map.addControl(new MaximizeButton());
     //add modal pane for expanded view
     $('body').append('<div id="mapper-modal"></div>');
     //
@@ -61,25 +61,30 @@ module.exports = IDBMap =  function(elid, options){
     }
 }
 
-    /*
-    * Map Controls
-    ****/
-var ExpandButton =  L.Control.extend({
+/*
+* Map Controls
+****/
+var resizeFunction = _.noop;
+
+var MaximizeButton =  L.Control.extend({
     options: {
         position:"topright"
     },
     _div: L.DomUtil.create('div', 'map-button'),
-    onAdd: function(map){
-        var selfish = this;
-        this._div.innerHTML = '<div title="maximize map" id="map-expand-button" class="map-button-icon"></div>';
-        var cont = map.getContainer();
-        L.DomEvent.addListener(this._div, 'click', function (e) {
+    expandFunc: function(map,control){
+        return function (e) {
             L.DomEvent.stopPropagation(e);
             var width = $(window).width(), height = $(window).height();
+            var cont = map.getContainer(), contwidth = $(cont).width(), contheight = $(cont).height();
             var pos = $(cont).position();
-            $(cont).css('position', 'fixed').css('top',pos.top+'px').css('left',pos.left+'px').css('z-index','550');
+            $(cont).css('position', 'fixed')
+            .css('top',pos.top+'px')
+            .css('left',pos.left+'px')
+            .css('width',contwidth+'px')
+            .css('height',contheight+'px')
+            .css('z-index','550');
             $(cont).animate({width: (width-53), height: (height-53), margin: 25, left:0,top:0},{
-                duration: 300,
+                duration: 200,
                 complete: function(){
                     $('#mapper-modal').show();
                     map.invalidateSize();
@@ -88,12 +93,56 @@ var ExpandButton =  L.Control.extend({
                     map.invalidateSize();
                 }
             });
-            map.removeControl(selfish);
-        });
+            map.removeControl(control);
+            resizeFunction = function(){
+                var width = $(window).width(), height = $(window).height();
+                $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
+                $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
+                map.invalidateSize()
+            };
+            L.DomEvent.addListener(window, 'resize', resizeFunction);
+        }
+    },
+    onAdd: function(map){
+        this.map = map;
+        this._div.innerHTML = '<div title="maximize map" id="map-maximize-button" class="map-button-icon"></div>';
+        this.expandClick = this.expandFunc(map,this);
+        L.DomEvent.addListener(this._div, 'click', this.expandClick);
         return this._div;
     },
     onRemove: function(map){
-        
+        L.DomEvent.removeListener(this._div, 'click', this.expandClick);
+        map.addControl(new MinimizeButton());
+    }
+});
+
+var MinimizeButton = L.Control.extend({
+    options: {
+        position:"topright"
+    },
+    _div: L.DomUtil.create('div', 'map-button'),
+    contractFunc: function(map,control){
+        return function (e) {
+            L.DomEvent.stopPropagation(e);
+            $('#mapper-modal').hide();
+            var cont = map.getContainer();
+            $(cont).removeAttr('style');
+            map.invalidateSize();//.setView([0,0],0);
+            //map.zoomOut();
+            map.removeControl(control);
+        }
+    },
+    onAdd: function(map){
+        this.map = map;
+        this._div.innerHTML = '<div title="minimize map" id="map-minimize-button" class="map-button-icon"></div>';
+        this.contractClick = this.contractFunc(map,this);
+        L.DomEvent.addListener(this._div, 'click', this.contractClick);
+        return this._div;
+    },
+    onRemove: function(map){
+        L.DomEvent.removeListener(this._div, 'click', this.contractClick);
+        L.DomEvent.removeListener(window, 'resize', resizeFunction);
+        map.addControl(new MaximizeButton());
     }
 });
 

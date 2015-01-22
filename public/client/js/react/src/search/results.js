@@ -179,7 +179,7 @@ var ResultsList = React.createClass({
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
         var dir, search = _.cloneDeep(this.props.search), name=e.currentTarget.attributes['data-term'].value,
-        sort={name: name}, sorting=search.sorting;
+        sort={name: name}, sorting=search.sorting, curlength = sorting.length;
         if(_.isUndefined(e.currentTarget.attributes['data-sort'])){
             dir='asc';
         }else{
@@ -196,7 +196,7 @@ var ResultsList = React.createClass({
             sorting.splice(ind,1);
         }
         sorting.unshift(sort);
-        if(sorting.length>len){
+        if(sorting.length>curlength){
             sorting.pop();
         }
         this.props.searchChange('sorting',sorting);

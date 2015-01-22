@@ -655,6 +655,7 @@ input::-webkit-input-placeholder {
   height: 496px;
   border: 1px solid #cccccc;
   border-radius: 4px;
+  position: relative;
 }
 #search {
   width: 450px;

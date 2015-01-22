@@ -107,7 +107,7 @@ module.exports = React.createClass({
         return (
             <div className={"clearfix section "+this.props.active} id="sorting">
                 <div id="sort-add">
-                     Add another sort &nbsp;<button onClick={this.addClick}><span className="glyphicon glyphicon-plus"></span></button>
+                     Add a sort &nbsp;<button onClick={this.addClick}><span className="glyphicon glyphicon-plus"></span></button>
                 </div>
                 <div id="sort-group">
                     {sorts}

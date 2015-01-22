@@ -70,7 +70,7 @@ var MaximizeButton =  L.Control.extend({
     options: {
         position:"topright"
     },
-    _div: L.DomUtil.create('div', 'map-button'),
+    _div: L.DomUtil.create('a', 'map-button'),
     expandFunc: function(map,control){
         return function (e) {
             L.DomEvent.stopPropagation(e);
@@ -120,14 +120,14 @@ var MinimizeButton = L.Control.extend({
     options: {
         position:"topright"
     },
-    _div: L.DomUtil.create('div', 'map-button'),
+    _div: L.DomUtil.create('a', 'map-button'),
     contractFunc: function(map,control){
         return function (e) {
             L.DomEvent.stopPropagation(e);
             $('#mapper-modal').hide();
             var cont = map.getContainer();
             $(cont).removeAttr('style');
-            map.invalidateSize();//.setView([0,0],0);
+            map.invalidateSize();
             //map.zoomOut();
             map.removeControl(control);
         }

@@ -28,7 +28,7 @@ module.exports = React.createClass({displayName: 'exports',
         return false;
     },
     componentWillReceiveProps: function(nextProps){
-        var q = this.makeMapQuery({search: nextProps.search });
+        var q = this.makeMapQuery({search: nextProps.search, type: 'point' });
         var next=JSON.stringify(q);
         //debugger
         if(next!==this.currentQuery){

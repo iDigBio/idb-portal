@@ -1,0 +1,14 @@
+#map-expand-button {
+  background-color: white;
+  background-image: url('//idigbio.org/portal/img/expand2.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  box-shadow: 0px 0px 5px #333;
+  border-radius: 4px;
+  width: 26px;
+  height: 26px;
+  padding: 2px;
+}
+#map-expand-button:hover {
+  cursor: pointer;
+}

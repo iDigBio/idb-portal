@@ -110,9 +110,7 @@ module.exports = React.createClass({
                      Add another sort &nbsp;<button onClick={this.addClick}><span className="glyphicon glyphicon-plus"></span></button>
                 </div>
                 <div id="sort-group">
-                 
-                        {sorts}
-
+                    {sorts}
                 </div>
             </div>
         )

@@ -42,7 +42,7 @@ module.exports = React.createClass({
                 <div className="option-group" id="mapping-options"> 
                     <span className="title">Lat/Lon Bounding Box</span>
                     <a className="btn" onClick={this.resetBounds}>
-                        Reset
+                        Clear
                     </a>
                     <div className="ordinates clearfix">
                         <label className="title">NorthWest</label>

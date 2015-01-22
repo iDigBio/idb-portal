@@ -36,6 +36,7 @@ var Media = React.createClass({displayName: 'Media',
 var Buttons = React.createClass({displayName: 'Buttons',
     render: function(){
         var el=[];
+        debugger
         if(_.has(this.props.data,'records')){
             var link = '/portal/records/'+this.props.data.records[0];
             el.push(
@@ -200,7 +201,7 @@ module.exports = React.createClass({displayName: 'exports',
             )
             //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
         }
-
+        debugger
         return (
             React.DOM.div({className: "container-fluid"}, 
                 React.DOM.div({className: "row-fluid"}, 

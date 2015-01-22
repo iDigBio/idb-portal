@@ -1,6 +1,6 @@
 
 var L = require('leaflet/dist/leaflet');
-
+var $ = require('jquery');
 //elid: string name of element id;
 //options: object map of settings
 /*
@@ -28,6 +28,8 @@ module.exports = IDBMap =  function(elid, options){
     }
     
     this.map = L.map(elid,this.defaults);
+    this.map.addControl(new ExpandButton());
+
     this.currentQueryTime = 0;
     var idblayer;
     
@@ -55,3 +57,32 @@ module.exports = IDBMap =  function(elid, options){
         })
     }
 }
+
+    /*
+    * Map Controls
+    ****/
+var ExpandButton =  L.Control.extend({
+    options: {
+        position:"topright"
+    },
+    _div: L.DomUtil.create('div', 'map-button'),
+    onAdd: function(map){
+        var selfish = this;
+        this._div.innerHTML = '<div title="maximize map" id="map-expand-button" class="map-button-icon"></div>';
+        return this._div;
+    }
+});
+
+var drawZoomButton = L.Control.extend({
+    options: {
+        position:"topright"
+    },
+    _div: L.DomUtil.create('div', 'drawzoom-div map-button'),
+    onAdd: function(map){     
+        this._div.innerHTML = '<div class="drawzoom-button map-button-icon" title="activate draw zoom"></div>';   
+        return this._div;
+    },
+    onRemove: function(map){
+        return this._div;
+    }
+});

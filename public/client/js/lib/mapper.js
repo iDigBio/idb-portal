@@ -34,8 +34,9 @@ module.exports = IDBMap =  function(elid, options){
     $('body').append('<div id="mapper-modal"></div>');
     //
     var popup = L.popup(), mapCode, self=this;
+    var mapapi = "//localhost:19196/v2/mapping/";
     this.map.on('click', function(e) {
-        $.getJSON("http://localhost:19196/v2/mapping/" + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
+        $.getJSON(mapapi + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             
             popup
                 .setLatLng(e.latlng)
@@ -52,7 +53,7 @@ module.exports = IDBMap =  function(elid, options){
 
         var time = d.getTime();
         self.currentQueryTime=time;
-        $.ajax('http://localhost:19196/v2/mapping/',{
+        $.ajax(mapapi,{
             data: q,
             success: function(resp){
                 //console.log(resp.shortCode)

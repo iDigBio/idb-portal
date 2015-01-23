@@ -33,6 +33,16 @@ module.exports = IDBMap =  function(elid, options){
     //add modal pane for expanded view
     $('body').append('<div id="mapper-modal"></div>');
     //
+    var popup = L.popup(), mapCode, self=this;
+    this.map.on('click', function(e) {
+        $.getJSON("http://localhost:19196/v2/mapping/" + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
+            
+            popup
+                .setLatLng(e.latlng)
+                .setContent("You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.")
+                .openOn(self.map);
+        });
+    });  
     this.currentQueryTime = 0;
     var idblayer;
     
@@ -48,6 +58,7 @@ module.exports = IDBMap =  function(elid, options){
                 //console.log(resp.shortCode)
                 //make sure last query run is the last one that renders
                 //as responses can be out of order
+                mapCode = resp.shortCode;
                 if(time>=self.currentQueryTime){
                     if(typeof idblayer == 'object'){
                         self.map.removeLayer(idblayer);

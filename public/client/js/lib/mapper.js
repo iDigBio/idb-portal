@@ -34,7 +34,7 @@ module.exports = IDBMap =  function(elid, options){
     $('body').append('<div id="mapper-modal"></div>');
     //
     var popup = L.popup(), mapCode, self=this;
-    var mapapi = "//localhost:19196/v2/mapping/";
+    var mapapi = "//beta-search.idigbio.org/v2/mapping/";
     this.map.on('click', function(e) {
         $.getJSON(mapapi + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             

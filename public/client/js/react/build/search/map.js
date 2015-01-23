@@ -15,20 +15,23 @@ module.exports = React.createClass({displayName: 'exports',
             params["style"]=settings.style;
         }
         if(_.has(settings,'type')){
-            params['type']=settings.type
+            params['type']=settings.type;
+        }
+        if(_.has(settings, 'threshold')){
+            params['threshold']=settings.threshold;
         }
         return params;
     },
     componentDidMount: function(){
         map = new IDBMap('map');
-        var query = this.makeMapQuery({search: this.props.search});
+        var query = queryBuilder.buildQueryShim(this.props.search);
         map.query(query)
     },
     shouldComponentUpdate: function(){
         return false;
     },
     componentWillReceiveProps: function(nextProps){
-        var q = this.makeMapQuery({search: nextProps.search, type: 'point' });
+        var q = queryBuilder.buildQueryShim(nextProps.search);
         var next=JSON.stringify(q);
         //debugger
         if(next!==this.currentQuery){

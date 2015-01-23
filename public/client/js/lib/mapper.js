@@ -37,10 +37,12 @@ module.exports = IDBMap =  function(elid, options){
     var idblayer;
     
     this.query = function(idbquery){
-        var q = JSON.stringify(idbquery),self=this, d = new Date;
+        var query = {rq: idbquery, type: 'auto', threshold: 10000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+        var q = JSON.stringify(query),self=this, d = new Date;
+
         var time = d.getTime();
         self.currentQueryTime=time;
-        $.ajax('//beta-search.idigbio.org/v2/mapping/',{
+        $.ajax('http://localhost:19196/v2/mapping/',{
             data: q,
             success: function(resp){
                 //console.log(resp.shortCode)

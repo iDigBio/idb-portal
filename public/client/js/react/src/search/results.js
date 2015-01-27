@@ -196,7 +196,7 @@ var ResultsList = React.createClass({
             sorting.splice(ind,1);
         }
         sorting.unshift(sort);
-        if(sorting.length>curlength){
+        if(sorting.length>curlength && curlength > 0){
             sorting.pop();
         }
         this.props.searchChange('sorting',sorting);

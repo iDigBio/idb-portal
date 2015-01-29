@@ -10,6 +10,7 @@ var gulp = require('gulp'),
     browserify = require('gulp-browserify'),
     react = require('gulp-react'),
     less = require('gulp-less'),
+    uglify = require('gulp-uglify'),
     path = require('path');
 
 gulp.task('default',function(){
@@ -34,6 +35,7 @@ gulp.task('default',function(){
         .on('error',function(e){
             gutil.log('Browserify Error:', e);
         })
+        //.pipe(uglify())
         .pipe(source('app.js'))
         .pipe(gulp.dest('./public/js'))
     }
@@ -57,5 +59,15 @@ gulp.task('libs', function(){
     .pipe(browserify({
         insertGlobals: true
     }))
+    .pipe(uglify())
+    .pipe(gulp.dest('./public/js'))
+});
+
+gulp.task('mapper', function(){
+    gulp.src('./public/client/idbmap.js')
+    .pipe(browserify({
+        insertGlobals: true
+    }))
+    .pipe(uglify())
     .pipe(gulp.dest('./public/js'))
 });

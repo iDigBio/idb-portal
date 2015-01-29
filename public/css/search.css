@@ -66,6 +66,11 @@
     height: 233px;
   }
 }
+@media (max-width: 1060px) {
+  #filters #filters-holder {
+    height: 231px;
+  }
+}
 #filters #filters-holder .filter-trans-enter {
   opacity: 0.01;
   transition: opacity 0.4s ease-in;
@@ -121,6 +126,11 @@
     width: 220px;
   }
 }
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .text textarea {
+    width: 240px;
+  }
+}
 #filters #filters-holder .filter .text.syn textarea {
   width: 199px;
   margin-right: 0px;
@@ -128,6 +138,11 @@
 @media (max-width: 992px) {
   #filters #filters-holder .filter .text.syn textarea {
     width: 160px;
+  }
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .text.syn textarea {
+    width: 180px;
   }
 }
 #filters #filters-holder .filter .text.syn a {
@@ -166,6 +181,11 @@
     width: 110px;
   }
 }
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .dates input.date {
+    width: 120px;
+  }
+}
 #filters #filters-holder .filter .presence {
   width: 260px;
   float: right;
@@ -176,6 +196,11 @@
 @media (max-width: 992px) {
   #filters #filters-holder .filter .presence {
     width: 220px;
+  }
+}
+@media (max-width: 1060px) {
+  #filters #filters-holder .filter .presence {
+    width: 240px;
   }
 }
 #filters #filters-holder .filter .presence .checkbox {
@@ -796,20 +821,13 @@ input::-webkit-input-placeholder {
         width:54%;
     }
 }*/
-@media (max-width: 960px) {
-  #search {
-    width: 355px;
-  }
-  #map {
-    margin-left: 360px;
-  }
-}
 @media (max-width: 600px) {
   #search {
     float: none;
     width: 90%;
     margin: 10px 20px;
     border-left: 1px solid #cccccc;
+    height: 466px;
   }
   #filter-selects select {
     width: 160px;

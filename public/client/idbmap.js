@@ -1,0 +1,1 @@
+window.IDBMap = require('./js/lib/mapper');

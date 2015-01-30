@@ -128,11 +128,8 @@ module.exports = Filters = React.createClass({
             );
         });
         //filters
-        var filters = [];
-        _.each(this.props.filters,function(item){
-            filters.push(
-                self.makeFilter(item)
-            )
+        var filters = _.map(this.props.filters,function(item){
+            return self.makeFilter(item)
         })
 
         var scrollDisplay = 'none';

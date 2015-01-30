@@ -48,7 +48,7 @@ module.exports = IDBMap =  function(elid, options){
     var idblayer;
     
     this.query = function(idbquery){
-        var query = {rq: idbquery, type: 'auto', threshold: 10000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+        var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query),self=this, d = new Date;
  
         var time = d.getTime();
@@ -70,7 +70,8 @@ module.exports = IDBMap =  function(elid, options){
             },
             dataType: 'json',
             contentType: 'application/json',
-            type: 'POST'
+            type: 'POST',
+            crossDomain: true
         })
     }
 }

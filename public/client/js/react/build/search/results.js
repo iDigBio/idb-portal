@@ -104,16 +104,19 @@ module.exports = Results =  React.createClass({displayName: 'Results',
         }
     },
     render: function(){
-        var search = this.props.search, self=this, li=[], results;
+        var search = this.props.search, self=this, li=[], Display, klass;
         switch(this.state.view){
             case 'list':
-                results = ResultsList({search: this.state.search, results: this.state.results, searchChange: this.props.searchChange});
+                Display = React.createFactory(ResultsList);
+                results = Display( {search: this.state.search, results: this.state.results, searchChange: this.props.searchChange} );
                 break
             case 'labels':
-                results = ResultsLabels({results: this.state.results});
+                Display = React.createFactory(ResultsLabels);
+                results = Display(  {results: this.state.results} );
                 break
             case 'images':
-                results = ResultsImages({search: this.state.search, results: this.state.results});
+                Display = React.createFactory(ResultsImages);
+                results = Display(  {search: this.state.search, results: this.state.results} );
                 break;
         }
         ['list','labels','images'].forEach(function(item){

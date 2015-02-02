@@ -104,7 +104,7 @@ module.exports = Downloads = React.createClass({
         var options = [],self=this, time='';
 
         //get count 
-
+        var downloader = React.createFactory(Downloader);
         searchHistory.history.forEach(function(item,ind){
             options.push(
                 <option key={'download-'+ind} value={ind}>{Downloads.queryToSentence(item)}</option>
@@ -118,7 +118,7 @@ module.exports = Downloads = React.createClass({
                         {options}
                     </select>
                 </div>
-                <Downloader search={this.props.search} time="calculating" />
+                <downloader search={this.props.search} time="calculating" />
             </div>
         )
     }

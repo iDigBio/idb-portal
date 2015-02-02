@@ -42,16 +42,19 @@ module.exports = Filters = React.createClass({
         var key= filter.name;// + Date.now();
         switch(filter.type){
             case 'text':
+                var textFilter = React.createFactory(TextFilter);
                 return(
-                    <TextFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <textFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 ); 
             case 'daterange':
+                var dateRange = React.createFactory(DateRangeFilter);
                 return (
-                    <DateRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <dateRange key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
             case 'numericrange':
+                var numericRange = React.createFactory(NumericRangeFilter);
                 return (
-                    <NumericRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <numericRange key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
         }
     },

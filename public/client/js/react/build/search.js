@@ -3,12 +3,12 @@
  */
 
 var React = require('react');
-var Filters = require('./search/filters');
-var Sorting = require('./search/sorting');
-var Mapping = require('./search/mapping');
-var Results = require('./search/results');
-var Download = require('./search/download');
-var Map = require('./search/map');
+var Filters = React.createFactory(require('./search/filters'));
+var Sorting = React.createFactory(require('./search/sorting'));
+var Mapping = React.createFactory(require('./search/mapping'));
+var Results = React.createFactory(require('./search/results'));
+var Download = React.createFactory(require('./search/download'));
+var Map = React.createFactory(require('./search/map'));
 
 var paramsParser = require('./search/lib/params_parser');
 
@@ -67,12 +67,14 @@ module.exports = Main = React.createClass({displayName: 'Main',
         searchHistory.push(search);
     },
     render: function(){
+        var any = React.createFactory(SearchAny);
+        var options = React.createFactory(OptionsPanel);
         return(
             React.DOM.div({id: "react-wrapper"}, 
                 React.DOM.div({id: "top", className: "clearfix"}, 
                     React.DOM.div({id: "search", className: "clearfix"}, 
-                        SearchAny({search: this.state.search, searchChange: this.searchChange}), 
-                        OptionsPanel({search: this.state.search, searchChange: this.searchChange})
+                        any({search: this.state.search, searchChange: this.searchChange}), 
+                        options({search: this.state.search, searchChange: this.searchChange})
                     ), 
                     Map({search: this.state.search})
                 ), 

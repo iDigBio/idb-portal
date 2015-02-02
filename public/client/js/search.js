@@ -3,10 +3,10 @@
  */
 
 var React = require('react')
-var SearchPage = require('./react/build/search');
+var SearchPage = React.createFactory(require('./react/build/search'));
 
 React.initializeTouchEvents(true);
-React.renderComponent(
+React.render(
     <SearchPage />,
     document.getElementById('main')
 )

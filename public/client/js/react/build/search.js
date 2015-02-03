@@ -3,7 +3,7 @@
  */
 
 var React = require('react');
-var Filters = React.createFactory(require('./search/filters'));
+var Filters = require('./search/filters');
 var Sorting = React.createFactory(require('./search/sorting'));
 var Mapping = React.createFactory(require('./search/mapping'));
 var Results = React.createFactory(require('./search/results'));
@@ -129,12 +129,12 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
         return {panels: localStorage.getItem('panels')}
     },
     showPanel: function(event){
-        event.preventDefault();
+        //event.preventDefault();
+        event.stopPropagation();
         var val = event.currentTarget.attributes['data-panel'].value;
         this.setState({panels: val},function(){
             localStorage.setItem('panels',val);
         })
-        return false 
     },
 
     render: function(){
@@ -151,12 +151,13 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
                 )
             )
         })
+        var filters = React.createFactory(Filters);
         return (
             React.DOM.div({id: "options", className: "clearfix"}, 
                 React.DOM.ul({id: "options-menu"}, 
                     menu
                 ), 
-                Filters({searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
+                filters({searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
                 Sorting({searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
                 Mapping({searchChange: this.props.searchChange, bounds: this.props.search.bounds, active: panels.mapping}), 
                 Download({search: this.props.search, searchChange: this.props.searchChange, active: panels.download})

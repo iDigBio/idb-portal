@@ -2,7 +2,7 @@
  * @jsx React.DOM
  */
 var React = require('react');
-var Chartist = require('react-chartist');
+var Chartist = React.createFactory(require('react-chartist'));
 
 module.exports = React.createClass({
 
@@ -20,7 +20,7 @@ module.exports = React.createClass({
             "ascomycota": "Fungi",
         }
         var results={};
-        var chart = {"series":[]};
+        var chart = {"series":[],"labels":[]};
         _.each(this.props.data.kingdom, function(v,k){
             if(_.isUndefined(results[kingdoms[k]])){
                 results[kingdoms[k]]=0;
@@ -30,16 +30,17 @@ module.exports = React.createClass({
         })
       
         _.each(results, function(v,k){
-            chart.series.push(v)
+            chart.series.push(v);
+            chart.labels.push(k + ' '+v);
         })
         var options = {
               chartPadding: 30,
-              labelOffset: 50,
+              labelOffset: 30,
               labelDirection: 'explode'
         }
         return(
             <div>
-                <Chartist data={chart} type={'Pie'} options />
+                <Chartist className="ct-chart ct-golden-section" data={chart} type={'Pie'} />
             </div>
         )
     }

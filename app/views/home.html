@@ -4,6 +4,9 @@
 <meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />
 <meta property="og:url" content="{{user.protocol}}://{{ user.host }}/portal" />
 <meta property="og:description" content="The iDigBio Specimen Portal provides access to millions of digitized natural history records gathered from institutions across the United States." />
+<link rel="stylesheet" type="text/css" href="/portal/components/chartist/dist/chartist.min.css">
+<script type="text/javascript" src="/portal/components/chartist/dist/chartist.min.js"></script>
+
 {% endblock %} {% block content %}
 <div class="row" id="portal-home">
     <div class="col-lg-5 col-lg-offset-1" class="clearfix">                        
@@ -29,7 +32,7 @@
 </div>
 <div class="row">
     <div class="col-lg-10 col-lg-offset-1" id="react-wrapper">
-
+        <div class="ct-chart ct-minor-second" style="max-width:300px;"></div>
     </div>
 </div>
 {% endblock %} 

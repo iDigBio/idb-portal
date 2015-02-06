@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 
 /*
 * Recordset View page.
@@ -24,15 +21,15 @@ var formatNum = function(num){
     return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-var Total = React.createClass({displayName: 'Total',
+var Total = React.createClass({displayName: "Total",
     render: function(){
         return (
-            React.DOM.span(null, formatNum(this.props.total))
+            React.createElement("span", null, formatNum(this.props.total))
         )
     }
 });
 
-var Fieldrow = React.createClass({displayName: 'Fieldrow',
+var Fieldrow = React.createClass({displayName: "Fieldrow",
     checkVal: function(val){
         if(_.isNaN(val)||val==='NaN'){
             return '-';
@@ -44,15 +41,15 @@ var Fieldrow = React.createClass({displayName: 'Fieldrow',
         var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
-            React.DOM.tr({key: this.props.key}, 
-                React.DOM.td(null, React.DOM.b(null, this.props.name), "  (", this.props.key, ")"), 
-                React.DOM.td({style: sty2, className: "value-column record-count"}, this.checkVal(this.props.total)), 
-                React.DOM.td({className: "value-column"}, 
-                    React.DOM.div({className: "perc-box"}, 
-                        React.DOM.span({className: "perc-bar", style: style}
+            React.createElement("tr", {key: this.props.keyid}, 
+                React.createElement("td", null, React.createElement("b", null, this.props.name), "  (", this.props.keyid, ")"), 
+                React.createElement("td", {style: sty2, className: "value-column record-count"}, this.checkVal(this.props.total)), 
+                React.createElement("td", {className: "value-column"}, 
+                    React.createElement("div", {className: "perc-box"}, 
+                        React.createElement("span", {className: "perc-bar", style: style}
                             
                         ), 
-                        React.DOM.span({className: "perc-text"}, 
+                        React.createElement("span", {className: "perc-text"}, 
                             this.checkVal(this.props.value)
                         )
                     )
@@ -62,28 +59,28 @@ var Fieldrow = React.createClass({displayName: 'Fieldrow',
     }
 });
 
-var FieldsTable = React.createClass({displayName: 'FieldsTable',
+var FieldsTable = React.createClass({displayName: "FieldsTable",
     render: function(){
         var self = this;
         var fieldrows = _.map(keys,function(key){
             var perc = Number(((100/self.props.stotal) * (self.props.stotal-self.props.missing[key])).toFixed(3));
-            return Fieldrow({key: key, name: fields.byDataTerm[key].name, total: formatNum(self.props.stotal-self.props.missing[key]), value: perc})
+            return React.createElement(Fieldrow, {key: key, keyid: key, name: fields.byDataTerm[key].name, total: formatNum(self.props.stotal-self.props.missing[key]), value: perc})
         });
         var sty = {'text-align': 'center'};
         return (
-            React.DOM.div({id: "fields-table"}, 
-                React.DOM.h2({className: "title"}, "Specimen Fields Used for Search"), 
-                React.DOM.div({className: "blurb"}, "This table represents the fields in specimen records that are used for iDigBio ", React.DOM.a({href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
+            React.createElement("div", {id: "fields-table"}, 
+                React.createElement("h2", {className: "title"}, "Specimen Fields Used for Search"), 
+                React.createElement("div", {className: "blurb"}, "This table represents the fields in specimen records that are used for iDigBio ", React.createElement("a", {href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
                  "records that provide the field."), 
-                React.DOM.table({className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
-                    React.DOM.thead(null, 
-                        React.DOM.tr(null, 
-                            React.DOM.th(null, "Field"), 
-                            React.DOM.th(null, "Records With This Field"), 
-                            React.DOM.th({style: sty}, "(%) Percent Used")
+                React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, 
+                            React.createElement("th", null, "Field"), 
+                            React.createElement("th", null, "Records With This Field"), 
+                            React.createElement("th", {style: sty}, "(%) Percent Used")
                         )
                     ), 
-                    React.DOM.tbody(null, 
+                    React.createElement("tbody", null, 
                         fieldrows
                     )
                 )
@@ -92,29 +89,29 @@ var FieldsTable = React.createClass({displayName: 'FieldsTable',
     }
 });
 
-var Title = React.createClass({displayName: 'Title',
+var Title = React.createClass({displayName: "Title",
     render: function(){
         return(
-            React.DOM.h1({id: "title"}, React.DOM.span(null, "Recordset:"), " ", this.props.key)
+            React.createElement("h1", {id: "title"}, React.createElement("span", null, "Recordset:"), " ", this.props.keyid)
         );
     }
 });
 
-var Description = React.createClass({displayName: 'Description',
+var Description = React.createClass({displayName: "Description",
     render: function(){
         var logo = [];
         if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
             logo.push(
-                React.DOM.img({className: "logo", src: this.props.data.logo_url})
+                React.createElement("img", {className: "logo", src: this.props.data.logo_url})
             );
         }
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
-            React.DOM.div({id: "description"}, 
-                React.DOM.p(null, 
+            React.createElement("div", {id: "description"}, 
+                React.createElement("p", null, 
                 logo, 
-                React.DOM.span({dangerouslySetInnerHTML: {__html: desc}}
+                React.createElement("span", {dangerouslySetInnerHTML: {__html: desc}}
                 )
                 )
             )
@@ -122,21 +119,21 @@ var Description = React.createClass({displayName: 'Description',
     }
 });
 
-var Last = React.createClass({displayName: 'Last',
+var Last = React.createClass({displayName: "Last",
     render: function(){
-       return(React.DOM.span(null, this.props.key));
+       return(React.createElement("span", null, this.props.keyid));
     }
 });
 
-var Buttons = React.createClass({displayName: 'Buttons',
+var Buttons = React.createClass({displayName: "Buttons",
     render: function(){
-        var search = JSON.stringify({recordset: this.props.key})
+        var search = JSON.stringify({recordset: this.props.keyid})
         return(
-            React.DOM.div({id: "buttons"}, 
-                React.DOM.a({href: '/portal/search?rq='+search}, 
-                   React.DOM.button({className: "btn button"}, "Search This Recordset")
+            React.createElement("div", {id: "buttons"}, 
+                React.createElement("a", {href: '/portal/search?rq='+search}, 
+                   React.createElement("button", {className: "btn button"}, "Search This Recordset")
                 ), 
-                React.DOM.button({'data-target': "#raw", 'data-toggle': "modal", className: "btn button"}, 
+                React.createElement("button", {"data-target": "#raw", "data-toggle": "modal", className: "btn button"}, 
                     "View Raw Data"
                 )
             )
@@ -144,7 +141,7 @@ var Buttons = React.createClass({displayName: 'Buttons',
     }
 });
 
-var Contacts = React.createClass({displayName: 'Contacts',
+var Contacts = React.createClass({displayName: "Contacts",
     render: function(){
         function check(val,prefix,postfix){
              var acc = [];
@@ -180,11 +177,11 @@ var Contacts = React.createClass({displayName: 'Contacts',
             var phone = check(contact.phone);
             var role = check(contact.role);
             return (
-                React.DOM.ul({className: "contact"}, 
-                    React.DOM.li(null, name), 
-                    React.DOM.li(null, role), 
-                    React.DOM.li(null, React.DOM.a({href: 'mailto: '+email}, email)), 
-                    React.DOM.li(null, phone)
+                React.createElement("ul", {className: "contact"}, 
+                    React.createElement("li", null, name), 
+                    React.createElement("li", null, role), 
+                    React.createElement("li", null, React.createElement("a", {href: 'mailto: '+email}, email)), 
+                    React.createElement("li", null, phone)
                 )
             );            
         }
@@ -197,9 +194,9 @@ var Contacts = React.createClass({displayName: 'Contacts',
 
         if(_.has(this.props.data,'institution_web_address') && !_.isEmpty(this.props.data.institution_web_address)){
             link = (
-                React.DOM.div({className: "wrapper"}, 
-                    React.DOM.div({className: "info"}, "Website"), 
-                    React.DOM.a({href: this.props.data.institution_web_address}, 
+                React.createElement("div", {className: "wrapper"}, 
+                    React.createElement("div", {className: "info"}, "Website"), 
+                    React.createElement("a", {href: this.props.data.institution_web_address}, 
                         this.props.data.institution_web_address
                     )
                 )
@@ -207,8 +204,8 @@ var Contacts = React.createClass({displayName: 'Contacts',
         }
 
         return (
-            React.DOM.div({id: "contacts", className: "clearfix"}, 
-                React.DOM.h2({className: "title"}, "Contacts"), 
+            React.createElement("div", {id: "contacts", className: "clearfix"}, 
+                React.createElement("h2", {className: "title"}, "Contacts"), 
                 contacts
             )
         )
@@ -217,37 +214,38 @@ var Contacts = React.createClass({displayName: 'Contacts',
 
 var Raw = require('./shared/raw');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     render: function(){
         var data = this.props.recordset._source.data['idigbio:data'];
         var id = this.props.recordset._source.data['idigbio:uuid'];
+        var last = data.update.substring(0,10);
         return (
-            React.DOM.div({id: "container"}, 
-                Title({key: data.collection_name}), 
-                Description({data: data}), 
-                Buttons({key: id}), 
-                React.DOM.div({id: "info", className: "clearfix"}, 
-                    React.DOM.div({className: "wrapper"}, 
-                        React.DOM.div({className: "info"}, "Total Specimen Records:",  
-                            React.DOM.span({id: "specimen-total"}, 
-                                " ", Total({key: 'Specimen', total: formatNum(this.props.stotal)})
+            React.createElement("div", {id: "container"}, 
+                React.createElement(Title, {key: data.collection_name, keyid: data.collection_name}), 
+                React.createElement(Description, {data: data}), 
+                React.createElement(Buttons, {key: id, keyid: id}), 
+                React.createElement("div", {id: "info", className: "clearfix"}, 
+                    React.createElement("div", {className: "wrapper"}, 
+                        React.createElement("div", {className: "info"}, "Total Specimen Records:",  
+                            React.createElement("span", {id: "specimen-total"}, 
+                                " ", React.createElement(Total, {key: 'Specimen', keyid: 'Specimen', total: formatNum(this.props.stotal)})
                             )
                         ), 
-                        React.DOM.div({className: "info"}, "Total Media Records:", 
-                            React.DOM.span({id: "media-total"}, 
-                                " ", Total({key: 'Media', total: formatNum(this.props.mtotal)})
+                        React.createElement("div", {className: "info"}, "Total Media Records:", 
+                            React.createElement("span", {id: "media-total"}, 
+                                " ", React.createElement(Total, {key: 'Media', keyid: 'Media', total: formatNum(this.props.mtotal)})
                             )
                         ), 
-                        React.DOM.div({className: "info"}, "Last Update:",  
-                            React.DOM.span({id: "last"}, 
-                                " ", Last({key: data.update.substring(0,10)})
+                        React.createElement("div", {className: "info"}, "Last Update:",  
+                            React.createElement("span", {id: "last"}, 
+                                " ", React.createElement(Last, {key: last, keyid: last})
                             )
                         )
                     )
                 ), 
-                Contacts({data: data}), 
-                FieldsTable({missing: this.props.missing, stotal: this.props.stotal}), 
-                Raw({data: data})
+                React.createElement(Contacts, {data: data}), 
+                React.createElement(FieldsTable, {missing: this.props.missing, stotal: this.props.stotal}), 
+                React.createElement(Raw, {data: data})
             )
         )
     }

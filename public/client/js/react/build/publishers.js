@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react')
 
@@ -288,7 +285,7 @@ function getCounts(o){
   return r
 }
 
-  var Recordset = React.createClass({displayName: 'Recordset',
+  var Recordset = React.createClass({displayName: "Recordset",
     render: function() {      
       if (hasCounts(this.props)) {
         var cts = getCounts(this.props);
@@ -297,22 +294,22 @@ function getCounts(o){
         })*/
 
         return (
-          React.DOM.tr(null, 
-            React.DOM.td(null, 
-              React.DOM.a({href: "/portal/recordsets/" + this.props.key}, this.props.name)
+          React.createElement("tr", null, 
+            React.createElement("td", null, 
+              React.createElement("a", {href: "/portal/recordsets/" + this.props.key}, this.props.name)
             ), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.digest_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.api_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.index_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.digest_mediarecord_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.api_mediarecord_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(cts.index_mediarecord_count))
+            React.createElement("td", {className: "valcol"}, formatNum(cts.digest_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(cts.api_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(cts.index_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(cts.digest_mediarecord_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(cts.api_mediarecord_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(cts.index_mediarecord_count))
           )
         );
       } else {
         var style = {"display": "none"}
         return (
-          React.DOM.tr({style: style}
+          React.createElement("tr", {style: style}
             /* this.props.key SKIPPED */
           )
         );
@@ -320,7 +317,7 @@ function getCounts(o){
     }        
   });
 
-  var Publisher = React.createClass({displayName: 'Publisher',
+  var Publisher = React.createClass({displayName: "Publisher",
     render: function() {
       var totals = {}
       count_types.forEach(function(ct){
@@ -333,32 +330,32 @@ function getCounts(o){
         _.each(cts,function(ct,key){
           totals[key] += ct;
         })
-        return Recordset({name: recordsets[reckey].name, key: reckey, index_record_count: cts.index_record_count, index_mediarecord_count: cts.index_mediarecord_count, api_record_count: cts.api_record_count, api_mediarecord_count: cts.api_mediarecord_count, digest_record_count: cts.digest_record_count, digest_mediarecord_count: cts.digest_mediarecord_count})
+        return React.createElement(Recordset, {name: recordsets[reckey].name, key: reckey, index_record_count: cts.index_record_count, index_mediarecord_count: cts.index_mediarecord_count, api_record_count: cts.api_record_count, api_mediarecord_count: cts.api_mediarecord_count, digest_record_count: cts.digest_record_count, digest_mediarecord_count: cts.digest_mediarecord_count})
       });
       var tds = _.map(totals,function(ct,key){
-        return React.DOM.td(null, ct)
+        return React.createElement("td", null, ct)
       })
       return (
-        React.DOM.div(null, 
-          React.DOM.h4({id: this.props.key}, this.props.name), 
-          React.DOM.table({className: "table table-bordered datatable table-condensed tablesorter-blue", id: this.props.key+'_table'}, 
-              React.DOM.thead(null, 
-                  React.DOM.tr(null, 
-                      React.DOM.th(null), 
-                      React.DOM.th({colSpan: "3", className: "top-header"}, "Record Count"), 
-                      React.DOM.th({colSpan: "3", className: "top-header"}, "Media Record Count")
+        React.createElement("div", null, 
+          React.createElement("h4", {id: this.props.key}, this.props.name), 
+          React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue", id: this.props.key+'_table'}, 
+              React.createElement("thead", null, 
+                  React.createElement("tr", null, 
+                      React.createElement("th", null), 
+                      React.createElement("th", {colSpan: "3", className: "top-header"}, "Record Count"), 
+                      React.createElement("th", {colSpan: "3", className: "top-header"}, "Media Record Count")
                   ), 
-                  React.DOM.tr(null, 
-                      React.DOM.th({className: "namecol"}, "Dataset Name"), 
-                      React.DOM.th({className: "statcol"}, "Digest"), 
-                      React.DOM.th({className: "statcol"}, "API"), 
-                      React.DOM.th({className: "statcol"}, "Index"), 
-                      React.DOM.th({className: "statcol"}, "Digest"), 
-                      React.DOM.th({className: "statcol"}, "API"), 
-                      React.DOM.th({className: "statcol"}, "Index")
+                  React.createElement("tr", null, 
+                      React.createElement("th", {className: "namecol"}, "Dataset Name"), 
+                      React.createElement("th", {className: "statcol"}, "Digest"), 
+                      React.createElement("th", {className: "statcol"}, "API"), 
+                      React.createElement("th", {className: "statcol"}, "Index"), 
+                      React.createElement("th", {className: "statcol"}, "Digest"), 
+                      React.createElement("th", {className: "statcol"}, "API"), 
+                      React.createElement("th", {className: "statcol"}, "Index")
                   )
               ), 
-              React.DOM.tbody(null, 
+              React.createElement("tbody", null, 
                   recsets
               )
           )
@@ -367,7 +364,7 @@ function getCounts(o){
     }        
   });
 
-  var PubSummaryRow = React.createClass({displayName: 'PubSummaryRow',
+  var PubSummaryRow = React.createClass({displayName: "PubSummaryRow",
     clickScroll: function(event) {
         scrollToId(this.props.key)
         return false
@@ -386,48 +383,48 @@ function getCounts(o){
         })  
       });   
       var tds = _.map(totals,function(ct,key){
-        return React.DOM.td(null, ct)
+        return React.createElement("td", null, ct)
       })       
       return (
-        React.DOM.tr(null, 
-            React.DOM.td(null, React.DOM.a({href: "#", onClick: this.clickScroll}, this.props.name)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.digest_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.api_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.index_record_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.digest_mediarecord_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.api_mediarecord_count)), 
-            React.DOM.td({className: "valcol"}, formatNum(totals.index_mediarecord_count))
+        React.createElement("tr", null, 
+            React.createElement("td", null, React.createElement("a", {href: "#", onClick: this.clickScroll}, this.props.name)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.digest_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.api_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.index_record_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.digest_mediarecord_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.api_mediarecord_count)), 
+            React.createElement("td", {className: "valcol"}, formatNum(totals.index_mediarecord_count))
         )
       );      
     }
   });
 
-  var PubSummary = React.createClass({displayName: 'PubSummary',
+  var PubSummary = React.createClass({displayName: "PubSummary",
      render: function() {
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return PubSummaryRow({name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
+        return React.createElement(PubSummaryRow, {name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
       });
       return (
-        React.DOM.div(null, 
-            React.DOM.h4(null, "Publisher Summary"), 
-            React.DOM.table({className: "table table-bordered datatable table-condensed tablesorter-blue", id: "publishers-table"}, 
-              React.DOM.thead(null, 
-                  React.DOM.tr(null, 
-                      React.DOM.th(null), 
-                      React.DOM.th({colSpan: "3", className: "top-header"}, "Record Count"), 
-                      React.DOM.th({colSpan: "3", className: "top-header"}, "Media Record Count")
+        React.createElement("div", null, 
+            React.createElement("h4", null, "Publisher Summary"), 
+            React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue", id: "publishers-table"}, 
+              React.createElement("thead", null, 
+                  React.createElement("tr", null, 
+                      React.createElement("th", null), 
+                      React.createElement("th", {colSpan: "3", className: "top-header"}, "Record Count"), 
+                      React.createElement("th", {colSpan: "3", className: "top-header"}, "Media Record Count")
                   ), 
-                  React.DOM.tr(null, 
-                      React.DOM.th(null, "Publisher Name"), 
-                      React.DOM.th({className: "statcol"}, "Digest"), 
-                      React.DOM.th({className: "statcol"}, "API"), 
-                      React.DOM.th({className: "statcol"}, "Index"), 
-                      React.DOM.th({className: "statcol"}, "Digest"), 
-                      React.DOM.th({className: "statcol"}, "API"), 
-                      React.DOM.th({className: "statcol"}, "Index")
+                  React.createElement("tr", null, 
+                      React.createElement("th", null, "Publisher Name"), 
+                      React.createElement("th", {className: "statcol"}, "Digest"), 
+                      React.createElement("th", {className: "statcol"}, "API"), 
+                      React.createElement("th", {className: "statcol"}, "Index"), 
+                      React.createElement("th", {className: "statcol"}, "Digest"), 
+                      React.createElement("th", {className: "statcol"}, "API"), 
+                      React.createElement("th", {className: "statcol"}, "Index")
                   )
               ), 
-              React.DOM.tbody(null, 
+              React.createElement("tbody", null, 
                 pubs
               )
             )
@@ -436,44 +433,44 @@ function getCounts(o){
     }
   });
 
-  var StatsTable = React.createClass({displayName: 'StatsTable',
+  var StatsTable = React.createClass({displayName: "StatsTable",
     render: function(){        
         return (
-            React.DOM.div(null, 
-                React.DOM.table({className: "table table-bordered table-condensed", id: "statstable"}, 
-                    React.DOM.tr(null, 
-                        React.DOM.th(null, " "), 
-                        React.DOM.th({className: "statcol"}, "Record Count"), 
-                        React.DOM.th({className: "statcol"}, "Media Record Count")
+            React.createElement("div", null, 
+                React.createElement("table", {className: "table table-bordered table-condensed", id: "statstable"}, 
+                    React.createElement("tr", null, 
+                        React.createElement("th", null, " "), 
+                        React.createElement("th", {className: "statcol"}, "Record Count"), 
+                        React.createElement("th", {className: "statcol"}, "Media Record Count")
                     ), 
-                    React.DOM.tr(null, 
-                        React.DOM.td(null, "Total from Providers"), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_digest_record_count)), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_digest_mediarecord_count))
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, "Total from Providers"), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_digest_record_count)), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_digest_mediarecord_count))
                     ), 
-                    React.DOM.tr(null, 
-                        React.DOM.td(null, "Total in API"), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_api_record_count)), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_api_mediarecord_count))
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, "Total in API"), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_api_record_count)), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_api_mediarecord_count))
                     ), 
-                    React.DOM.tr(null, 
-                        React.DOM.td(null, "Total Published (all data incorporated in new workflow)"), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_rsindex_record_count)), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_rsindex_mediarecord_count))
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, "Total Published (all data incorporated in new workflow)"), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_rsindex_record_count)), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_rsindex_mediarecord_count))
                     ), 
-                    React.DOM.tr(null, 
-                        React.DOM.td(null, "Total Indexed (all data) *"), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_index_record_count)), 
-                        React.DOM.td({className: "valcol"}, formatNum(this.props.total_index_mediarecord_count))
+                    React.createElement("tr", null, 
+                        React.createElement("td", null, "Total Indexed (all data) *"), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_index_record_count)), 
+                        React.createElement("td", {className: "valcol"}, formatNum(this.props.total_index_mediarecord_count))
                     )
                 ), 
-                React.DOM.p(null, "* Data that is marked deleted in iDigBio remains indexed until a cleanup is run.")
+                React.createElement("p", null, "* Data that is marked deleted in iDigBio remains indexed until a cleanup is run.")
             )
         )
     }
   })
 
-  var Page = React.createClass({displayName: 'Page',   
+  var Page = React.createClass({displayName: "Page",   
     render: function() {
       total_rsindex_record_count = 0;
       total_rsindex_mediarecord_count = 0;
@@ -503,12 +500,12 @@ function getCounts(o){
       })      
 
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return Publisher({name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
+        return React.createElement(Publisher, {name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
       });
       return (
-        React.DOM.div(null, 
-          StatsTable({total_index_record_count: total_index_record_count, total_index_mediarecord_count: total_index_mediarecord_count, total_api_record_count: total_api_record_count, total_api_mediarecord_count: total_api_mediarecord_count, total_rsindex_record_count: total_rsindex_record_count, total_rsindex_mediarecord_count: total_rsindex_mediarecord_count, total_digest_record_count: total_digest_record_count, total_digest_mediarecord_count: total_digest_mediarecord_count}), 
-          PubSummary(null), 
+        React.createElement("div", null, 
+          React.createElement(StatsTable, {total_index_record_count: total_index_record_count, total_index_mediarecord_count: total_index_mediarecord_count, total_api_record_count: total_api_record_count, total_api_mediarecord_count: total_api_mediarecord_count, total_rsindex_record_count: total_rsindex_record_count, total_rsindex_mediarecord_count: total_rsindex_mediarecord_count, total_digest_record_count: total_digest_record_count, total_digest_mediarecord_count: total_digest_mediarecord_count}), 
+          React.createElement(PubSummary, null), 
           pubs
         )
       );
@@ -522,7 +519,7 @@ function getCounts(o){
         requestAnimationFrame(page_render);
     } 
     React.renderComponent(
-      Page(null),
+      React.createElement(Page, null),
       document.getElementById('main')
     );  
 

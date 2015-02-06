@@ -6,7 +6,7 @@ var React = require('react');
 var IDBMap = require('../../../lib/mapper');
 
 var map; 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     currentQuery: '',
     makeMapQuery: function(settings){
         var params = {};
@@ -42,7 +42,7 @@ module.exports = React.createClass({displayName: 'exports',
     },
     render: function(){
         return (
-            React.DOM.div({id: "map"})
+            React.createElement("div", {id: "map"})
         )
     }
 })

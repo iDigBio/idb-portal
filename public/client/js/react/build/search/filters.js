@@ -1,11 +1,8 @@
-/**
- * @jsx React.DOM
- */
 
-var React = require('react/addons')
+var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;
 
-module.exports = Filters = React.createClass({displayName: 'Filters',
+module.exports = Filters = React.createClass({displayName: "Filters",
     statics: {
         newFilterProps: function(term){
             var type = fields.byTerm[term].type;
@@ -41,20 +38,17 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
         //var type = 'text';
         var key= filter.name;// + Date.now();
         switch(filter.type){
-            case 'text':
-                var textFilter = React.createFactory(TextFilter);
+            case 'text':         
                 return(
-                    textFilter({key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
+                    React.createElement(TextFilter, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
                 ); 
             case 'daterange':
-                var dateRange = React.createFactory(DateRangeFilter);
                 return (
-                    dateRange({key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
+                    React.createElement(DateRangeFilter, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
                 );  
             case 'numericrange':
-                var numericRange = React.createFactory(NumericRangeFilter);
                 return (
-                    numericRange({key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
+                    React.createElement(NumericRange, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
                 );  
         }
     },
@@ -118,14 +112,14 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
                 }else{
                     var disabled = flist.indexOf(field.term) === -1 ? '' : 'disabled';
                     fltrs.push(
-                            React.DOM.option({disabled: disabled, value: field.term, key: field.term}, 
+                            React.createElement("option", {disabled: disabled, value: field.term, key: field.term}, 
                                 field.name
                             )
                     );
                 }
             });
             fgroups.push(
-              React.DOM.optgroup({key: val, label: fields.groupNames[val]}, 
+              React.createElement("optgroup", {key: val, label: fields.groupNames[val]}, 
                 "  ", fltrs
               )
             );
@@ -140,23 +134,23 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
             scrollDisplay='block';
         }
         return (
-            React.DOM.div({className: "section "+this.props.active, id: "filters"}, 
-                React.DOM.div({className: "option-group", id: "filter-select"}, 
-                    React.DOM.select({className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
-                        React.DOM.option({value: "0", defaultValue: true, className: "default"}, "Add a field"), 
+            React.createElement("div", {className: "section "+this.props.active, id: "filters"}, 
+                React.createElement("div", {className: "option-group", id: "filter-select"}, 
+                    React.createElement("select", {className: "form-control", value: "0", placeholder: "select to add", onChange: this.addFilter}, 
+                        React.createElement("option", {value: "0", defaultValue: true, className: "default"}, "Add a field"), 
                         fgroups
                     ), 
-                    React.DOM.a({className: "btn", onClick: this.clearFilters}, 
+                    React.createElement("a", {className: "btn", onClick: this.clearFilters}, 
                         "Clear"
                     )
                 ), 
-                React.DOM.div({id: "filters-holder", className: "options-holder"}, 
+                React.createElement("div", {id: "filters-holder", className: "options-holder"}, 
        
                         filters
                 
                 ), 
-                React.DOM.div({id: "filter-scroller", onClick: this.scrollFilters}, 
-                    React.DOM.span({style: {'display': scrollDisplay}}, 
+                React.createElement("div", {id: "filter-scroller", onClick: this.scrollFilters}, 
+                    React.createElement("span", {style: {'display': scrollDisplay}}, 
                         "↓ Scroll To Bottom ↓"
                     )
                 )
@@ -165,7 +159,7 @@ module.exports = Filters = React.createClass({displayName: 'Filters',
     }
 });
 
-var TextFilter = React.createClass({displayName: 'TextFilter',
+var TextFilter = React.createClass({displayName: "TextFilter",
     componentWillMount: function(){
         var self = this;
         //function for limiting execution of consecutive key strokes
@@ -305,23 +299,23 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     render: function(){
         var filter = this.props.filter,disabled=false;
         var name = filter.name, label = fields.byTerm[name].name;
-        var syn = React.DOM.span(null),cl='text';
+        var syn = React.createElement("span", null),cl='text';
         if(fields.byTerm[name].synonyms){
-            syn=React.DOM.a({onClick: this.getSynonyms}, "Add EOL Synonyms");
+            syn=React.createElement("a", {onClick: this.getSynonyms}, "Add EOL Synonyms");
             cl+=' syn'
         }
         if(filter.exists || filter.missing){
             disabled=true;
         }
         return(
-            React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.a({className: "remove", href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
-                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+            React.createElement("div", {className: "option-group filter", id: name+'-filter', key: name}, 
+                React.createElement("a", {className: "remove", href: "#", onClick: this.props.removeFilter, "data-remove": name}, 
+                    React.createElement("i", {className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
                 ), 
-                React.DOM.label({className: "filter-name"}, label), 
-                React.DOM.div({className: cl}, 
+                React.createElement("label", {className: "filter-name"}, label), 
+                React.createElement("div", {className: cl}, 
                 syn, 
-                    React.DOM.textarea({className: "form-control", name: name, 'data-name': name, 
+                    React.createElement("textarea", {className: "form-control", name: name, "data-name": name, 
                         placeholder: fields.byTerm[name].dataterm, 
                         disabled: disabled, 
                         onChange: this.textType, 
@@ -331,16 +325,16 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
                     )
                     
                 ), 
-                React.DOM.div({className: "presence"}, 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: filter.exists}), 
+                React.createElement("div", {className: "presence"}, 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: filter.exists}), 
                             "Present"
                         )
                     ), 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: filter.missing}), 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: filter.missing}), 
                             "Missing"
                         )
                     )
@@ -350,7 +344,7 @@ var TextFilter = React.createClass({displayName: 'TextFilter',
     }
 });
 
-var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
+var DateRangeFilter = React.createClass({displayName: "DateRangeFilter",
     dateChange: function(event){
         var date = event.currentTarget.value;
         var filter = this.props.filter;//, filter=filters[ind];   
@@ -400,15 +394,15 @@ var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
             disabled=true;
         }
         return(
-            React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.a({className: "remove", href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
-                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+            React.createElement("div", {className: "option-group filter", id: name+'-filter', key: name}, 
+                React.createElement("a", {className: "remove", href: "#", onClick: this.props.removeFilter, "data-remove": name}, 
+                    React.createElement("i", {className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
                 ), 
-                React.DOM.label({className: "filter-name"}, label), 
-                React.DOM.div({className: "dates clearfix pull-right"}, 
-                    React.DOM.div({className: "pull-left"}, 
+                React.createElement("label", {className: "filter-name"}, label), 
+                React.createElement("div", {className: "dates clearfix pull-right"}, 
+                    React.createElement("div", {className: "pull-left"}, 
                         "Start:",  
-                        React.DOM.input({
+                        React.createElement("input", {
                             name: "gte", 
                             type: "text", 
                             className: "form-control date", 
@@ -419,9 +413,9 @@ var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
                             placeholder: "yyyy-mm-dd"}
                         )
                     ), 
-                    React.DOM.div({className: "pull-left"}, 
+                    React.createElement("div", {className: "pull-left"}, 
                         "End:",  
-                        React.DOM.input({
+                        React.createElement("input", {
                             name: "lte", 
                             type: "text", 
                             className: "form-control date", 
@@ -433,16 +427,16 @@ var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
                         )
                     )
                 ), 
-                React.DOM.div({className: "presence"}, 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
+                React.createElement("div", {className: "presence"}, 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
                             "Present"
                         )
                     ), 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
                             "Missing"
                         )
                     )
@@ -452,7 +446,7 @@ var DateRangeFilter = React.createClass({displayName: 'DateRangeFilter',
     }
 })
 
-var NumericRangeFilter = React.createClass({displayName: 'NumericRangeFilter',
+var NumericRangeFilter = React.createClass({displayName: "NumericRangeFilter",
     presenceClick: function(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){
@@ -489,16 +483,16 @@ var NumericRangeFilter = React.createClass({displayName: 'NumericRangeFilter',
             disabled=true;
         }
         return(
-            React.DOM.div({className: "option-group filter", id: name+'-filter', key: name}, 
-                React.DOM.a({className: "remove", href: "#", onClick: this.props.removeFilter, 'data-remove': name}, 
-                    React.DOM.i({className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
+            React.createElement("div", {className: "option-group filter", id: name+'-filter', key: name}, 
+                React.createElement("a", {className: "remove", href: "#", onClick: this.props.removeFilter, "data-remove": name}, 
+                    React.createElement("i", {className: "glyphicon glyphicon-remove", title: "click to remove this filter"})
                 ), 
-                React.DOM.label({className: "filter-name"}, label), 
+                React.createElement("label", {className: "filter-name"}, label), 
 
-                React.DOM.div({className: "dates clearfix pull-right"}, 
-                    React.DOM.div({className: "pull-left"}, 
+                React.createElement("div", {className: "dates clearfix pull-right"}, 
+                    React.createElement("div", {className: "pull-left"}, 
                         "Min:",  
-                        React.DOM.input({
+                        React.createElement("input", {
                             name: "gte", 
                             type: "text", 
                             className: "form-control date", 
@@ -507,9 +501,9 @@ var NumericRangeFilter = React.createClass({displayName: 'NumericRangeFilter',
                             value: filter.range.gte ?  filter.range.gte : ''}
                         )
                     ), 
-                    React.DOM.div({className: "pull-left"}, 
+                    React.createElement("div", {className: "pull-left"}, 
                         "Max:",  
-                        React.DOM.input({
+                        React.createElement("input", {
                             name: "lte", 
                             type: "text", 
                             className: "form-control date", 
@@ -519,16 +513,16 @@ var NumericRangeFilter = React.createClass({displayName: 'NumericRangeFilter',
                         )
                     )
                 ), 
-                React.DOM.div({className: "presence"}, 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
+                React.createElement("div", {className: "presence"}, 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "exists", onChange: this.presenceClick, checked: exists}), 
                             "Present"
                         )
                     ), 
-                    React.DOM.div({className: "checkbox"}, 
-                        React.DOM.label(null, 
-                            React.DOM.input({type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
+                    React.createElement("div", {className: "checkbox"}, 
+                        React.createElement("label", null, 
+                            React.createElement("input", {type: "checkbox", name: name, value: "missing", onChange: this.presenceClick, checked: missing}), 
                             "Missing"
                         )
                     )

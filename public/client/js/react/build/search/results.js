@@ -4,7 +4,7 @@
 
 var React = require('react');
 
-module.exports = Results =  React.createClass({displayName: 'Results',
+module.exports = Results =  React.createClass({displayName: "Results",
 
     getInitialState: function(){
         //this.getResults();
@@ -122,7 +122,7 @@ module.exports = Results =  React.createClass({displayName: 'Results',
         ['list','labels','images'].forEach(function(item){
             var cl = item == self.state.view ? 'active' : ''; 
             li.push(
-                React.DOM.li({key: 'tab-'+item, onClick: self.viewChange, 'data-value': item, className: cl}, helpers.firstToUpper(item))
+                React.createElement("li", {key: 'tab-'+item, onClick: self.viewChange, "data-value": item, className: cl}, helpers.firstToUpper(item))
             )
         })
         if(this.state.search.from + this.state.search.size < this.state.total){
@@ -131,11 +131,11 @@ module.exports = Results =  React.createClass({displayName: 'Results',
             $('footer').show();
         }        
         return(
-            React.DOM.div({id: "results", className: "clearfix", onScroll: this.resultsScroll}, 
-                React.DOM.ul({id: "results-menu", className: "pull-left"}, 
+            React.createElement("div", {id: "results", className: "clearfix", onScroll: this.resultsScroll}, 
+                React.createElement("ul", {id: "results-menu", className: "pull-left"}, 
                     li
                 ), 
-                React.DOM.div({className: "pull-right total"}, 
+                React.createElement("div", {className: "pull-right total"}, 
                     "Total: ", helpers.formatNum(parseInt(this.state.total))
                 ), 
 
@@ -146,7 +146,7 @@ module.exports = Results =  React.createClass({displayName: 'Results',
     }
 });
 
-var ResultsList = React.createClass({displayName: 'ResultsList',
+var ResultsList = React.createClass({displayName: "ResultsList",
     
     getInitialState: function(){
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
@@ -240,22 +240,22 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
             if(sorted.name===item){
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
                 headers.push(
-                    React.DOM.th({key: 'header-'+item, id: item, className: "data-column", style: style, 'data-term': item, 'data-sort': sorted.order, onClick: self.sortColumn}, 
+                    React.createElement("th", {key: 'header-'+item, id: item, className: "data-column", style: style, "data-term": item, "data-sort": sorted.order, onClick: self.sortColumn}, 
                         fields.byTerm[item].name, 
-                        React.DOM.i({className: "glyphicon "+icon})
+                        React.createElement("i", {className: "glyphicon "+icon})
                     )
                 ) 
             }else{
                 headers.push(
-                    React.DOM.th({key: 'header-'+item, id: item, className: "data-column", style: style, 'data-term': item, onClick: self.sortColumn}, fields.byTerm[item].name)
+                    React.createElement("th", {key: 'header-'+item, id: item, className: "data-column", style: style, "data-term": item, onClick: self.sortColumn}, fields.byTerm[item].name)
                 ) 
             }
         });
         //add column list button
         headers.push(
-            React.DOM.th({key: 'header-select', style: {width: '60px'}}, 
-                React.DOM.button({className: "pull-right", 'data-toggle': "modal", 'data-target': "#column-list"}, 
-                    React.DOM.i({className: "glyphicon glyphicon-list"})
+            React.createElement("th", {key: 'header-select', style: {width: '60px'}}, 
+                React.createElement("button", {className: "pull-right", "data-toggle": "modal", "data-target": "#column-list"}, 
+                    React.createElement("i", {className: "glyphicon glyphicon-list"})
                 )
             )
         )
@@ -270,24 +270,24 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                 }
 
                 if(_.isEmpty(val)){
-                    val = React.DOM.span({className: "no-data"}, "no data");
+                    val = React.createElement("span", {className: "no-data"}, "no data");
                 }
 
                 if(columns.length-1 === ind){
-                    tds.push(React.DOM.td({key: 'row-'+index+'-cell-'+ind, colSpan: "2"}, val));
+                    tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind, colSpan: "2"}, val));
                 }else{
-                    tds.push(React.DOM.td({key: 'row-'+index+'-cell-'+ind}, val));
+                    tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
                 }
             })
             rows.push(
-                React.DOM.tr({id: item.uuid, key: 'row-'+index, onClick: self.openRecord}, 
+                React.createElement("tr", {id: item.uuid, key: 'row-'+index, onClick: self.openRecord}, 
                     tds
                 )
             );
         })
 
         if(rows.length===0){
-            rows.push(React.DOM.tr({key: 'row-no-results', className: "no-results-row"}, React.DOM.td({colSpan: columns.length+1}, "No Matching Records")))
+            rows.push(React.createElement("tr", {key: 'row-no-results', className: "no-results-row"}, React.createElement("td", {colSpan: columns.length+1}, "No Matching Records")))
         }
         //column selection modal list
         var list=[];
@@ -296,7 +296,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
 
         _.each(fields.searchGroups,function(val){
             list.push(
-                React.DOM.tr({key: val}, React.DOM.td({className: "bold"}, fields.groupNames[val]))
+                React.createElement("tr", {key: val}, React.createElement("td", {className: "bold"}, fields.groupNames[val]))
             )
             _.each(fields.byGroup[val],function(field){
                 if(field.hidden && !field.results){
@@ -310,10 +310,10 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
                         }
                     }
                     list.push(
-                        React.DOM.tr({key: 'column-select-'+field.term}, 
-                            React.DOM.td(null, 
-                                React.DOM.label(null, 
-                                    React.DOM.input({name: field.term, onChange: self.columnCheckboxClick, type: "checkbox", checked: checked, disabled: disabled}), " ", field.name
+                        React.createElement("tr", {key: 'column-select-'+field.term}, 
+                            React.createElement("td", null, 
+                                React.createElement("label", null, 
+                                    React.createElement("input", {name: field.term, onChange: self.columnCheckboxClick, type: "checkbox", checked: checked, disabled: disabled}), " ", field.name
                                 )
                             )
                         )
@@ -323,35 +323,35 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
         });
 
         return(
-            React.DOM.div({id: "result-list", className: "panel"}, 
-                React.DOM.div({id: "column-list", className: "modal fade"}, 
-                    React.DOM.div({className: "modal-dialog"}, 
-                        React.DOM.div({className: "modal-content"}, 
-                            React.DOM.div({className: "modal-header"}, 
-                                React.DOM.label(null, "Select Display Columns"), 
-                                React.DOM.button({onClick: this.resetColumns, id: "reset"}, 
+            React.createElement("div", {id: "result-list", className: "panel"}, 
+                React.createElement("div", {id: "column-list", className: "modal fade"}, 
+                    React.createElement("div", {className: "modal-dialog"}, 
+                        React.createElement("div", {className: "modal-content"}, 
+                            React.createElement("div", {className: "modal-header"}, 
+                                React.createElement("label", null, "Select Display Columns"), 
+                                React.createElement("button", {onClick: this.resetColumns, id: "reset"}, 
                                     "Reset"
                                 ), 
-                                React.DOM.button({type: "button", className: "close pull-right", 'data-dismiss': "modal"}, 
-                                    React.DOM.span({'aria-hidden': "true"}, "×")
+                                React.createElement("button", {type: "button", className: "close pull-right", "data-dismiss": "modal"}, 
+                                    React.createElement("span", {"aria-hidden": "true"}, "×")
                                 )
                             ), 
-                            React.DOM.div({className: "modal-body"}, 
-                                React.DOM.table(null, 
+                            React.createElement("div", {className: "modal-body"}, 
+                                React.createElement("table", null, 
                                     list
                                 )
                             ), 
-                            React.DOM.div({className: "modal-footer"}
+                            React.createElement("div", {className: "modal-footer"}
 
                             )
                         )
                     )
                 ), 
-                React.DOM.table({id: "data-table", className: "table table-condensed"}, 
-                    React.DOM.thead(null, 
-                        React.DOM.tr({id: "results-headers"}, headers)
+                React.createElement("table", {id: "data-table", className: "table table-condensed"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", {id: "results-headers"}, headers)
                     ), 
-                    React.DOM.tbody(null, 
+                    React.createElement("tbody", null, 
                         rows
                     )
                 )
@@ -360,7 +360,7 @@ var ResultsList = React.createClass({displayName: 'ResultsList',
     }
 });
 
-var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
+var ResultsLabels = React.createClass({displayName: "ResultsLabels",
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
@@ -368,27 +368,27 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
         if(typeof data.scientificname == 'string') { 
             txt += helpers.check(raw["dwc:scientificName"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
             content.push(
-                React.DOM.em(null, 
-                    React.DOM.b(null, 
+                React.createElement("em", null, 
+                    React.createElement("b", null, 
                       helpers.check(raw["dwc:scientificName"])
                     )
                 )          
             );
             content.push(
-                React.DOM.span(null,  helpers.check(raw["dwc:scientificNameAuthorship"], ' ') ) 
+                React.createElement("span", null,  helpers.check(raw["dwc:scientificNameAuthorship"], ' ') ) 
             );
          
         } else {  
             //txt += helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
             content.push(
-                React.DOM.em(null, 
-                   React.DOM.b(null, 
+                React.createElement("em", null, 
+                   React.createElement("b", null, 
                 helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"],' ')
                    )
                 )
             )
             content.push(
-               React.DOM.span(null, helpers.check(raw["dwc:scientificNameAuthorship"], ' '))
+               React.createElement("span", null, helpers.check(raw["dwc:scientificNameAuthorship"], ' '))
             )
         } 
 
@@ -397,17 +397,17 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
             var imgcount;
             if(data.mediarecords.length > 1){ 
                 imgcount = (
-                    React.DOM.span({className: "image-count"}, 
+                    React.createElement("span", {className: "image-count"}, 
                         data.mediarecords.length
                     )
                 )
             }else{
-                imgcount = React.DOM.span(null);
+                imgcount = React.createElement("span", null);
             } 
             content.push(
-                React.DOM.span({key: 'media-'+result.uuid+this.props.stamp, className: "image-wrapper"}, 
+                React.createElement("span", {key: 'media-'+result.uuid+this.props.stamp, className: "image-wrapper"}, 
                     imgcount, 
-                    React.DOM.img({'data-onerror': "$(this).attr('src','/portal/img/notavailable.png')", 'data-onload': "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: " loading image...", src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
+                    React.createElement("img", {"data-onerror": "$(this).attr('src','/portal/img/notavailable.png')", "data-onload": "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: " loading image...", src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
                 )  
             )
      
@@ -433,10 +433,10 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
         }
       
         return (
-            React.DOM.div({key: 'label-'+id, id: result.uuid, className: "pull-left result-item result-label", title: "click to view record", onClick: this.openRecord}, 
-                React.DOM.p(null, 
+            React.createElement("div", {key: 'label-'+id, id: result.uuid, className: "pull-left result-item result-label", title: "click to view record", onClick: this.openRecord}, 
+                React.createElement("p", null, 
                    content, 
-                    React.DOM.span({style: {lineHeight: '1em', fontSize:'1em'}}, 
+                    React.createElement("span", {style: {lineHeight: '1em', fontSize:'1em'}}, 
                         " ", out
                     )
                 )
@@ -452,14 +452,14 @@ var ResultsLabels = React.createClass({displayName: 'ResultsLabels',
             labels.push(self.makeLabel(result,'label-'+ind));
         })
         return (
-            React.DOM.div({id: "result-labels", className: "panel"}, 
+            React.createElement("div", {id: "result-labels", className: "panel"}, 
                 labels
             )
         )
     }
 });
 
-var ResultsImages = React.createClass({displayName: 'ResultsImages',
+var ResultsImages = React.createClass({displayName: "ResultsImages",
     getImageOnlyResults: function(search){
         /*var self=this, search=_.cloneDeep(search);
         search.image = true,
@@ -541,13 +541,13 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
             return !_.isEmpty(i);
         })
         return (
-            React.DOM.a({className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
-                React.DOM.span({className: "img-count"}, count), 
-                React.DOM.img({alt: "loading...", 
+            React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
+                React.createElement("span", {className: "img-count"}, count), 
+                React.createElement("img", {alt: "loading...", 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
                 onError: this.errorImage}), 
-                React.DOM.div({className: "gallery-image-text"}, 
-                    React.DOM.div({className: "image-text"}, 
+                React.createElement("div", {className: "gallery-image-text"}, 
+                    React.createElement("div", {className: "image-text"}, 
                         clean.join(', ')
                     )
                 )
@@ -566,7 +566,7 @@ var ResultsImages = React.createClass({displayName: 'ResultsImages',
         });
 
         return (
-            React.DOM.div({id: "results-images", className: "panel"}, 
+            React.createElement("div", {id: "results-images", className: "panel"}, 
                 images
             )
         )

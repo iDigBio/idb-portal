@@ -1,8 +1,5 @@
-/**
- * @jsx React.DOM
- */
 
-var React = require('react/addons')
+var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;
 
 module.exports = Filters = React.createClass({
@@ -41,20 +38,17 @@ module.exports = Filters = React.createClass({
         //var type = 'text';
         var key= filter.name;// + Date.now();
         switch(filter.type){
-            case 'text':
-                var textFilter = React.createFactory(TextFilter);
+            case 'text':         
                 return(
-                    <textFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <TextFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 ); 
             case 'daterange':
-                var dateRange = React.createFactory(DateRangeFilter);
                 return (
-                    <dateRange key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <DateRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
             case 'numericrange':
-                var numericRange = React.createFactory(NumericRangeFilter);
                 return (
-                    <numericRange key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
+                    <NumericRange key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
         }
     },

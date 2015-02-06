@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react')
 var dwc = require('../../lib/dwc_fields');
@@ -32,9 +29,12 @@ var Tab = React.createClass({
 
 var Row = React.createClass({
     render: function(){
-        var name = _.isUndefined(dwc.names[this.props.key]) ? this.props.key : dwc.names[this.props.key];
-        var regex = /(https?:\/\/(\S|\w)+)/;
-        var str = this.props.data[this.props.key].replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
+        var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
+        var regex = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+        var str = this.props.data.replace(regex, function(match){
+            var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
+            return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+        });
         return (
             <tr className="data-row">
                 <td className="field-name">{name}</td>
@@ -48,8 +48,14 @@ var Section = React.createClass({
     render: function(){
         var rows = [],self=this;
         var data = this.props.data;
-        
-        _.each(data, function(fld){
+
+        _.each(data,function(fld){
+            var key = Object.keys(fld)[0];
+            if(_.isString(fld[key])){
+                rows.push(<Row key={key} keyid={key} data={fld[key]}/>);
+            } 
+        });        
+        /*_.each(data, function(fld){
             var key = Object.keys(fld)[0];
             var name = _.isUndefined(dwc.names[key]) ? key : dwc.names[key];
             var regex = /(https?:\/\/(\S|\w)+)/;
@@ -58,12 +64,12 @@ var Section = React.createClass({
                val = val.replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
             }
             rows.push( 
-                <tr key={key} className="data-row">
+                <Row keyid={key} key={key} className="data-row">
                     <td className="field-name">{name}</td>
                     <td className="field-value" dangerouslySetInnerHTML={{__html: val}}></td>
                 </tr>
             ); 
-        });
+        });*/
         var cl = "section section-hide";
         if(this.props.active){
             cl="section";
@@ -90,8 +96,8 @@ var Record = React.createClass({
                 if(cnt===0){
                     active=true;
                 }
-                tabs.push(<Tab key={'tab-'+sec} name={sec} active={active} />)
-                record.push(<Section key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
+                tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
+                record.push(<Section key={'sec-'+sec} key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
                 cnt++;
             } 
         })
@@ -153,8 +159,8 @@ var Img = React.createClass({
     },
     render: function(){
         return (
-            <a href={'/portal/mediarecords/'+this.props.key} title="click to open media record">
-                <img className="gallery-image" onError={this.error} src={'//api.idigbio.org/v1/mediarecords/'+this.props.key+'/media?quality=webview'} /> 
+            <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
+                <img className="gallery-image" onError={this.error} src={'//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview'} /> 
             </a>
         );
     }
@@ -165,7 +171,7 @@ var Gallery = React.createClass({
         if(_.has(this.props.data,'mediarecords')){
             var imgs = [];
             _.each(this.props.data.mediarecords,function(item){
-                imgs.push(<Img key={item} />)
+                imgs.push(<Img key={item} keyid={item} />);
             })
         
             return (
@@ -180,7 +186,7 @@ var Gallery = React.createClass({
             return <span/>
         }
     }
-})
+});
 
 var Buttons = React.createClass({
     print: function(){

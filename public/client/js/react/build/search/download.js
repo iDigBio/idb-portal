@@ -1,10 +1,7 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 
-module.exports = Downloads = React.createClass({displayName: 'Downloads',
+module.exports = Downloads = React.createClass({displayName: "Downloads",
     statics: {
         queryToSentence: function(query){
             var q = query;
@@ -104,27 +101,26 @@ module.exports = Downloads = React.createClass({displayName: 'Downloads',
         var options = [],self=this, time='';
 
         //get count 
-        var downloader = React.createFactory(Downloader);
         searchHistory.history.forEach(function(item,ind){
             options.push(
-                React.DOM.option({key: 'download-'+ind, value: ind}, Downloads.queryToSentence(item))
+                React.createElement("option", {key: 'download-'+ind, value: ind}, Downloads.queryToSentence(item))
             )
         })
         return (
-            React.DOM.div({className: "clearfix section "+this.props.active, id: "download"}, 
-                React.DOM.div({className: "sub", id: "current"}, 
-                    React.DOM.label(null, "Current Search"), 
-                    React.DOM.select({className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
+            React.createElement("div", {className: "clearfix section "+this.props.active, id: "download"}, 
+                React.createElement("div", {className: "sub", id: "current"}, 
+                    React.createElement("label", null, "Current Search"), 
+                    React.createElement("select", {className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
                         options
                     )
                 ), 
-                downloader({search: this.props.search, time: "calculating"})
+                React.createElement(Downloader, {search: this.props.search, time: "calculating"})
             )
         )
     }
 });
 
-var Downloader = React.createClass({displayName: 'Downloader',
+var Downloader = React.createClass({displayName: "Downloader",
     getInitialState: function(){
         var downloads=[];
         if(localStorage){
@@ -267,39 +263,39 @@ var Downloader = React.createClass({displayName: 'Downloader',
             var sentence = item.sentence ? item.sentence : 'no label';
             if(item.complete){
 
-                return React.DOM.tr({key: sentence, className: "dl-row", title: sentence}, 
-                         React.DOM.td({className: "title"}, sentence), 
-                         React.DOM.td({className: "status"}, React.DOM.a({href: item.download_url}, "Click To Download"))
+                return React.createElement("tr", {key: sentence, className: "dl-row", title: sentence}, 
+                         React.createElement("td", {className: "title"}, sentence), 
+                         React.createElement("td", {className: "status"}, React.createElement("a", {href: item.download_url}, "Click To Download"))
                       )
             }else{
-                return React.DOM.tr({key: sentence, className: "dl-row", title: sentence}, 
-                        React.DOM.td({className: "title"}, sentence), 
-                        React.DOM.td({className: "status pending"}, "pending")
+                return React.createElement("tr", {key: sentence, className: "dl-row", title: sentence}, 
+                        React.createElement("td", {className: "title"}, sentence), 
+                        React.createElement("td", {className: "status pending"}, "pending")
                     )
             }
             key++;
         })
 
         return (
-            React.DOM.div({className: "sub"}, 
-                React.DOM.div({id: "downloader"}, 
-                    React.DOM.label(null, "Download CSV"), " - ", React.DOM.span(null, "Approx. time: ", this.state.time), 
-                    React.DOM.div({className: "input-group"}, 
-                        React.DOM.span({className: "input-group-addon"}, "Email"), 
-                        React.DOM.input({id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 
-                        React.DOM.a({className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled, title: "click to start download"}, 
-                            React.DOM.i({className: "glyphicon glyphicon-download"})
+            React.createElement("div", {className: "sub"}, 
+                React.createElement("div", {id: "downloader"}, 
+                    React.createElement("label", null, "Download CSV"), " - ", React.createElement("span", null, "Approx. time: ", this.state.time), 
+                    React.createElement("div", {className: "input-group"}, 
+                        React.createElement("span", {className: "input-group-addon"}, "Email"), 
+                        React.createElement("input", {id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 
+                        React.createElement("a", {className: "btn input-group-addon", onClick: this.startDownload, disabled: this.state.disabled, title: "click to start download"}, 
+                            React.createElement("i", {className: "glyphicon glyphicon-download"})
                         )
                     )
                 ), 
-                React.DOM.div({id: "downloads-section", className: "clearfix"}, 
-                    React.DOM.label(null, "Available Downloads"), 
-                    React.DOM.table({id: "download-header"}, 
-                        React.DOM.thead(null, 
-                            React.DOM.tr(null, React.DOM.th({className: "title"}, "Search"), React.DOM.th({className: "status"}, "Status"))
+                React.createElement("div", {id: "downloads-section", className: "clearfix"}, 
+                    React.createElement("label", null, "Available Downloads"), 
+                    React.createElement("table", {id: "download-header"}, 
+                        React.createElement("thead", null, 
+                            React.createElement("tr", null, React.createElement("th", {className: "title"}, "Search"), React.createElement("th", {className: "status"}, "Status"))
                         )
                     ), 
-                    React.DOM.table({id: "downloads-available"}, 
+                    React.createElement("table", {id: "downloads-available"}, 
                        
                             downloads
                       

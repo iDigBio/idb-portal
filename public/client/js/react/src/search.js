@@ -1,14 +1,11 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 var Filters = require('./search/filters');
-var Sorting = React.createFactory(require('./search/sorting'));
-var Mapping = React.createFactory(require('./search/mapping'));
-var Results = React.createFactory(require('./search/results'));
-var Download = React.createFactory(require('./search/download'));
-var Map = React.createFactory(require('./search/map'));
+var Sorting = require('./search/sorting');
+var Mapping = require('./search/mapping');
+var Results = require('./search/results');
+var Download = require('./search/download');
+var Map = require('./search/map');
 
 var paramsParser = require('./search/lib/params_parser');
 
@@ -67,14 +64,12 @@ module.exports = Main = React.createClass({
         searchHistory.push(search);
     },
     render: function(){
-        var any = React.createFactory(SearchAny);
-        var options = React.createFactory(OptionsPanel);
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
                     <div id="search" className="clearfix">
-                        <any search={this.state.search} searchChange={this.searchChange} />
-                        <options search={this.state.search} searchChange={this.searchChange}/>
+                        <SearchAny search={this.state.search} searchChange={this.searchChange} />
+                        <OptionsPanel search={this.state.search} searchChange={this.searchChange}/>
                     </div>
                     <Map search={this.state.search} />
                 </div>
@@ -151,13 +146,13 @@ var OptionsPanel = React.createClass({
                 </li>
             )
         })
-        var filters = React.createFactory(Filters);
+        //var filters = React.createFactory(Filters);
         return (
             <div id="options" className="clearfix">
                 <ul id="options-menu" >
                     {menu}
                 </ul>
-                <filters searchChange={this.props.searchChange} filters={this.props.search.filters} active={panels.filters}/>
+                <Filters searchChange={this.props.searchChange} filters={this.props.search.filters} active={panels.filters}/>
                 <Sorting searchChange={this.props.searchChange} sorting={this.props.search.sorting} active={panels.sorting}/>
                 <Mapping searchChange={this.props.searchChange} bounds={this.props.search.bounds} active={panels.mapping}/>
                 <Download search={this.props.search} searchChange={this.props.searchChange} active={panels.download}/>

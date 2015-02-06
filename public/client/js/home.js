@@ -1,6 +1,4 @@
-/**
- * @jsx React.DOM
- */
+
 //var React = require('react');
 //var HomePage = React.createFactory(require('./react/build/home'));
 

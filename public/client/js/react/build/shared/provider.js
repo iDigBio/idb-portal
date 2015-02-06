@@ -1,10 +1,8 @@
-/**
- * @jsx React.DOM
- */
+
 var React = require('react');
 var _ = require('underscore');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     noLogo: function(event){
         $(event.currentTarget).remove();
     },
@@ -57,11 +55,11 @@ module.exports = React.createClass({displayName: 'exports',
             var phone =  self.check(contact.phone);
             var role =  self.check(contact.role);
             return (
-                React.DOM.ul({className: "pull-left contact"}, 
-                    React.DOM.li(null, name), 
-                    React.DOM.li(null, role), 
-                    React.DOM.li(null, React.DOM.a({href: 'mailto: '+email}, email)), 
-                    React.DOM.li(null, phone)
+                React.createElement("ul", {className: "pull-left contact"}, 
+                    React.createElement("li", null, name), 
+                    React.createElement("li", null, role), 
+                    React.createElement("li", null, React.createElement("a", {href: 'mailto: '+email}, email)), 
+                    React.createElement("li", null, phone)
                 )
             );
         }     
@@ -69,15 +67,15 @@ module.exports = React.createClass({displayName: 'exports',
         var data = this.props.data;
         if(_.has(data,'name')){
             rows.push(
-                React.DOM.div({key: "title", className: "title"}, data.name)
+                React.createElement("div", {key: "title", className: "title"}, data.name)
             )
         }
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){
-            rows.push(React.DOM.img({key: "logo", className: "logo", src: data.logo, onError: this.noLogo}))
+            rows.push(React.createElement("img", {key: "logo", className: "logo", src: data.logo, onError: this.noLogo}))
         }
         if(_.has(data,'url')){
             rows.push(
-                React.DOM.a({key: "link", href: data.url}, 
+                React.createElement("a", {key: "link", href: data.url}, 
                     data.url
                 )
             )
@@ -85,7 +83,7 @@ module.exports = React.createClass({displayName: 'exports',
         if(_.has(data,'description')){
             var desc = _.unescape(data.description);
             rows.push(
-                React.DOM.div({key: "description", className: "justify", dangerouslySetInnerHTML: {__html: desc}})
+                React.createElement("div", {key: "description", className: "justify", dangerouslySetInnerHTML: {__html: desc}})
             )
         }
 
@@ -95,19 +93,19 @@ module.exports = React.createClass({displayName: 'exports',
                 contacts.push(makeContact(item));
             })
             con = (
-                React.DOM.div({id: "contacts"}, 
-                    React.DOM.div({className: "title"}, "Contacts"), 
+                React.createElement("div", {id: "contacts"}, 
+                    React.createElement("div", {className: "title"}, "Contacts"), 
                     contacts
                 )
             );
         }else{
-            con = React.DOM.span(null);
+            con = React.createElement("span", null);
         }
 
         return (
-            React.DOM.div({id: "provider-wrapper", className: "clearfix"}, 
-                React.DOM.h4({className: "title"}, "Data Provided By"), 
-                React.DOM.div({id: "provider-info", className: "clearfix"}, 
+            React.createElement("div", {id: "provider-wrapper", className: "clearfix"}, 
+                React.createElement("h4", {className: "title"}, "Data Provided By"), 
+                React.createElement("div", {id: "provider-info", className: "clearfix"}, 
                     rows, 
                     con
                 )

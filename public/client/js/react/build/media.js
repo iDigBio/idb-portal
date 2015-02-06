@@ -1,12 +1,9 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 
-var Media = React.createClass({displayName: 'Media',
+var Media = React.createClass({displayName: "Media",
     error: function(event){
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
     },
@@ -21,11 +18,11 @@ var Media = React.createClass({displayName: 'Media',
         }
 
         return (
-            React.DOM.div({key: this.props.key, id: "media-wrapper", className: "clearfix"}, 
-                React.DOM.a({className: "clearfix", target: '_'+this.props.key, href: link, title: "click to open original media file"}, 
-                    React.DOM.img({className: "media", src: '//api.idigbio.org/v1/mediarecords/'+this.props.key+'/media?quality=webview', onError: this.error})
+            React.createElement("div", {key: this.props.keyid, id: "media-wrapper", className: "clearfix"}, 
+                React.createElement("a", {className: "clearfix", target: '_'+this.props.keyid, href: link, title: "click to open original media file"}, 
+                    React.createElement("img", {className: "media", src: '//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview', onError: this.error})
                 ), 
-                React.DOM.a({href: link, download: this.props.key, target: '_'+this.props.key}, 
+                React.createElement("a", {href: link, download: this.props.keyid, target: '_'+this.props.keyid}, 
                     "Download Media File"
                 )
             )
@@ -33,45 +30,45 @@ var Media = React.createClass({displayName: 'Media',
     }
 });
 
-var Buttons = React.createClass({displayName: 'Buttons',
+var Buttons = React.createClass({displayName: "Buttons",
     render: function(){
         var el=[];
         debugger
         if(_.has(this.props.data,'records')){
             var link = '/portal/records/'+this.props.data.records[0];
             el.push(
-                React.DOM.a({className: "btn button", href: link, key: link}, 
+                React.createElement("a", {className: "btn button", href: link, key: link, keyid: link}, 
                     "Go To Specimen Record"
                 )
             )
         }else{
             el.push(
-                React.DOM.span({className: "no-assoc"}, "Media is not associated with any record")
+                React.createElement("span", {className: "no-assoc"}, "Media is not associated with any record")
             )
         }
         var rlink = '/portal/recordsets/'+this.props.data.recordset;
 
         el.push(
-            React.DOM.a({className: "btn button", href: rlink, key: rlink}, 
+            React.createElement("a", {className: "btn button", href: rlink, key: rlink, keyid: rlink}, 
                 "Go To Recordset"
             )
         );
 
         el.push(
-            React.DOM.a({href: "#raw", 'data-toggle': "modal", 'data-target': "#raw", className: "btn button", key: 'raw-data'}, 
+            React.createElement("a", {href: "#raw", "data-toggle": "modal", "data-target": "#raw", className: "btn button", key: 'raw-data'}, 
                 "View Raw Data"
             )            
         );
         
         return (
-            React.DOM.div({id: "action-buttons", key: 'buttons'}, 
+            React.createElement("div", {id: "action-buttons", key: 'buttons'}, 
                 el
             )
         );
     }
 });
 
-var Table = React.createClass({displayName: 'Table',
+var Table = React.createClass({displayName: "Table",
     render: function(){
         var order=[],rows=[],self=this;
 
@@ -96,23 +93,23 @@ var Table = React.createClass({displayName: 'Table',
                     str = val.replace(regex, "<a href=\"$1\">$1</a>");
                 }
                 rows.push(
-                    React.DOM.tr({key: count}, 
-                        React.DOM.td({className: "name"}, name), 
-                        React.DOM.td({className: "value", dangerouslySetInnerHTML: {__html: str}})
+                    React.createElement("tr", {key: count}, 
+                        React.createElement("td", {className: "name"}, name), 
+                        React.createElement("td", {className: "value", dangerouslySetInnerHTML: {__html: str}})
                     )
                 );                
             }else if(_.isArray(val)){
                 rows.push(
-                    React.DOM.tr({key: count}, 
-                        React.DOM.td({className: "name"}, name), 
-                        React.DOM.td({className: "value"}, val.join(', '))
+                    React.createElement("tr", {key: count}, 
+                        React.createElement("td", {className: "name"}, name), 
+                        React.createElement("td", {className: "value"}, val.join(', '))
                     )
                 );                 
             }else{
                 rows.push(
-                    React.DOM.tr({key: count}, 
-                        React.DOM.td({className: "name"}, name), 
-                        React.DOM.td({className: "value"}, val)
+                    React.createElement("tr", {key: count}, 
+                        React.createElement("td", {className: "name"}, name), 
+                        React.createElement("td", {className: "value"}, val)
                     )
                 );                 
             }
@@ -120,8 +117,8 @@ var Table = React.createClass({displayName: 'Table',
         });
 
         return (
-            React.DOM.div({id: "meta-table"}, 
-                React.DOM.table(null, 
+            React.createElement("div", {id: "meta-table"}, 
+                React.createElement("table", null, 
                     rows
                 )
             )
@@ -129,7 +126,7 @@ var Table = React.createClass({displayName: 'Table',
     }
 });
 
-var Group = React.createClass({displayName: 'Group',
+var Group = React.createClass({displayName: "Group",
     error: function(event){
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
     },
@@ -138,24 +135,24 @@ var Group = React.createClass({displayName: 'Group',
             var imgs = [];
             var media = this.props.record.indexTerms.mediarecords;
             for(id in media){
-                if(media[id] != this.props.key){
+                if(media[id] != this.props.keyid){
                     imgs.push(
-                        React.DOM.a({href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id]}, 
-                            React.DOM.img({className: "gallery-image", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
+                        React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id]}, 
+                            React.createElement("img", {className: "gallery-image", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
                         )
                     )                    
                 }
             }
             return (
-                React.DOM.div({id: "other-images", className: "clearfix"}, 
-                    React.DOM.h4({className: "title"}, "Other Media"), 
-                    React.DOM.div({id: "images-wrapper"}, 
+                React.createElement("div", {id: "other-images", className: "clearfix"}, 
+                    React.createElement("h4", {className: "title"}, "Other Media"), 
+                    React.createElement("div", {id: "images-wrapper"}, 
                         imgs
                     )
                 )
             )
         }else{
-            return React.DOM.span(null)
+            return React.createElement("span", null)
         }
     }
 });
@@ -163,7 +160,7 @@ var Group = React.createClass({displayName: 'Group',
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     render: function(){
         var source = this.props.mediarecord;
         var name ='',info=[];
@@ -193,40 +190,40 @@ module.exports = React.createClass({displayName: 'exports',
                 }
             }) 
 
-            name =  React.DOM.h1({id: "title", className: "clearfix"}, 
-                React.DOM.em(null, title), 
-                React.DOM.span({className: "title-addition"}, 
+            name =  React.createElement("h1", {id: "title", className: "clearfix"}, 
+                React.createElement("em", null, title), 
+                React.createElement("span", {className: "title-addition"}, 
                     info.join(', ')
                 )
             )
             //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
         }
-        debugger
+        
         return (
-            React.DOM.div({className: "container-fluid"}, 
-                React.DOM.div({className: "row-fluid"}, 
-                    React.DOM.div({className: "span12", id: "container"}, 
-                        React.DOM.div({id: "data-container", className: "clearfix"}, 
+            React.createElement("div", {className: "container-fluid"}, 
+                React.createElement("div", {className: "row-fluid"}, 
+                    React.createElement("div", {className: "span12", id: "container"}, 
+                        React.createElement("div", {id: "data-container", className: "clearfix"}, 
                             name, 
-                            React.DOM.div({id: "data-content"}, 
-                                Media({key: source.uuid, data: source.data})
+                            React.createElement("div", {id: "data-content"}, 
+                                React.createElement(Media, {key: source.uuid+'_media', keyid: source.uuid, data: source.data})
                             ), 
-                            React.DOM.div({id: "data-meta", className: "clearfix"}, 
-                                React.DOM.div({id: "actions"}, 
-                                    Buttons({data: source.indexTerms})
+                            React.createElement("div", {id: "data-meta", className: "clearfix"}, 
+                                React.createElement("div", {id: "actions"}, 
+                                    React.createElement(Buttons, {data: source.indexTerms})
                                 ), 
-                                React.DOM.div({id: "data-table", className: "clearfix"}, 
-                                    React.DOM.h4({className: "title"}, "Media Metadata"), 
-                                    Table({record: source.data})
+                                React.createElement("div", {id: "data-table", className: "clearfix"}, 
+                                    React.createElement("h4", {className: "title"}, "Media Metadata"), 
+                                    React.createElement(Table, {record: source.data})
                                 )
                             ), 
-                            Group({record: this.props.record, key: source.uuid}), 
-                            Provider({data: this.props.mediarecord.attribution})
+                            React.createElement(Group, {record: this.props.record, key: source.uuid, keyid: source.uuid}), 
+                            React.createElement(Provider, {data: this.props.mediarecord.attribution})
                             
                         )
                     )
                 ), 
-                Raw({data: source.data})
+                React.createElement(Raw, {data: source.data})
             )
         )
     }

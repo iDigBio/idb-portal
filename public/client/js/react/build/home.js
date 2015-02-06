@@ -1,10 +1,8 @@
-/**
- * @jsx React.DOM
- */
+
 var React = require('react');
 var Chartist = React.createFactory(require('react-chartist'));
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
 
     render: function(){
         var kingdoms = {
@@ -39,8 +37,8 @@ module.exports = React.createClass({displayName: 'exports',
               labelDirection: 'explode'
         }
         return(
-            React.DOM.div(null, 
-                Chartist({className: "ct-chart ct-golden-section", data: chart, type: 'Pie'})
+            React.createElement("div", null, 
+                React.createElement(Chartist, {className: "ct-chart ct-golden-section", data: chart, type: 'Pie'})
             )
         )
     }

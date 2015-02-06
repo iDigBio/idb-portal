@@ -4,7 +4,7 @@
 
 var React = require('react');
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     currentBounds: function(){
         var b = this.props.bounds;
         return {
@@ -38,55 +38,55 @@ module.exports = React.createClass({displayName: 'exports',
     render: function(){
         var bounds = this.props.bounds;
         return(
-            React.DOM.div({className: "clearfix section "+this.props.active, id: "mapping"}, 
-                React.DOM.div({className: "option-group", id: "mapping-options"}, 
-                    React.DOM.span({className: "title"}, "Lat/Lon Bounding Box"), 
-                    React.DOM.a({className: "btn", onClick: this.resetBounds}, 
+            React.createElement("div", {className: "clearfix section "+this.props.active, id: "mapping"}, 
+                React.createElement("div", {className: "option-group", id: "mapping-options"}, 
+                    React.createElement("span", {className: "title"}, "Lat/Lon Bounding Box"), 
+                    React.createElement("a", {className: "btn", onClick: this.resetBounds}, 
                         "Clear"
                     ), 
-                    React.DOM.div({className: "ordinates clearfix"}, 
-                        React.DOM.label({className: "title"}, "NorthWest"), 
-                        React.DOM.div({className: "pull-left ordinate"}, 
+                    React.createElement("div", {className: "ordinates clearfix"}, 
+                        React.createElement("label", {className: "title"}, "NorthWest"), 
+                        React.createElement("div", {className: "pull-left ordinate"}, 
                             "Lat:", 
-                            React.DOM.input({type: "text", 
+                            React.createElement("input", {type: "text", 
                                 onChange: this.degreeChange, 
                                 value: !bounds.top_left.lat ? '' : bounds.top_left.lat, 
                                 placeholder: "90.0", 
-                                'data-corner': "top_left", 
-                                'data-name': "lat", 
+                                "data-corner": "top_left", 
+                                "data-name": "lat", 
                                 className: "coordinate form-control"})
                         ), 
-                        React.DOM.div({className: "ordinate"}, 
+                        React.createElement("div", {className: "ordinate"}, 
                             "Lon:", 
-                            React.DOM.input({type: "text", 
+                            React.createElement("input", {type: "text", 
                                 onChange: this.degreeChange, 
                                 value: !bounds.top_left.lon ? '' : bounds.top_left.lon, 
                                 placeholder: "-180.0", 
-                                'data-corner': "top_left", 
-                                'data-name': "lon", 
+                                "data-corner": "top_left", 
+                                "data-name": "lon", 
                                 className: "coordinate form-control"})
                         )
                     ), 
-                    React.DOM.div({className: "ordinates clearfix"}, 
-                        React.DOM.label({className: "title"}, "SouthEast"), 
-                        React.DOM.div({className: "pull-left ordinate"}, 
+                    React.createElement("div", {className: "ordinates clearfix"}, 
+                        React.createElement("label", {className: "title"}, "SouthEast"), 
+                        React.createElement("div", {className: "pull-left ordinate"}, 
                             "Lat:", 
-                            React.DOM.input({type: "text", 
+                            React.createElement("input", {type: "text", 
                                 onChange: this.degreeChange, 
                                 value: !bounds.bottom_right.lat ? '' : bounds.bottom_right.lat, 
                                 placeholder: "-90.0", 
-                                'data-corner': "bottom_right", 
-                                'data-name': "lat", 
+                                "data-corner": "bottom_right", 
+                                "data-name": "lat", 
                                 className: "coordinate form-control"})
                         ), 
-                        React.DOM.div({className: "ordinate"}, 
+                        React.createElement("div", {className: "ordinate"}, 
                             "Lon:", 
-                            React.DOM.input({type: "text", 
+                            React.createElement("input", {type: "text", 
                                 onChange: this.degreeChange, 
                                 value: !bounds.bottom_right.lon ? '' : bounds.bottom_right.lon, 
                                 placeholder: "180.0", 
-                                'data-corner': "bottom_right", 
-                                'data-name': "lon", 
+                                "data-corner": "bottom_right", 
+                                "data-name": "lon", 
                                 className: "coordinate form-control"})
                         )
                     )

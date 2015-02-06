@@ -1,18 +1,15 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 var Filters = require('./search/filters');
-var Sorting = React.createFactory(require('./search/sorting'));
-var Mapping = React.createFactory(require('./search/mapping'));
-var Results = React.createFactory(require('./search/results'));
-var Download = React.createFactory(require('./search/download'));
-var Map = React.createFactory(require('./search/map'));
+var Sorting = require('./search/sorting');
+var Mapping = require('./search/mapping');
+var Results = require('./search/results');
+var Download = require('./search/download');
+var Map = require('./search/map');
 
 var paramsParser = require('./search/lib/params_parser');
 
-module.exports = Main = React.createClass({displayName: 'Main',
+module.exports = Main = React.createClass({displayName: "Main",
 
     statics: {
         defaultSearch: function(){
@@ -67,24 +64,22 @@ module.exports = Main = React.createClass({displayName: 'Main',
         searchHistory.push(search);
     },
     render: function(){
-        var any = React.createFactory(SearchAny);
-        var options = React.createFactory(OptionsPanel);
         return(
-            React.DOM.div({id: "react-wrapper"}, 
-                React.DOM.div({id: "top", className: "clearfix"}, 
-                    React.DOM.div({id: "search", className: "clearfix"}, 
-                        any({search: this.state.search, searchChange: this.searchChange}), 
-                        options({search: this.state.search, searchChange: this.searchChange})
+            React.createElement("div", {id: "react-wrapper"}, 
+                React.createElement("div", {id: "top", className: "clearfix"}, 
+                    React.createElement("div", {id: "search", className: "clearfix"}, 
+                        React.createElement(SearchAny, {search: this.state.search, searchChange: this.searchChange}), 
+                        React.createElement(OptionsPanel, {search: this.state.search, searchChange: this.searchChange})
                     ), 
-                    Map({search: this.state.search})
+                    React.createElement(Map, {search: this.state.search})
                 ), 
-                Results({search: this.state.search, searchChange: this.searchChange})
+                React.createElement(Results, {search: this.state.search, searchChange: this.searchChange})
             )
         )
     }
 });
 
-var SearchAny = React.createClass({displayName: 'SearchAny',
+var SearchAny = React.createClass({displayName: "SearchAny",
     checkClick: function(event){
         this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
@@ -98,21 +93,21 @@ var SearchAny = React.createClass({displayName: 'SearchAny',
     render: function(){
 
         return(
-            React.DOM.div({id: "search-any", className: "clearfix"}, 
-                React.DOM.h3(null, React.DOM.img({id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching"), 
-                React.DOM.div({className: "input-group"}, 
-                    React.DOM.input({type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.props.search.fulltext}), 
-                    React.DOM.a({className: "btn input-group-addon", onClick: this.resetSearch}, React.DOM.i({className: "glyphicon glyphicon-refresh"}))
+            React.createElement("div", {id: "search-any", className: "clearfix"}, 
+                React.createElement("h3", null, React.createElement("img", {id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching"), 
+                React.createElement("div", {className: "input-group"}, 
+                    React.createElement("input", {type: "text", className: "form-control", placeholder: "search any field", onChange: this.textType, value: this.props.search.fulltext}), 
+                    React.createElement("a", {className: "btn input-group-addon", onClick: this.resetSearch}, React.createElement("i", {className: "glyphicon glyphicon-refresh"}))
                 ), 
-                React.DOM.div({className: "checkbox"}, 
-                    React.DOM.label(null, 
-                        React.DOM.input({type: "checkbox", name: "image", onChange: this.checkClick, checked: this.props.search.image}), 
+                React.createElement("div", {className: "checkbox"}, 
+                    React.createElement("label", null, 
+                        React.createElement("input", {type: "checkbox", name: "image", onChange: this.checkClick, checked: this.props.search.image}), 
                         "Must have image"
                     )
                 ), 
-                React.DOM.div({className: "checkbox"}, 
-                    React.DOM.label(null, 
-                        React.DOM.input({type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.props.search.geopoint}), 
+                React.createElement("div", {className: "checkbox"}, 
+                    React.createElement("label", null, 
+                        React.createElement("input", {type: "checkbox", name: "geopoint", onChange: this.checkClick, checked: this.props.search.geopoint}), 
                         "Must have map point"
                     )
                 )
@@ -121,7 +116,7 @@ var SearchAny = React.createClass({displayName: 'SearchAny',
     }
 })
 
-var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
+var OptionsPanel = React.createClass({displayName: "OptionsPanel",
     getInitialState: function(){
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
@@ -146,21 +141,21 @@ var OptionsPanel = React.createClass({displayName: 'OptionsPanel',
                 panels[item]='';
             }
             menu.push(
-                React.DOM.li({key: ind, className: "tab"}, 
-                    React.DOM.a({className: panels[item], href: "#", onClick: self.showPanel, 'data-panel': item}, helpers.firstToUpper(item))
+                React.createElement("li", {key: ind, className: "tab"}, 
+                    React.createElement("a", {className: panels[item], href: "#", onClick: self.showPanel, "data-panel": item}, helpers.firstToUpper(item))
                 )
             )
         })
-        var filters = React.createFactory(Filters);
+        //var filters = React.createFactory(Filters);
         return (
-            React.DOM.div({id: "options", className: "clearfix"}, 
-                React.DOM.ul({id: "options-menu"}, 
+            React.createElement("div", {id: "options", className: "clearfix"}, 
+                React.createElement("ul", {id: "options-menu"}, 
                     menu
                 ), 
-                filters({searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
-                Sorting({searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
-                Mapping({searchChange: this.props.searchChange, bounds: this.props.search.bounds, active: panels.mapping}), 
-                Download({search: this.props.search, searchChange: this.props.searchChange, active: panels.download})
+                React.createElement(Filters, {searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
+                React.createElement(Sorting, {searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
+                React.createElement(Mapping, {searchChange: this.props.searchChange, bounds: this.props.search.bounds, active: panels.mapping}), 
+                React.createElement(Download, {search: this.props.search, searchChange: this.props.searchChange, active: panels.download})
             )
         )
     }

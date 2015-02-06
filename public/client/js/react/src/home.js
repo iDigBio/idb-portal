@@ -1,6 +1,4 @@
-/**
- * @jsx React.DOM
- */
+
 var React = require('react');
 var Chartist = React.createFactory(require('react-chartist'));
 

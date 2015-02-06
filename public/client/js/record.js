@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react')
 //var Map = require('./search/views/mapbox');
@@ -10,7 +7,7 @@ var L = require('leaflet/dist/leaflet');
 var RecordPage = require('./react/build/record');
 //TODO: rewrite recordset id into page code so you can Async this
 $.getJSON('//beta-search.idigbio.org/v2/view/records/'+$('#recordID').val(),function(resp){
-    React.renderComponent(
+    React.render(
         <RecordPage record={resp} />,
         document.getElementById('react-wrapper')
     ) 

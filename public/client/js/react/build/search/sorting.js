@@ -5,7 +5,7 @@
 var React = require('react/addons')
 var RCTgroup = React.addons.CSSTransitionGroup;
 
-module.exports = React.createClass({displayName: 'exports',
+module.exports = React.createClass({displayName: "exports",
     getSortNames: function(){
         var list=[];
         this.props.sorting.forEach(function(item){
@@ -48,7 +48,7 @@ module.exports = React.createClass({displayName: 'exports',
 
         this.props.sorting.forEach(function(item,ind){
             var fgroups =[];
-            fgroups.push(React.DOM.option({value: "0"}, "select a field"));
+            fgroups.push(React.createElement("option", {value: "0"}, "select a field"));
             _.each(groups,function(val){
                 var flist = [];
                 _.each(fields.byGroup[val],function(field){
@@ -60,14 +60,14 @@ module.exports = React.createClass({displayName: 'exports',
                             disabled='disabled';
                         } 
                         flist.push(
-                            React.DOM.option({disabled: disabled, value: field.term, key: field.term}, 
+                            React.createElement("option", {disabled: disabled, value: field.term, key: field.term}, 
                                 field.name
                             )
                         );
                     }
                 });
                 fgroups.push(
-                  React.DOM.optgroup({label: fields.groupNames[val]}, 
+                  React.createElement("optgroup", {label: fields.groupNames[val]}, 
                     "  ", flist
                   )
                 );
@@ -76,40 +76,40 @@ module.exports = React.createClass({displayName: 'exports',
             var desc=item.order == 'desc' ?  'selected':'';
             if(ind===0){
                 sorts.push(
-                    React.DOM.div({className: "option-group", key: ind}, 
-                        React.DOM.label(null, "Sort by"), 
-                        React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
-                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                    React.createElement("div", {className: "option-group", key: ind}, 
+                        React.createElement("label", null, "Sort by"), 
+                        React.createElement("button", {onClick: self.removeClick, "data-index": ind}, React.createElement("i", {className: "glyphicon glyphicon-minus"})), 
+                        React.createElement("select", {className: "name form-control", value: item.name, onChange: self.sortChange, "data-index": ind, "data-name": "name"}, 
                             fgroups
                         ), 
-                        React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
-                            React.DOM.option({value: "asc", selected: asc}, "Ascending"), 
-                            React.DOM.option({value: "desc", selected: desc}, "Descending")
+                        React.createElement("select", {className: "direction form-control", value: item.order, onChange: self.sortChange, "data-index": ind, "data-name": "order"}, 
+                            React.createElement("option", {value: "asc", selected: asc}, "Ascending"), 
+                            React.createElement("option", {value: "desc", selected: desc}, "Descending")
                         )
                     )
                 )
             }else{
                 sorts.push(
-                    React.DOM.div({className: "option-group", key: ind}, 
-                        React.DOM.label(null, "Then by"), 
-                        React.DOM.button({onClick: self.removeClick, 'data-index': ind}, React.DOM.i({className: "glyphicon glyphicon-minus"})), 
-                        React.DOM.select({className: "name form-control", value: item.name, onChange: self.sortChange, 'data-index': ind, 'data-name': "name"}, 
+                    React.createElement("div", {className: "option-group", key: ind}, 
+                        React.createElement("label", null, "Then by"), 
+                        React.createElement("button", {onClick: self.removeClick, "data-index": ind}, React.createElement("i", {className: "glyphicon glyphicon-minus"})), 
+                        React.createElement("select", {className: "name form-control", value: item.name, onChange: self.sortChange, "data-index": ind, "data-name": "name"}, 
                             fgroups
                         ), 
-                        React.DOM.select({className: "direction form-control", value: item.order, onChange: self.sortChange, 'data-index': ind, 'data-name': "order"}, 
-                            React.DOM.option({value: "asc"}, "Ascending"), 
-                            React.DOM.option({value: "desc"}, "Descending")
+                        React.createElement("select", {className: "direction form-control", value: item.order, onChange: self.sortChange, "data-index": ind, "data-name": "order"}, 
+                            React.createElement("option", {value: "asc"}, "Ascending"), 
+                            React.createElement("option", {value: "desc"}, "Descending")
                         )
                     )
                 )
             }
         })
         return (
-            React.DOM.div({className: "clearfix section "+this.props.active, id: "sorting"}, 
-                React.DOM.div({id: "sort-add"}, 
-                     "Add a sort  ", React.DOM.button({onClick: this.addClick}, React.DOM.span({className: "glyphicon glyphicon-plus"}))
+            React.createElement("div", {className: "clearfix section "+this.props.active, id: "sorting"}, 
+                React.createElement("div", {id: "sort-add"}, 
+                     "Add a sort  ", React.createElement("button", {onClick: this.addClick}, React.createElement("span", {className: "glyphicon glyphicon-plus"}))
                 ), 
-                React.DOM.div({id: "sort-group"}, 
+                React.createElement("div", {id: "sort-group"}, 
                     sorts
                 )
             )

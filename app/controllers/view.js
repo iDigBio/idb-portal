@@ -1,11 +1,12 @@
 
 var request = require('request');
 var path = require('path'),
-    appDir = path.dirname(require.main.filename)
-var RecordPage = require(appDir+'/public/client/js/react/build/record');
-var MediaPage = require(appDir+'/public/client/js/react/build/media');
+    appDir = path.dirname(require.main.filename);
+var React = require('react');
+var RecordPage = React.createFactory(require(appDir+'/public/client/js/react/build/record'));
+var MediaPage = React.createFactory(require(appDir+'/public/client/js/react/build/media'));
 var async = require('async');
-var _ = require('underscore');
+var _ = require('lodash');
 
 
 module.exports = function(app, config) {
@@ -36,7 +37,7 @@ module.exports = function(app, config) {
 					var record = body;
 					var React = require('react');
 					//console.log(recordset)
-					var Page = React.renderComponentToString(RecordPage({record: record}));
+					var Page = React.renderToString(RecordPage({record: record}));
 					//
 					res.render('record', {
 						activemenu: 'search',
@@ -71,7 +72,7 @@ module.exports = function(app, config) {
 					var render = function(){
 
 						var React = require('react');
-						var Page = React.renderComponentToString(MediaPage({mediarecord: mediarecord, record: record}));
+						var Page = React.renderToString(MediaPage({mediarecord: mediarecord, record: record}));
 			           
 			            res.render('media', {
 			                activemenu: 'search',

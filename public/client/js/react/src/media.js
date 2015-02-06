@@ -1,6 +1,3 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 var dwc = require('../../lib/dwc_fields');
@@ -21,11 +18,11 @@ var Media = React.createClass({
         }
 
         return (
-            <div key={this.props.key} id="media-wrapper" className="clearfix">
-                <a className="clearfix" target={'_'+this.props.key} href={link} title="click to open original media file">
-                    <img className="media" src={'//api.idigbio.org/v1/mediarecords/'+this.props.key+'/media?quality=webview'} onError={this.error}/>
+            <div key={this.props.keyid} id="media-wrapper" className="clearfix">
+                <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
+                    <img className="media" src={'//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview'} onError={this.error}/>
                 </a>
-                <a href={link} download={this.props.key} target={'_'+this.props.key}>
+                <a href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
                     Download Media File
                 </a>
             </div>
@@ -40,7 +37,7 @@ var Buttons = React.createClass({
         if(_.has(this.props.data,'records')){
             var link = '/portal/records/'+this.props.data.records[0];
             el.push(
-                <a className="btn button" href={link} key={link}>
+                <a className="btn button" href={link} key={link} keyid={link}>
                     Go To Specimen Record
                 </a>
             )
@@ -52,7 +49,7 @@ var Buttons = React.createClass({
         var rlink = '/portal/recordsets/'+this.props.data.recordset;
 
         el.push(
-            <a className="btn button" href={rlink} key={rlink}>
+            <a className="btn button" href={rlink} key={rlink} keyid={rlink}>
                 Go To Recordset
             </a>
         );
@@ -138,7 +135,7 @@ var Group = React.createClass({
             var imgs = [];
             var media = this.props.record.indexTerms.mediarecords;
             for(id in media){
-                if(media[id] != this.props.key){
+                if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]}  >
                             <img className="gallery-image" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
@@ -201,7 +198,7 @@ module.exports = React.createClass({
             </h1>
             //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
         }
-        debugger
+        
         return (
             <div className="container-fluid">
                 <div className="row-fluid">
@@ -209,7 +206,7 @@ module.exports = React.createClass({
                         <div id="data-container" className="clearfix">
                             {name}
                             <div id="data-content">
-                                <Media key={source.uuid} data={source.data} />
+                                <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
                             </div>
                             <div id="data-meta" className="clearfix">
                                 <div id="actions"> 
@@ -220,7 +217,7 @@ module.exports = React.createClass({
                                     <Table record={source.data} />
                                 </div>
                             </div>
-                            <Group record={this.props.record} key={source.uuid}/>
+                            <Group record={this.props.record} key={source.uuid} keyid={source.uuid}/>
                             <Provider data={this.props.mediarecord.attribution} />
                             
                         </div>

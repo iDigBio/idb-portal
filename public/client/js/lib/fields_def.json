@@ -236,7 +236,7 @@
         "group": "specimen"
     },
     "RecordID": {
-        "term": "recordid",
+        "term": "recordids",
         "type": "text",
         "group": "specimen"
     },

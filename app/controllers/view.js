@@ -39,6 +39,7 @@ module.exports = function(app, config) {
 					//console.log(recordset)
 					var Page = React.renderToString(RecordPage({record: record}));
 					//
+					
 					res.render('record', {
 						activemenu: 'search',
 						id: req.params.id,

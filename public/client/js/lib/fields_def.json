@@ -38,7 +38,7 @@
         "synonyms": true,
         "default": true,
         "group": "taxonomy",
-        "dataterm": "dwc:scientificName"
+        "dataterm": "dwc:scientificname"
     },
     "Genus": {
         "term": "genus",
@@ -52,29 +52,29 @@
         "term": "specificepithet",
         "type": "text",
         "group": "taxonomy",
-        "dataterm": "dwc:specificEpithet"
+        "dataterm": "dwc:specificepithet"
     },
     "Infraspecific Epithet": {
         "term": "infraspecificepithet",
         "type": "text",
         "group": "taxonomy",
-        "dataterm": "dwc:infraspecificEpithet"
+        "dataterm": "dwc:infraspecificepithet"
     },
     "Higher Taxon": {
         "term": "highertaxon",
         "type": "text",
         "group": "taxonomy",
-        "dataterm": "dwc:higherClassification"
+        "dataterm": "dwc:higherclassification"
     },
     "Common Name":{
         "term": "commonname",
         "type": "text",
         "group": "taxonomy",
-        "dataterm": "dwc:vernacularName"
+        "dataterm": "dwc:vernacularname"
     },
     "Latitude" : {
         "term": "lat",
-        "dataterm": "dwc:decimalLatitude",
+        "dataterm": "dwc:decimallatitude",
         "type": "text",
         "group": "locality",
         "hidden": true,
@@ -82,7 +82,7 @@
     },
     "Longitude": {
         "term": "lon",
-        "dataterm": "dwc:decimalLongitude",
+        "dataterm": "dwc:decimallongitude",
         "type": "text",
         "group": "locality",
         "hidden": true,
@@ -100,7 +100,7 @@
         "type": "text",
         "default": true,
         "group": "locality",
-        "dataterm": "dwc:stateProvince"
+        "dataterm": "dwc:stateprovince"
     },
     "County/Parish/Province": {
         "term": "county",
@@ -118,7 +118,7 @@
         "term": "waterbody",
         "type": "text",
         "group": "locality",
-        "dataterm": "dwc:waterBody"
+        "dataterm": "dwc:waterbody"
     },
     "Continent": {
         "term": "continent",
@@ -130,7 +130,7 @@
         "term": "datecollected",
         "type": "daterange",
         "group": "collectionevent",
-        "dataterm": "dwc:eventDate"
+        "dataterm": "dwc:eventdate"
     },
     "Locality": {
         "term": "locality",
@@ -143,92 +143,93 @@
         "term": "verbatimlocality",
         "type": "text",
         "group": "locality",
-        "dataterm": "dwc:verbatimLocality",
+        "dataterm": "dwc:verbatimlocality",
         "tokenized": true
     },
     "Institution Name": {
         "term": "institutionname",
         "type": "text",
-        "group": "specimen"
+        "group": "specimen",
+        "hidden": true
     },
     "Institution Code": {
         "term": "institutioncode",
         "type": "text",
         "group": "specimen",
-        "dataterm": "dwc:institutionCode"
+        "dataterm": "dwc:institutioncode"
     },
     "Collector": {
         "term": "collector",
         "type": "text",
         "group": "collectionevent",
-        "dataterm": "dwc:recordedBy"
+        "dataterm": "dwc:recordedby"
     },
     "Field Number": {
         "term": "fieldnumber",
         "type": "text",
         "group": "collectionevent",
-        "dataterm": "dwc:fieldNumber"
+        "dataterm": "dwc:fieldnumber"
     },
     "Catalog Number": {
         "term": "catalognumber",
         "type": "text",
         "group": "specimen",
-        "dataterm": "dwc:catalogNumber"
+        "dataterm": "dwc:catalognumber"
     },
     "Barcode Value": {
         "term": "barcodevalue",
         "type": "text",
         "group": "specimen",
-        "dataterm": "idigbio:barcodeValue"
+        "dataterm": "idigbio:barcodevalue"
     },
     "Type Status": {
         "term": "typestatus",
         "type": "text",
         "group": "specimen",
-        "dataterm": "dwc:typeStatus"
+        "dataterm": "dwc:typestatus"
     },
     "Collection Code": {
         "term": "collectioncode",
         "type": "text",
         "group": "specimen",
-        "dataterm": "dwc:collectionCode"
+        "dataterm": "dwc:collectioncode"
     },
     "Collection Name": {
         "term": "collectionname",
         "type": "text",
         "group": "collectionevent",
-        "dataterm": "idigbio:collectionName",
+        "dataterm": "idigbio:collectionname",
         "hidden": true
     },
     "Minimum Elevation": {
         "term": "minelevation",
         "type": "numericrange",
         "group": "locality",
-        "dataterm": "dwc:minimumElevationInMeters"
+        "dataterm": "dwc:minimumelevationinmeters"
     },
     "Maximum Elevation": {
         "term": "maxelevation", 
         "type": "numericrange",
         "group": "locality",
-        "dataterm": "dwc:maximumElevationInMeters" 
+        "dataterm": "dwc:maximumelevationinmeters" 
     },
     "Minimum Depth": {
         "term": "mindepth",
         "type": "numericrange",
         "group": "locality",
-        "dataterm": "dwc:minimumDepthInMeters"
+        "dataterm": "dwc:minimumdepthinmeters"
     },
     "Maximum Depth": {
         "term": "maxdepth",
         "type": "numericrange",
         "group": "locality",
-        "dataterm": "dwc:maximumDepthInMeters"
+        "dataterm": "dwc:maximumdepthinmeters"
     },
     "Occurence ID":{
         "term": "occurrenceid",
         "type": "text",
         "group":"specimen",
-        "dataterm": "dwc:occurrenceID"
+        "dataterm": "dwc:occurrenceid"
     },
     "Recordset": {
         "term": "recordset",
@@ -243,7 +244,7 @@
     "Basis of Record":{
         "term": "basisofrecord",
         "type": "text",
-        "dataterm": "dwc:basisOfRecord",
+        "dataterm": "dwc:basisofrecord",
         "group": "specimen"
     },
     "Bed": {
@@ -274,72 +275,72 @@
         "term": "earliesteraorlowesterathem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:earliestEraOrLowestErathem"
+        "dataterm": "dwc:earliesteraorlowesterathem"
     },
     "Latest Era": {
         "term": "latesteraorhighesterathem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:latestEraOrHighestErathem"
+        "dataterm": "dwc:latesteraorhighesterathem"
     },
     "Earliest Eon": {
         "term": "earliesteonorlowesteonothem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:earliestEonOrLowestEonothem"
+        "dataterm": "dwc:earliesteonorlowesteonothem"
     },
     "Latest Eon": {
         "term": "latesteonorhighesteonothem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:latestEonOrHighestEonothem"
+        "dataterm": "dwc:latesteonorhighesteonothem"
     },
     "Earliest Period": {
         "term": "earliestperiodorlowestsystem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:earliestPeriodOrLowestSystem"
+        "dataterm": "dwc:earliestperiodorlowestsystem"
     },
     "Latest Period": {
         "term": "latestperiodorhighestsystem",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:latestPeriodOrHighestSystem"
+        "dataterm": "dwc:latestperiodorhighestsystem"
     },
     "Earliest Epoch": {
         "term": "earliestepochorlowestseries",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:earliestEpochOrLowestSeries"
+        "dataterm": "dwc:earliestepochorlowestseries"
     },
     "Latest Epoch": {
         "term": "latestepochorhighestseries",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:latestEpochOrHighestSeries"
+        "dataterm": "dwc:latestepochorhighestseries"
     },
     "Earliest Age": {
         "term": "earliestageorloweststage",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:earliestAgeOrLowestStage"
+        "dataterm": "dwc:earliestageorloweststage"
     },
     "Latest Age": {
         "term": "latestageorhigheststage",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:latestAgeOrHighestStage"
+        "dataterm": "dwc:latestageorhigheststage"
     },
     "Lowest Biostratigraphic Zone":{
         "term": "lowestbiostratigraphiczone",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:lowestBiostratigraphicZone"
+        "dataterm": "dwc:lowestbiostratigraphiczone"
     },
     "Lithostratigraphic Terms": {
         "term": "lithostratigraphicterms",
         "type": "text",
         "group": "paleocontext",
-        "dataterm": "dwc:lithostratigraphicTerms"
+        "dataterm": "dwc:lithostratigraphicterms"
     }
 }

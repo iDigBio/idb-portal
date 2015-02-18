@@ -6,25 +6,23 @@ module.exports = React.createClass({
 
     render: function(){
         var kingdoms = {
-            "animalia": "Animalia",
-            "plantae": "Plantae",
-            "fungi": "Fungi",
-            "Animalia": "Animalia",
-            "Plantae": "Plantae",
-            "dicotyledonae": "Plantae",
-            "monocotyledonae": "Plantae",
-            "Fungi": "Fungi",
-            "animals": "Animalia",
-            "ascomycota": "Fungi",
+            "incertae": "other",
+            "ichnofossil": "other",
+            "taxon indet.": "other"
         }
         var results={};
         var chart = {"series":[],"labels":[]};
-        _.each(this.props.data.kingdom, function(v,k){
-            if(_.isUndefined(results[kingdoms[k]])){
-                results[kingdoms[k]]=0;
+        var king;
+        _.each(response.kingdom, function(v,k){
+            if(_.isUndefined(kingdoms[k])){
+                king=k;
+            }else{
+                king='other';
             }
-            results[kingdoms[k]]+= v.itemCount;
-     
+            if(_.isUndefined(results[king])){
+                results[king]=0;
+            }
+            results[king]+= v.itemCount;
         })
       
         _.each(results, function(v,k){

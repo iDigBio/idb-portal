@@ -64,7 +64,7 @@ module.exports = IDBMap =  function(elid, options){
                     if(typeof idblayer == 'object'){
                         self.map.removeLayer(idblayer);
                     }
-                    idblayer = L.tileLayer(resp.tiles,{minZoom: 1, maxZoom: 12})
+                    idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
                     self.map.addLayer(idblayer);                    
                 }
             },

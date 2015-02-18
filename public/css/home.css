@@ -1,0 +1,9 @@
+.count {
+  text-align: center;
+  height: 60px;
+  background-color: #6aaa51;
+  color: white;
+  font-weight: bold;
+  font-size: 1.2em;
+  padding: 5px;
+}

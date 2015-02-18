@@ -3,6 +3,10 @@
 //var HomePage = React.createFactory(require('./react/build/home'));
 var base = '//beta-search.idigbio.org';
 var record = {"rq":{"kingdom":{"type":"exists"}},"fields": ["kingdom"]};
+var colors = ['#cf7a0b','#3782cd','#d3b833','#6aaa51','#ED475A','#A7EC7C','#56E4F4'];
+function formatNum(num){
+    return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 $.ajax(base+'/v2/summary/top/basic/',{
     data: JSON.stringify(record),
     success: function(response){
@@ -38,7 +42,10 @@ $.ajax(base+'/v2/summary/top/basic/',{
                 }
             },
             color:{
-                pattern: ['#cf7a0b','#3782cd','#d3b833','#6aaa51']
+                pattern: colors
+            },
+            size:{
+                height:280
             }
         })
     },
@@ -55,7 +62,9 @@ $.ajax(base+'/v2/summary/top/basic/',{
         var kingdoms = {
             "incertae": "other",
             "ichnofossil": "other",
-            "taxon indet.": "other"
+            "taxon indet.": "other",
+            "monocotyledonae": "other",
+            "pteridophyta": "other"
         }
         var king=[],other=['other'];
         _.each(response.kingdom, function(v,k){
@@ -73,7 +82,10 @@ $.ajax(base+'/v2/summary/top/basic/',{
             },
             bindto:'#media-chart',
             color:{
-                pattern: ['#cf7a0b','#3782cd','#d3b833','#6aaa51']
+                pattern: colors
+            },
+            size:{
+                height:280
             }
         })
     },
@@ -85,7 +97,7 @@ $.ajax(base+'/v2/summary/top/basic/',{
 
 $.ajax(base+'/v2/summary/count/basic/',{
     success: function(resp){
-        $('#recordcount').html(resp.itemCount);
+        $('#recordcount').html(formatNum(resp.itemCount));
     },
     dataType: 'json',
     contentType: 'application/json',
@@ -93,7 +105,7 @@ $.ajax(base+'/v2/summary/count/basic/',{
 })
 $.ajax(base+'/v2/summary/count/media/',{
     success: function(resp){
-        $('#mediacount').html(resp.itemCount);
+        $('#mediacount').html(formatNum(resp.itemCount));
     },
     dataType: 'json',
     contentType: 'application/json',
@@ -101,7 +113,7 @@ $.ajax(base+'/v2/summary/count/media/',{
 })
 $.ajax(base+'/v2/summary/count/recordset/',{
     success: function(resp){
-        $('#recordsetcount').html(resp.itemCount);
+        $('#recordsetcount').html(formatNum(resp.itemCount));
     },
     dataType: 'json',
     contentType: 'application/json',

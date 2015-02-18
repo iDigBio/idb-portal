@@ -35,28 +35,35 @@
         </div>
     </div>
 </div>
+
 <div class="row">
-    <div class="col-lg-2 col-lg-offset-3 count" >
-        <div id="recordcount"></div>
-        Specimen Records
-    </div>
-    <div class="col-lg-2 count" >
-        <div id="mediacount"></div>
-        Media Records
-    </div>
-    <div class="col-lg-2 count" >
-        <div id="recordsetcount"></div>
-        Recordsets
-    </div>       
-</div>
-<div class="row">
-    <div class="col-lg-3 col-lg-offset-3" id="react-wrapper">
+    <div class="col-lg-2 col-lg-offset-3" id="react-wrapper">
         <h4>Specimen Records</h4>
         <div class="chart" id="specimen-chart"></div>
     </div>
-    <div class="col-lg-3" id="react-wrapper">
+    <div class="col-lg-2" id="react-wrapper">
         <h4>Media Records</h4>
         <div class="chart" id="media-chart"></div>
+    </div>
+    <div class="col-lg-2">
+        <div class="row count">
+            <div class="col-lg-12" >
+                <div id="recordcount"></div>
+                <span class="name">Specimen Records</span>
+            </div>
+        </div>
+        <div class="row count">
+            <div class="col-lg-12" >
+                <div id="mediacount"></div>
+                <span class="name">Media Records</span>
+            </div>
+        </div>
+        <div class="row count">
+            <div class="col-lg-12" >
+                <div id="recordsetcount"></div>
+                <span class="name">Recordsets</span>
+            </div>       
+        </div>
     </div>
 </div>
 {% endblock %} 

@@ -17,7 +17,7 @@
     "fgh": "https://bitbucket.org/monoid/fgh/raw/465610eb2dcca8e48b84f7ed6927b81fd292bb65/fgh.js",
     "materialize": "*",
     "c3js-chart": "*",
-    "leaflet-utfgrid": "git@github.com:danzel/Leaflet.utfgrid.git"
+    "leaflet-utfgrid": "danzel/Leaflet.utfgrid"
   },
   "ignore": [
     "**/.*",

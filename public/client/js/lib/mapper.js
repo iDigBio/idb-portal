@@ -2,6 +2,7 @@
 var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
+require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 //elid: string name of element id;
 //options: object map of settings
 /*
@@ -9,6 +10,7 @@ var _ = require('lodash');
 *initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
 ***/
 module.exports = IDBMap =  function(elid, options){
+
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap contributors',
         minZoom: 0, 
@@ -45,7 +47,7 @@ module.exports = IDBMap =  function(elid, options){
         });
     });  
     this.currentQueryTime = 0;
-    var idblayer;
+    var idblayer,utf8grid;
     
     this.query = function(idbquery){
         var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
@@ -64,8 +66,18 @@ module.exports = IDBMap =  function(elid, options){
                     if(typeof idblayer == 'object'){
                         self.map.removeLayer(idblayer);
                     }
+                    if(typeof utf8grid == 'object'){
+                        self.map.removeLayer(utf8grid);
+                    }
                     idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
-                    self.map.addLayer(idblayer);                    
+                    utf8grid = L.utfGrid(resp.utf8grid,{
+                        useJsonP: false
+                    }) 
+                    /*utf8grid.on('mouseover', function (e) {
+                        console.log('hover: feature');
+                    });*/
+                    self.map.addLayer(idblayer); 
+                    self.map.addLayer(utf8grid);                  
                 }
             },
             dataType: 'json',

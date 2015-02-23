@@ -23,8 +23,9 @@ module.exports = IDBMap =  function(elid, options){
         zoom: 2,
         layers: [base],
         scrollWheelZoom: true,
-        boxZoom: false,
-        zoomControl: true
+        boxZoom: true,
+        zoomControl: true,
+        worldCopyJump: true
     };
     if(typeof options == 'object'){
         _.merge(this.defaults,options);
@@ -39,7 +40,7 @@ module.exports = IDBMap =  function(elid, options){
     var mapapi = "//beta-search.idigbio.org/v2/mapping/";
     this.map.on('click', function(e) {
         $.getJSON(mapapi + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
-            
+            debugger
             popup
                 .setLatLng(e.latlng)
                 .setContent("You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.")
@@ -72,10 +73,10 @@ module.exports = IDBMap =  function(elid, options){
                     idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
                     utf8grid = L.utfGrid(resp.utf8grid,{
                         useJsonP: false
-                    }) 
-                    /*utf8grid.on('mouseover', function (e) {
-                        console.log('hover: feature');
-                    });*/
+                    });
+                    utf8grid.on('click',function(e){
+                        debugger
+                    })
                     self.map.addLayer(idblayer); 
                     self.map.addLayer(utf8grid);                  
                 }

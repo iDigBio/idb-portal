@@ -22,6 +22,9 @@ module.exports = Downloads = React.createClass({
                     parts.push(name + ' is '+(filter.exists ? 'present' : 'missing')+'.');
                 }else if(type=='text' && !_.isEmpty(filter.text)){
                     var lines = filter.text.split('\n'),words='';
+                    lines = _.filter(lines,function(i){
+                        return !_.isEmpty(i);
+                    })
                     if(lines.length>1){
                         words = '(' + lines.join(' or ') + ').';
                     }else{

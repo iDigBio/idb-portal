@@ -5,7 +5,7 @@
 var React = require('react/addons')
 var RCTgroup = React.addons.CSSTransitionGroup;
 
-module.exports = React.createClass({displayName: "exports",
+module.exports = Sort = React.createClass({displayName: "Sort",
     getSortNames: function(){
         var list=[];
         this.props.sorting.forEach(function(item){
@@ -38,6 +38,12 @@ module.exports = React.createClass({displayName: "exports",
         //this.setState({sorting: sorting});
         this.props.searchChange('sorting',sorting);
     },
+    scrollSorts: function(e){
+        e.preventDefault();
+        $('#sort-group').animate({
+            scrollTop: $('#sort-group').height()
+        });
+    },
     render: function(){
         var sorts=[],self=this;
         var options = [], names=this.getSortNames();
@@ -67,7 +73,7 @@ module.exports = React.createClass({displayName: "exports",
                     }
                 });
                 fgroups.push(
-                  React.createElement("optgroup", {label: fields.groupNames[val]}, 
+                  React.createElement("optgroup", {label: fields.groupNames[val], key: val+ind}, 
                     "  ", flist
                   )
                 );
@@ -111,6 +117,11 @@ module.exports = React.createClass({displayName: "exports",
                 ), 
                 React.createElement("div", {id: "sort-group"}, 
                     sorts
+                ), 
+                React.createElement("div", {id: "sort-scroller"}, 
+                    React.createElement("span", {style: {'display': 'block'}, onClick: this.scrollSorts}, 
+                        "↓ Scroll To Bottom ↓"
+                    )
                 )
             )
         )

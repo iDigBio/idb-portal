@@ -296,7 +296,7 @@ function getCounts(o){
         return (
           React.createElement("tr", null, 
             React.createElement("td", null, 
-              React.createElement("a", {href: "/portal/recordsets/" + this.props.key}, this.props.name)
+              React.createElement("a", {href: "/portal/recordsets/" + this.props.keyid}, this.props.name)
             ), 
             React.createElement("td", {className: "valcol"}, formatNum(cts.digest_record_count)), 
             React.createElement("td", {className: "valcol"}, formatNum(cts.api_record_count)), 
@@ -330,15 +330,15 @@ function getCounts(o){
         _.each(cts,function(ct,key){
           totals[key] += ct;
         })
-        return React.createElement(Recordset, {name: recordsets[reckey].name, key: reckey, index_record_count: cts.index_record_count, index_mediarecord_count: cts.index_mediarecord_count, api_record_count: cts.api_record_count, api_mediarecord_count: cts.api_mediarecord_count, digest_record_count: cts.digest_record_count, digest_mediarecord_count: cts.digest_mediarecord_count})
+        return React.createElement(Recordset, {name: recordsets[reckey].name, key: reckey, keyid: reckey, index_record_count: cts.index_record_count, index_mediarecord_count: cts.index_mediarecord_count, api_record_count: cts.api_record_count, api_mediarecord_count: cts.api_mediarecord_count, digest_record_count: cts.digest_record_count, digest_mediarecord_count: cts.digest_mediarecord_count})
       });
       var tds = _.map(totals,function(ct,key){
         return React.createElement("td", null, ct)
       })
       return (
         React.createElement("div", null, 
-          React.createElement("h4", {id: this.props.key}, this.props.name), 
-          React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue", id: this.props.key+'_table'}, 
+          React.createElement("h4", {id: this.props.keyid}, this.props.name), 
+          React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue", id: this.props.keyid+'_table'}, 
               React.createElement("thead", null, 
                   React.createElement("tr", null, 
                       React.createElement("th", null), 
@@ -366,7 +366,7 @@ function getCounts(o){
 
   var PubSummaryRow = React.createClass({displayName: "PubSummaryRow",
     clickScroll: function(event) {
-        scrollToId(this.props.key)
+        scrollToId(this.props.keyid)
         return false
     },
     render: function(){
@@ -402,7 +402,7 @@ function getCounts(o){
   var PubSummary = React.createClass({displayName: "PubSummary",
      render: function() {
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return React.createElement(PubSummaryRow, {name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
+        return React.createElement(PubSummaryRow, {name: publishers[pubkey].name, key: pubkey, keyid: pubkey, recordsets: publishers[pubkey].recordsets})
       });
       return (
         React.createElement("div", null, 
@@ -500,7 +500,7 @@ function getCounts(o){
       })      
 
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return React.createElement(Publisher, {name: publishers[pubkey].name, key: pubkey, recordsets: publishers[pubkey].recordsets})
+        return React.createElement(Publisher, {name: publishers[pubkey].name, key: pubkey, keyid: pubkey, recordsets: publishers[pubkey].recordsets})
       });
       return (
         React.createElement("div", null, 

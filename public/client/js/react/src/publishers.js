@@ -296,7 +296,7 @@ function getCounts(o){
         return (
           <tr>
             <td>
-              <a href={"/portal/recordsets/" + this.props.key }>{this.props.name}</a>
+              <a href={"/portal/recordsets/" + this.props.keyid }>{this.props.name}</a>
             </td>
             <td className="valcol">{formatNum(cts.digest_record_count)}</td>
             <td className="valcol">{formatNum(cts.api_record_count)}</td>
@@ -330,15 +330,15 @@ function getCounts(o){
         _.each(cts,function(ct,key){
           totals[key] += ct;
         })
-        return <Recordset name={recordsets[reckey].name} key={reckey} index_record_count={cts.index_record_count} index_mediarecord_count={cts.index_mediarecord_count} api_record_count={cts.api_record_count} api_mediarecord_count={cts.api_mediarecord_count} digest_record_count={cts.digest_record_count} digest_mediarecord_count={cts.digest_mediarecord_count} />
+        return <Recordset name={recordsets[reckey].name} key={reckey} keyid={reckey} index_record_count={cts.index_record_count} index_mediarecord_count={cts.index_mediarecord_count} api_record_count={cts.api_record_count} api_mediarecord_count={cts.api_mediarecord_count} digest_record_count={cts.digest_record_count} digest_mediarecord_count={cts.digest_mediarecord_count} />
       });
       var tds = _.map(totals,function(ct,key){
         return <td>{ct}</td>
       })
       return (
         <div>
-          <h4 id={this.props.key} >{this.props.name}</h4>          
-          <table className="table table-bordered datatable table-condensed tablesorter-blue" id={this.props.key+'_table'}>
+          <h4 id={this.props.keyid} >{this.props.name}</h4>          
+          <table className="table table-bordered datatable table-condensed tablesorter-blue" id={this.props.keyid+'_table'}>
               <thead>
                   <tr>
                       <th></th>
@@ -366,7 +366,7 @@ function getCounts(o){
 
   var PubSummaryRow = React.createClass({
     clickScroll: function(event) {
-        scrollToId(this.props.key)
+        scrollToId(this.props.keyid)
         return false
     },
     render: function(){
@@ -402,7 +402,7 @@ function getCounts(o){
   var PubSummary = React.createClass({
      render: function() {
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return <PubSummaryRow name={publishers[pubkey].name} key={pubkey} recordsets={publishers[pubkey].recordsets} />
+        return <PubSummaryRow name={publishers[pubkey].name} key={pubkey} keyid={pubkey} recordsets={publishers[pubkey].recordsets} />
       });
       return (
         <div>
@@ -500,7 +500,7 @@ function getCounts(o){
       })      
 
       var pubs = _.map(_.keys(publishers), function(pubkey){
-        return <Publisher name={publishers[pubkey].name} key={pubkey} recordsets={publishers[pubkey].recordsets} />
+        return <Publisher name={publishers[pubkey].name} key={pubkey} keyid={pubkey} recordsets={publishers[pubkey].recordsets} />
       });
       return (
         <div>

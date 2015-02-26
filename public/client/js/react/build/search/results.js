@@ -28,7 +28,24 @@ module.exports = Results =  React.createClass({displayName: "Results",
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
             self.lastQueryTime = now;
-            $.ajax('//beta-search.idigbio.org/v2/search/',{
+            idbapi.search(query,function(response){
+                if(now>= self.lastQueryTime){
+                    var res, more=false;
+                    if(searchState.from > 0){
+                        res = self.state.results.concat(response.items);
+                    }else{
+                        res = response.items;
+                    }
+
+                    if(response.itemCount > (searchState.from+searchState.size)){
+                        more=true;
+                    }
+                    self.setState({results: res, total: response.itemCount, hasMore: more},function(){
+                        self.forceUpdate();
+                    });
+                }
+            })
+            /*$.ajax('//beta-search.idigbio.org/v2/search/',{
                 data: JSON.stringify(query),
                 success: function(response){
                     //console.log(resp.shortCode)
@@ -53,7 +70,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
                 dataType: 'json',
                 contentType: 'application/json',
                 type: 'POST'
-            });
+            });*/
 
         },300,{leading: true, trailing: true});
     },
@@ -458,46 +475,26 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
 
 var ResultsImages = React.createClass({displayName: "ResultsImages",
     getImageOnlyResults: function(search){
-        /*var self=this, search=_.cloneDeep(search);
-        search.image = true,
-        query = queryBuilder.makeQuery(search);
-        searchServer.esQuery('records',query,function(response){
-            var results;
-            if(search.from>0){
-                results = self.state.results.concat(response.hits.hits);
-            }else{
-                results = response.hits.hits;
-            }
-            self.setState({results: results});
-            self.forceUpdate();
-        });*/
 
         var d = new Date, self=this, searchState = _.cloneDeep(search);
         searchState.image=true;
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         self.lastQueryTime = now;
-        $.ajax('//beta-search.idigbio.org/v2/search/',{
-            data: JSON.stringify(query),
-            success: function(response){
-                //console.log(resp.shortCode)
-                //make sure last query run is the last one that renders
-                //as responses can be out of order
-                if(now>= self.lastQueryTime){
-                    var res;
-                    if(searchState.from > 0){
-                        res = self.state.results.concat(response.items);
-                    }else{
-                        res = response.items;
-                    }
-                    self.setState({results: res},function(){
-                        self.forceUpdate();
-                    });
+        idbapi.search(query,function(response){
+            //make sure last query run is the last one that renders
+            //as responses can be out of order
+            if(now>= self.lastQueryTime){
+                var res;
+                if(searchState.from > 0){
+                    res = self.state.results.concat(response.items);
+                }else{
+                    res = response.items;
                 }
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            type: 'POST'
+                self.setState({results: res},function(){
+                    self.forceUpdate();
+                });
+            }
         });
     },
     getInitialState: function(){

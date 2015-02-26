@@ -21,6 +21,12 @@
 <meta property="og:description" content="{{ record.attribution.name }}" />
 {% endif %}
 <meta property="og:url" content="https://{{ user.host }}/portal/records/{{ id }}" />
+<script type="text/javascript">
+{% autoescape false %}
+  var record={{ data }};
+{% endautoescape %}
+</script>
+
 {% endblock %} 
 
 {% block content %}

@@ -1,6 +1,7 @@
 
 var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;
+var idbapi = require('../../../lib/idbapi');
 
 module.exports = Filters = React.createClass({displayName: "Filters",
     statics: {
@@ -207,8 +208,18 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                 var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
                 last = split[split.length-1].toLowerCase(),
-                //field = fields.byTerm[name].term,
-                query = {"aggs":{},"from":0,"size":0};
+                rq ={};
+                rq[name]={'type':'prefix', 'value': last};
+                query = {rq: rq, limit: 15};
+
+                idbapi.search(query, function(resp) {
+                    var list = [];
+                    resp.items.forEach(function(item){
+                        list.push(item.indexTerms[name]);
+                    })
+                    respCallback(list);
+                })
+                /*query = {"aggs":{},"from":0,"size":0};
                 query.aggs["static_"+name]={"terms":{"field":name,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
         
                 searchServer.esQuery('records', query, function(resp) {
@@ -217,7 +228,7 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                         list.push(obj.key);
                     });
                     respCallback(list);
-                });
+                });*/
             },
             focus: function (event,ui){
                 //adaption for textarea input with "or" query

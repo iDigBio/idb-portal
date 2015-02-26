@@ -1,19 +1,20 @@
 
-var React = require('react')
+var React = require('react');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
 var L = require('leaflet/dist/leaflet');
 //provides order for sections
 var RecordPage = require('./react/build/record');
 //TODO: rewrite recordset id into page code so you can Async this
-$.getJSON('//beta-search.idigbio.org/v2/view/records/'+$('#recordID').val(),function(resp){
+//$.getJSON('//beta-search.idigbio.org/v2/view/records/'+$('#recordID').val(),function(resp){
+
     React.render(
-        <RecordPage record={resp} />,
+        <RecordPage record={record} />,
         document.getElementById('react-wrapper')
     ) 
     //$('.tabs .tab:first-child').trigger('click'); 
     //make map if geopoint
-    if(_.has(resp.indexTerms,'geopoint')){
+    if(_.has(record.indexTerms,'geopoint')){
         $('#map').css('display','block');
        
         var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -32,9 +33,9 @@ $.getJSON('//beta-search.idigbio.org/v2/view/records/'+$('#recordID').val(),func
         });
 
         L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';
-        var point = L.latLng(resp.indexTerms.geopoint);
+        var point = L.latLng(record.indexTerms.geopoint);
         L.marker(point).addTo(map);
         map.panTo(point).setZoom(5); 
     }       
-});
+//});
 

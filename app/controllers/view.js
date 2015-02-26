@@ -46,6 +46,7 @@ module.exports = function(app, config) {
 						user: req.user,
 						token: req.session._csrf,
 						record: record,
+						data: JSON.stringify(record),
 						content: Page
 					});			
 				}else{
@@ -82,6 +83,7 @@ module.exports = function(app, config) {
 			                token: req.session._csrf,
 			                content: Page,
 			                record: record,
+			                data: JSON.stringify(record),
 			                mediarecord: mediarecord
 			            }); 					
 					}

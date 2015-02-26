@@ -210,25 +210,14 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                 last = split[split.length-1].toLowerCase(),
                 rq ={};
                 rq[name]={'type':'prefix', 'value': last};
-                query = {rq: rq, limit: 15};
+                query = {rq: rq, count: 15, top_fields:[name]};
 
-                idbapi.search(query, function(resp) {
-                    var list = [];
-                    resp.items.forEach(function(item){
-                        list.push(item.indexTerms[name]);
+                idbapi.summary('top/basic/',query, function(resp) {
+                    var list = _.map(resp[name], function(v,k){
+                        return k;
                     })
                     respCallback(list);
                 })
-                /*query = {"aggs":{},"from":0,"size":0};
-                query.aggs["static_"+name]={"terms":{"field":name,"include":"^"+last+".*","exclude":"^.{1,2}$","size":15}};
-        
-                searchServer.esQuery('records', query, function(resp) {
-                    var list = [];
-                    $.each(resp.aggregations['static_' + name]['buckets'], function(index, obj) {
-                        list.push(obj.key);
-                    });
-                    respCallback(list);
-                });*/
             },
             focus: function (event,ui){
                 //adaption for textarea input with "or" query

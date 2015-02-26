@@ -1,8 +1,8 @@
 
 var React = require('react');
-var _ = require('underscore');
+var _ = require('lodash');
 
-module.exports = React.createClass({
+module.exports = Provider = React.createClass({
     noLogo: function(event){
         $(event.currentTarget).remove();
     },
@@ -55,7 +55,7 @@ module.exports = React.createClass({
             var phone =  self.check(contact.phone);
             var role =  self.check(contact.role);
             return (
-                <ul className="pull-left contact">
+                <ul key={name+email+role}className="pull-left contact">
                     <li>{name}</li>
                     <li>{role}</li>
                     <li><a href={'mailto: '+email}>{email}</a></li>
@@ -93,7 +93,7 @@ module.exports = React.createClass({
                 contacts.push(makeContact(item));
             })
             con = (
-                <div id="contacts">
+                <div key="contacts" id="contacts">
                     <div className="title">Contacts</div>
                     {contacts}
                 </div>

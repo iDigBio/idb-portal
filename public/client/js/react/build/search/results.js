@@ -8,7 +8,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
         if(!localStorage || _.isUndefined(localStorage.viewType)){
             localStorage.setItem('viewType','list');
         }
-        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search, hasMore: false};
+        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         //
@@ -28,6 +28,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
             self.lastQueryTime = now;
+            //self.setState({loading: true});
             idbapi.search(query,function(response){
                 if(now>= self.lastQueryTime){
                     var res, more=false;
@@ -36,42 +37,14 @@ module.exports = Results =  React.createClass({displayName: "Results",
                     }else{
                         res = response.items;
                     }
-
                     if(response.itemCount > (searchState.from+searchState.size)){
                         more=true;
                     }
-                    self.setState({results: res, total: response.itemCount, hasMore: more},function(){
+                    self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
                         self.forceUpdate();
                     });
                 }
             })
-            /*$.ajax('//beta-search.idigbio.org/v2/search/',{
-                data: JSON.stringify(query),
-                success: function(response){
-                    //console.log(resp.shortCode)
-                    //make sure last query run is the last one that renders
-                    //as responses can be out of order
-                    if(now>= self.lastQueryTime){
-                        var res, more=false;
-                        if(searchState.from > 0){
-                            res = self.state.results.concat(response.items);
-                        }else{
-                            res = response.items;
-                        }
-
-                        if(response.itemCount > (searchState.from+searchState.size)){
-                            more=true;
-                        }
-                        self.setState({results: res, total: response.itemCount, hasMore: more},function(){
-                            self.forceUpdate();
-                        });
-                    }
-                },
-                dataType: 'json',
-                contentType: 'application/json',
-                type: 'POST'
-            });*/
-
         },300,{leading: true, trailing: true});
     },
     componentDidMount: function(){
@@ -101,7 +74,8 @@ module.exports = Results =  React.createClass({displayName: "Results",
         if(this.state.total > search.from + search.size){
             if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
                 search.from += search.size;
-                this.setState({search: search},function(){
+                this.setState({search: search, loading: true},function(){
+                   this.forceUpdate();
                    this.getResults(); 
                 }); 
             }
@@ -112,25 +86,24 @@ module.exports = Results =  React.createClass({displayName: "Results",
 
         if(this.state.total > search.from + search.size){
             search.from += search.size;
-            this.setState({search: search},function(){
+            this.setState({search: search, loading: true},function(){
                this.getResults(); 
             }); 
         }
     },
     render: function(){
-        var search = this.props.search, self=this, li=[], Display, klass;
+        var search = this.props.search, self=this, li=[];
         switch(this.state.view){
             case 'list':
-                Display = React.createFactory(ResultsList);
-                results = Display( {search: this.state.search, results: this.state.results, searchChange: this.props.searchChange} );
+                results = React.createElement(ResultsList, {
+                            search: this.state.search, results: this.state.results, 
+                            searchChange: this.props.searchChange, loading: this.state.loading});
                 break
             case 'labels':
-                Display = React.createFactory(ResultsLabels);
-                results = Display(  {results: this.state.results} );
+                results = React.createElement(ResultsLabels, {results: this.state.results, loading: this.state.loading});
                 break
             case 'images':
-                Display = React.createFactory(ResultsImages);
-                results = Display(  {search: this.state.search, results: this.state.results} );
+                results = React.createElement(ResultsImages, {search: this.state.search, results: this.state.results, loading: this.state.loading});
                 break;
         }
         ['list','labels','images'].forEach(function(item){
@@ -299,8 +272,15 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 )
             );
         })
-
-        if(rows.length===0){
+        if(this.props.loading){
+            rows.push(
+                React.createElement("tr", {key: 'loading-row', className: "no-results-row"}, 
+                    React.createElement("td", {colSpan: columns.length+1}, 
+                        React.createElement("img", {src: '/portal/img/ajax-loader.gif'})
+                    )
+                )
+            );
+        }else if(rows.length===0){
             rows.push(React.createElement("tr", {key: 'row-no-results', className: "no-results-row"}, React.createElement("td", {colSpan: columns.length+1}, "No Matching Records")))
         }
         //column selection modal list
@@ -465,6 +445,14 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
         this.props.results.forEach(function(result,ind){
             labels.push(self.makeLabel(result,'label-'+ind));
         })
+        if(this.props.loading){
+            var style={width:"100%",height:"30px",textAlign:"center"};
+            labels.push(
+                React.createElement("div", {key: 'loading-div', style: style}, 
+                    React.createElement("img", {src: "/portal/img/ajax-loader.gif"})
+                )
+            )
+        }
         return (
             React.createElement("div", {id: "result-labels", className: "panel"}, 
                 labels

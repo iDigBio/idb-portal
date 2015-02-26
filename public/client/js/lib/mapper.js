@@ -40,7 +40,6 @@ module.exports = IDBMap =  function(elid, options){
     var mapapi = "//beta-search.idigbio.org/v2/mapping/";
     this.map.on('click', function(e) {
         $.getJSON(mapapi + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
-            debugger
             popup
                 .setLatLng(e.latlng)
                 .setContent("You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.")

@@ -2,45 +2,45 @@ require('jquery');
 module.exports = {
     host: '//beta-search.idigbio.org/v2/',
     search: function(query,callback){
-        this._basicPost('search/',query,callback);
+        this._basic('POST','search/',query,callback);
     },
-    media: function(query,callback){
-        this._basicPost('media/',query,callback);
+    media: function(arg1,arg2){
+        this._basic('POST','media/',query,callback);
     },
-    mapping: function(query,callback){
-        this._basicPost('mapping/',query,callback);
+    mapping: function(arg1,arg2){
+        this._basic('POST','mapping/',query,callback);
     },
     view: function(type,uuid,callback){
-        this._basicGet('view/'+type+'/'+uuid,callback);
+        this._basic('GET','view/'+type+'/'+uuid,callback);
     },
     summary: function(type,query,callback){
-        this._basicPost('summary/'+type,query,callback);
+        this._basic('POST','summary/'+type,query,callback);
     },
-    _basicPost: function(type,query,callback){
-        $.ajax(this.host+type,{
-            data: JSON.stringify(query),
-            success: function(response){
-                callback(response);
-            },
+    _basic: function(method,arg1,arg2,arg3){
+        var options={
             error: function(jqxhr,status,error){
                 console.log(status +': '+error);
             },
             dataType: 'json',
             contentType: 'application/json',
-            type: 'POST'
-        });        
-    },
-    _basicGet: function(viewType,callback){
-         $.ajax(this.host+viewType,{
-            success: function(response){
-                callback(response);
-            },
-            error: function(jqxhr,status,error){
-                console.log(status +': '+error);
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            type: 'GET'
-        });        
+            type: method
+        }
+        var path=this.host;
+        [arg1,arg2,arg3].forEach(function(arg){
+            switch(typeof(arg)){
+                case 'object':
+                    options.data=JSON.stringify(arg);
+                    break;
+                case 'string':
+                    path+=arg;
+                    break;
+                case 'function':
+                    options.success = function(response){
+                        arg(response);
+                    }
+                    break;
+            }
+        });
+        $.ajax(path,options);        
     }
 }

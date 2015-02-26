@@ -33,7 +33,6 @@ var Media = React.createClass({
 var Buttons = React.createClass({
     render: function(){
         var el=[];
-        debugger
         if(_.has(this.props.data,'records')){
             var link = '/portal/records/'+this.props.data.records[0];
             el.push(

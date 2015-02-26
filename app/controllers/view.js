@@ -83,7 +83,7 @@ module.exports = function(app, config) {
 			                token: req.session._csrf,
 			                content: Page,
 			                record: record,
-			                data: JSON.stringify(record),
+			                data: JSON.stringify({record: record, mediarecord: mediarecord}),
 			                mediarecord: mediarecord
 			            }); 					
 					}

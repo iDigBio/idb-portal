@@ -170,6 +170,12 @@
         "group": "collectionevent",
         "dataterm": "dwc:fieldnumber"
     },
+    "Collector Number": {
+        "term": "recordnumber",
+        "type": "text",
+        "group": "collectionevent",
+        "dataterm": "dwc:recordnumber"
+    },
     "Catalog Number": {
         "term": "catalognumber",
         "type": "text",

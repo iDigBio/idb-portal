@@ -6,6 +6,7 @@
 <meta property="og:description" content="The iDigBio Specimen Portal provides access to millions of digitized natural history records gathered from institutions across the United States." />
 
 <link rel="stylesheet" type="text/css" href="/portal/css/home.css">
+<link rel="stylesheet" type="text/css" href="/portal/css/jquery-ui-1.10.0.custom.css">
 <!--<link rel="stylesheet" type="text/css" href="/portal/components/chartist/dist/chartist.min.css">
 <script type="text/javascript" src="/portal/components/chartist/dist/chartist.min.js"></script>-->
 <link rel="stylesheet" type="text/css" href="/portal/components/c3js-chart/c3.min.css">
@@ -14,56 +15,40 @@
 
 {% endblock %} {% block content %}
 <div class="row" id="portal-home">
-    <div class="col-lg-3 col-lg-offset-3" class="clearfix">                        
-        <h3>Start Searching Specimen Records</h3>
-        <form class="form-inline">
-            <div class="form-group">
-                <div class="input-group">
-                    <input type="text" placeholder="Scientific Name" class="form-control" id="searchbox" autocomplete="off" >
-                    <a class="input-group-addon btn btn-material-lightblue" >Go</a>
-                </div>
-            </div>
-            <p style="font-size:.75em">Press ESC to close auto-complete suggestions. </p>
-        </form>
-    </div>
-    <div class="col-lg-3">
-        <div style="margin:15px 15px 15px 5px" class="pull-left">
-            <h3 style="color: #444;margin:0px 0px;padding-top:0px;">iDigBio Specimen Portal</h3>
-            <p>If you are familiar with our portal's interface, you can start searching <a href="/portal/search">Specimen Records</a>.<br>
-            If this is your first time here, you might consider browsing <a href="/portal/tutorial">our tutorial.</a><br>
-            Our data are based on the <a href="http://rs.tdwg.org/dwc/terms/index.htm">Darwin Core</a> and <a href="http://terms.gbif.org/wiki/Audubon_Core">Audubon Core</a> standards.</p>
-        </div>
+    <div class="col-lg-5 col-lg-offset-3" class="clearfix" id="search-row"> 
+                <h3>Start Searching Specimen Records</h3>
+                <form class="form-inline">
+                    <div id="search-form-group" class="form-group">
+                        <div class="input-group">
+                            <input type="text" placeholder="Scientific Name" class="form-control" id="searchbox" autocomplete="off" >
+                            <a class="input-group-addon btn btn-material-lightblue" >Go</a>
+                        </div>
+                        <p style="font-size:.75em">Press ESC to close auto-complete suggestions. </p>
+                    </div>
+                </form>
     </div>
 </div>
-
-<div class="row">
-    <div class="col-lg-2 col-lg-offset-3" id="react-wrapper">
+<!--<div class="row" id="count-row">
+        <div class="col-lg-4  col-lg-offset-4 count" >
+            <div id="recordsetcount"></div>
+            <span class="name">Recordsets</span>
+        </div>       
+</div>-->
+<div class="row" id="stats-row">
+    <div class="col-lg-3 col-lg-offset-3" id="react-wrapper">
         <h4>Specimen Records</h4>
+        <h4 id="recordcount"></h4>
         <div class="chart" id="specimen-chart"></div>
     </div>
-    <div class="col-lg-2" id="react-wrapper">
+    <div class="col-lg-3" id="react-wrapper">
         <h4>Media Records</h4>
+        <h4 id="mediacount"></h4>
         <div class="chart" id="media-chart"></div>
     </div>
-    <div class="col-lg-2">
-        <div class="row count">
-            <div class="col-lg-12" >
-                <div id="recordcount"></div>
-                <span class="name">Specimen Records</span>
-            </div>
-        </div>
-        <div class="row count">
-            <div class="col-lg-12" >
-                <div id="mediacount"></div>
-                <span class="name">Media Records</span>
-            </div>
-        </div>
-        <div class="row count">
-            <div class="col-lg-12" >
-                <div id="recordsetcount"></div>
-                <span class="name">Recordsets</span>
-            </div>       
-        </div>
+</div>
+<div class="row">
+    <div class="col-lg-2 col-lg-offset-5">
+        
     </div>
 </div>
 {% endblock %} 

@@ -1,7 +1,6 @@
 .count {
-  text-align: left;
+  text-align: center;
   height: 60px;
-  background-color: #6aaa51;
   color: white;
   font-weight: bold;
   font-size: 1.2em;
@@ -11,9 +10,36 @@
 .count .name {
   font-size: .9em;
 }
+#count-row {
+  background-color: #a4cc95;
+}
+#search-row {
+  text-align: left;
+}
 h4 {
   text-align: center;
+  color: #555;
+  font-weight: bold;
 }
 .chart {
   max-height: 200px;
+}
+#search-form-group {
+  width: 90%;
+  max-width: 390px;
+}
+@media (max-width: 992px) {
+  #search-form-group {
+    width: 90%;
+    margin: 0px 20px;
+  }
+}
+#search-form-group .input-group {
+  width: 100%;
+}
+#search-form-group .input-group max-width:200px .btn {
+  max-width: 20px;
+}
+#stats-row {
+  background-color: #eef5eb;
 }

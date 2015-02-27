@@ -82,16 +82,8 @@
   height: 30px;
   cursor: pointer;
 }
-#results #result-list #data-table tbody tr td {
-  overflow: hidden;
-  height: 30px;
-  word-wrap: break-word;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-#results #result-list #data-table tbody tr td span.no-data {
-  color: #aaa;
-  font-style: italic;
+#results #result-list #data-table tbody tr:hover {
+  background-color: #f5f5f5;
 }
 #results #result-list #data-table tbody tr.no-results-row {
   font-weight: bold;
@@ -103,6 +95,17 @@
 }
 #results #result-list #data-table tbody tr.no-results-row td {
   padding: 20px;
+}
+#results #result-list #data-table tbody tr td {
+  overflow: hidden;
+  height: 30px;
+  word-wrap: break-word;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#results #result-list #data-table tbody tr td span.no-data {
+  color: #aaa;
+  font-style: italic;
 }
 #results #result-labels {
   padding-top: 10px;

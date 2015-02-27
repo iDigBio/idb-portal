@@ -73,9 +73,6 @@ module.exports = IDBMap =  function(elid, options){
                     utf8grid = L.utfGrid(resp.utf8grid,{
                         useJsonP: false
                     });
-                    utf8grid.on('click',function(e){
-                        debugger
-                    })
                     self.map.addLayer(idblayer); 
                     self.map.addLayer(utf8grid);                  
                 }
@@ -186,3 +183,16 @@ var drawZoomButton = L.Control.extend({
         return this._div;
     }
 });
+
+var legend = L.Control.extend({
+    options: {
+        position: "bottomleft"
+    },
+    _div: L.DomUtil.create('div','map-legend'),
+    onAdd: function(map){
+
+    },
+    onRemove: function(map){
+
+    }
+})

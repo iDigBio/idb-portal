@@ -2,10 +2,10 @@ require('jquery');
 module.exports = {
     host: '//beta-search.idigbio.org/v2/',
     search: function(query,callback){
-        this._basic('POST','search/',query,callback);
+        this._basic('POST','search/records/',query,callback);
     },
     media: function(query,callback){
-        this._basic('POST','media/',query,callback);
+        this._basic('POST','search/media/',query,callback);
     },
     mapping: function(query,callback){
         this._basic('POST','mapping/',query,callback);

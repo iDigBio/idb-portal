@@ -1,6 +1,8 @@
 
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
+React.initializeTouchEvents(true);
+
 module.exports = Results =  React.createClass({displayName: "Results",
 
     getInitialState: function(){

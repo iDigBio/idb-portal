@@ -192,6 +192,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         this.props.searchChange('sorting',sorting);
     },
     openRecord: function(e){
+        e.preventDefault();
         window.open('/portal/records/'+e.currentTarget.id,'_blank');
     },
     setSortable: function(){

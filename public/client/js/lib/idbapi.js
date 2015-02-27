@@ -4,10 +4,10 @@ module.exports = {
     search: function(query,callback){
         this._basic('POST','search/',query,callback);
     },
-    media: function(arg1,arg2){
+    media: function(query,callback){
         this._basic('POST','media/',query,callback);
     },
-    mapping: function(arg1,arg2){
+    mapping: function(query,callback){
         this._basic('POST','mapping/',query,callback);
     },
     view: function(type,uuid,callback){

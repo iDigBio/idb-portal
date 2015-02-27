@@ -310,6 +310,7 @@
 }
 #results #result-list #data-table tbody tr {
   height: 30px;
+  cursor: pointer;
 }
 #results #result-list #data-table tbody tr td {
   overflow: hidden;
@@ -321,9 +322,6 @@
 #results #result-list #data-table tbody tr td span.no-data {
   color: #aaa;
   font-style: italic;
-}
-#results #result-list #data-table tbody tr:hover {
-  cursor: pointer;
 }
 #results #result-list #data-table tbody tr.no-results-row {
   font-weight: bold;

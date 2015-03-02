@@ -1,4 +1,4 @@
 idb-portal
 ==========
 
-time for new portal code
+Node,Express,React,Leaflet,Lodash,jQuery

@@ -3,6 +3,7 @@ var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
+var idbapi = require('./idbapi');
 //elid: string name of element id;
 //options: object map of settings
 /*
@@ -33,48 +34,66 @@ module.exports = IDBMap =  function(elid, options){
     //init map
     this.map = L.map(elid,this.defaults);
     this.map.addControl(new MaximizeButton());
+    this.map.addControl(new L.control.scale({
+        position:'bottomright'
+    }))
     //add modal pane for expanded view
     $('body').append('<div id="mapper-modal"></div>');
     //
-    var popup = L.popup(), mapCode, self=this;
-    var mapapi = "//beta-search.idigbio.org/v2/mapping/";
+    var popup = L.popup(),  self=this;
+    var mapapi = idbapi.host+"mapping/";
     this.map.on('click', function(e) {
-        $.getJSON(mapapi + mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
+        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             popup
                 .setLatLng(e.latlng)
                 .setContent("You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.")
                 .openOn(self.map);
         });
     });  
+    this.map.on('zoomend',function(e){
+        if(typeof legend == 'object'){
+            self.map.removeControl(legend);
+            if(typeof self.map.mapCode != 'undefined'){
+                self.map.addControl(legend)
+            }
+        }
+    })
     this.currentQueryTime = 0;
-    var idblayer,utf8grid;
+    var idblayer,utf8grid,legend;
     
     this.query = function(idbquery){
         var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query),self=this, d = new Date;
- 
         var time = d.getTime();
         self.currentQueryTime=time;
+        if(typeof idblayer == 'object'){
+            self.map.removeLayer(idblayer);
+        }
+        if(typeof utf8grid == 'object'){
+            self.map.removeLayer(utf8grid);
+        }
+        if(typeof legend == 'object'){
+            self.map.removeControl(legend);
+        }
         $.ajax(mapapi,{
             data: q,
             success: function(resp){
                 //console.log(resp.shortCode)
                 //make sure last query run is the last one that renders
                 //as responses can be out of order
-                mapCode = resp.shortCode;
+                //mapCode = resp.shortCode;
+                self.map.mapCode = resp.shortCode;
                 if(time>=self.currentQueryTime){
-                    if(typeof idblayer == 'object'){
-                        self.map.removeLayer(idblayer);
-                    }
-                    if(typeof utf8grid == 'object'){
-                        self.map.removeLayer(utf8grid);
-                    }
+
                     idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
                     utf8grid = L.utfGrid(resp.utf8grid,{
                         useJsonP: false
                     });
+                    legend = new legendPanel();
+
                     self.map.addLayer(idblayer); 
-                    self.map.addLayer(utf8grid);                  
+                    self.map.addLayer(utf8grid);
+                    self.map.addControl(legend);                  
                 }
             },
             dataType: 'json',
@@ -180,19 +199,38 @@ var drawZoomButton = L.Control.extend({
         return this._div;
     },
     onRemove: function(map){
+        this._div.innerHTML='';
         return this._div;
     }
 });
 
-var legend = L.Control.extend({
+var legendPanel = L.Control.extend({
     options: {
         position: "bottomleft"
     },
     _div: L.DomUtil.create('div','map-legend'),
     onAdd: function(map){
-
+        var colors=[],self=this,header,def;
+        idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
+            if(isNaN(resp.order[0])){
+                header='<span class="legend-header">Top 10 Scientific Names</span>';
+                def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
+            }else{
+                header='<span class="legend-header">Density Legend</span>';
+                def='';
+            }
+            colors=_.map(resp.order,function(val){
+                var swatch = '<div class="legend-item">';
+                swatch+=val;
+                swatch+='<span class="legend-swatch" style="background-color:'+resp.colors[val.toString()].fill+'"></span></div>';
+                return swatch;
+            });
+            self._div.innerHTML='<div class="wrapper">'+header+colors.join('')+def+'</div>';
+        });
+        return this._div;
     },
     onRemove: function(map){
-
+        this._div.innerHTML=''
+        return this._div;
     }
 })

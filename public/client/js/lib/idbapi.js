@@ -7,8 +7,11 @@ module.exports = {
     media: function(query,callback){
         this._basic('POST','search/media/',query,callback);
     },
-    mapping: function(query,callback){
+    createMap: function(query,callback){
         this._basic('POST','mapping/',query,callback);
+    },
+    mapping: function(path,callback){
+        this._basic('GET','mapping/'+path,callback);
     },
     view: function(type,uuid,callback){
         this._basic('GET','view/'+type+'/'+uuid,callback);

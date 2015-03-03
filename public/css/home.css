@@ -45,6 +45,8 @@ h4 {
 }
 #stats-row {
   padding: 20px;
+  border-bottom: 2px solid #d0e5c8;
+  border-top: 2px solid #d0e5c8;
 }
 #welcome {
   font-size: 1.4em;

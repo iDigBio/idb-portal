@@ -15,8 +15,8 @@
 
 {% endblock %} {% block content %}
 <div class="row" id="portal-home">
-    <div class="col-lg-5 col-lg-offset-3" class="clearfix" id="search-row"> 
-                <h3>Start Searching Specimen Records</h3>
+    <div class="col-lg-3 col-lg-offset-3" class="clearfix" id="search-row"> 
+                <h3>Start Searching <span id="recordsets-total"></span> Recordsets</h3>
                 <form class="form-inline">
                     <div id="search-form-group" class="form-group">
                         <div class="input-group">
@@ -27,6 +27,7 @@
                     </div>
                 </form>
     </div>
+
 </div>
 <!--<div class="row" id="count-row">
         <div class="col-lg-4  col-lg-offset-4 count" >

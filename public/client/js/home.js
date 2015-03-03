@@ -87,7 +87,7 @@ idbapi.summary('count/media/',function(resp){
     $('#mediacount').html(formatNum(resp.itemCount));
 })
 idbapi.summary('count/recordset/',function(resp){
-    $('#recordsetcount').html(formatNum(resp.itemCount));
+    $('#recordsets-total').html(formatNum(resp.itemCount));
 });
 $('#searchbox').autocomplete({
     source: function(searchString, respCallback) {

@@ -59,22 +59,19 @@ module.exports = IDBMap =  function(elid, options){
         }
     })
     this.currentQueryTime = 0;
-    var idblayer,utf8grid,legend;
+    var idblayer,utf8grid,legend,self=this;
     
     this.query = function(idbquery){
-        var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
-        var q = JSON.stringify(query),self=this, d = new Date;
+        self.idbquery=idbquery;
+        self._query();
+    }
+
+    this._query = _.debounce(function(){
+        var query = {rq: self.idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+        var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
         self.currentQueryTime=time;
-        if(typeof idblayer == 'object'){
-            self.map.removeLayer(idblayer);
-        }
-        if(typeof utf8grid == 'object'){
-            self.map.removeLayer(utf8grid);
-        }
-        if(typeof legend == 'object'){
-            self.map.removeControl(legend);
-        }
+
         $.ajax(mapapi,{
             data: q,
             success: function(resp){
@@ -84,16 +81,24 @@ module.exports = IDBMap =  function(elid, options){
                 //mapCode = resp.shortCode;
                 self.map.mapCode = resp.shortCode;
                 if(time>=self.currentQueryTime){
-
+                    if(typeof legend == 'object'){
+                        //self.map.removeControl(legend);
+                        legend.removeFrom(self.map)
+                    }
+                    legend = new legendPanel();
+                    self.map.addControl(legend);
+                    if(typeof idblayer == 'object'){
+                        self.map.removeLayer(idblayer);
+                    }
                     idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
+                    self.map.addLayer(idblayer);
+                    if(typeof utf8grid == 'object'){
+                        self.map.removeLayer(utf8grid);
+                    }
                     utf8grid = L.utfGrid(resp.utf8grid,{
                         useJsonP: false
                     });
-                    legend = new legendPanel();
-
-                    self.map.addLayer(idblayer); 
                     self.map.addLayer(utf8grid);
-                    self.map.addControl(legend);                  
                 }
             },
             dataType: 'json',
@@ -101,7 +106,7 @@ module.exports = IDBMap =  function(elid, options){
             type: 'POST',
             crossDomain: true
         })
-    }
+    }, 100,{'leading': false, 'trailing': true});
 }
 
 /*
@@ -189,28 +194,13 @@ var MinimizeButton = L.Control.extend({
     }
 });
 
-var drawZoomButton = L.Control.extend({
-    options: {
-        position:"topright"
-    },
-    _div: L.DomUtil.create('div', 'drawzoom-div map-button'),
-    onAdd: function(map){     
-        this._div.innerHTML = '<div class="drawzoom-button map-button-icon" title="activate draw zoom"></div>';   
-        return this._div;
-    },
-    onRemove: function(map){
-        this._div.innerHTML='';
-        return this._div;
-    }
-});
-
 var legendPanel = L.Control.extend({
     options: {
         position: "bottomleft"
     },
     _div: L.DomUtil.create('div','map-legend'),
     onAdd: function(map){
-        var colors=[],self=this,header,def;
+        var colors,self=this,header,def;
         idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
             if(isNaN(resp.order[0])){
                 header='<span class="legend-header">Top 10 Scientific Names</span>';

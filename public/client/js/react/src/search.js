@@ -36,8 +36,14 @@ module.exports = Main = React.createClass({
         }
     },
     getInitialState: function(){
-
+        if(url('?view')){
+            var types =['list','labels','images'], view = url('?view');
+            if(types.indexOf(view) > -1){
+                localStorage.setItem('viewType', view);
+            }
+        }
         var search;
+
         if(url('?rq') || url('?sort')){
             search = Main.defaultSearch();
             paramsParser(search);

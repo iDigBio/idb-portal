@@ -24,7 +24,10 @@ idbapi.summary('top/records/',record,function(response){
     var chart = c3.generate({
         data:{
             columns: king,
-            type: 'pie'
+            type: 'pie',
+            onclick: function(d,el){
+                window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}';
+            }
         },
         bindto:'#specimen-chart',
         pie:{
@@ -65,7 +68,10 @@ idbapi.summary('top/records/',media,function(response){
     var chart = c3.generate({
         data:{
             columns: king,
-            type: 'pie'
+            type: 'pie',
+            onclick: function(d,el){
+                window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}&view=images';
+            }
         },
         bindto:'#media-chart',
         color:{

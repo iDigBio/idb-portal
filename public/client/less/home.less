@@ -18,32 +18,44 @@
 }
 #search-row{
     text-align:left;
+    h4{
+        text-align: left;
+    }
 }
 h4{
     text-align:center;
     color:#555;
     font-weight: bold;
-    
+    font-size: 1.5em;
 }
 .chart{
     max-height:200px;
 }
 #search-form-group{
     width:90%;
-    max-width: 390px;
+
     @media(max-width: @screenmed){
         width:90%;
         margin:0px 20px;
     }
     .input-group{
         width:100%;
-        max-width:200px
+       
         .btn{
-            max-width:20px;
+            
         }
     }
 }
-#stats-row{
+.lightgreen{
 
     background-color:lighten(@idbgreen,45%);
+}
+#stats-row{
+    padding:20px;
+}
+#welcome{
+    font-size:1.4em;
+    line-height: 1.2em;
+    padding-top:30px;
+    margin-top:-10px;
 }

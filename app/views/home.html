@@ -14,28 +14,36 @@
 <script type="text/javascript" src="/portal/components/c3js-chart/c3.min.js"></script>
 
 {% endblock %} {% block content %}
-<div class="row" id="portal-home">
+
+<div class="row lightgreen" id="welcome">
+    <div class="col-lg-6 col-lg-offset-3">
+        <h4>Welcome to the iDigBio Portal</h4>
+        <p>
+            If you are familiar with our portal's interface, you can start searching <a href="/portal/search">Specimen Records</a>.
+            If this is your first time here, you might consider browsing our <a href="/portal/tutorial">tutorial</a>.
+            Our data are based on the Darwin Core and Audubon Core standards.
+        </p>        
+    </div>
+</div>
+<div class="row lightgreen" id="portal-home">
     <div class="col-lg-3 col-lg-offset-3" class="clearfix" id="search-row"> 
-                <h3>Start Searching <span id="recordsets-total"></span> Recordsets</h3>
-                <form class="form-inline">
-                    <div id="search-form-group" class="form-group">
-                        <div class="input-group">
-                            <input type="text" placeholder="Scientific Name" class="form-control" id="searchbox" autocomplete="off" >
-                            <a class="input-group-addon btn btn-material-lightblue" >Go</a>
-                        </div>
-                        <p style="font-size:.75em">Press ESC to close auto-complete suggestions. </p>
-                    </div>
-                </form>
+        <h4>Quick Search <span id="recordsets-total"></span> Recordsets</h4>
+        <form class="form-inline">
+            <div id="search-form-group" class="form-group">
+                <div class="input-group">
+                    <input type="text" placeholder="Scientific Name" class="form-control" id="searchbox" autocomplete="off" >
+                    <a class="input-group-addon btn btn-material-lightblue" >Go</a>
+                </div>
+                <p style="font-size:.75em">Press ESC to close auto-complete suggestions. </p>
+            </div>
+        </form>
+    </div>
+    <div class="col-lg-3">
+
     </div>
 
 </div>
-<!--<div class="row" id="count-row">
-        <div class="col-lg-4  col-lg-offset-4 count" >
-            <div id="recordsetcount"></div>
-            <span class="name">Recordsets</span>
-        </div>       
-</div>-->
-<div class="row" id="stats-row">
+<div class="row lightgreen" id="stats-row">
     <div class="col-lg-3 col-lg-offset-3" id="react-wrapper">
         <h4>Specimen Records</h4>
         <h4 id="recordcount"></h4>
@@ -47,11 +55,7 @@
         <div class="chart" id="media-chart"></div>
     </div>
 </div>
-<div class="row">
-    <div class="col-lg-2 col-lg-offset-5">
-        
-    </div>
-</div>
+
 {% endblock %} 
 
 {% block scriptblock %}

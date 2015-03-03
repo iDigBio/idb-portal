@@ -16,17 +16,20 @@
 #search-row {
   text-align: left;
 }
+#search-row h4 {
+  text-align: left;
+}
 h4 {
   text-align: center;
   color: #555;
   font-weight: bold;
+  font-size: 1.5em;
 }
 .chart {
   max-height: 200px;
 }
 #search-form-group {
   width: 90%;
-  max-width: 390px;
 }
 @media (max-width: 992px) {
   #search-form-group {
@@ -37,9 +40,15 @@ h4 {
 #search-form-group .input-group {
   width: 100%;
 }
-#search-form-group .input-group max-width:200px .btn {
-  max-width: 20px;
+.lightgreen {
+  background-color: #eef5eb;
 }
 #stats-row {
-  background-color: #eef5eb;
+  padding: 20px;
+}
+#welcome {
+  font-size: 1.4em;
+  line-height: 1.2em;
+  padding-top: 30px;
+  margin-top: -10px;
 }

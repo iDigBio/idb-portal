@@ -203,7 +203,7 @@ var legendPanel = L.Control.extend({
         var colors,self=this,header,def;
         idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
             if(isNaN(resp.order[0])){
-                header='<span class="legend-header">Top 10 Scientific Names</span>';
+                header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';
                 def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
             }else{
                 header='<span class="legend-header">Density Legend</span>';

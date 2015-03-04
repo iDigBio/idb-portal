@@ -13,7 +13,7 @@ var idbapi = require('./idbapi');
 module.exports = IDBMap =  function(elid, options){
 
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution: 'Map data © OpenStreetMap contributors',
+        attribution: 'Map data © OpenStreetMap',
         minZoom: 0, 
         //maxZoom: 19,
         reuseTiles: true
@@ -200,14 +200,15 @@ var legendPanel = L.Control.extend({
     },
     _div: L.DomUtil.create('div','map-legend'),
     onAdd: function(map){
-        var colors,self=this,header,def;
+        var colors,self=this,header,def='';
         idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
-            if(isNaN(resp.order[0])){
+            if(_.isEmpty(resp.order)){
+                header='<span class="legend-header">No Map Points Available</span>';
+            }else if(isNaN(resp.order[0])){
                 header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';
                 def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
             }else{
                 header='<span class="legend-header">Density Legend</span>';
-                def='';
             }
             colors=_.map(resp.order,function(val){
                 var swatch = '<div class="legend-item">';

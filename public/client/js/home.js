@@ -26,7 +26,9 @@ idbapi.summary('top/records/',record,function(response){
             columns: king,
             type: 'pie',
             onclick: function(d,el){
-                window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}';
+                if(d.name.toLowerCase()!='other'){
+                    window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}';
+                }
             }
         },
         bindto:'#specimen-chart',
@@ -70,7 +72,9 @@ idbapi.summary('top/records/',media,function(response){
             columns: king,
             type: 'pie',
             onclick: function(d,el){
-                window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}&view=images';
+                if(d.name.toLowerCase()!='other'){
+                    window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}&view=images';
+                }
             }
         },
         bindto:'#media-chart',

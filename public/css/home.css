@@ -17,7 +17,7 @@
   text-align: left;
 }
 #search-row h4 {
-  text-align: left;
+  text-align: center;
 }
 h4 {
   text-align: center;
@@ -29,7 +29,7 @@ h4 {
   max-height: 200px;
 }
 #search-form-group {
-  width: 90%;
+  width: 100%;
 }
 @media (max-width: 992px) {
   #search-form-group {
@@ -51,6 +51,21 @@ h4 {
 #welcome {
   font-size: 1.4em;
   line-height: 1.2em;
-  padding-top: 30px;
+  padding: 30px 10px 0px 10px;
   margin-top: -10px;
+}
+#welcome p {
+  text-align: justify;
+}
+#search {
+  margin-bottom: 20px;
+  padding: 0px 10px;
+}
+#jump {
+  text-align: center;
+  font-weight: bold;
+}
+#jump .jump {
+  margin: 10px;
+  font-size: 1.2em;
 }

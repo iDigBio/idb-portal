@@ -14,7 +14,7 @@
 <script type="text/javascript" src="/portal/components/c3js-chart/c3.min.js"></script>
 
 {% endblock %} {% block content %}
-
+<div class="container-fluid">
 <div class="row " id="welcome">
     <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
         <h4>Welcome to the iDigBio Portal</h4>
@@ -36,7 +36,6 @@
                         <i class="glyphicon glyphicon-search"></i>
                     </a>
                 </div>
-                <p style="font-size:.75em">Press ESC to close auto-complete suggestions. </p>
             </div>
         </form>
     </div>
@@ -47,7 +46,7 @@
         <a class="jump" href="/portal/tutorial">Tutorial</a>
     </div>
 </div>
-<div class="row lightgreen" id="stats-row">
+<div class="row" id="stats-row">
     <div class="col-lg-3 col-lg-offset-3" id="react-wrapper">
         <h4>Specimen Records</h4>
         <h4 id="recordcount"></h4>
@@ -59,7 +58,12 @@
         <div class="chart" id="media-chart"></div>
     </div>
 </div>
-
+<div class="row" id="notes">
+    <div class="col-lg-6 col-lg-offset-3" id="react-wrapper">
+        <p>Click a legend name to remove/add pie wedge.</p>
+    </div>
+</div>
+</div>
 {% endblock %} 
 
 {% block scriptblock %}

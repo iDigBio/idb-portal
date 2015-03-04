@@ -50,22 +50,42 @@ h4{
 
     background-color:lighten(@idbgreen,45%);
 }
+@top: lighten(@idbgreen,45%);
+@bottom: lighten(@idbgreen,35%);
 #stats-row{
-    padding:20px;
-    border-bottom:2px solid lighten(@idbgreen,35%);
+
     border-top:2px solid lighten(@idbgreen,35%);
+    padding:0px;
+    background: @top; /* Old browsers */
+    background: -moz-linear-gradient(top,  @top 0%, @bottom 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@top), color-stop(100%,@bottom)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  @top 0%,@bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  @top 0%,@bottom 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  @top 0%,@bottom 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  @top 0%,@bottom 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=@top, endColorstr=@bottom,GradientType=0 ); /* IE6-9 */
+}
+#notes{
+    border-bottom:2px solid lighten(@idbgreen,35%);
+    text-align:center;
+    background:@bottom;
+    padding-top:10px;
+    p{
+        font-size:.8em;
+    }
 }
 #welcome{
     font-size:1.4em;
     line-height: 1.2em;
-    padding:30px 10px 0px 10px;
+    padding:30px 0px 0px 0px;
     margin-top:-10px;
     p{
+        margin:10px;
         text-align: justify;
     }
 }
 #search{
-    margin-bottom:20px;
+    margin-bottom:30px;
     padding: 0px 10px;
 }
 #jump{

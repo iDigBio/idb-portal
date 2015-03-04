@@ -44,21 +44,46 @@ h4 {
   background-color: #eef5eb;
 }
 #stats-row {
-  padding: 20px;
-  border-bottom: 2px solid #d0e5c8;
   border-top: 2px solid #d0e5c8;
+  padding: 0px;
+  background: #eef5eb;
+  /* Old browsers */
+  background: -moz-linear-gradient(top, #eef5eb 0%, #d0e5c8 100%);
+  /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #eef5eb), color-stop(100%, #d0e5c8));
+  /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #eef5eb 0%, #d0e5c8 100%);
+  /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #eef5eb 0%, #d0e5c8 100%);
+  /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #eef5eb 0%, #d0e5c8 100%);
+  /* IE10+ */
+  background: linear-gradient(to bottom, #eef5eb 0%, #d0e5c8 100%);
+  /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#eef5eb, endColorstr=#d0e5c8, GradientType=0);
+  /* IE6-9 */
+}
+#notes {
+  border-bottom: 2px solid #d0e5c8;
+  text-align: center;
+  background: #d0e5c8;
+  padding-top: 10px;
+}
+#notes p {
+  font-size: .8em;
 }
 #welcome {
   font-size: 1.4em;
   line-height: 1.2em;
-  padding: 30px 10px 0px 10px;
+  padding: 30px 0px 0px 0px;
   margin-top: -10px;
 }
 #welcome p {
+  margin: 10px;
   text-align: justify;
 }
 #search {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   padding: 0px 10px;
 }
 #jump {

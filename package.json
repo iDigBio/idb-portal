@@ -48,7 +48,9 @@
     "less": "*",
     "bootstrap": "*",
     "jquery-ui-browserify": "*",
-    "pouchdb": "*"
+    "pouchdb": "*",
+    "griddle-react": "*",
+    "es5-shim": "*"
   },
   "devDependencies": {
     "assert": "*",

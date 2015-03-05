@@ -8,6 +8,28 @@ var fields = require(appDir+'/public/client/js/lib/fields');
 //var RecordsetPage = require(appDir+'/public/react/build/recordset');
 module.exports = function(app, config) {
     return {
+        collections: function(req,res){
+
+            request.get({"url": 'http://internal.idigbio.org/collections', "json": true}, function(err, resp, body){
+                res.render('collections', {
+                    activemenu: 'publishers',
+                    user: req.user,
+                    token: req.session._csrf,
+                    data: JSON.stringify(body)
+                });
+            });
+        },
+        collection: function(req,res){
+            request.get({"url": 'http://internal.idigbio.org/collections/'+req.params.id, "json": true}, function(err, resp, body){
+                
+                res.render('collection', {
+                    activemenu: 'publishers',
+                    user: req.user,
+                    token: req.session._csrf,
+                    data: JSON.stringify(body)
+                });
+            });
+        },
         publishers: function(req, res) {
             res.render('publishers', {
                 activemenu: 'publishers',

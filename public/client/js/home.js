@@ -99,22 +99,7 @@ idbapi.summary('count/media/',function(resp){
 idbapi.summary('count/recordset/',function(resp){
     $('#recordsets-total').html(formatNum(resp.itemCount));
 });
-/*$('#searchbox').autocomplete({
-    source: function(searchString, respCallback) {
-        var rq ={"scientificname": {'type':'prefix', 'value': searchString.term}};
-        query = {rq: rq, count: 15, top_fields:["scientificname"]};
 
-        idbapi.summary('top/records/',query, function(resp) {
-            var list = _.map(resp["scientificname"], function(v,k){
-                return k;
-            })
-            respCallback(list);
-        })
-    },
-    select: function(event,ui){
-        window.location = '/portal/search?rq={"data":{"type":"fulltext","value":"'+ui.item.value+'"}}';             
-    }
-});*/
 $('#searchbox').keypress(function(e) {
     if(e.which == 13) {
         e.preventDefault();

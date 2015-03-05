@@ -1,5 +1,6 @@
 
 var React = require('react')
+var idbapi = require('../../lib/idbapi');
 
 var searchBase = "//" + window.searchServer["host"] + "/idigbio/";
 var statsBase = "//" + window.searchServer["host"] + "/stats/";
@@ -146,7 +147,54 @@ var publishers = {}
 var recordsets = {}
 
 pending_calls += 1;
-$.post(searchBase + "publishers/_search",JSON.stringify(allquery),function(data,textStatus,jqXHR){
+
+var pubs={};
+var defpub= function(){
+  return {recordsets:{},totals:{api:0,index:0,digest:0},name:''};
+}
+var defsets = function(){
+  return {
+    apimedia: 0,
+    apirecords: 0,
+    digestmedia: 0,
+    digestrecords: 0,
+    indexmedia:0,
+    indexrecords:0
+  }
+};
+async.parallel([
+  function(callback){
+    idbapi.publishers({"fields":["data.idigbio:data.name"]},function(resp){
+      resp.items.forEach(function(item){
+        if(_.isUndefined(pubs[item.uuid])){
+            pubs[item.uuid]=defpub();
+        }
+        pubs[item.uuid].name=item.data.name;
+      })
+      callback();
+    });
+  },
+  function(callback){
+    idbapi.recordsets({"fields":["data.idigbio:data.collection_name","publisher"]},function(resp){
+      resp.items.forEach(function(item){
+        if(_.isUndefined(pubs[item.indexTerms.publisher])){
+          pubs[item.indexTerms.publisher]=defpub();
+        }
+        pubs[item.indexTerms.publisher].recordsets[item.uuid]=defsets();//(item.data) 
+        pubs[item.indexTerms.publisher].recordsets[item.uuid].name = item.data.collection_name;
+      });
+      callback();
+    });    
+  }
+],function(error){
+  debugger
+})
+
+
+
+
+
+/*$.post(searchBase + "publishers/_search",JSON.stringify(allquery),function(data,textStatus,jqXHR){
   
   _.each(data.hits.hits,function(hit){
     var name = hit._source.data["idigbio:data"].name;
@@ -163,7 +211,7 @@ $.post(searchBase + "publishers/_search",JSON.stringify(allquery),function(data,
   });
   pending_calls -= 1;
 });
-
+*/
 pending_calls += 1;
 $.post(searchBase + "recordsets/_search",JSON.stringify(allquery),function(data,textStatus,jqXHR){
   _.each(data.hits.hits,function(hit){

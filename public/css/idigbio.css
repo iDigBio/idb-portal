@@ -535,7 +535,7 @@ ul#logo-list  {
   margin: 0;
   padding: 0;
   border-top: 1px solid #fff;
-  z-index: 10;
+  z-index: 2000;
 }
   
 #snav  li li.last { border-bottom: 1px solid #624e2e; }

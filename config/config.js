@@ -54,7 +54,12 @@ var config = {
 			},
 			publishers: {
 				url: "/portal/publishers",
-				label: "Publishers"
+				label: "Our Data",
+				submenu: [
+					{url: "/portal/publishers", label: 'Publishers'},
+					{url: "/portal/collections", label: 'Collections'}
+
+				]
 			},
 			tools: {
 				url: "//www.idigbio.org/content/community-research-tools",

@@ -31,5 +31,12 @@ $(document).ready(function(){
 		case 'mediarecords':
 			require('./media');
 		    break;
+		case 'collections':
+			if(url(-1)!=='collections'){
+				require('./collection')
+			}else{
+				require('./collections');
+			}
+			break;
 	}
 });	

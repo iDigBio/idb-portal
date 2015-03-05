@@ -37,6 +37,8 @@ module.exports = function(app, config) {
     app.get('/mediarecords/:id', view.media);
     app.get('/tutorial', home.tutorial);
     app.get('/publishers', publishers.publishers);
+    app.get('/collections', publishers.collections);
+    app.get('/collections/:id', publishers.collection);
     app.get('/recordsets/:id', publishers.recordset);
     app.get('/recordset/:id', publishers.recordsetRedirect);
     app.get('/logout', user.logout);

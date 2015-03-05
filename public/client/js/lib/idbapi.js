@@ -7,6 +7,12 @@ module.exports = {
     media: function(query,callback){
         this._basic('POST','search/media/',query,callback);
     },
+    publishers: function(query,callback){
+        this._basic('POST','search/publishers/',query,callback);
+    },
+    recordsets: function(query,callback){
+        this._basic('POST','search/recordsets/',query,callback);
+    },
     createMap: function(query,callback){
         this._basic('POST','mapping/',query,callback);
     },

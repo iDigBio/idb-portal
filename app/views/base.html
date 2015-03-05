@@ -67,6 +67,15 @@
           {% for value in menus.public -%}
               <li {% if loop.key == activemenu %} class="active" {% endif %}>
                 <a href="{{ value.url }}" >{{ value.label }} </a>
+                {% if value.submenu -%}
+                    <ul>
+                      {% for item in value.submenu -%}
+                          <li>
+                            <a href="{{ item.url }}">{{ item.label }}</a>
+                          </li>
+                      {%- endfor %}
+                    </ul>
+                {%- endif %}
               </li>
           {%- endfor %}
           </ul>

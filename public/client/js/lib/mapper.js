@@ -57,6 +57,13 @@ module.exports = IDBMap =  function(elid, options){
                 self.map.addControl(legend)
             }
         }
+        if(typeof idblayer == 'object'){
+            self.map.removeLayer(idblayer);
+            if(typeof self.map.resp != 'undefined'){
+                idblayer = L.tileLayer(self.map.resp.tiles,{minZoom: 1})
+                self.map.addLayer(idblayer)
+            }
+        }
     })
     this.currentQueryTime = 0;
     var idblayer,utf8grid,legend,self=this;
@@ -80,6 +87,7 @@ module.exports = IDBMap =  function(elid, options){
                 //as responses can be out of order
                 //mapCode = resp.shortCode;
                 self.map.mapCode = resp.shortCode;
+                self.map.resp=resp;
                 if(time>=self.currentQueryTime){
                     if(typeof legend == 'object'){
                         //self.map.removeControl(legend);

@@ -104,6 +104,7 @@ var SearchAny = React.createClass({
                 <div className="input-group">
                     <input type="text" className="form-control" placeholder="search all fields" onChange={this.textType} value={this.props.search.fulltext}/>
                     <a className="btn input-group-addon" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
+                    <a className="btn input-group-addon" title="help"><i className="glyphicon glyphicon-question-sign"></i></a>
                 </div>
                 <div className="checkbox">
                     <label>

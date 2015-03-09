@@ -103,7 +103,8 @@ var SearchAny = React.createClass({displayName: "SearchAny",
                 React.createElement("h3", null, React.createElement("img", {id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching"), 
                 React.createElement("div", {className: "input-group"}, 
                     React.createElement("input", {type: "text", className: "form-control", placeholder: "search all fields", onChange: this.textType, value: this.props.search.fulltext}), 
-                    React.createElement("a", {className: "btn input-group-addon", onClick: this.resetSearch, title: "reset"}, React.createElement("i", {className: "glyphicon glyphicon-refresh"}))
+                    React.createElement("a", {className: "btn input-group-addon", onClick: this.resetSearch, title: "reset"}, React.createElement("i", {className: "glyphicon glyphicon-refresh"})), 
+                    React.createElement("a", {className: "btn input-group-addon", title: "help"}, React.createElement("i", {className: "glyphicon glyphicon-question-sign"}))
                 ), 
                 React.createElement("div", {className: "checkbox"}, 
                     React.createElement("label", null, 

@@ -27,6 +27,11 @@
   overflow: scroll;
   height: 105px;
 }
+@media (max-width: 1060px) {
+  #download #downloads-section #downloads-available {
+    height: 75px;
+  }
+}
 #download #downloads-section table {
   border-top: 1px solid #cccccc;
   width: 100%;

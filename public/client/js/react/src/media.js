@@ -22,7 +22,7 @@ var Media = React.createClass({
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
                     <img className="media" src={'//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview'} onError={this.error}/>
                 </a>
-                <a href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
+                <a href={link} download={this.props.keyid} target={'_'+this.props.keyid} className="hidden-print">
                     Download Media File
                 </a>
             </div>
@@ -31,6 +31,10 @@ var Media = React.createClass({
 });
 
 var Buttons = React.createClass({
+    print: function(e){
+        e.preventDefault();
+        window.print();
+    },
     render: function(){
         var el=[];
         if(_.has(this.props.data,'records')){
@@ -62,6 +66,9 @@ var Buttons = React.createClass({
         return (
             <div id="action-buttons" key={'buttons'}>
                 {el}
+                <button className="btn button" title="print this page" onClick={this.print}>
+                    <i className="glyphicon glyphicon-print"> </i>
+                </button>
             </div>
         );
     }
@@ -136,8 +143,8 @@ var Group = React.createClass({
             for(id in media){
                 if(media[id] != this.props.keyid){
                     imgs.push(
-                        <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]}  >
-                            <img className="gallery-image" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
+                        <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} className="hidden-print" >
+                            <img className="gallery-image visible-print-block" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
                         </a>
                     )                    
                 }
@@ -208,7 +215,7 @@ module.exports = React.createClass({
                                 <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
                             </div>
                             <div id="data-meta" className="clearfix">
-                                <div id="actions"> 
+                                <div id="actions" className="hidden-print"> 
                                     <Buttons data={source.indexTerms} />
                                 </div>
                                 <div id="data-table" className="clearfix">

@@ -76,17 +76,26 @@ h3{
             @media(max-width: @screenmed){
                 width: 100%;
                 float: none;
+                text-align:center;
             }
             #action-buttons{
                 //border-top:@brd;
                 padding-top:10px;
                 .button{
                     display:inline-block;
-                    margin:2px 5px;
+                    margin:2px 2px;
                     border-radius:2px;
                     background-color:@idbgreen;
                     color:#efe;
-                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);                    
+                    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);   
+                    @media(max-width: @screenmed){
+                        margin:2px 3px;
+                        font-size: 1em;
+                    }
+                    @media(max-width: @screensmall){
+                        margin:2px 3px;
+                        font-size: .85em;
+                    }                 
                 }
             }
         }
@@ -198,6 +207,7 @@ h4.title{
     border:1px solid #ccc;
     padding:5px;
     max-height: 500px;
+    max-width:90%;
     margin:10px;
     background-color: white;
     border-radius:3px;

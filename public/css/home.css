@@ -79,6 +79,11 @@ h4 {
   padding: 30px 0px 0px 0px;
   margin-top: -10px;
 }
+@media (max-width: 768px) {
+  #welcome {
+    font-size: 1.2em;
+  }
+}
 #welcome p {
   margin: 10px;
   text-align: justify;

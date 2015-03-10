@@ -86,6 +86,12 @@ body {
   margin: 0px;
   font-weight: bolder;
 }
+@media (max-width: 992px) {
+  #data-container #data-content #record-container .tabs .tab a {
+    padding: 6px 4px 6px 4px;
+    font-size: .9em;
+  }
+}
 #data-container #data-content #record-container .tabs .tab a:hover {
   text-decoration: none;
   color: #6aaa51;
@@ -210,6 +216,11 @@ body {
   padding: 0px 0px;
   width: 98%;
   margin: auto auto;
+}
+@media (max-width: 992px) {
+  #data-container #data-meta #actions #action-buttons {
+    text-align: center;
+  }
 }
 #data-container #data-meta #actions #action-buttons button {
   display: inline-block;

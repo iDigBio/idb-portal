@@ -86,6 +86,9 @@ module.exports = Main = React.createClass({
 });
 
 var SearchAny = React.createClass({
+    openHelp: function(){
+
+    },
     checkClick: function(event){
         this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
@@ -100,11 +103,15 @@ var SearchAny = React.createClass({
 
         return(
             <div id="search-any" className="clearfix">
-                <h3><img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching</h3>
+                <h3>
+                    <img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching
+                    <a className="btn btn-lg pull-right" title="help" data-toggle="modal" data-target="#search-help">
+                        <i className="glyphicon glyphicon-question-sign"></i>
+                    </a>
+                </h3>
                 <div className="input-group">
                     <input type="text" className="form-control" placeholder="search all fields" onChange={this.textType} value={this.props.search.fulltext}/>
                     <a className="btn input-group-addon" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
-                    <a className="btn input-group-addon" title="help"><i className="glyphicon glyphicon-question-sign"></i></a>
                 </div>
                 <div className="checkbox">
                     <label>
@@ -117,6 +124,46 @@ var SearchAny = React.createClass({
                         <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.props.search.geopoint}/>
                         Must have map point
                     </label>
+                </div>
+                <div id="search-help" className="modal fade">
+                    <div className="modal-dialog">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <button type="button" className="close pull-right" data-dismiss="modal">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                                <h3>Search Help</h3>
+                            </div>
+                            <div className="modal-body">
+                                <ul>
+                                    <li>
+                                        This search page is reactive to input and will execute a search the moment you interact with the form inputs.
+                                    </li>
+                                    <li>
+                                        Full text searches across all data fields can be executed with the "search all fields" box at the top of the search form.
+                                    </li>
+                                    <li>
+                                        Check the <b>Must have image</b> and <b>Must have map point</b> checkboxes to only show records with images and/or mapping data respectively.
+                                    </li>
+                                    <li> 
+                                        Use the field <em>Filters</em> tab to add exact match terms on a per field basis to your search.
+                                        A filter can also be used to simply select the presence or absence of a field in a record with
+                                        the <b>Present</b> and <b>Missing</b> checkboxes.
+                                    </li>
+                                    <li>
+                                        Use the <em>Sorting</em> tab to add multiple sort values to the search.
+                                    </li>
+                                    <li>
+                                        Use the <em>Mapping</em> tab to add geographic bounding coordinates to your search.
+                                    </li>
+                                    <li>
+                                        Use the <em>Download</em> tab to access your search history and to download the current search results.
+                                    </li>
+                                </ul>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
         )

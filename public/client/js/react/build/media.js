@@ -22,7 +22,7 @@ var Media = React.createClass({displayName: "Media",
                 React.createElement("a", {className: "clearfix", target: '_'+this.props.keyid, href: link, title: "click to open original media file"}, 
                     React.createElement("img", {className: "media", src: '//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview', onError: this.error})
                 ), 
-                React.createElement("a", {href: link, download: this.props.keyid, target: '_'+this.props.keyid}, 
+                React.createElement("a", {href: link, download: this.props.keyid, target: '_'+this.props.keyid, className: "hidden-print"}, 
                     "Download Media File"
                 )
             )
@@ -31,6 +31,10 @@ var Media = React.createClass({displayName: "Media",
 });
 
 var Buttons = React.createClass({displayName: "Buttons",
+    print: function(e){
+        e.preventDefault();
+        window.print();
+    },
     render: function(){
         var el=[];
         if(_.has(this.props.data,'records')){
@@ -61,7 +65,10 @@ var Buttons = React.createClass({displayName: "Buttons",
         
         return (
             React.createElement("div", {id: "action-buttons", key: 'buttons'}, 
-                el
+                el, 
+                React.createElement("button", {className: "btn button", title: "print this page", onClick: this.print}, 
+                    React.createElement("i", {className: "glyphicon glyphicon-print"}, " ")
+                )
             )
         );
     }
@@ -136,8 +143,8 @@ var Group = React.createClass({displayName: "Group",
             for(id in media){
                 if(media[id] != this.props.keyid){
                     imgs.push(
-                        React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id]}, 
-                            React.createElement("img", {className: "gallery-image", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
+                        React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id], className: "hidden-print"}, 
+                            React.createElement("img", {className: "gallery-image visible-print-block", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
                         )
                     )                    
                 }
@@ -208,7 +215,7 @@ module.exports = React.createClass({displayName: "exports",
                                 React.createElement(Media, {key: source.uuid+'_media', keyid: source.uuid, data: source.data})
                             ), 
                             React.createElement("div", {id: "data-meta", className: "clearfix"}, 
-                                React.createElement("div", {id: "actions"}, 
+                                React.createElement("div", {id: "actions", className: "hidden-print"}, 
                                     React.createElement(Buttons, {data: source.indexTerms})
                                 ), 
                                 React.createElement("div", {id: "data-table", className: "clearfix"}, 

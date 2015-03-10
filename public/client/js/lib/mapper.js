@@ -210,7 +210,7 @@ var legendPanel = L.Control.extend({
     onAdd: function(map){
         var colors,self=this,header,def='';
         idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
-            if(_.isEmpty(resp.order)){
+            if(resp.order.length===0){
                 header='<span class="legend-header">No Map Points Available</span>';
             }else if(isNaN(resp.order[0])){
                 header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';

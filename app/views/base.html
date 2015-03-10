@@ -37,7 +37,7 @@
       <input type="hidden" id="api-url" name="api-url" value="{{ urls.api }}" />
       <!-- wakulla header -->
       <div class="sixteen columns full alpha omega" id="header">
-        <div id="nav">
+        <div id="nav" class="hidden-print">
             <ul id="header-links">
                 <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>
                 <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>
@@ -61,7 +61,7 @@
         <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
 
       </div>
-      <div class="sixteen columns full alpha omega" id="snav-research">
+      <div class="sixteen columns full alpha omega hidden-print" id="snav-research">
         <div id="snav" class="clearfix">
           <ul id="portal-menu" style="float:left">
           {% for value in menus.public -%}

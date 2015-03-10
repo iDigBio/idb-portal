@@ -9,8 +9,8 @@ var Tab = React.createClass({
         event.preventDefault();
         $('li.tab').removeClass('active');
         $(event.currentTarget).addClass('active');
-        $('.section').addClass('section-hide');
-        $('#'+$(event.currentTarget).attr('data-tab')).removeClass('section-hide');
+        $('.section').addClass('visible-print-block');
+        $('#'+$(event.currentTarget).attr('data-tab')).removeClass('visible-print-block');
     },
     render: function(){
         var cl = "tab";
@@ -30,10 +30,11 @@ var Tab = React.createClass({
 var Row = React.createClass({
     render: function(){
         var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
-        var regex = /(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+        var regex = /[\A|\s]+(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
         var str = this.props.data.replace(regex, function(match){
             var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
             return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+           
         });
         return (
             <tr className="data-row">
@@ -70,7 +71,7 @@ var Section = React.createClass({
                 </tr>
             ); 
         });*/
-        var cl = "section section-hide";
+        var cl = "section visible-print-block";
         if(this.props.active){
             cl="section";
         }
@@ -104,7 +105,7 @@ var Record = React.createClass({
 
         return (
             <div id="record-container">
-                <ul className="tabs">
+                <ul className="tabs hidden-print">
                     {tabs}
                 </ul>
                 <div className="record">
@@ -195,7 +196,7 @@ var Buttons = React.createClass({
     render: function(){
 
         return (
-            <div id="actions" className="clearfix">
+            <div id="actions" className="clearfix hidden-print">
                 
                 <div id="action-buttons">
                     <a href={"/portal/recordsets/"+this.props.data.recordset}>
@@ -203,6 +204,9 @@ var Buttons = React.createClass({
                     </a>
                     <button data-target="#raw" data-toggle="modal" className="btn">
                         View Raw Data
+                    </button>
+                    <button className="btn" title="print this page" onClick={this.print}>
+                        <i className="glyphicon glyphicon-print"> </i>
                     </button>
                 </div>
             </div>

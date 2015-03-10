@@ -18,10 +18,18 @@
     #description,#fields-table{
         float:left;
         width:64%;
+        @media(max-width:@screenmed){
+            float:none;
+            width: 100%;
+        }
     }
     #buttons,#info,#contacts{
         float:right;
         width:34%;
+        @media(max-width:@screenmed){
+            float:none;
+            width: 100%;
+        }
     }
     #description{
         p{
@@ -68,6 +76,10 @@
     #buttons{
         padding:0px;
         margin-bottom:15px;
+        @media(max-width:@screenmed){
+            margin: 10px 0px;
+           text-align: center;
+        }
         .btn{
             
         }
@@ -83,7 +95,9 @@
     #info{
         padding:0px;
         margin-bottom:15px;
-
+        @media(max-width:@screenmed){
+            text-align: center;
+        }
     }
     #contacts{
         

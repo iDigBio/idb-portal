@@ -3,6 +3,7 @@ var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
+var leafletImage = require('leaflet-image/leaflet-image');
 var idbapi = require('./idbapi');
 //elid: string name of element id;
 //options: object map of settings
@@ -34,6 +35,7 @@ module.exports = IDBMap =  function(elid, options){
     //init map
     this.map = L.map(elid,this.defaults);
     this.map.addControl(new MaximizeButton());
+    this.map.addControl(new ImageButton());
     this.map.addControl(new L.control.scale({
         position:'bottomright'
     }))
@@ -199,6 +201,37 @@ var MinimizeButton = L.Control.extend({
         L.DomEvent.removeListener(this._div, 'click', this.contractClick);
         L.DomEvent.removeListener(window, 'resize', resizeFunction);
         map.addControl(new MaximizeButton());
+    }
+});
+
+var ImageButton = L.Control.extend({
+    options: {
+        position:"topright"
+    },
+    _div: L.DomUtil.create('a', 'image-button'),
+    imageClick: function(map,control){
+        return function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            debugger
+            leafletImage(map,function(err,canvas){
+                var img = document.createElement('img');
+                var dimensions = map.getSize();
+                img.width = dimensions.x;
+                img.height = dimensions.y;
+                img.src = canvas.toDataURL();
+                //document.getElementById('images').innerHTML = '';
+                $('footer').prepend(img);
+            })
+        }
+    },
+    onAdd: function(map){
+        this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon"></div>';
+        L.DomEvent.addListener(this._div, 'click', this.imageClick(map,this));
+        return this._div;
+    },
+    onRemove: function(map){
+        return this._div
     }
 });
 

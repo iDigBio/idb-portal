@@ -9,8 +9,6 @@
   width: 26px;
   height: 26px;
   padding: 2px;
-}
-#map-maximize-button:hover {
   cursor: pointer;
 }
 #map-minimize-button {
@@ -24,8 +22,19 @@
   width: 26px;
   height: 26px;
   padding: 2px;
+  cursor: pointer;
 }
-#map-minimize-button:hover {
+#map-image-button {
+  background-color: white;
+  background-image: url('//localhost:19199/portal/img/camera.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 16px 16px;
+  box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.65);
+  border-radius: 4px;
+  width: 26px;
+  height: 26px;
+  padding: 2px;
   cursor: pointer;
 }
 #mapper-modal {

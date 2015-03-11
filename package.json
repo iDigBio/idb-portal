@@ -40,6 +40,7 @@
     "uglify-js": "*",
     "bower": "*",
     "leaflet": "*",
+    "leaflet-image": "*",
     "reactify": "1.0.0",
     "envify": "~1.2.1",
     "react": "~0.12.2",

@@ -178,7 +178,7 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
         return {panels: localStorage.getItem('panels')}
     },
     showPanel: function(event){
-        //event.preventDefault();
+        event.preventDefault();
         event.stopPropagation();
         var val = event.currentTarget.attributes['data-panel'].value;
         this.setState({panels: val},function(){

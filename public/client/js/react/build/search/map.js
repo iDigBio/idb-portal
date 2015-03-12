@@ -42,7 +42,9 @@ module.exports = React.createClass({displayName: "exports",
     },
     render: function(){
         return (
-            React.createElement("div", {id: "map"})
+            React.createElement("div", {id: "map-wrapper"}, 
+                React.createElement("div", {id: "map"})
+            )
         )
     }
 })

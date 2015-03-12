@@ -1,6 +1,7 @@
 module.exports = function(){
     //initialize history on new [function name]
-    this.history=[],self=this;
+    this.history=[];
+    var self=this;
     (function(){
         if(!_.isUndefined(localStorage)){
             if(!_.isUndefined(localStorage.history)){

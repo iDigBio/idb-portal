@@ -26,7 +26,6 @@
 }
 #map-image-button {
   background-color: white;
-  background-image: url('//localhost:19199/portal/img/camera.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 16px 16px;
@@ -36,6 +35,12 @@
   height: 26px;
   padding: 2px;
   cursor: pointer;
+}
+#map-image-button.camera-icon {
+  background-image: url('//localhost:19199/portal/img/camera.png');
+}
+#map-image-button.spinner {
+  background-image: url('//idigbio.org/portal/img/ajax-loader.gif');
 }
 #mapper-modal {
   display: none;

@@ -143,12 +143,13 @@ var Group = React.createClass({displayName: "Group",
             for(id in media){
                 if(media[id] != this.props.keyid){
                     imgs.push(
-                        React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id], className: "hidden-print"}, 
-                            React.createElement("img", {className: "gallery-image visible-print-block", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
+                        React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id]}, 
+                            React.createElement("img", {className: "gallery-image", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
                         )
                     )                    
                 }
             }
+            debugger
             return (
                 React.createElement("div", {id: "other-images", className: "clearfix"}, 
                     React.createElement("h4", {className: "title"}, "Other Media"), 
@@ -223,7 +224,7 @@ module.exports = React.createClass({displayName: "exports",
                                     React.createElement(Table, {record: source.data})
                                 )
                             ), 
-                            React.createElement(Group, {record: this.props.record, key: source.uuid, keyid: source.uuid}), 
+                            React.createElement(Group, {record: this.props.record, keyid: source.uuid}), 
                             React.createElement(Provider, {data: this.props.mediarecord.attribution})
                             
                         )

@@ -17,7 +17,10 @@
     "fgh": "https://bitbucket.org/monoid/fgh/raw/465610eb2dcca8e48b84f7ed6927b81fd292bb65/fgh.js",
     "materialize": "*",
     "c3js-chart": "*",
-    "leaflet-utfgrid": "danzel/Leaflet.utfgrid"
+    "leaflet-utfgrid": "danzel/Leaflet.utfgrid",
+    "canvasblob": "eligrey/canvas-toBlob.js",
+    "blobjs": "eligrey/Blob.js",
+    "filesaver": "eligrey/FileSaver.js"
   },
   "ignore": [
     "**/.*",

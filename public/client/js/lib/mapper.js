@@ -5,6 +5,9 @@ var _ = require('lodash');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 var leafletImage = require('leaflet-image/leaflet-image');
 var idbapi = require('./idbapi');
+require('../../../../public/components/blobjs/Blob');
+require('../../../../public/components/canvasblob/canvas-toBlob.js');
+var FileSaver = require('../../../../public/components/filesaver/FileSaver');
 //elid: string name of element id;
 //options: object map of settings
 /*
@@ -213,20 +216,41 @@ var ImageButton = L.Control.extend({
         return function(e){
             e.preventDefault();
             e.stopPropagation();
-            debugger
+            $('#map-image-button').removeClass('camera-icon').addClass('spinner');
+            var legend = _.cloneDeep(map.legend);
+            if(isNaN(legend.order[0])){
+                legend.order.push('other');
+                legend.colors['other']=legend.default;                
+            }
             leafletImage(map,function(err,canvas){
-                var img = document.createElement('img');
-                var dimensions = map.getSize();
-                img.width = dimensions.x;
-                img.height = dimensions.y;
-                img.src = canvas.toDataURL();
-                //document.getElementById('images').innerHTML = '';
-                $('footer').prepend(img);
-            })
+                var context = canvas.getContext('2d'),width=canvas.width,height=canvas.height;
+                context.beginPath();
+                context.rect(15, height-(legend.order.length*15)-20, 100, (legend.order.length*15)+15);
+                context.shadowOffsetX=0;
+                context.shadowOffsetY=1;
+                context.shadowBlur=7;
+                context.shadowColor='rgba(0, 0, 0, 0.65)';
+                context.fillStyle = 'white';
+                context.fill();
+                context.shadowBlur=0;
+                legend.order.reverse().forEach(function(item,index,arr){
+                    context.beginPath();
+                    var h=height-(15*(index+1))-10;
+                    context.rect(20, h, 20, 15);
+                    context.fillStyle = legend.colors[item].fill;
+                    context.fill();
+                    context.font = '10px Arial';
+                    context.strokeText(item,44,h+11);
+                });
+                canvas.toBlob(function(blob){
+                    FileSaver.saveAs(blob, "iDigBio_Map"+Date.now()+".png");
+                    $('#map-image-button').removeClass('spinner').addClass('camera-icon');
+                }); 
+            });
         }
     },
     onAdd: function(map){
-        this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon"></div>';
+        this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon camera-icon"></div>';
         L.DomEvent.addListener(this._div, 'click', this.imageClick(map,this));
         return this._div;
     },
@@ -243,6 +267,7 @@ var legendPanel = L.Control.extend({
     onAdd: function(map){
         var colors,self=this,header,def='';
         idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
+            map.legend=resp;
             if(resp.order.length===0){
                 header='<span class="legend-header">No Map Points Available</span>';
             }else if(isNaN(resp.order[0])){

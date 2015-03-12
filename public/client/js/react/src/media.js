@@ -143,12 +143,13 @@ var Group = React.createClass({
             for(id in media){
                 if(media[id] != this.props.keyid){
                     imgs.push(
-                        <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} className="hidden-print" >
-                            <img className="gallery-image visible-print-block" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
+                        <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
+                            <img className="gallery-image" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
                         </a>
                     )                    
                 }
             }
+            debugger
             return (
                 <div id="other-images" className="clearfix">
                     <h4 className="title">Other Media</h4>
@@ -223,7 +224,7 @@ module.exports = React.createClass({
                                     <Table record={source.data} />
                                 </div>
                             </div>
-                            <Group record={this.props.record} key={source.uuid} keyid={source.uuid}/>
+                            <Group record={this.props.record} keyid={source.uuid}/>
                             <Provider data={this.props.mediarecord.attribution} />
                             
                         </div>

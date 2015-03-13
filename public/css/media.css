@@ -133,7 +133,7 @@ h3 {
 }
 #data-container #other-images {
   text-align: left;
-  width: 64%;
+  width: 65%;
   float: left;
 }
 @media (max-width: 992px) {
@@ -156,7 +156,7 @@ h3 {
   max-width: 90%;
 }
 #data-container #provider-wrapper {
-  width: 64%;
+  width: 65%;
   float: left;
 }
 @media (max-width: 992px) {

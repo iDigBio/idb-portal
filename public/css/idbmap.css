@@ -24,6 +24,11 @@
   padding: 2px;
   cursor: pointer;
 }
+@media handheld {
+  #image-button {
+    display: none;
+  }
+}
 #map-image-button {
   background-color: white;
   background-repeat: no-repeat;

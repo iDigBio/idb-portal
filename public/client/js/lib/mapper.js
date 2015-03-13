@@ -7,7 +7,7 @@ var leafletImage = require('leaflet-image/leaflet-image');
 var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
-var FileSaver = require('../../../../public/components/filesaver/FileSaver');
+var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
 //elid: string name of element id;
 //options: object map of settings
 /*

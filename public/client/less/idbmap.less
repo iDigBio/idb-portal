@@ -26,6 +26,11 @@
     cursor:pointer;
     
 }
+#image-button{
+    @media handheld{
+        display:none;
+    }
+}
 #map-image-button{
     background-color: white;
     background-repeat: no-repeat;
@@ -38,7 +43,7 @@
     padding:2px;
     cursor:pointer;
     &.camera-icon{
-        background-image: url('//localhost:19199/portal/img/camera.png');
+        background-image: url(@loc+'/portal/img/camera.png');
     }
     &.spinner{
         background-image: url('//idigbio.org/portal/img/ajax-loader.gif');

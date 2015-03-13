@@ -13,8 +13,9 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 /*
 *Map object
 *initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
+*popupContent: optional function for returning popup content(must return string) function(event,resp,map)
 ***/
-module.exports = IDBMap =  function(elid, options){
+module.exports = IDBMap =  function(elid, options, popupContent){
 
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
@@ -32,6 +33,7 @@ module.exports = IDBMap =  function(elid, options){
         zoomControl: true,
         worldCopyJump: true
     };
+
     if(typeof options == 'object'){
         _.merge(this.defaults,options);
     }
@@ -49,10 +51,13 @@ module.exports = IDBMap =  function(elid, options){
     var mapapi = idbapi.host+"mapping/";
     this.map.on('click', function(e) {
         $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
-            popup
-                .setLatLng(e.latlng)
-                .setContent("You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.")
-                .openOn(self.map);
+            var cont;
+            if(_.isUndefined(popupContent)){
+                cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
+            }else{
+                cont = popupContent(e,data,self.map);
+            }
+            popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
         });
     });  
     this.map.on('zoomend',function(e){
@@ -232,15 +237,18 @@ var ImageButton = L.Control.extend({
                 context.shadowColor='rgba(0, 0, 0, 0.65)';
                 context.fillStyle = 'white';
                 context.fill();
+                context.shadowOffsetX=0;
+                context.shadowOffsetY=0;
                 context.shadowBlur=0;
+                context.shadowColor='rgba(0, 0, 0, 0)';
                 legend.order.reverse().forEach(function(item,index,arr){
                     context.beginPath();
                     var h=height-(15*(index+1))-10;
                     context.rect(20, h, 20, 15);
                     context.fillStyle = legend.colors[item].fill;
                     context.fill();
-                    context.font = '10px Arial';
-                    context.strokeText(item,44,h+11);
+                    context.font = 'normal 10px Arial';
+                    context.strokeText(item,44,h+11,65);
                 });
                 canvas.toBlob(function(blob){
                     FileSaver.saveAs(blob, "iDigBio_Map"+Date.now()+".png");

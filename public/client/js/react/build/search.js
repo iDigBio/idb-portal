@@ -77,7 +77,7 @@ module.exports = Main = React.createClass({displayName: "Main",
                         React.createElement(SearchAny, {search: this.state.search, searchChange: this.searchChange}), 
                         React.createElement(OptionsPanel, {search: this.state.search, searchChange: this.searchChange})
                     ), 
-                    React.createElement(Map, {search: this.state.search})
+                    React.createElement(Map, {search: this.state.search, searchChange: this.searchChange})
                 ), 
                 React.createElement(Results, {search: this.state.search, searchChange: this.searchChange})
             )

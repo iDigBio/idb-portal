@@ -77,7 +77,7 @@ module.exports = Main = React.createClass({
                         <SearchAny search={this.state.search} searchChange={this.searchChange} />
                         <OptionsPanel search={this.state.search} searchChange={this.searchChange}/>
                     </div>
-                    <Map search={this.state.search} />
+                    <Map search={this.state.search} searchChange={this.searchChange}/>
                 </div>
                 <Results search={this.state.search} searchChange={this.searchChange}/>
             </div>

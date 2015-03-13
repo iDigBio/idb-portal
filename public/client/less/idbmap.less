@@ -1,3 +1,5 @@
+@import 'variables.less';
+
 #map-maximize-button{
     background-color: white;
     background-image: url('//idigbio.org/portal/img/expand2.png');
@@ -43,7 +45,7 @@
     padding:2px;
     cursor:pointer;
     &.camera-icon{
-        background-image: url(@loc+'/portal/img/camera.png');
+        background-image: url("@{loc}/portal/img/camera.png");
     }
     &.spinner{
         background-image: url('//idigbio.org/portal/img/ajax-loader.gif');

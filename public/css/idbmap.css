@@ -42,7 +42,7 @@
   cursor: pointer;
 }
 #map-image-button.camera-icon {
-  background-image: url('//localhost:19199/portal/img/camera.png');
+  background-image: url("//beta-next.idigbio.org:19199/portal/img/camera.png");
 }
 #map-image-button.spinner {
   background-image: url('//idigbio.org/portal/img/ajax-loader.gif');

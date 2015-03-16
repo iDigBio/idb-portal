@@ -2,26 +2,14 @@
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
+    getInitialState: function(){
+        return {type: this.props.mapping.type};
+    },
     defaultMappingProps: function(type){
         if(type=='box'){
-            return {
-                top_left: {
-                    lat: false,
-                    lon: false
-                },
-                bottom_right: {
-                    lat: false,
-                    lon: false
-                }
-            }
+            return Box.defaultBounds();
         }else if(type=='radius'){
-            return {
-                distance: false,
-                location: {
-                    lat: false,
-                    lon: false
-                }
-            }
+            return Radius.defaultBounds();
         }
     },
     resetBounds: function(){
@@ -30,26 +18,25 @@ module.exports = React.createClass({displayName: "exports",
         b.top_left.lon=false;
         b.bottom_right.lat=false;
         b.bottom_right.lon=false;*/
-        var t = this.props.mapping.type
+        var t = this.state.type
         this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
 
     mappingType: function(e){
         var t = e.target.value;
-       
-        this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
+        this.setState({type: t});       
+        //this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
     render: function(){
-        var bounds = this.props.mapping.bounds, type;
-        switch(this.props.mapping.type){
+        var mapping = this.props.mapping, type;
+        switch(this.state.type){
             case 'box':
-                type= React.createElement(Box, {searchChange: this.props.searchChange, bounds: bounds})
+                type= React.createElement(Box, {searchChange: this.props.searchChange, mapping: mapping})
                 break;
             case 'radius':
-                type= React.createElement(Radius, {searchChange: this.props.searchChange, bounds: bounds})
+                type= React.createElement(Radius, {searchChange: this.props.searchChange, mapping: mapping})
                 break;
         }
-
         return(
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "mapping"}, 
                 React.createElement("div", {className: "option-group", id: "mapping-options"}, 
@@ -57,12 +44,12 @@ module.exports = React.createClass({displayName: "exports",
                     React.createElement("a", {className: "btn pull-right", onClick: this.resetBounds}, 
                         "Clear"
                     ), 
-                    React.createElement("div", {className: "form", onChange: this.mappingType}, 
+                    React.createElement("div", {className: "form"}, 
                         React.createElement("label", {className: "radio-inline"}, 
-                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.props.mapping.type=='box'}), "Bounding Box"
+                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.state.type=='box', onChange: this.mappingType}), "Bounding Box"
                         ), 
                         React.createElement("label", {className: "radio-inline"}, 
-                            React.createElement("input", {type: "radio", name: "mapping-type", id: "radius", value: "radius", checked: this.props.mapping.type=='radius'}), "Radius"
+                            React.createElement("input", {type: "radio", name: "mapping-type", id: "radius", value: "radius", checked: this.state.type=='radius', onChange: this.mappingType}), "Radius"
                         )
                     ), 
                     type
@@ -73,19 +60,39 @@ module.exports = React.createClass({displayName: "exports",
 })
 
 var Box = React.createClass({displayName: "Box",
+    statics: {
+        defaultBounds: function(){
+            return {
+                top_left: {
+                    lat: false,
+                    lon: false
+                },
+                bottom_right: {
+                    lat: false,
+                    lon: false
+                }
+            }
+        }
+    },
     currentBounds: function(){
         //use this function instead of calling this.props.bounds so 
         //we always pass a new object when updating bound changes
-        var b = this.props.bounds;
-        return {
-            top_left: {
-                lat: b.top_left.lat,
-                lon: b.top_left.lon
-            },
-            bottom_right: {
-                lat: b.bottom_right.lat,
-                lon: b.bottom_right.lon
+        
+
+        if(this.props.mapping.type=='box'){
+            var b = this.props.mapping.bounds;
+            return {
+                top_left: {
+                    lat: b.top_left.lat,
+                    lon: b.top_left.lon
+                },
+                bottom_right: {
+                    lat: b.bottom_right.lat,
+                    lon: b.bottom_right.lon
+                }
             }
+        }else{
+            return Box.defaultBounds();
         }
     },
     degreeChange: function(event){
@@ -98,7 +105,7 @@ var Box = React.createClass({displayName: "Box",
         this.props.searchChange('mapping',{type: "box", bounds: bounds});
     },
     render: function(){
-        var bounds = this.props.bounds;
+        var bounds = this.currentBounds();
         return (
             React.createElement("div", null, 
                 React.createElement("div", {className: "ordinates clearfix"}, 
@@ -153,14 +160,29 @@ var Box = React.createClass({displayName: "Box",
 });
 
 var Radius = React.createClass({displayName: "Radius",
-    currentBounds: function(){
-        var bounds = this.props.bounds;
-        return {
-            distance: bounds.distance,
-            location:{
-                lat: bounds.location.lat,
-                lon: bounds.location.lon
+    statics: {
+        defaultBounds: function(){
+            return {
+                distance: false,
+                location:{
+                    lat:false,
+                    lon:false
+                }
             }
+        }
+    },
+    currentBounds: function(){
+        if(this.props.mapping.type=='radius'){
+            var bounds = this.props.mapping.bounds;
+            return {
+                distance: bounds.distance,
+                location:{
+                    lat: bounds.location.lat,
+                    lon: bounds.location.lon
+                }
+            }            
+        }else{
+            return Radius.defaultBounds();
         }
     },
 
@@ -180,7 +202,7 @@ var Radius = React.createClass({displayName: "Radius",
         this.props.searchChange('mapping',{type:'radius',bounds: b});
     },
     render: function(){
-        var bounds = this.props.bounds;
+        var bounds = this.currentBounds();
         return(
             React.createElement("div", null, 
                 React.createElement("div", {className: "ordinates clearfix"}, 

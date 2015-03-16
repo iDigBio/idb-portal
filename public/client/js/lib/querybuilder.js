@@ -257,7 +257,12 @@ module.exports = (function(){
                     break;
 
                 case 'radius':
-
+                    var b = search.mapping.bounds
+                    if(b.distance && b.locality.lat && b.locality.lon){
+                        geobounds.type = 'geo_distance';
+                        geobounds.distance = b.distance+'k';
+                        geobounds.locality={lat: b.locality.lat, lon: b.locality.lon};
+                    }
                     break; 
             }
 

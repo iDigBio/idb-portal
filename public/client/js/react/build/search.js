@@ -70,6 +70,7 @@ module.exports = Main = React.createClass({displayName: "Main",
                 search[k]=v;
             });
         }
+       
         this.setState({search: search});
         searchHistory.push(search);
     },

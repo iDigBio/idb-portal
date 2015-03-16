@@ -1,12 +1,9 @@
-/**
- * @jsx React.DOM
- */
 
 var React = require('react');
 
 module.exports = React.createClass({displayName: "exports",
     defaultMappingProps: function(type){
-        if('box'){
+        if(type=='box'){
             return {
                 top_left: {
                     lat: false,
@@ -17,9 +14,9 @@ module.exports = React.createClass({displayName: "exports",
                     lon: false
                 }
             }
-        }else if('radius'){
+        }else if(type=='radius'){
             return {
-                distance: "",
+                distance: false,
                 location: {
                     lat: false,
                     lon: false
@@ -38,7 +35,8 @@ module.exports = React.createClass({displayName: "exports",
     },
 
     mappingType: function(e){
-        var t = e.target.value
+        var t = e.target.value;
+       
         this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
     render: function(){
@@ -51,6 +49,7 @@ module.exports = React.createClass({displayName: "exports",
                 type= React.createElement(Radius, {searchChange: this.props.searchChange, bounds: bounds})
                 break;
         }
+
         return(
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "mapping"}, 
                 React.createElement("div", {className: "option-group", id: "mapping-options"}, 
@@ -154,6 +153,32 @@ var Box = React.createClass({displayName: "Box",
 });
 
 var Radius = React.createClass({displayName: "Radius",
+    currentBounds: function(){
+        var bounds = this.props.bounds;
+        return {
+            distance: bounds.distance,
+            location:{
+                lat: bounds.location.lat,
+                lon: bounds.location.lon
+            }
+        }
+    },
+
+    boundsChange: function(e){
+        var b = this.currentBounds();
+        switch(e.target.name){
+            case 'distance':
+                b.distance=e.target.value;
+                break;
+            case 'lat':
+                b.location.lat=e.target.value;
+                break;
+            case 'lon':
+                b.location.lon=e.target.value;
+                break;
+        }
+        this.props.searchChange('mapping',{type:'radius',bounds: b});
+    },
     render: function(){
         var bounds = this.props.bounds;
         return(
@@ -163,17 +188,17 @@ var Radius = React.createClass({displayName: "Radius",
                     React.createElement("div", {className: "pull-left ordinate"}, 
                         "Lat:", 
                         React.createElement("input", {type: "text", 
-                            onChange: this.degreeChange, 
+                            onChange: this.boundsChange, 
                             value: !bounds.location.lat ? '' : bounds.location.lat, 
-                            "data-name": "lat", 
+                            name: "lat", 
                             className: "coordinate form-control"})
                     ), 
                     React.createElement("div", {className: "ordinate"}, 
                         "Lon:", 
                         React.createElement("input", {type: "text", 
-                            onChange: this.degreeChange, 
+                            onChange: this.boundsChange, 
                             value: !bounds.location.lon ? '' : bounds.location.lon, 
-                            "data-name": "lon", 
+                            name: "lon", 
                             className: "coordinate form-control"})
                     )
                 ), 
@@ -181,9 +206,9 @@ var Radius = React.createClass({displayName: "Radius",
                     React.createElement("label", {className: "title"}, "Radius Length"), 
                     React.createElement("div", {className: "pull-left ordinate"}, 
                         React.createElement("input", {type: "text", 
-                            onChange: this.degreeChange, 
+                            onChange: this.boundsChange, 
                             value: !bounds.distance ? '' : bounds.distance, 
-                            "data-name": "distance", 
+                            name: "distance", 
                             className: "coordinate form-control"})
                     )
                 )

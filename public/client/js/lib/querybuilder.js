@@ -126,39 +126,48 @@ module.exports = (function(){
             })
 
             var geobounds = {}; //collects geobounds field values
-            _.each(search.bounds,function(val,key){
-                _.each(val, function(v,k){
-                    if(v && _.isEmpty(geobounds)){
-                        geobounds={
-                            top_left:{
-                                lat: 89.99999,
-                                lon: -180.0
-                            },
-                            bottom_right:{
-                                lat: -90.0,
-                                lon: 179.99999
+            switch(search.mapping.type){
+                case 'box':
+                    _.each(search.bounds,function(val,key){
+                        _.each(val, function(v,k){
+                            if(v && _.isEmpty(geobounds)){
+                                geobounds={
+                                    top_left:{
+                                        lat: 89.99999,
+                                        lon: -180.0
+                                    },
+                                    bottom_right:{
+                                        lat: -90.0,
+                                        lon: 179.99999
+                                    }
+                                }
+                            }
+                            if(v){
+                                geobounds[key][k]=parseFloat(v);
+                            }
+                        })
+                    });
+                    //compile geobounds query
+                    if(!_.isEmpty(geobounds)){
+                        if(geobounds.top_left.lat>89.99999){
+                            geobounds.top_left.lat=89.99999;
+                        }
+                        if(geobounds.bottom_right.lon>179.99999){
+                            geobounds.bottom_right.lon=179.99999;
+                        }
+                        var bounds = {"geo_bounding_box": {
+                                "geopoint": geobounds
                             }
                         }
+                        and.push(bounds);
                     }
-                    if(v){
-                        geobounds[key][k]=parseFloat(v);
-                    }
-                })
-            });
-            //compile geobounds query
-            if(!_.isEmpty(geobounds)){
-                if(geobounds.top_left.lat>89.99999){
-                    geobounds.top_left.lat=89.99999;
-                }
-                if(geobounds.bottom_right.lon>179.99999){
-                    geobounds.bottom_right.lon=179.99999;
-                }
-                var bounds = {"geo_bounding_box": {
-                        "geopoint": geobounds
-                    }
-                }
-                and.push(bounds);
+                    break;
+
+                case 'radius':
+
+                    break;
             }
+
 
             if(and.length > 0){
                 _.extend(query.query, {"filtered": {"filter": {}}} );
@@ -223,26 +232,35 @@ module.exports = (function(){
             })
 
             var geobounds = {}; //collects geobounds field values
-            _.each(search.bounds,function(val,key){
-                _.each(val, function(v,k){
-                    if(v && _.isEmpty(geobounds)){
-                        geobounds={
-                            type: "geo_bounding_box",
-                            top_left:{
-                                lat: 89.99999,
-                                lon: -179.99999
-                            },
-                            bottom_right:{
-                                lat: -89.99999,
-                                lon: 179.99999
+            switch(search.mapping.type){
+                case 'box':
+                    _.each(search.mapping.bounds,function(val,key){
+                        _.each(val, function(v,k){
+                            if(v && _.isEmpty(geobounds)){
+                                geobounds={
+                                    type: "geo_bounding_box",
+                                    top_left:{
+                                        lat: 89.99999,
+                                        lon: -179.99999
+                                    },
+                                    bottom_right:{
+                                        lat: -89.99999,
+                                        lon: 179.99999
+                                    }
+                                }
                             }
-                        }
-                    }
-                    if(v){
-                        geobounds[key][k]=parseFloat(v);
-                    }
-                })
-            });
+                            if(v){
+                                geobounds[key][k]=parseFloat(v);
+                            }
+                        })
+                    });
+                    break;
+
+                case 'radius':
+
+                    break; 
+            }
+
             if(!_.isEmpty(geobounds)){
                 idbq['geopoint'] = geobounds;
             }else if(search.geopoint){

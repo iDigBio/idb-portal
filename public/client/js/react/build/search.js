@@ -22,20 +22,24 @@ module.exports = Main = React.createClass({displayName: "Main",
                 sorting:[],
                 from: 0,
                 size: 100,
-                bounds:{
-                    top_left:{
-                        lat: false,
-                        lon: false
-                    },
-                    bottom_right:{
-                        lat: false,
-                        lon: false
-                    }
+                mapping: {
+                    type: "box",
+                    bounds:{
+                        top_left:{
+                            lat: false,
+                            lon: false
+                        },
+                        bottom_right:{
+                            lat: false,
+                            lon: false
+                        }
+                    }   
                 }
             };
         }
     },
     getInitialState: function(){
+        //set results view
         if(url('?view')){
             var types =['list','labels','images'], view = url('?view');
             if(types.indexOf(view) > -1){
@@ -43,7 +47,7 @@ module.exports = Main = React.createClass({displayName: "Main",
             }
         }
         var search;
-
+        //set current search
         if(url('?rq') || url('?sort')){
             search = Main.defaultSearch();
             paramsParser(search);
@@ -208,7 +212,7 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
                 ), 
                 React.createElement(Filters, {searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
                 React.createElement(Sorting, {searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
-                React.createElement(Mapping, {searchChange: this.props.searchChange, bounds: this.props.search.bounds, active: panels.mapping}), 
+                React.createElement(Mapping, {searchChange: this.props.searchChange, mapping: this.props.search.mapping, active: panels.mapping}), 
                 React.createElement(Download, {search: this.props.search, searchChange: this.props.searchChange, active: panels.download})
             )
         )

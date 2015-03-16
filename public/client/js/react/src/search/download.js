@@ -49,29 +49,34 @@ module.exports = Downloads = React.createClass({
             });
             
             var geobounds=[];
-            var nw = q.bounds.top_left, se = q.bounds.bottom_right;
-            if(nw.lat || nw.lon){
-                var l = 'NW', c=[];
-                if(nw.lat){
-                    c.push(' lat = '+nw.lat);
+            if(q.mapping.type=='box'){
+                var nw = q.mapping.bounds.top_left, se = q.mapping.bounds.bottom_right;
+                if(nw.lat || nw.lon){
+                    var l = 'NW', c=[];
+                    if(nw.lat){
+                        c.push(' lat = '+nw.lat);
+                    }
+                    if(nw.lon){
+                        c.push(' lon = '+nw.lon);
+                    }
+                    l += c.join(',');
+                    geobounds.push(l);
                 }
-                if(nw.lon){
-                    c.push(' lon = '+nw.lon);
-                }
-                l += c.join(',');
-                geobounds.push(l);
+                if(se.lat || se.lon){
+                    var l = 'SE', c=[];
+                    if(se.lat){
+                        c.push(' lat = '+se.lat);
+                    }
+                    if(se.lon){
+                        c.push(' lon = '+se.lon);
+                    }
+                    l += c.join(',');
+                    geobounds.push(l);
+                }                
+            }else if(q.mapping.type=='radius'){
+
             }
-            if(se.lat || se.lon){
-                var l = 'SE', c=[];
-                if(se.lat){
-                    c.push(' lat = '+se.lat);
-                }
-                if(se.lon){
-                    c.push(' lon = '+se.lon);
-                }
-                l += c.join(',');
-                geobounds.push(l);
-            }
+
             //compile geobounds
             if(geobounds.length > 0){
                 parts.push('Bounds are '+geobounds.join(' & ')+'.');

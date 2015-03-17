@@ -60,7 +60,6 @@ module.exports = Results =  React.createClass({
             this.setState({search: nextProps.search},function(){
                 this.getResults(nextProps.search); 
             });
-        
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;
@@ -127,9 +126,7 @@ module.exports = Results =  React.createClass({
                 <div className="pull-right total">
                     Total: {helpers.formatNum(parseInt(this.state.total))}
                 </div>
-
                 {results}
-
             </div>
         )
     }

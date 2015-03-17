@@ -27,6 +27,11 @@ module.exports = React.createClass({
         this.setState({type: t});       
         //this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
+    componentWillReceiveProps: function(nextProps){
+        if(nextProps.mapping.type !== this.state.type){
+            this.setState({type: nextProps.mapping.type});
+        }
+    },
     render: function(){
         var mapping = this.props.mapping, type;
         switch(this.state.type){
@@ -78,7 +83,6 @@ var Box = React.createClass({
         //use this function instead of calling this.props.bounds so 
         //we always pass a new object when updating bound changes
         
-
         if(this.props.mapping.type=='box'){
             var b = this.props.mapping.bounds;
             return {
@@ -164,10 +168,8 @@ var Radius = React.createClass({
         defaultBounds: function(){
             return {
                 distance: false,
-                location:{
-                    lat:false,
-                    lon:false
-                }
+                lat:false,
+                lon:false
             }
         }
     },
@@ -176,10 +178,8 @@ var Radius = React.createClass({
             var bounds = this.props.mapping.bounds;
             return {
                 distance: bounds.distance,
-                location:{
-                    lat: bounds.location.lat,
-                    lon: bounds.location.lon
-                }
+                lat: bounds.lat,
+                lon: bounds.lon
             }            
         }else{
             return Radius.defaultBounds();
@@ -188,18 +188,21 @@ var Radius = React.createClass({
 
     boundsChange: function(e){
         var b = this.currentBounds();
+        var val = _.isEmpty(e.target.value) ?  false : e.target.value;
         switch(e.target.name){
             case 'distance':
-                b.distance=e.target.value;
+                b.distance=val;
                 break;
             case 'lat':
-                b.location.lat=e.target.value;
+                b.lat=val;
                 break;
             case 'lon':
-                b.location.lon=e.target.value;
+                b.lon=val;
                 break;
         }
+        //if(b.distance && b.lat && b.lon){
         this.props.searchChange('mapping',{type:'radius',bounds: b});
+        //}
     },
     render: function(){
         var bounds = this.currentBounds();
@@ -211,7 +214,7 @@ var Radius = React.createClass({
                         Lat:
                         <input type="text" 
                             onChange={this.boundsChange} 
-                            value={!bounds.location.lat ? '' : bounds.location.lat} 
+                            value={!bounds.lat ? '' : bounds.lat} 
                             name="lat" 
                             className="coordinate form-control"/>
                     </div>
@@ -219,19 +222,19 @@ var Radius = React.createClass({
                         Lon:
                         <input type="text" 
                             onChange={this.boundsChange} 
-                            value={!bounds.location.lon ? '' : bounds.location.lon} 
+                            value={!bounds.lon ? '' : bounds.lon} 
                             name="lon" 
                             className="coordinate form-control" />
                     </div>
                 </div>
                 <div className="ordinates clearfix">
-                    <label className="title">Radius Length</label>
-                    <div className="pull-left ordinate">
+                    <label >Radius Length</label>
+                    <div className=" pull-left ordinate">
                         <input type="text" 
                             onChange={this.boundsChange} 
                             value={!bounds.distance ? '' : bounds.distance} 
                             name="distance" 
-                            className="coordinate form-control"/>
+                            className="coordinate form-control pull-left"/>
                     </div>
                 </div>                
             </div>

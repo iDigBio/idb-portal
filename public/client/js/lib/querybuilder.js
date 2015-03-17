@@ -6,7 +6,7 @@ var fields = require('./fields');
 module.exports = (function(){
 	var QueryBuilder = function(){  
 
-        // ### makeQuery
+        // ### makeQuery DEPRECATED IN FAVOR OF API
         // costructs an Elastic Search query from a search object
         // created with buildSearchObject
         // returns an Elastic Search JSON object.
@@ -232,6 +232,7 @@ module.exports = (function(){
             })
 
             var geobounds = {}; //collects geobounds field values
+
             switch(search.mapping.type){
                 case 'box':
                     _.each(search.mapping.bounds,function(val,key){
@@ -258,10 +259,12 @@ module.exports = (function(){
 
                 case 'radius':
                     var b = search.mapping.bounds
-                    if(b.distance && b.locality.lat && b.locality.lon){
+                 
+                    if(b.distance && b.lat && b.lon){
                         geobounds.type = 'geo_distance';
-                        geobounds.distance = b.distance+'k';
-                        geobounds.locality={lat: b.locality.lat, lon: b.locality.lon};
+                        geobounds.distance = b.distance+'km';
+                        geobounds.lat = parseFloat(b.lat);
+                        geobounds.lon = parseFloat(b.lon);
                     }
                     break; 
             }

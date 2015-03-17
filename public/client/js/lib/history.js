@@ -42,4 +42,18 @@ module.exports = function(){
             return true;
         }
     }
+    /*
+    *Define single item settings for local storage.
+    **/
+    this.set = function(name, value){
+        return localStorage.setItem(name,value);
+    }
+
+    this.get = function(name){
+        return localStorage.getItem(name);
+    }
+
+    this.remove = function(name){
+        return localStorage.removeItem(name);
+    }
 }

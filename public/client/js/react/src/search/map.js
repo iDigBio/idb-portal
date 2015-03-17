@@ -45,7 +45,8 @@ module.exports = React.createClass({
                     var bounds={}, target=e.currentTarget.attributes;
                     bounds['top_left']={lat: parseFloat(target['data-nw-lat'].value),lon: parseFloat(target['data-nw-lon'].value)};
                     bounds['bottom_right']={lat: parseFloat(target['data-se-lat'].value),lon: parseFloat(target['data-se-lon'].value)};
-                    self.props.searchChange('bounds',bounds);
+                    self.props.searchChange('mapping',{type: 'box', bounds: bounds});
+                    map.closePopup();
                 })
                 str = a;
                 //str = 'There are '+resp.itemCount+' items in this locality.' +

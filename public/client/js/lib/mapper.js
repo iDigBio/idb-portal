@@ -16,7 +16,10 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 *popupContent: optional function for returning popup content(must return string) function(event,resp,map)
 ***/
 module.exports = IDBMap =  function(elid, options, popupContent){
-
+    var self=this;
+    /*
+    * Basic Options
+    ****/
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
         minZoom: 0, 
@@ -37,46 +40,197 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     if(typeof options == 'object'){
         _.merge(this.defaults,options);
     }
+    /*
+    * Map Controls
+    ****/
+    var resizeFunction = _.noop;
+
+    var MaximizeButton =  L.Control.extend({
+        options: {
+            position:"topright"
+        },
+        _div: L.DomUtil.create('a', 'map-button'),
+        expandFunc: function(map,control){
+            return function (e) {
+                L.DomEvent.stopPropagation(e);
+                var width = $(window).width(), height = $(window).height();
+                var cont = map.getContainer(), contwidth = $(cont).width(), contheight = $(cont).height();
+                var pos = $(cont).position();
+                $(cont).css('position', 'fixed')
+                .css('top',pos.top+'px')
+                .css('left',pos.left+'px')
+                .css('width',contwidth+'px')
+                .css('height',contheight+'px')
+                .css('z-index','550');
+                $(cont).animate({width: (width-53), height: (height-53), margin: 25, left:0,top:0},{
+                    duration: 200,
+                    complete: function(){
+                        $('#mapper-modal').show();
+                        map.invalidateSize();
+                    },
+                    progress: function(){
+                        map.invalidateSize();
+                    }
+                });
+                map.removeControl(control);
+                resizeFunction = function(){
+                    var width = $(window).width(), height = $(window).height();
+                    $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
+                    $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
+                    map.invalidateSize()
+                };
+                L.DomEvent.addListener(window, 'resize', resizeFunction);
+            }
+        },
+        onAdd: function(map){
+            this.map = map;
+            this._div.innerHTML = '<div title="maximize map" id="map-maximize-button" class="map-button-icon"></div>';
+            this.expandClick = this.expandFunc(map,this);
+            L.DomEvent.addListener(this._div, 'click', this.expandClick);
+            return this._div;
+        },
+        onRemove: function(map){
+            L.DomEvent.removeListener(this._div, 'click', this.expandClick);
+            map.addControl(new MinimizeButton());
+        }
+    });
+
+    var MinimizeButton = L.Control.extend({
+        options: {
+            position:"topright"
+        },
+        _div: L.DomUtil.create('a', 'map-button'),
+        contractFunc: function(map,control){
+            return function (e) {
+                L.DomEvent.stopPropagation(e);
+                $('#mapper-modal').hide();
+                var cont = map.getContainer();
+                $(cont).removeAttr('style');
+                map.invalidateSize();
+                //map.zoomOut();
+                map.removeControl(control);
+            }
+        },
+        onAdd: function(map){
+            this.map = map;
+            this._div.innerHTML = '<div title="minimize map" id="map-minimize-button" class="map-button-icon"></div>';
+            this.contractClick = this.contractFunc(map,this);
+            L.DomEvent.addListener(this._div, 'click', this.contractClick);
+            return this._div;
+        },
+        onRemove: function(map){
+            L.DomEvent.removeListener(this._div, 'click', this.contractClick);
+            L.DomEvent.removeListener(window, 'resize', resizeFunction);
+            map.addControl(new MaximizeButton());
+        }
+    });
+
+    var ImageButton = L.Control.extend({
+        options: {
+            position:"topright"
+        },
+        _div: L.DomUtil.create('a', 'image-button'),
+        imageClick: function(map,control){
+            return function(e){
+                e.preventDefault();
+                e.stopPropagation();
+                $('#map-image-button').removeClass('camera-icon').addClass('spinner');
+                var legend = _.cloneDeep(map.legend);
+                if(isNaN(legend.order[0])){
+                    legend.order.push('other');
+                    legend.colors['other']=legend.default;                
+                }
+                leafletImage(map,function(err,canvas){
+                    var context = canvas.getContext('2d'),width=canvas.width,height=canvas.height;
+                    context.beginPath();
+                    context.rect(15, height-(legend.order.length*15)-20, 100, (legend.order.length*15)+15);
+                    context.shadowOffsetX=0;
+                    context.shadowOffsetY=1;
+                    context.shadowBlur=7;
+                    context.shadowColor='rgba(0, 0, 0, 0.65)';
+                    context.fillStyle = 'white';
+                    context.fill();
+                    context.shadowOffsetX=0;
+                    context.shadowOffsetY=0;
+                    context.shadowBlur=0;
+                    context.shadowColor='rgba(0, 0, 0, 0)';
+                    legend.order.reverse().forEach(function(item,index,arr){
+                        context.beginPath();
+                        var h=height-(15*(index+1))-10;
+                        context.rect(20, h, 20, 15);
+                        context.fillStyle = legend.colors[item].fill;
+                        context.fill();
+                        context.font = 'normal 10px Arial';
+                        context.strokeText(item,44,h+11,65);
+                    });
+                    canvas.toBlob(function(blob){
+                        FileSaver.saveAs(blob, "iDigBio_Map"+Date.now()+".png");
+                        $('#map-image-button').removeClass('spinner').addClass('camera-icon');
+                    }); 
+                });
+            }
+        },
+        onAdd: function(map){
+            this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon camera-icon"></div>';
+            L.DomEvent.addListener(this._div, 'click', this.imageClick(map,this));
+            return this._div;
+        },
+        onRemove: function(map){
+            return this._div
+        }
+    });
+
+    var legendPanel = L.Control.extend({
+        options: {
+            position: "bottomleft"
+        },
+        _div: L.DomUtil.create('div','map-legend'),
+        onAdd: function(map){
+            var colors,control=this,header,def='',time=self.currentQueryTime;
+            idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
+                if(time >= self.currentQueryTime){
+                    //control response
+                    map.legend=resp;
+                    if(resp.order.length===0){
+                        header='<span class="legend-header">No Map Points Available</span>';
+                    }else if(isNaN(resp.order[0])){
+                        header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';
+                        def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
+                    }else{
+                        header='<span class="legend-header">Density</span>';
+                    }
+                    colors=_.map(resp.order,function(val){
+                        var swatch = '<div class="legend-item">';
+                        swatch+=val;
+                        swatch+='<span class="legend-swatch" style="background-color:'+resp.colors[val.toString()].fill+'"></span></div>';
+                        return swatch;
+                    });
+                    control._div.innerHTML='<div class="wrapper">'+header+colors.join('')+def+'</div>';
+                }
+            });
+            return this._div;
+        },
+        onRemove: function(map){
+            this._div.innerHTML=''
+            return this._div;
+        }
+    });
+
+
     //init map
     this.map = L.map(elid,this.defaults);
     this.map.addControl(new MaximizeButton());
+    //add mapper modal for maximize view
+    $('body').append('<div id="mapper-modal"></div>');
     this.map.addControl(new ImageButton());
     this.map.addControl(new L.control.scale({
         position:'bottomright'
     }))
-    //add modal pane for expanded view
-    $('body').append('<div id="mapper-modal"></div>');
-    //
-    var popup = L.popup(),  self=this;
-    var mapapi = idbapi.host+"mapping/";
-    this.map.on('click', function(e) {
-        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
-            var cont;
-            if(_.isUndefined(popupContent)){
-                cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
-            }else{
-                cont = popupContent(e,data,self.map);
-            }
-            popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
-        });
-    });  
-    this.map.on('zoomend',function(e){
-        if(typeof legend == 'object'){
-            self.map.removeControl(legend);
-            if(typeof self.map.mapCode != 'undefined'){
-                self.map.addControl(legend)
-            }
-        }
-        if(typeof idblayer == 'object'){
-            self.map.removeLayer(idblayer);
-            if(typeof self.map.resp != 'undefined'){
-                idblayer = L.tileLayer(self.map.resp.tiles,{minZoom: 1})
-                self.map.addLayer(idblayer)
-            }
-        }
-    })
+    /*
+    *Instance Methods
+    **/
     this.currentQueryTime = 0;
-    var idblayer,utf8grid,legend,self=this;
+    var idblayer,utf8grid,legend;
     
     this.query = function(idbquery){
         self.idbquery=idbquery;
@@ -125,177 +279,38 @@ module.exports = IDBMap =  function(elid, options, popupContent){
             crossDomain: true
         })
     }, 100,{'leading': false, 'trailing': true});
-}
-
-/*
-* Map Controls
-****/
-var resizeFunction = _.noop;
-
-var MaximizeButton =  L.Control.extend({
-    options: {
-        position:"topright"
-    },
-    _div: L.DomUtil.create('a', 'map-button'),
-    expandFunc: function(map,control){
-        return function (e) {
-            L.DomEvent.stopPropagation(e);
-            var width = $(window).width(), height = $(window).height();
-            var cont = map.getContainer(), contwidth = $(cont).width(), contheight = $(cont).height();
-            var pos = $(cont).position();
-            $(cont).css('position', 'fixed')
-            .css('top',pos.top+'px')
-            .css('left',pos.left+'px')
-            .css('width',contwidth+'px')
-            .css('height',contheight+'px')
-            .css('z-index','550');
-            $(cont).animate({width: (width-53), height: (height-53), margin: 25, left:0,top:0},{
-                duration: 200,
-                complete: function(){
-                    $('#mapper-modal').show();
-                    map.invalidateSize();
-                },
-                progress: function(){
-                    map.invalidateSize();
-                }
-            });
-            map.removeControl(control);
-            resizeFunction = function(){
-                var width = $(window).width(), height = $(window).height();
-                $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
-                $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
-                map.invalidateSize()
-            };
-            L.DomEvent.addListener(window, 'resize', resizeFunction);
-        }
-    },
-    onAdd: function(map){
-        this.map = map;
-        this._div.innerHTML = '<div title="maximize map" id="map-maximize-button" class="map-button-icon"></div>';
-        this.expandClick = this.expandFunc(map,this);
-        L.DomEvent.addListener(this._div, 'click', this.expandClick);
-        return this._div;
-    },
-    onRemove: function(map){
-        L.DomEvent.removeListener(this._div, 'click', this.expandClick);
-        map.addControl(new MinimizeButton());
-    }
-});
-
-var MinimizeButton = L.Control.extend({
-    options: {
-        position:"topright"
-    },
-    _div: L.DomUtil.create('a', 'map-button'),
-    contractFunc: function(map,control){
-        return function (e) {
-            L.DomEvent.stopPropagation(e);
-            $('#mapper-modal').hide();
-            var cont = map.getContainer();
-            $(cont).removeAttr('style');
-            map.invalidateSize();
-            //map.zoomOut();
-            map.removeControl(control);
-        }
-    },
-    onAdd: function(map){
-        this.map = map;
-        this._div.innerHTML = '<div title="minimize map" id="map-minimize-button" class="map-button-icon"></div>';
-        this.contractClick = this.contractFunc(map,this);
-        L.DomEvent.addListener(this._div, 'click', this.contractClick);
-        return this._div;
-    },
-    onRemove: function(map){
-        L.DomEvent.removeListener(this._div, 'click', this.contractClick);
-        L.DomEvent.removeListener(window, 'resize', resizeFunction);
-        map.addControl(new MaximizeButton());
-    }
-});
-
-var ImageButton = L.Control.extend({
-    options: {
-        position:"topright"
-    },
-    _div: L.DomUtil.create('a', 'image-button'),
-    imageClick: function(map,control){
-        return function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            $('#map-image-button').removeClass('camera-icon').addClass('spinner');
-            var legend = _.cloneDeep(map.legend);
-            if(isNaN(legend.order[0])){
-                legend.order.push('other');
-                legend.colors['other']=legend.default;                
-            }
-            leafletImage(map,function(err,canvas){
-                var context = canvas.getContext('2d'),width=canvas.width,height=canvas.height;
-                context.beginPath();
-                context.rect(15, height-(legend.order.length*15)-20, 100, (legend.order.length*15)+15);
-                context.shadowOffsetX=0;
-                context.shadowOffsetY=1;
-                context.shadowBlur=7;
-                context.shadowColor='rgba(0, 0, 0, 0.65)';
-                context.fillStyle = 'white';
-                context.fill();
-                context.shadowOffsetX=0;
-                context.shadowOffsetY=0;
-                context.shadowBlur=0;
-                context.shadowColor='rgba(0, 0, 0, 0)';
-                legend.order.reverse().forEach(function(item,index,arr){
-                    context.beginPath();
-                    var h=height-(15*(index+1))-10;
-                    context.rect(20, h, 20, 15);
-                    context.fillStyle = legend.colors[item].fill;
-                    context.fill();
-                    context.font = 'normal 10px Arial';
-                    context.strokeText(item,44,h+11,65);
-                });
-                canvas.toBlob(function(blob){
-                    FileSaver.saveAs(blob, "iDigBio_Map"+Date.now()+".png");
-                    $('#map-image-button').removeClass('spinner').addClass('camera-icon');
-                }); 
-            });
-        }
-    },
-    onAdd: function(map){
-        this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon camera-icon"></div>';
-        L.DomEvent.addListener(this._div, 'click', this.imageClick(map,this));
-        return this._div;
-    },
-    onRemove: function(map){
-        return this._div
-    }
-});
-
-var legendPanel = L.Control.extend({
-    options: {
-        position: "bottomleft"
-    },
-    _div: L.DomUtil.create('div','map-legend'),
-    onAdd: function(map){
-        var colors,self=this,header,def='';
-        idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
-            map.legend=resp;
-            if(resp.order.length===0){
-                header='<span class="legend-header">No Map Points Available</span>';
-            }else if(isNaN(resp.order[0])){
-                header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';
-                def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
+    
+    /*
+    * Event Actions
+    ***/
+    var popup = L.popup();
+    var mapapi = idbapi.host+"mapping/";
+    this.map.on('click', function(e) {
+        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
+            var cont;
+            if(_.isUndefined(popupContent)){
+                cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
             }else{
-                header='<span class="legend-header">Density Legend</span>';
+                cont = popupContent(e,data,self.map);
             }
-            colors=_.map(resp.order,function(val){
-                var swatch = '<div class="legend-item">';
-                swatch+=val;
-                swatch+='<span class="legend-swatch" style="background-color:'+resp.colors[val.toString()].fill+'"></span></div>';
-                return swatch;
-            });
-            self._div.innerHTML='<div class="wrapper">'+header+colors.join('')+def+'</div>';
+            popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
         });
-        return this._div;
-    },
-    onRemove: function(map){
-        this._div.innerHTML=''
-        return this._div;
-    }
-})
+    }); 
+
+    this.map.on('zoomend',function(e){
+        if(typeof legend == 'object'){
+            self.map.removeControl(legend);
+            if(typeof self.map.mapCode != 'undefined'){
+                self.map.addControl(legend)
+            }
+        }
+        if(typeof idblayer == 'object'){
+            self.map.removeLayer(idblayer);
+            if(typeof self.map.resp != 'undefined'){
+                idblayer = L.tileLayer(self.map.resp.tiles,{minZoom: 1})
+                self.map.addLayer(idblayer)
+            }
+        }
+    })
+
+}

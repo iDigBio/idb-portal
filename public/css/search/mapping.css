@@ -28,3 +28,12 @@
   height: 27px;
   width: 100px;
 }
+#mapping-options.option-group .ordinates .distance {
+  width: 120px;
+  float: left;
+  margin: 2px 5px;
+}
+#mapping-options.option-group .ordinates .distance input.coordinate {
+  height: 27px;
+  width: 60px;
+}

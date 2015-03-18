@@ -13,11 +13,6 @@ module.exports = React.createClass({displayName: "exports",
         }
     },
     resetBounds: function(){
-        /*var b = this.currentBounds();
-        b.top_left.lat=false;
-        b.top_left.lon=false;
-        b.bottom_right.lat=false;
-        b.bottom_right.lon=false;*/
         var t = this.state.type
         this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
@@ -25,7 +20,6 @@ module.exports = React.createClass({displayName: "exports",
     mappingType: function(e){
         var t = e.target.value;
         this.setState({type: t});       
-        //this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
     },
     componentWillReceiveProps: function(nextProps){
         if(nextProps.mapping.type !== this.state.type){
@@ -46,7 +40,7 @@ module.exports = React.createClass({displayName: "exports",
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "mapping"}, 
                 React.createElement("div", {className: "option-group", id: "mapping-options"}, 
                     React.createElement("span", {className: "title"}, "Lat/Lon Contraints"), 
-                    React.createElement("a", {className: "btn pull-right", onClick: this.resetBounds}, 
+                    React.createElement("a", {className: "btn", onClick: this.resetBounds}, 
                         "Clear"
                     ), 
                     React.createElement("div", {className: "form"}, 
@@ -229,12 +223,12 @@ var Radius = React.createClass({displayName: "Radius",
                 ), 
                 React.createElement("div", {className: "ordinates clearfix"}, 
                     React.createElement("label", null, "Radius Length"), 
-                    React.createElement("div", {className: " pull-left ordinate"}, 
+                    React.createElement("div", {className: " pull-left distance"}, 
                         React.createElement("input", {type: "text", 
                             onChange: this.boundsChange, 
                             value: !bounds.distance ? '' : bounds.distance, 
                             name: "distance", 
-                            className: "coordinate form-control pull-left"})
+                            className: "coordinate form-control"}), " km"
                     )
                 )
             )

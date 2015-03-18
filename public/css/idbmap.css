@@ -1,6 +1,5 @@
 #map-maximize-button {
   background-color: white;
-  background-image: url('//idigbio.org/portal/img/expand2.png');
   background-repeat: no-repeat;
   background-position: center center;
   background-size: 16px 16px;
@@ -11,18 +10,11 @@
   padding: 2px;
   cursor: pointer;
 }
-#map-minimize-button {
-  background-color: white;
+#map-maximize-button.maximize-button {
+  background-image: url('//idigbio.org/portal/img/expand2.png');
+}
+#map-maximize-button.minimize-button {
   background-image: url('//idigbio.org/portal/img/contract2.png');
-  background-repeat: no-repeat;
-  background-position: center center;
-  background-size: 16px 16px;
-  box-shadow: 0px 1px 7px rgba(0, 0, 0, 0.65);
-  border-radius: 4px;
-  width: 26px;
-  height: 26px;
-  padding: 2px;
-  cursor: pointer;
 }
 @media handheld {
   #image-button {

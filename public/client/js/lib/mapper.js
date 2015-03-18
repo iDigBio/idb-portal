@@ -43,85 +43,67 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     /*
     * Map Controls
     ****/
-    var resizeFunction = _.noop;
+    var resizeFunction = function(){
+        var width = $(window).width(), height = $(window).height();
+        $('#'+elid).css('width', (width-53)+'px').css('height', (height-53)+'px');
+        $('#'+elid).css('width', (width-53)+'px').css('height', (height-53)+'px');
+        self.map.invalidateSize();
+    }
 
     var MaximizeButton =  L.Control.extend({
         options: {
             position:"topright"
         },
+        expanded: false,
         _div: L.DomUtil.create('a', 'map-button'),
         expandFunc: function(map,control){
             return function (e) {
-                L.DomEvent.stopPropagation(e);
-                var width = $(window).width(), height = $(window).height();
-                var cont = map.getContainer(), contwidth = $(cont).width(), contheight = $(cont).height();
-                var pos = $(cont).position();
-                $(cont).css('position', 'fixed')
-                .css('top',pos.top+'px')
-                .css('left',pos.left+'px')
-                .css('width',contwidth+'px')
-                .css('height',contheight+'px')
-                .css('z-index','550');
-                $(cont).animate({width: (width-53), height: (height-53), margin: 25, left:0,top:0},{
-                    duration: 200,
-                    complete: function(){
-                        $('#mapper-modal').show();
-                        map.invalidateSize();
-                    },
-                    progress: function(){
-                        map.invalidateSize();
-                    }
-                });
-                map.removeControl(control);
-                resizeFunction = function(){
+                var cont = '#'+elid;
+                if(!control.expanded){
+                    L.DomEvent.stopPropagation(e);
                     var width = $(window).width(), height = $(window).height();
-                    $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
-                    $(cont).css('width', (width-53)+'px').css('height', (height-53)+'px');
-                    map.invalidateSize()
-                };
-                L.DomEvent.addListener(window, 'resize', resizeFunction);
+                    var contwidth = $(cont).width(), contheight = $(cont).height();
+                    var pos = $(cont).position();
+                    $(cont).css('position', 'fixed')
+                    .css('top',pos.top+'px')
+                    .css('left',pos.left+'px')
+                    .css('width',contwidth+'px')
+                    .css('height',contheight+'px')
+                    .css('z-index','550');
+                    $(cont).animate({width: (width-53), height: (height-53), margin: 25, left:0,top:0},{
+                        duration: 200,
+                        complete: function(){
+                            $('#mapper-modal').show();
+                            map.invalidateSize();
+                        },
+                        progress: function(){
+                            map.invalidateSize();
+                        }
+                    });
+                    L.DomEvent.addListener(window, 'resize', resizeFunction);
+                    $('#map-maximize-button.maximize-button').removeClass('maximize-button').addClass('minimize-button');
+                    control.expanded=true;                 
+                }else{
+                    L.DomEvent.stopPropagation(e);
+                    L.DomEvent.removeListener(window, 'resize', resizeFunction);
+                    $('#mapper-modal').hide();
+                    $(cont).removeAttr('style');
+                    map.invalidateSize();
+                    //map.zoomOut();
+                    $('#map-maximize-button.minimize-button').removeClass('minimize-button').addClass('maximize-button');
+                    control.expanded=false;                   
+                }
             }
         },
         onAdd: function(map){
             this.map = map;
-            this._div.innerHTML = '<div title="maximize map" id="map-maximize-button" class="map-button-icon"></div>';
+            this._div.innerHTML = '<div title="maximize map" id="map-maximize-button" class="map-button-icon maximize-button"></div>';
             this.expandClick = this.expandFunc(map,this);
             L.DomEvent.addListener(this._div, 'click', this.expandClick);
             return this._div;
         },
         onRemove: function(map){
             L.DomEvent.removeListener(this._div, 'click', this.expandClick);
-            map.addControl(new MinimizeButton());
-        }
-    });
-
-    var MinimizeButton = L.Control.extend({
-        options: {
-            position:"topright"
-        },
-        _div: L.DomUtil.create('a', 'map-button'),
-        contractFunc: function(map,control){
-            return function (e) {
-                L.DomEvent.stopPropagation(e);
-                $('#mapper-modal').hide();
-                var cont = map.getContainer();
-                $(cont).removeAttr('style');
-                map.invalidateSize();
-                //map.zoomOut();
-                map.removeControl(control);
-            }
-        },
-        onAdd: function(map){
-            this.map = map;
-            this._div.innerHTML = '<div title="minimize map" id="map-minimize-button" class="map-button-icon"></div>';
-            this.contractClick = this.contractFunc(map,this);
-            L.DomEvent.addListener(this._div, 'click', this.contractClick);
-            return this._div;
-        },
-        onRemove: function(map){
-            L.DomEvent.removeListener(this._div, 'click', this.contractClick);
-            L.DomEvent.removeListener(window, 'resize', resizeFunction);
-            map.addControl(new MaximizeButton());
         }
     });
 
@@ -230,15 +212,15 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     *Instance Methods
     **/
     this.currentQueryTime = 0;
-    var idblayer,utf8grid,legend;
+    var idbquery,idblayer,utf8grid,legend;
     
-    this.query = function(idbquery){
-        self.idbquery=idbquery;
-        self._query();
+    this.query = function(query){
+        idbquery=query;
+        _query();
     }
 
-    this._query = _.debounce(function(){
-        var query = {rq: self.idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+    var _query = _.debounce(function(){
+        var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
         self.currentQueryTime=time;

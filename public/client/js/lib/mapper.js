@@ -2,7 +2,7 @@
 var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
-require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
+//require('../../../../public/components/leaflet-loading/src/Control.Loading');
 var leafletImage = require('leaflet-image/leaflet-image');
 var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
@@ -22,8 +22,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     ****/
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
-        minZoom: 0, 
-        //maxZoom: 19,
+        minZoom: 0,
         reuseTiles: true
     });
 
@@ -49,7 +48,13 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         $('#'+elid).css('width', (width-53)+'px').css('height', (height-53)+'px');
         self.map.invalidateSize();
     }
-
+    var formatNum = function (val){
+        if(isNaN(val)){
+            return val;
+        }else{
+            return val.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
     var MaximizeButton =  L.Control.extend({
         options: {
             position:"topright"
@@ -143,7 +148,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                         context.fillStyle = legend.colors[item].fill;
                         context.fill();
                         context.font = 'normal 10px Arial';
-                        context.strokeText(item,44,h+11,65);
+                        context.strokeText(formatNum(item),44,h+11,65);
                     });
                     canvas.toBlob(function(blob){
                         FileSaver.saveAs(blob, "iDigBio_Map"+Date.now()+".png");
@@ -183,7 +188,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     }
                     colors=_.map(resp.order,function(val){
                         var swatch = '<div class="legend-item">';
-                        swatch+=val;
+                        swatch+=formatNum(val);
                         swatch+='<span class="legend-swatch" style="background-color:'+resp.colors[val.toString()].fill+'"></span></div>';
                         return swatch;
                     });
@@ -207,12 +212,27 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     this.map.addControl(new ImageButton());
     this.map.addControl(new L.control.scale({
         position:'bottomright'
-    }))
+    }));
+    var loading = {
+        base: false,
+        idblayer: false
+    }
+    var makeIdblayer = function(tilePath){
+        var layer = L.tileLayer(tilePath,{minZoom: 1});
+        var idbloading = function(){
+            loading.idblayer=true;
+        }
+        var idbloaded = function(){
+            loading.idblayer=false;
+        }
+        return layer;
+    }
     /*
     *Instance Methods
     **/
     this.currentQueryTime = 0;
     var idbquery,idblayer,utf8grid,legend;
+    var mapapi = idbapi.host+"mapping/";
     
     this.query = function(query){
         idbquery=query;
@@ -244,7 +264,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     if(typeof idblayer == 'object'){
                         self.map.removeLayer(idblayer);
                     }
-                    idblayer = L.tileLayer(resp.tiles,{minZoom: 1})
+                    idblayer = makeIdblayer(resp.tiles);
                     self.map.addLayer(idblayer);
                     if(typeof utf8grid == 'object'){
                         self.map.removeLayer(utf8grid);
@@ -266,7 +286,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     * Event Actions
     ***/
     var popup = L.popup();
-    var mapapi = idbapi.host+"mapping/";
+
     this.map.on('click', function(e) {
         $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             var cont;
@@ -289,7 +309,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         if(typeof idblayer == 'object'){
             self.map.removeLayer(idblayer);
             if(typeof self.map.resp != 'undefined'){
-                idblayer = L.tileLayer(self.map.resp.tiles,{minZoom: 1})
+                idblayer = makeIdblayer(self.map.resp.tiles);
                 self.map.addLayer(idblayer)
             }
         }

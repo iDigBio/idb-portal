@@ -1,3 +1,4 @@
+@import '../../components/leaflet/dist/leaflet.css';
 #map-maximize-button {
   background-color: white;
   background-repeat: no-repeat;

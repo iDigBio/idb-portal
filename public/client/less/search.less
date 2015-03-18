@@ -5,6 +5,7 @@
 @import 'search/sorting.less';
 @import 'search/download.less';
 @import 'search/mapping.less';
+@import 'idbmap.less';
 
 #main,#react-wrapper,#top,body{
     background-color: @bggrey;
@@ -88,7 +89,8 @@ input::-webkit-input-placeholder{
                 text-decoration: none;
                 color:#333;
                 border: @brd2;
-                padding:3px 6px 3px 6px;
+                border-bottom:none;
+                padding:3px 6px 2px 6px;
                 border-radius:3px 3px 0px 0px;
                 background-color: white;
                 z-index:1;
@@ -97,8 +99,8 @@ input::-webkit-input-placeholder{
                 }
                 &.active{
                     background-color: @bggreydark;
-                    border-bottom:1px solid @bggreydark;
-                    padding-bottom:3px; 
+                   
+                    padding-bottom:4px; 
                 }
                 &.active:hover{
                     cursor:auto;

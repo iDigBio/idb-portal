@@ -2,7 +2,8 @@
 var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
-//require('../../../../public/components/leaflet-loading/src/Control.Loading');
+require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
+require('../../../../public/components/leaflet-loading/src/Control.Loading');
 var leafletImage = require('leaflet-image/leaflet-image');
 var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
@@ -32,6 +33,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         layers: [base],
         scrollWheelZoom: true,
         boxZoom: true,
+        loadingControl: true,
         zoomControl: true,
         worldCopyJump: true
     };
@@ -217,21 +219,34 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         base: false,
         idblayer: false
     }
+    /*
+    * iDBLayer control and rendering with events
+    ****/
+    var idblayer;
+    var idbloading = function(){
+        self.map.fire('dataloading');
+    }
+    var idbload = function(){
+        self.map.fire('dataload');
+    }
     var makeIdblayer = function(tilePath){
-        var layer = L.tileLayer(tilePath,{minZoom: 1});
-        var idbloading = function(){
-            loading.idblayer=true;
+        idblayer = L.tileLayer(tilePath,{minZoom: 1});
+        idblayer.on('loading',idbloading);
+        idblayer.on('load',idbload)
+        return idblayer;
+    }
+    var removeIdblayer = function(){
+        if(typeof idblayer == 'object'){
+            idblayer.off('loading',idbloading);
+            idblayer.off('load',idbload);
         }
-        var idbloaded = function(){
-            loading.idblayer=false;
-        }
-        return layer;
+        return idblayer;
     }
     /*
     *Instance Methods
     **/
     this.currentQueryTime = 0;
-    var idbquery,idblayer,utf8grid,legend;
+    var idbquery,utf8grid,legend;
     var mapapi = idbapi.host+"mapping/";
     
     this.query = function(query){
@@ -262,10 +277,9 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     legend = new legendPanel();
                     self.map.addControl(legend);
                     if(typeof idblayer == 'object'){
-                        self.map.removeLayer(idblayer);
+                        self.map.removeLayer(removeIdblayer());
                     }
-                    idblayer = makeIdblayer(resp.tiles);
-                    self.map.addLayer(idblayer);
+                    self.map.addLayer(makeIdblayer(resp.tiles));
                     if(typeof utf8grid == 'object'){
                         self.map.removeLayer(utf8grid);
                     }
@@ -307,10 +321,9 @@ module.exports = IDBMap =  function(elid, options, popupContent){
             }
         }
         if(typeof idblayer == 'object'){
-            self.map.removeLayer(idblayer);
+            self.map.removeLayer(removeIdblayer());
             if(typeof self.map.resp != 'undefined'){
-                idblayer = makeIdblayer(self.map.resp.tiles);
-                self.map.addLayer(idblayer)
+                self.map.addLayer(makeIdblayer(self.map.resp.tiles))
             }
         }
     })

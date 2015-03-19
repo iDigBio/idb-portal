@@ -1,4 +1,5 @@
 @import '../../components/leaflet/dist/leaflet.css';
+@import '../../components/leaflet-loading/src/Control.Loading.css';
 #filters {
   z-index: 10;
   position: relative;

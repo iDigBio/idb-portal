@@ -33,9 +33,9 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         layers: [base],
         scrollWheelZoom: true,
         boxZoom: true,
-        loadingControl: true,
         zoomControl: true,
-        worldCopyJump: true
+        worldCopyJump: true,
+        loadingControl: true
     };
 
     if(typeof options == 'object'){
@@ -130,19 +130,32 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     legend.colors['other']=legend.default;                
                 }
                 leafletImage(map,function(err,canvas){
+                    //build white box
                     var context = canvas.getContext('2d'),width=canvas.width,height=canvas.height;
+
                     context.beginPath();
-                    context.rect(15, height-(legend.order.length*15)-20, 100, (legend.order.length*15)+15);
+                    context.rect(15, height-(legend.order.length*15)-35, 100, (legend.order.length*15)+30);
                     context.shadowOffsetX=0;
                     context.shadowOffsetY=1;
                     context.shadowBlur=7;
                     context.shadowColor='rgba(0, 0, 0, 0.65)';
                     context.fillStyle = 'white';
                     context.fill();
+                    //reset shadowing
                     context.shadowOffsetX=0;
                     context.shadowOffsetY=0;
                     context.shadowBlur=0;
                     context.shadowColor='rgba(0, 0, 0, 0)';
+                    //add title
+                    context.beginPath();
+                    var title;
+                    if(isNaN(legend.order[0])){
+                        title='Top '+(legend.order.length-1)+' Taxa';
+                    }else{
+                        title='Record Density';
+                    }
+                    context.font = 'normal 10px Arial';
+                    context.strokeText(title,25,height-(legend.order.length*15)-20);
                     legend.order.reverse().forEach(function(item,index,arr){
                         context.beginPath();
                         var h=height-(15*(index+1))-10;
@@ -186,7 +199,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                         header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';
                         def='<div class="legend-item">other<span class="legend-swatch" style="background-color:'+resp.default.fill+'"></span></div>'
                     }else{
-                        header='<span class="legend-header">Density</span>';
+                        header='<span class="legend-header">Record Density</span>';
                     }
                     colors=_.map(resp.order,function(val){
                         var swatch = '<div class="legend-item">';
@@ -215,11 +228,8 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     this.map.addControl(new L.control.scale({
         position:'bottomright'
     }));
-    var loading = {
-        base: false,
-        idblayer: false
-    }
-    /*
+
+/*
     * iDBLayer control and rendering with events
     ****/
     var idblayer;

@@ -73,8 +73,8 @@ module.exports = Downloads = React.createClass({displayName: "Downloads",
                     l += c.join(',');
                     geobounds.push(l);
                 }                
-            }else if(q.mapping.type=='radius'){
-
+            }else if(q.mapping.type=='radius' && q.mapping.bounds.lat && q.mapping.bounds.lon && q.mapping.bounds.distance){
+                geobounds.push('point at '+q.mapping.bounds.lat+ ', '+ q.mapping.bounds.lon + ' with a '+q.mapping.bounds.distance+'km radius');
             }
 
             //compile geobounds

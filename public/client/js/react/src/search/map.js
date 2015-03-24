@@ -53,7 +53,7 @@ module.exports = React.createClass({
                 //' Click <a class="bbox-link" data-nw-lat="'+resp.bbox.nw.lat+'" data-nw-lon="'+
                 //resp.bbox.nw.lon+'" data-se-lat="'+resp.bbox.se.lat+'" data-se-lon="'+resp.bbox.se.lon+'" href="#">here</a> to set the mapping bounding box on this region';
             }else{
-                str= 'test'
+                str= 'There are '+resp.itemCount+' points';
             }
             return str;
         });

@@ -189,6 +189,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         _div: L.DomUtil.create('div','map-legend'),
         onAdd: function(map){
             var colors,control=this,header,def='',time=self.currentQueryTime;
+           
             idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
                 if(time >= self.currentQueryTime){
                     //control response
@@ -209,6 +210,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     });
                     control._div.innerHTML='<div class="wrapper">'+header+colors.join('')+def+'</div>';
                 }
+
             });
             return this._div;
         },
@@ -240,7 +242,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         self.map.fire('dataload');
     }
     var makeIdblayer = function(tilePath){
-        idblayer = L.tileLayer(tilePath,{minZoom: 1});
+        idblayer = L.tileLayer(tilePath,{minZoom: 0});
         idblayer.on('loading',idbloading);
         idblayer.on('load',idbload)
         return idblayer;
@@ -314,12 +316,14 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     this.map.on('click', function(e) {
         $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             var cont;
-            if(_.isUndefined(popupContent)){
-                cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
-            }else{
-                cont = popupContent(e,data,self.map);
+            if(data.itemCount>0){
+                if(_.isUndefined(popupContent)){
+                    cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
+                }else{
+                    cont = popupContent(e,data,self.map);
+                }
+                popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
             }
-            popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
         });
     }); 
 

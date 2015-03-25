@@ -116,44 +116,6 @@ var Record = React.createClass({displayName: "Record",
     }
 });
 
-var Title = React.createClass({displayName: "Title",
-    render: function(){
-        var title = '',info=[];
-        //build title
-        var data = this.props.data;
-        if(_.has(data,'dwc:scientificName')) { 
-            title = data['dwc:scientificName'] ;
-        }else if(_.has(data, 'dwc:genus')){
-            title = data['dwc:genus'];
-            if(_.has(data, 'dwc:specificEpithet')){
-                title += data['dwc:specificEpithet'];
-            }
-        }
-        if(_.isEmpty(title)){
-            title = 'No Name';
-        } 
-        //var author = '';
-        if(_.has(data,'dwc:scientificNameAuthorship')){
-            info.push(data['dwc:scientificNameAuthorship']);
-        }
-        //build info ids,inst
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
-            if(_.has(data,item)){
-                info.push(data[item]);
-            }
-        }) 
-
-        return (
-            React.createElement("h1", {id: "title", className: "clearfix"}, 
-                React.createElement("em", null, title), 
-                React.createElement("span", {className: "title-addition"}, 
-                    info.join(', ')
-                )
-            )
-        );       
-    }
-});
-
 var Img = React.createClass({displayName: "Img",
     error: function(event){
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
@@ -217,6 +179,7 @@ var Buttons = React.createClass({displayName: "Buttons",
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
+var Title = require('./shared/title');
 
 module.exports = Page = React.createClass({displayName: "Page",
     render: function(){
@@ -266,7 +229,7 @@ module.exports = Page = React.createClass({displayName: "Page",
                     React.createElement("div", {className: "span12"}, 
 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
-                            React.createElement(Title, {data: data}), 
+                            React.createElement(Title, {data: this.props.record}), 
                             React.createElement("div", {id: "data-content"}, 
                                 React.createElement(Record, {record: record})
                             ), 

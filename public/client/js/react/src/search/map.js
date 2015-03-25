@@ -1,6 +1,7 @@
 
 var React = require('react');
 var IDBMap = require('../../../lib/mapper');
+var helpers = require('../../../lib/helpers');
 
 var map; 
 module.exports = React.createClass({
@@ -23,7 +24,7 @@ module.exports = React.createClass({
         var self = this;
         map = new IDBMap('map',{},function(e,resp,map){
             var str;
-            if(resp.itemCount > 5){
+            if(resp.itemCount > 100){
                 var a = document.createElement('A');
                 var nwlat = document.createAttribute('data-nw-lat');
                 nwlat.value=resp.bbox.nw.lat;
@@ -53,7 +54,15 @@ module.exports = React.createClass({
                 //' Click <a class="bbox-link" data-nw-lat="'+resp.bbox.nw.lat+'" data-nw-lon="'+
                 //resp.bbox.nw.lon+'" data-se-lat="'+resp.bbox.se.lat+'" data-se-lon="'+resp.bbox.se.lon+'" href="#">here</a> to set the mapping bounding box on this region';
             }else{
-                str= 'There are '+resp.itemCount+' points';
+                var links = _.map(resp.items,function(item){
+                    var title = helpers.filterFirst([item.indexTerms.scientificname,item.indexTerms.genus,item.indexTerms.specificepithet]);
+                    
+                    var html='<div class="map-popup-item"><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
+                     title+
+                    '</a></div>';
+                    return html;
+                });
+                str='<div class="map-popup-wrapper">'+links.join('')+'</div>';
             }
             return str;
         });

@@ -8,7 +8,7 @@ module.exports = Collection = React.createClass({displayName: "Collection",
         var self=this;
         var regex = /(((ftp|https?):\/\/|www)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
 
-        var rows =_.map(_.keys(self.props.data),function(key){
+        var rows =_.map(_.without(_.keys(self.props.data),'update_url'),function(key){
             var frags = key.split('_');
             for(i=0; i<frags.length; i++) {
                 frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
@@ -59,6 +59,7 @@ module.exports = Collection = React.createClass({displayName: "Collection",
         return (
             React.createElement("div", {className: "col-lg-10 col-lg-offset-1"}, 
                 React.createElement("h3", null, "Collection: ", title), 
+                React.createElement("a", {className: "pull-right", href: this.props.data.update_url, target: "_new"}, "Update/Add Information"), 
                 React.createElement("table", {className: "table table-bordered table-condensed"}, 
                     rows
                 )

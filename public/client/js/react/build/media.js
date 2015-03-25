@@ -166,52 +166,19 @@ var Group = React.createClass({displayName: "Group",
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
+var Title = require('./shared/title');
 
 module.exports = React.createClass({displayName: "exports",
     render: function(){
         var source = this.props.mediarecord;
-        var name ='',info=[];
-        if(_.has(this.props.record, 'indexTerms')){
-            var data = this.props.record.data;
-            var title = '';
-            //build title
-            if(_.has(data,'dwc:scientificName')) { 
-                title = data['dwc:scientificName'] ;
-            }else if(_.has(data, 'dwc:genus')){
-                title = data['dwc:genus'];
-                if(_.has(data, 'dwc:specificEpithet')){
-                    title += data['dwc:specificEpithet'];
-                }
-            }
-            if(_.isEmpty(title)){
-                title = 'No Name';
-            } 
-
-            if(_.has(data,'dwc:scientificNameAuthorship')){
-                info.push(data['dwc:scientificNameAuthorship']);
-            }
-            //build info ids,inst
-            ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
-                if(_.has(data,item)){
-                    info.push(data[item]);
-                }
-            }) 
-
-            name =  React.createElement("h1", {id: "title", className: "clearfix"}, 
-                React.createElement("em", null, title), 
-                React.createElement("span", {className: "title-addition"}, 
-                    info.join(', ')
-                )
-            )
-            //name = '<em>'+title+'</em><span class="title-addition">'+info.join(', ')+'</span>';             
-        }
+        var info=[];
         
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row-fluid"}, 
                     React.createElement("div", {className: "span12", id: "container"}, 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
-                            name, 
+                            React.createElement(Title, {data: this.props.record}), 
                             React.createElement("div", {id: "data-content"}, 
                                 React.createElement(Media, {key: source.uuid+'_media', keyid: source.uuid, data: source.data})
                             ), 

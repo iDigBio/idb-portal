@@ -85,3 +85,7 @@
   margin-right: 2px;
   opacity: 1.0;
 }
+.map-popup-wrapper {
+  max-height: 100px;
+  overflow: scroll;
+}

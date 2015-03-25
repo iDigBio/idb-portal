@@ -223,6 +223,11 @@
   font-size: 1em;
   border-radius: 0px;
 }
+#results #results-images .image .gallery-image-text .title {
+  font-weight: bold;
+  font-style: italic;
+  margin-right: 5px;
+}
 #results #results-images .image .gallery-image-text .image-text {
   margin: 3px 8px;
 }

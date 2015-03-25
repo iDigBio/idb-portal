@@ -116,44 +116,6 @@ var Record = React.createClass({
     }
 });
 
-var Title = React.createClass({
-    render: function(){
-        var title = '',info=[];
-        //build title
-        var data = this.props.data;
-        if(_.has(data,'dwc:scientificName')) { 
-            title = data['dwc:scientificName'] ;
-        }else if(_.has(data, 'dwc:genus')){
-            title = data['dwc:genus'];
-            if(_.has(data, 'dwc:specificEpithet')){
-                title += data['dwc:specificEpithet'];
-            }
-        }
-        if(_.isEmpty(title)){
-            title = 'No Name';
-        } 
-        //var author = '';
-        if(_.has(data,'dwc:scientificNameAuthorship')){
-            info.push(data['dwc:scientificNameAuthorship']);
-        }
-        //build info ids,inst
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
-            if(_.has(data,item)){
-                info.push(data[item]);
-            }
-        }) 
-
-        return (
-            <h1 id="title" className="clearfix">
-                <em>{title}</em>
-                <span className="title-addition">
-                    {info.join(', ')}
-                </span>
-            </h1>
-        );       
-    }
-});
-
 var Img = React.createClass({
     error: function(event){
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
@@ -217,6 +179,7 @@ var Buttons = React.createClass({
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
+var Title = require('./shared/title');
 
 module.exports = Page = React.createClass({
     render: function(){
@@ -266,7 +229,7 @@ module.exports = Page = React.createClass({
                     <div className="span12">   
 
                         <div id="data-container" className="clearfix">
-                            <Title data={data}/>
+                            <Title data={this.props.record}/>
                             <div id="data-content">
                                 <Record record={record} />
                             </div>

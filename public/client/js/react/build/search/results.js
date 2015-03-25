@@ -508,20 +508,17 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
     },
     makeImage: function(uuid,record,key){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
-        var text=[], specimen = record.data;
-        if(typeof specimen["dwc:scientificName"] == 'string') { 
-            text.push(helpers.check(specimen["dwc:scientificName"]));
-            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));          
+        var name=[], specimen = record.data, index=record.indexTerms;
+        if(typeof index.scientificname == 'string') { 
+            name.push(index.scientificname);
         }else{  
-            text.push(helpers.check(specimen["dwc:genus"]));
-            text.push(helpers.check(specimen["dwc:specificEpithet"]));
-            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));
+            name.push(index.genus);
+            name.push(index.specificepithet);
         } 
-        text.push(helpers.check(specimen["dwc:inistitutionCode"]));
-        text.push(helpers.check(specimen["dwc:eventDate"]));
-        var clean = text.filter(function(i){
-            return !_.isEmpty(i);
-        })
+        name.push(specimen["dwc:scientificnameauthorship"]); 
+        _.pull(name,undefined);
+        var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
+
         return (
             React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
                 React.createElement("span", {className: "img-count"}, count), 
@@ -530,7 +527,8 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
                 onError: this.errorImage}), 
                 React.createElement("div", {className: "gallery-image-text"}, 
                     React.createElement("div", {className: "image-text"}, 
-                        clean.join(', ')
+                        React.createElement("span", {className: "title"}, _.capitalize(name.join(' '))), 
+                        React.createElement("span", {className: ""}, text.join(', '))
                     )
                 )
             )

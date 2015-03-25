@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "express": "3.0.3",
-    "lodash": "*",
+    "lodash": "3.6.0",
     "express-expose": "0.3.3",
     "consolidate": "*",
     "swig": "*",
@@ -44,7 +44,6 @@
     "reactify": "1.0.0",
     "envify": "~1.2.1",
     "react": "~0.12.2",
-    "react-chartist": "*",
     "request": "*",
     "less": "*",
     "bootstrap": "*",

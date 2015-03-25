@@ -45,6 +45,14 @@ module.exports = React.createClass({displayName: "exports",
                 "customComponent": Recordsets,
                 "displayName": "Recordsets"
                 
+            },
+            {
+                "columnName": "update_url",
+                "locked": false,
+                "visible": true,
+                "customComponent": UpdateLink,
+                "displayName": "Update/Add Information"
+                
             }
         ]
         var cols = _.map(_.without(_.keys(this.props.data[0]),_.map(columnMeta,function(i){return i.columnName})),function(item){
@@ -61,8 +69,8 @@ module.exports = React.createClass({displayName: "exports",
                 results: this.props.data, 
                 showFilter: true, 
                 resultsPerPage: 20, 
-                columns: ['institution','collection','collection_url','collection_catalog_url','recordsets',
-                'contact','contact_role','contact_email'], 
+                columns: ['institution','collection',
+                'contact','contact_role', 'update_url'], 
                 columnMetadata: columnMeta.concat(cols), 
                 enableInfiniteScroll: true, bodyHeight: 400, 
                 useFixedHeader: true})
@@ -135,5 +143,12 @@ var Recordsets = React.createClass({displayName: "Recordsets",
         }else{
             return React.createElement("span", null)
         }
+    }
+});
+
+var UpdateLink = React.createClass({displayName: "UpdateLink",
+    render: function(){
+        var d=this.props.data;
+        return React.createElement("a", {href: d, target: "_new"}, "Update/Add Information")
     }
 });

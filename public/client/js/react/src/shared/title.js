@@ -1,0 +1,36 @@
+/*
+*Title : component expects props [data] = api record with data and indexTerms dictionary
+****/
+
+var React = require('react');
+var _ = require('lodash');
+
+module.exports = Title = React.createClass({
+    render: function(){
+        var title = '',info=[];
+        //build title
+        var index = this.props.data.indexTerms, data=this.props.data.data;
+        if(_.has(index,'scientificname')) { 
+            title = _.capitalize(index['scientificname']);
+        }else if(_.has(index, 'genus')){
+            title = _.capitalize(index['genus']);
+            if(_.has(index, 'specificepithet')){
+                title += index['specificepithet'];
+            }
+        }
+        if(_.isEmpty(title)){
+            title = <em>No Name</em>;
+        } 
+        //build info ids,inst
+        info = _.without([data.scientificnameauthorship,index.institutioncode,index.collectioncode,index.catalognumber],undefined); 
+
+        return (
+            <h1 id="title" className="clearfix">
+                <em>{title}</em>
+                <span className="title-addition">
+                    {info.join(', ')}
+                </span>
+            </h1>
+        );       
+    }
+});

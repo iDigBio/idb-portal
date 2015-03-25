@@ -1,7 +1,7 @@
 /* Helpers module
 * general view helping methods
 ****/
-
+var _ = require('lodash');
 var helpers = module.exports = {
 
     check: function (val, prefix, postfix) {
@@ -48,6 +48,9 @@ var helpers = module.exports = {
     strip: function(str){
         return str.replace(/(\r\n|\n|\r)/gm,"").trim();
     },
+    /*
+    *Pretty print JSON 
+    ****/
     formatJSON: function(json) {
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
@@ -69,8 +72,31 @@ var helpers = module.exports = {
             return '<span class="' + cls + '">' + match + '</span>';
         });
     },
+    /*
+    *Test string for valid email
+    ****/
     testEmail: function(value){
         var emailreg = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
         return emailreg.test(value);
-    }
+    },
+
+    /*
+    *filter: tests array elements for undefinedness and returns array of valid elements
+    ****/
+    filter: function(vals){
+        return _.filter(vals,function(item){
+            return !_.isUndefined(item);
+        })
+    },
+
+    filterFirst: function(vals){
+        var out,i;
+        for(i=0;i<vals.length;i++){
+            if(!_.isUndefined(vals[i])){
+                out=vals[i];
+                break;
+            }
+        }
+        return out;
+    }       
 }     

@@ -508,20 +508,17 @@ var ResultsImages = React.createClass({
     },
     makeImage: function(uuid,record,key){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
-        var text=[], specimen = record.data;
-        if(typeof specimen["dwc:scientificName"] == 'string') { 
-            text.push(helpers.check(specimen["dwc:scientificName"]));
-            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));          
+        var name=[], specimen = record.data, index=record.indexTerms;
+        if(typeof index.scientificname == 'string') { 
+            name.push(index.scientificname);
         }else{  
-            text.push(helpers.check(specimen["dwc:genus"]));
-            text.push(helpers.check(specimen["dwc:specificEpithet"]));
-            text.push(helpers.check(specimen["dwc:scientificNameAuthorship"]));
+            name.push(index.genus);
+            name.push(index.specificepithet);
         } 
-        text.push(helpers.check(specimen["dwc:inistitutionCode"]));
-        text.push(helpers.check(specimen["dwc:eventDate"]));
-        var clean = text.filter(function(i){
-            return !_.isEmpty(i);
-        })
+        name.push(specimen["dwc:scientificnameauthorship"]); 
+        _.pull(name,undefined);
+        var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
+
         return (
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+key}>
                 <span className="img-count">{count}</span>
@@ -530,7 +527,8 @@ var ResultsImages = React.createClass({
                 onError={this.errorImage}/>
                 <div className="gallery-image-text">
                     <div className="image-text">
-                        {clean.join(', ')}
+                        <span className="title">{_.capitalize(name.join(' '))}</span>
+                        <span className="">{text.join(', ')}</span>
                     </div>
                 </div>
             </a>

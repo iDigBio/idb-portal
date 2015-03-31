@@ -225,8 +225,8 @@ module.exports = Page = React.createClass({displayName: "Page",
        
         return (
             React.createElement("div", {className: "container-fluid"}, 
-                React.createElement("div", {className: "row-fluid"}, 
-                    React.createElement("div", {className: "span12"}, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col-lg-12"}, 
 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
                             React.createElement(Title, {data: this.props.record}), 

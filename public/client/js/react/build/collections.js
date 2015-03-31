@@ -91,7 +91,7 @@ var LinkCell = React.createClass({displayName: "LinkCell",
                 l=d;
             }
             return (
-                React.createElement("a", {href: l, target: "new"}, "Link")
+                React.createElement("a", {href: l, target: "_new"}, "Link")
             )            
         }
     }
@@ -105,7 +105,7 @@ var LinkName = React.createClass({displayName: "LinkName",
         }else{
             var href = '/portal/collections/'+this.props.rowData.collection_uuid.split('urn:uuid:')[1];
             return (
-                React.createElement("a", {href: href, target: "new"}, d)
+                React.createElement("a", {href: href, target: "_new"}, d)
             )            
         }
     }

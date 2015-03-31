@@ -149,7 +149,6 @@ var Group = React.createClass({
                     )                    
                 }
             }
-            debugger
             return (
                 <div id="other-images" className="clearfix">
                     <h4 className="title">Other Media</h4>
@@ -175,8 +174,8 @@ module.exports = React.createClass({
         
         return (
             <div className="container-fluid">
-                <div className="row-fluid">
-                    <div className="span12" id="container">   
+                <div className="row">
+                    <div className="col-lg-12" id="container">   
                         <div id="data-container" className="clearfix">
                             <Title data={this.props.record}/>
                             <div id="data-content">

@@ -91,7 +91,7 @@ var LinkCell = React.createClass({
                 l=d;
             }
             return (
-                <a href={l} target="new">Link</a>
+                <a href={l} target="_new">Link</a>
             )            
         }
     }
@@ -105,7 +105,7 @@ var LinkName = React.createClass({
         }else{
             var href = '/portal/collections/'+this.props.rowData.collection_uuid.split('urn:uuid:')[1];
             return (
-                <a href={href} target="new">{d}</a>
+                <a href={href} target="_new">{d}</a>
             )            
         }
     }

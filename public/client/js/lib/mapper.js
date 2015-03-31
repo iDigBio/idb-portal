@@ -234,7 +234,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
 /*
     * iDBLayer control and rendering with events
     ****/
-    var idblayer;
+    var idblayer,utf8grid;
     var idbloading = function(){
         self.map.fire('dataloading');
     }
@@ -253,6 +253,40 @@ module.exports = IDBMap =  function(elid, options, popupContent){
             idblayer.off('load',idbload);
         }
         return idblayer;
+    }
+    var mapClick = function(e){
+        var lat, lon;
+        if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
+            lat=e.data.lat;
+            lon=e.data.lon;
+        }else{
+            lat=e.latlng.lat;
+            lon=e.latlng.lng;
+        }
+        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom(), function(data){
+            var cont;
+            if(data.itemCount>0){
+                if(_.isUndefined(popupContent)){
+                    cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
+                }else{
+                    cont = popupContent(e,data,self.map);
+                }
+                popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
+            }
+        });
+    }
+    var makeUtflayer = function(path){
+        utf8grid = L.utfGrid(path,{
+            useJsonP: false
+        })
+        utf8grid.on('click',mapClick);
+        return utf8grid;
+    }
+    var removeUtflayer = function(){
+        if(typeof utf8grid == 'object'){
+            utf8grid.off('click',mapClick);
+        }
+        return utf8grid;
     }
     /*
     *Instance Methods
@@ -293,12 +327,9 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     }
                     self.map.addLayer(makeIdblayer(resp.tiles));
                     if(typeof utf8grid == 'object'){
-                        self.map.removeLayer(utf8grid);
+                        self.map.removeLayer(removeUtflayer());
                     }
-                    utf8grid = L.utfGrid(resp.utf8grid,{
-                        useJsonP: false
-                    });
-                    self.map.addLayer(utf8grid);
+                    self.map.addLayer(makeUtflayer(resp.utf8grid));
                 }
             },
             dataType: 'json',
@@ -313,7 +344,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     ***/
     var popup = L.popup();
 
-    this.map.on('click', function(e) {
+    /*this.map.on('click', function(e) {
         $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
             var cont;
             if(data.itemCount>0){
@@ -325,7 +356,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                 popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
             }
         });
-    }); 
+    });*/ 
 
     this.map.on('zoomend',function(e){
         if(typeof legend == 'object'){

@@ -225,8 +225,8 @@ module.exports = Page = React.createClass({
        
         return (
             <div className="container-fluid">
-                <div className="row-fluid">
-                    <div className="span12">   
+                <div className="row">
+                    <div className="col-lg-12">   
 
                         <div id="data-container" className="clearfix">
                             <Title data={this.props.record}/>

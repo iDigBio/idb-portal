@@ -99,10 +99,10 @@ module.exports = Results =  React.createClass({displayName: "Results",
                 results = React.createElement(ResultsList, {
                             search: this.state.search, results: this.state.results, 
                             searchChange: this.props.searchChange, loading: this.state.loading});
-                break
+                break;
             case 'labels':
                 results = React.createElement(ResultsLabels, {results: this.state.results, loading: this.state.loading});
-                break
+                break;
             case 'images':
                 results = React.createElement(ResultsImages, {search: this.state.search, results: this.state.results, loading: this.state.loading});
                 break;
@@ -544,11 +544,17 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
                 })
             }
         });
-
+        if(images.length === 0){
+            images.push(
+                React.createElement("div", {className: "no-images"}, 
+                    React.createElement("h4", null, "No Images Available")
+                )
+            )
+        }
         return (
             React.createElement("div", {id: "results-images", className: "panel"}, 
                 images
             )
         )
     }
-})
+});

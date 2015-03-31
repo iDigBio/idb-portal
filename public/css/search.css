@@ -464,6 +464,13 @@
 #results #results-images .image .gallery-image-text .image-text {
   margin: 3px 8px;
 }
+#results #results-images .no-images {
+  text-align: center;
+  height: 30px;
+}
+#results #results-images .no-images h4 {
+  font-weight: bold;
+}
 #results .panel {
   margin: 0px auto;
   padding: 0px 0px;

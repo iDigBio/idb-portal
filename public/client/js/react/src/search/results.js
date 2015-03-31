@@ -99,10 +99,10 @@ module.exports = Results =  React.createClass({
                 results = <ResultsList 
                             search={this.state.search} results={this.state.results} 
                             searchChange={this.props.searchChange} loading={this.state.loading} />;
-                break
+                break;
             case 'labels':
                 results = <ResultsLabels results={this.state.results} loading={this.state.loading} />;
-                break
+                break;
             case 'images':
                 results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
                 break;
@@ -544,11 +544,17 @@ var ResultsImages = React.createClass({
                 })
             }
         });
-
+        if(images.length === 0){
+            images.push(
+                <div className="no-images">
+                    <h4>No Images Available</h4>
+                </div>
+            )
+        }
         return (
             <div id="results-images" className="panel">
                 {images}
             </div>
         )
     }
-})
+});

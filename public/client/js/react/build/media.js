@@ -149,7 +149,6 @@ var Group = React.createClass({displayName: "Group",
                     )                    
                 }
             }
-            debugger
             return (
                 React.createElement("div", {id: "other-images", className: "clearfix"}, 
                     React.createElement("h4", {className: "title"}, "Other Media"), 
@@ -175,8 +174,8 @@ module.exports = React.createClass({displayName: "exports",
         
         return (
             React.createElement("div", {className: "container-fluid"}, 
-                React.createElement("div", {className: "row-fluid"}, 
-                    React.createElement("div", {className: "span12", id: "container"}, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {className: "col-lg-12", id: "container"}, 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
                             React.createElement(Title, {data: this.props.record}), 
                             React.createElement("div", {id: "data-content"}, 

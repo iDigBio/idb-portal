@@ -245,8 +245,15 @@ body {
 }
 #data-container #data-meta #map #map-wrapper #map-box {
   height: 200px;
-  margin: 15px auto;
+  margin: 15px auto 5px auto;
   border: 1px solid #cccccc;
+}
+#data-container #data-meta #map #map-wrapper #map-geopoint {
+  width: 100%;
+  font-size: .9em;
+}
+#data-container #data-meta #map #map-wrapper #map-geopoint span {
+  margin: 0px 5px 0px 0px;
 }
 #data-container #data-meta #gallery-wrapper {
   margin-top: 0px;

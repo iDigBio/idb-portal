@@ -22,6 +22,16 @@ module.exports = React.createClass({displayName: "exports",
     },
     componentDidMount: function(){
         var self = this;
+
+        function makeMapItem(data){
+            var index = data.indexTerms;
+            var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
+            //replacing - (breaking hyphen) with non breaking hyphen code for readablity of dates
+            var html='<div class="map-popup-item"><a target="'+data.uuid+'" href="/portal/records/'+data.uuid+'">'+
+                helpers.filter([title,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></div>';
+            return html;
+        }
+
         map = new IDBMap('map',{},function(e,resp,map){
             var str;
             if(resp.itemCount > 100){
@@ -55,14 +65,11 @@ module.exports = React.createClass({displayName: "exports",
                 //resp.bbox.nw.lon+'" data-se-lat="'+resp.bbox.se.lat+'" data-se-lon="'+resp.bbox.se.lon+'" href="#">here</a> to set the mapping bounding box on this region';
             }else{
                 var links = _.map(resp.items,function(item){
-                    var title = helpers.filterFirst([item.indexTerms.scientificname,item.indexTerms.genus,item.indexTerms.specificepithet]);
-                    
-                    var html='<div class="map-popup-item"><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
-                     title+
-                    '</a></div>';
-                    return html;
+                    return makeMapItem(item);
                 });
-                str='<div class="map-popup-wrapper">'+links.join('')+'</div>';
+                str='<div class="map-popup-wrapper">'+
+                '<label>'+resp.itemCount+' Record'+(resp.itemCount > 1 ? 's':'')+'</label>'+
+                links.join('')+'</div>';
             }
             return str;
         });

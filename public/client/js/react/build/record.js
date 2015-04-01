@@ -176,6 +176,26 @@ var Buttons = React.createClass({displayName: "Buttons",
     }
 });
 
+var Map = React.createClass({displayName: "Map",
+    render: function(){
+        if(_.has(this.props.data,'geopoint')){
+            return (
+                React.createElement("div", {id: "map", className: "clearfix"}, 
+                    React.createElement("h4", {className: "title"}, "Georeference Data"), 
+                    React.createElement("div", {id: "map-wrapper"}, 
+                        React.createElement("div", {id: "map-box"}), 
+                        React.createElement("div", {id: "map-geopoint"}, 
+                            React.createElement("span", null, "Lat: ", this.props.data.geopoint.lat), 
+                            React.createElement("span", null, "Lon: ", this.props.data.geopoint.lon)
+                        )
+                    )
+                )
+            )
+        }else{
+            return React.createElement("span", null)
+        }
+    }
+});
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
@@ -236,12 +256,7 @@ module.exports = Page = React.createClass({displayName: "Page",
                             React.createElement("div", {id: "data-meta", className: "clearfix"}, 
                                 React.createElement(Buttons, {data: index}), 
                                 React.createElement(Gallery, {data: index}), 
-                                React.createElement("div", {id: "map", className: "clearfix"}, 
-                                    React.createElement("h4", {className: "title"}, "Georeference Data"), 
-                                    React.createElement("div", {id: "map-wrapper"}, 
-                                        React.createElement("div", {id: "map-box"})
-                                    )
-                                )
+                                React.createElement(Map, {data: index})
                             ), 
                             React.createElement(Provider, {data: this.props.record.attribution})
                         )

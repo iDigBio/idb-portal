@@ -88,7 +88,9 @@ var helpers = module.exports = {
             return !_.isUndefined(item);
         })
     },
-
+    /*
+    *filterFirst: iterates array and returns first element that is not undefined
+    ****/
     filterFirst: function(vals){
         var out,i;
         for(i=0;i<vals.length;i++){

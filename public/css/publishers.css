@@ -14,3 +14,7 @@ th.top-header {
 .table tbody tr td.valcol {
   text-align: right;
 }
+h3,
+h4 {
+  font-weight: bold;
+}

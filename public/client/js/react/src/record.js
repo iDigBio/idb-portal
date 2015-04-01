@@ -176,6 +176,26 @@ var Buttons = React.createClass({
     }
 });
 
+var Map = React.createClass({
+    render: function(){
+        if(_.has(this.props.data,'geopoint')){
+            return (
+                <div id="map" className="clearfix">
+                    <h4 className="title">Georeference Data</h4>
+                    <div id="map-wrapper">
+                        <div id="map-box"></div>
+                        <div id="map-geopoint">
+                            <span>Lat: {this.props.data.geopoint.lat}</span>
+                            <span>Lon: {this.props.data.geopoint.lon}</span>
+                        </div>
+                    </div>
+                </div>
+            )
+        }else{
+            return <span/>
+        }
+    }
+});
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
@@ -236,12 +256,7 @@ module.exports = Page = React.createClass({
                             <div id="data-meta" className="clearfix">
                                 <Buttons data={index} /> 
                                 <Gallery data={index} />
-                                <div id="map" className="clearfix">
-                                    <h4 className="title">Georeference Data</h4>
-                                    <div id="map-wrapper">
-                                        <div id="map-box"></div>
-                                    </div>
-                                </div>
+                                <Map data={index} />
                             </div>
                             <Provider data={this.props.record.attribution} />
                         </div>

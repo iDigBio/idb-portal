@@ -88,7 +88,6 @@ module.exports = React.createClass({displayName: "exports",
             this.currentQuery=next;
             map.query(q);
         }
-        
     },
     render: function(){
         return (

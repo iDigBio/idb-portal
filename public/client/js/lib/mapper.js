@@ -256,6 +256,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     }
     var mapClick = function(e){
         var lat, lon;
+        var popup = L.popup();
         if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
             lat=e.data.lat;
             lon=e.data.lon;
@@ -342,7 +343,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     /*
     * Event Actions
     ***/
-    var popup = L.popup();
+   
 
     /*this.map.on('click', function(e) {
         $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){

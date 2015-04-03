@@ -21,8 +21,11 @@ module.exports = React.createClass({
         return params;
     },
     componentDidMount: function(){
-        var self = this;
+        var self = this, clickData;
 
+        function makeItemTable(data){
+            var t='<table>';
+        }
         function makeMapItem(data){
             var index = data.indexTerms;
             var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
@@ -34,6 +37,7 @@ module.exports = React.createClass({
 
         map = new IDBMap('map',{},function(e,resp,map){
             var str;
+    
             if(resp.itemCount > 100){
                 var a = document.createElement('A');
                 var nwlat = document.createAttribute('data-nw-lat');

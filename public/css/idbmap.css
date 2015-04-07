@@ -85,11 +85,33 @@
   margin-right: 2px;
   opacity: 1.0;
 }
+.map-item-count {
+  font-weight: bold;
+}
+.map-item-nav {
+  width: 100%;
+  margin: 2px 2px;
+}
+.map-item-nav span {
+  display: inline-block;
+  cursor: pointer;
+}
+.map-item-nav span.map-count-legend {
+  float: left;
+  width: 80%;
+  text-align: center;
+}
+.map-item-nav span.nav-left {
+  float: left;
+}
+.map-item-nav span.nav-right {
+  float: right;
+}
 .map-popup-wrapper {
-  margin-top: 10px;
+  margin-top: 5px;
   min-height: 40px;
   max-height: 140px;
-  max-width: 200px;
+  max-width: 220px;
   word-break: keep-all;
   overflow: auto;
   font-size: .9em;

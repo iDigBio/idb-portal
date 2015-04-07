@@ -2,6 +2,7 @@
 var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
+var helpers = require('./helpers');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 require('../../../../public/components/leaflet-loading/src/Control.Loading');
 var leafletImage = require('leaflet-image/leaflet-image');
@@ -231,8 +232,8 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         position:'bottomright'
     }));
 
-/*
-    * iDBLayer control and rendering with events
+    /*
+    * iDBLayer and UTF8Grid interactions control and rendering with events
     ****/
     var idblayer,utf8grid;
     var idbloading = function(){
@@ -254,28 +255,6 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         }
         return idblayer;
     }
-    var mapClick = function(e){
-        var lat, lon;
-        var popup = L.popup();
-        if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
-            lat=e.data.lat;
-            lon=e.data.lon;
-        }else{
-            lat=e.latlng.lat;
-            lon=e.latlng.lng;
-        }
-        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom(), function(data){
-            var cont;
-            if(data.itemCount>0){
-                if(_.isUndefined(popupContent)){
-                    cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
-                }else{
-                    cont = popupContent(e,data,self.map);
-                }
-                popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
-            }
-        });
-    }
     var makeUtflayer = function(path){
         utf8grid = L.utfGrid(path,{
             useJsonP: false
@@ -290,10 +269,88 @@ module.exports = IDBMap =  function(elid, options, popupContent){
         return utf8grid;
     }
     /*
+    * used to call Map API points endpoint. 
+    ****/
+
+    var mapClick = function(e){
+        var lat, lon, zoom;
+        var popup = L.popup();
+        if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
+            lat=e.data.lat;
+            lon=e.data.lon;
+        }else{
+            lat=e.latlng.lat;
+            lon=e.latlng.lng;
+        }
+        var nextPoints=false,prevPoints=false;
+        var navClick=function(e){
+            if(e.target.attributes['data-load'].value==='next' && typeof nextPoints === 'function'){
+                nextPoints();
+            }else if(e.target.attributes['data-load'].value==='prev' && typeof prevPoints === 'function'){
+                prevPoints();
+            }
+        }
+        var makeContent = function(data,offset){
+            var items=[];
+            data.items.forEach(function(item,ind){
+                var index = item.indexTerms;
+                var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
+                items.push(
+                    '<tr class="map-popup-item"><td>'+(ind+offset+1)+'</td><td><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
+                helpers.filter([title,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
+                )
+            })
+            var table='<div class="map-item-count">'+data.itemCount+' Records</div>'+
+            '<div class="map-item-nav clearfix"><span class="nav-left" data-load="prev">&lt;</span>'+
+            '<span class="map-count-legend">'+(offset+1)+'-'+(offset+data.items.length)+'</span>'+
+            '<span class="nav-right" data-load="next">&gt;</span></div>'+
+            '<div class="map-popup-wrapper">'+
+            '<table class="map-items>'+items.join('')+'</table></div>';
+            return table;
+        }
+        var getPoints = function(offset,callback){
+            $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
+                if(data.itemCount > data.items.length+offset){
+                    nextPoints = function(){
+                        getPoints(offset+100,function(d){
+                            $('.nav-left, .nav-right').off('click',navClick);
+                            popup.setContent(makeContent(d,offset+100));
+                            $('.nav-left, .nav-right').on('click',navClick);
+                        });
+                    }
+                }else{
+                    nextPoints=false;
+                }
+                if(offset>=100){
+                    prevPoints = function(){
+                        getPoints(offset-100,function(d){
+                            $('.nav-left, .nav-right').off('click',navClick);
+                            popup.setContent(makeContent(d,offset-100));
+                            $('.nav-left, .nav-right').on('click',navClick);
+                        });
+                    }
+                }else{
+                    prevPoints=false;
+                }
+                callback(data);
+            });
+        }        
+        getPoints(0, function(data){
+            var cont;
+            if(data.itemCount>0){
+                popup.setLatLng(e.latlng).setContent(makeContent(data,0)).openOn(self.map);
+                $('.nav-left, .nav-right').on('click',navClick)
+            }
+        });
+    }
+
+
+
+    /*
     *Instance Methods
     **/
     this.currentQueryTime = 0;
-    var idbquery,utf8grid,legend;
+    var idbquery,legend;
     var mapapi = idbapi.host+"mapping/";
     
     this.query = function(query){

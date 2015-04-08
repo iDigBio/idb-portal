@@ -21,61 +21,37 @@ module.exports = React.createClass({displayName: "exports",
         return params;
     },
     componentDidMount: function(){
-        var self = this, clickData;
-
-        function makeItemTable(data){
-            var t='<table>';
+        var self=this;
+        var func = _.noop;
+        var clickFunc = function(e){
+            func();
         }
-        function makeMapItem(data){
-            var index = data.indexTerms;
-            var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
-            //replacing - (breaking hyphen) with non breaking hyphen code for readablity of dates
-            var html='<div class="map-popup-item"><a target="'+data.uuid+'" href="/portal/records/'+data.uuid+'">'+
-                helpers.filter([title,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></div>';
-            return html;
-        }
-
-        map = new IDBMap('map',{},function(e,resp,map){
-            var str;
-    
-            if(resp.itemCount > 100){
-                var a = document.createElement('A');
-                var nwlat = document.createAttribute('data-nw-lat');
-                nwlat.value=resp.bbox.nw.lat;
-                a.setAttributeNode(nwlat);
-                var nwlon = document.createAttribute('data-nw-lon');
-                nwlon.value=resp.bbox.nw.lon;
-                a.setAttributeNode(nwlon);
-                var selat = document.createAttribute('data-se-lat');
-                selat.value=resp.bbox.se.lat;
-                a.setAttributeNode(selat);
-                var selon = document.createAttribute('data-se-lon');
-                selon.value=resp.bbox.se.lon;
-                a.setAttributeNode(selon);
-                var href = document.createAttribute('href');
-                href.value = '#';
-                a.setAttributeNode(href);
-                a.innerHTML = 'There are '+resp.itemCount+' items in this locality.';
-                a.addEventListener('click',function(e){
-                    var bounds={}, target=e.currentTarget.attributes;
-                    bounds['top_left']={lat: parseFloat(target['data-nw-lat'].value),lon: parseFloat(target['data-nw-lon'].value)};
-                    bounds['bottom_right']={lat: parseFloat(target['data-se-lat'].value),lon: parseFloat(target['data-se-lon'].value)};
-                    self.props.searchChange('mapping',{type: 'box', bounds: bounds});
-                    map.closePopup();
-                })
-                str = a;
-                //str = 'There are '+resp.itemCount+' items in this locality.' +
-                //' Click <a class="bbox-link" data-nw-lat="'+resp.bbox.nw.lat+'" data-nw-lon="'+
-                //resp.bbox.nw.lon+'" data-se-lat="'+resp.bbox.se.lat+'" data-se-lon="'+resp.bbox.se.lon+'" href="#">here</a> to set the mapping bounding box on this region';
-            }else{
-                var links = _.map(resp.items,function(item){
-                    return makeMapItem(item);
-                });
-                str='<div class="map-popup-wrapper">'+
-                '<label>'+resp.itemCount+' Record'+(resp.itemCount > 1 ? 's':'')+'</label>'+
-                links.join('')+'</div>';
+        map = new IDBMap('map',{},function(data){
+            
+            if(_.has(data,'bbox')){
+                func = function(){
+                    self.props.searchChange('mapping',{
+                        type: 'box',
+                        bounds: {
+                            top_left: data.bbox.nw,
+                            bottom_right: data.bbox.se
+                        }
+                    })
+                }
             }
-            return str;
+            if(_.has(data,'radius')){
+                func = function(){
+                    self.props.searchChange('mapping',{
+                        type: 'radius',
+                        bounds: data.radius
+                    })
+                }
+            }
+
+            return '<a href="#" class="set-bounds-link">Set Map Bounds</a>';
+        }, function(){
+            $('.set-bounds-link').off('click',clickFunc);
+            $('.set-bounds-link').on('click',clickFunc);
         });
 
         var query = queryBuilder.buildQueryShim(this.props.search);

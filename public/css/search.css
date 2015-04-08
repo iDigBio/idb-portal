@@ -796,6 +796,16 @@
 }
 .map-item-count {
   font-weight: bold;
+  width: 100%;
+  text-align: center;
+}
+.map-item-count .map-count-title {
+  display: inline-block;
+  float: left;
+}
+.map-item-count .map-title-outlink {
+  display: inline-block;
+  float: right;
 }
 .map-item-nav {
   width: 100%;
@@ -803,29 +813,38 @@
 }
 .map-item-nav span {
   display: inline-block;
-  cursor: pointer;
+  font-weight: bold;
 }
 .map-item-nav span.map-count-legend {
-  float: left;
-  width: 80%;
+  width: 90%;
   text-align: center;
 }
 .map-item-nav span.nav-left {
   float: left;
+  cursor: pointer;
 }
 .map-item-nav span.nav-right {
   float: right;
+  cursor: pointer;
+}
+.map-item-nav span.disable {
+  color: #ddd;
+  cursor: auto;
 }
 .map-popup-wrapper {
   margin-top: 5px;
   min-height: 40px;
   max-height: 140px;
-  max-width: 220px;
+  width: 220px;
   word-break: keep-all;
   overflow: auto;
   font-size: .9em;
 }
-.map-popup-wrapper .map-popup-item a:hover {
+.map-popup-wrapper .map-popup-item td {
+  height: 20px;
+  padding: 1px 2px;
+}
+.map-popup-wrapper .map-popup-item td a:hover {
   text-decoration: underline;
 }
 #main,

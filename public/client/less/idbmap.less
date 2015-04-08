@@ -95,23 +95,38 @@
 }
 .map-item-count{
     font-weight: bold;
+    width:100%;
+    text-align: center;
+    .map-count-title{
+        display:inline-block;
+        float:left;
+    }
+    .map-title-outlink{
+        display: inline-block;
+        float:right;
+    }
 }
 .map-item-nav{
     width:100%;
     margin:2px 2px;
     span{
-        display:inline-block;
-        cursor:pointer;
-        &.map-count-legend{
-            float:left;
-            width:80%;
+        display:inline-block;        
+        font-weight:bold;
+        &.map-count-legend{     
+            width:90%;
             text-align:center;
         }
         &.nav-left{
             float:left;
+            cursor:pointer;
         }
         &.nav-right{
             float:right;
+            cursor:pointer;
+        }
+        &.disable{
+            color:#ddd;
+            cursor:auto;
         }
     }
 }
@@ -119,11 +134,18 @@
     margin-top:5px;
     min-height:40px;
     max-height:140px;
-    max-width:220px;
+    width:220px;
     word-break:keep-all;
     overflow:auto;
     font-size:.9em;
-    .map-popup-item a:hover{
-        text-decoration: underline;
+
+    .map-popup-item{
+        td{ 
+            height:20px;
+            padding:1px 2px;
+            a:hover{
+                text-decoration: underline;
+            }
+        }
     }
 }

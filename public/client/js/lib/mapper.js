@@ -17,7 +17,7 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 *initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
 *popupContent: optional function for returning popup content(must return string) function(event,resp,map)
 ***/
-module.exports = IDBMap =  function(elid, options, popupContent){
+module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var self=this;
     /*
     * Basic Options
@@ -273,7 +273,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     ****/
 
     var mapClick = function(e){
-        var lat, lon, zoom;
+        var lat, lon, zoom,coords='';
         var popup = L.popup();
         if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
             lat=e.data.lat;
@@ -291,7 +291,7 @@ module.exports = IDBMap =  function(elid, options, popupContent){
             }
         }
         var makeContent = function(data,offset){
-            var items=[];
+            var items=[],nextstyle='',prevstyle='';
             data.items.forEach(function(item,ind){
                 var index = item.indexTerms;
                 var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
@@ -300,12 +300,18 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                 helpers.filter([title,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
                 )
             })
-            var table='<div class="map-item-count">'+data.itemCount+' Records</div>'+
-            '<div class="map-item-nav clearfix"><span class="nav-left" data-load="prev">&lt;</span>'+
-            '<span class="map-count-legend">'+(offset+1)+'-'+(offset+data.items.length)+'</span>'+
-            '<span class="nav-right" data-load="next">&gt;</span></div>'+
+            if(data.itemCount <= offset+data.items.length){
+                nextstyle='disable';
+            }
+            if(offset==0){
+                prevstyle='disable';
+            }
+            var table='<div class="map-item-count clearfix"><span class="map-count-title">'+helpers.formatNum(data.itemCount)+' Record'+(data.itemCount>1?'s</span>':'</span>')+'<span class="map-title-outlink">'+coords+'</span></div>'+
+            '<div class="map-item-nav clearfix"><span class="nav-left '+prevstyle+'" data-load="prev">&lt;</span>'+
+            '<span class="map-count-legend">'+helpers.formatNum(offset+1)+'-'+helpers.formatNum(offset+data.items.length)+'</span>'+
+            '<span class="nav-right '+nextstyle+'" data-load="next">&gt;</span></div>'+
             '<div class="map-popup-wrapper">'+
-            '<table class="map-items>'+items.join('')+'</table></div>';
+            '<table class="map-items">'+items.join('')+'</table></div>';
             return table;
         }
         var getPoints = function(offset,callback){
@@ -333,13 +339,23 @@ module.exports = IDBMap =  function(elid, options, popupContent){
                     prevPoints=false;
                 }
                 callback(data);
+                if(_.isFunction(titleOutClick)){
+                    titleOutClick();
+                }
             });
         }        
         getPoints(0, function(data){
             var cont;
             if(data.itemCount>0){
+                //setCoords is a init param for map
+                if(_.isFunction(titleOutLink)){
+                    coords=titleOutLink(data);
+                }else if(_.isString(titleOutLink)){
+                    coords=titleOutLink;
+                }
+                $('.nav-left, .nav-right').off('click',navClick);
                 popup.setLatLng(e.latlng).setContent(makeContent(data,0)).openOn(self.map);
-                $('.nav-left, .nav-right').on('click',navClick)
+                $('.nav-left, .nav-right').on('click',navClick);
             }
         });
     }
@@ -356,6 +372,19 @@ module.exports = IDBMap =  function(elid, options, popupContent){
     this.query = function(query){
         idbquery=query;
         _query();
+        this.map.closePopup();
+        //this.map.fitWorld();
+        if(_.has(query,'geopoint')){
+            if(query.geopoint.type=='geo_distance'){
+                this.map.setView([query.geopoint.lat,query.geopoint.lon]);
+            }else if(query.geopoint.type=='geo_bounding_box'){
+                var g=query.geopoint;
+                this.map.fitBounds([[g.top_left.lat,g.top_left.lon],[g.bottom_right.lat,g.bottom_right.lon]]);
+            }
+        }else{
+            this.map.setView([0,0],2);
+        }
+        
     }
 
     var _query = _.debounce(function(){

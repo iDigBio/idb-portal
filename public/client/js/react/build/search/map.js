@@ -24,6 +24,8 @@ module.exports = React.createClass({displayName: "exports",
         var self=this;
         var func = _.noop;
         var clickFunc = function(e){
+            e.preventDefault();
+            e.stopPropagation();
             func();
         }
         map = new IDBMap('map',{},function(data){

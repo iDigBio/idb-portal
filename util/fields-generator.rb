@@ -21,8 +21,8 @@ CSV.parse(resp.body, :headers => true) do |row|
     #output['sorder'][row['type_order'].to_i]=row['type_dict_key']
   end
   #out of order index assigning
-  output['order'][row['type_dict_key']][row['field_order'].to_i] = row['field_dwc_term'].to_s.downcase
-  output['names'][row['field_dwc_term'].to_s.downcase] = row['field_label'] 
+  output['order'][row['type_dict_key']][row['field_order'].to_i] = row['field_dwc_term'].to_s
+  output['names'][row['field_dwc_term'].to_s] = row['field_label'] 
 end
 
 File.open('../public/client/js/lib/dwc_fields.js','w') do |file|

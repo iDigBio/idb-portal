@@ -30,6 +30,7 @@ module.exports = React.createClass({displayName: "exports",
             
             if(_.has(data,'bbox')){
                 func = function(){
+                    self.props.viewChange('optionsTab','mapping');
                     self.props.searchChange('mapping',{
                         type: 'box',
                         bounds: {
@@ -41,6 +42,7 @@ module.exports = React.createClass({displayName: "exports",
             }
             if(_.has(data,'radius')){
                 func = function(){
+                    self.props.viewChange('optionsTab','mapping');
                     self.props.searchChange('mapping',{
                         type: 'radius',
                         bounds: data.radius

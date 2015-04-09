@@ -40,11 +40,17 @@ module.exports = Main = React.createClass({
     },
     getInitialState: function(){
         //set results view
+        var state={optionsTab:'filters',resultsTab:'list'};
         if(url('?view')){
             var types =['list','labels','images'], view = url('?view');
             if(types.indexOf(view) > -1){
-                localStorage.setItem('viewType', view);
+                localStorage.setItem('resultsTab', view);
+                state['resultsTab']=view;
+            }else{
+                state['resultsTab']='list';
             }
+        }else if(localStorage.getItem('resultsTab')){
+            state['resultsTab']=localStorage.getItem('resultsTab');
         }
         var search;
         //set current search
@@ -59,7 +65,8 @@ module.exports = Main = React.createClass({
         }
      
         searchHistory.push(search);
-        return {search: search};
+        state['search']=search;
+        return state;
     },
     searchChange: function(key,val){
         var search = _.cloneDeep(this.state.search);
@@ -74,17 +81,26 @@ module.exports = Main = React.createClass({
         this.setState({search: search});
         searchHistory.push(search);
     },
+    viewChange: function(view,option){
+        //currently only supports options panel and results tabs
+        if(view=='optionsTab'||view=='resultsTab'){
+            localStorage.setItem(view, option);
+            var ch={};
+            ch[view]=option;
+            this.setState(ch);
+        }
+    },
     render: function(){
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
                     <div id="search" className="clearfix">
                         <SearchAny search={this.state.search} searchChange={this.searchChange} />
-                        <OptionsPanel search={this.state.search} searchChange={this.searchChange}/>
+                        <OptionsPanel search={this.state.search} searchChange={this.searchChange} view={this.state.optionsTab} viewChange={this.viewChange}/>
                     </div>
-                    <Map search={this.state.search} searchChange={this.searchChange}/>
+                    <Map search={this.state.search} searchChange={this.searchChange} viewChange={this.viewChange}/>
                 </div>
-                <Results search={this.state.search} searchChange={this.searchChange}/>
+                <Results search={this.state.search} searchChange={this.searchChange} view={this.state.resultsTab} viewChange={this.viewChange}/>
             </div>
         )
     }
@@ -176,25 +192,26 @@ var SearchAny = React.createClass({
 })
 
 var OptionsPanel = React.createClass({
-    getInitialState: function(){
+    /*getInitialState: function(){
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
         }
         return {panels: localStorage.getItem('panels')}
-    },
+    },*/
     showPanel: function(event){
         event.preventDefault();
         event.stopPropagation();
         var val = event.currentTarget.attributes['data-panel'].value;
-        this.setState({panels: val},function(){
+        /*this.setState({panels: val},function(){
             localStorage.setItem('panels',val);
-        })
+        })*/
+        this.props.viewChange('optionsTab',val);
     },
 
     render: function(){
         var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
         Object.keys(panels).forEach(function(item,ind){
-            if(item==self.state.panels){
+            if(item==self.props.view){
                 panels[item]='active';
             }else{
                 panels[item]='';

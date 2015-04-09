@@ -7,14 +7,12 @@ module.exports = Results =  React.createClass({
 
     getInitialState: function(){
         //this.getResults();
-        if(!localStorage || _.isUndefined(localStorage.viewType)){
-            localStorage.setItem('viewType','list');
-        }
-        return {results: [], view: localStorage.getItem('viewType'), total: 0, search: this.props.search, hasMore: false, loading: true};
+
+        return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
         //
-        if(nextState.view!==this.state.view ){
+        if(nextProps.view!==this.props.view){
             return true;
         }else{
             return false;
@@ -63,10 +61,7 @@ module.exports = Results =  React.createClass({
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;
-        if(localStorage){
-            localStorage.setItem('viewType',view);
-        }
-        this.setState({view: view});
+        this.props.viewChange('resultsTab', view);
     },
     //this is not a synthentic event
     resultsScroll: function(e){
@@ -94,7 +89,7 @@ module.exports = Results =  React.createClass({
     },
     render: function(){
         var search = this.props.search, self=this, li=[];
-        switch(this.state.view){
+        switch(this.props.view){
             case 'list':
                 results = <ResultsList 
                             search={this.state.search} results={this.state.results} 
@@ -108,7 +103,7 @@ module.exports = Results =  React.createClass({
                 break;
         }
         ['list','labels','images'].forEach(function(item){
-            var cl = item == self.state.view ? 'active' : ''; 
+            var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
             )

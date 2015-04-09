@@ -49,7 +49,7 @@ module.exports = Filters = React.createClass({displayName: "Filters",
                 );  
             case 'numericrange':
                 return (
-                    React.createElement(NumericRange, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
+                    React.createElement(NumericRangeFilter, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
                 );  
         }
     },

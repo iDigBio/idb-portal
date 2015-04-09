@@ -54,10 +54,11 @@ module.exports = Results =  React.createClass({displayName: "Results",
     componentWillReceiveProps: function(nextProps){
         //component should only recieve search as props
         var isNewSearch =  JSON.stringify(this.props.search) !== JSON.stringify(nextProps.search);
-      
-            this.setState({search: nextProps.search},function(){
-                this.getResults(nextProps.search); 
+        if(isNewSearch){
+            this.setState({search: _.cloneDeep(nextProps.search)},function(){
+                this.getResults(this.state.search); 
             });
+        }
     },
     viewChange: function(event){
         var view = event.currentTarget.attributes['data-value'].value;

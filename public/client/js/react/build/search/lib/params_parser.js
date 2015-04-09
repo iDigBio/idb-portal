@@ -1,3 +1,8 @@
+/*
+* Params Parser module: mutates a search state object to contain get params values
+* Supports iDigBio API params  (rq,sort) 
+*
+****/
 module.exports = function(search){
     if(url('?rq')){
         try{

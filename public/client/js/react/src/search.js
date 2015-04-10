@@ -50,6 +50,7 @@ module.exports = Main = React.createClass({
                 state['resultsTab']='list';
             }
         }else if(localStorage.getItem('resultsTab')){
+
             state['resultsTab']=localStorage.getItem('resultsTab');
         }
         var search;

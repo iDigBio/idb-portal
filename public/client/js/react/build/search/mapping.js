@@ -39,13 +39,13 @@ module.exports = React.createClass({displayName: "exports",
         return(
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "mapping"}, 
                 React.createElement("div", {className: "option-group", id: "mapping-options"}, 
-                    React.createElement("span", {className: "title"}, "Lat/Lon Contraints"), 
+                    React.createElement("span", {className: "title"}, "Lat/Lon Bounds"), 
                     React.createElement("a", {className: "btn", onClick: this.resetBounds}, 
                         "Clear"
                     ), 
                     React.createElement("div", {className: "form"}, 
                         React.createElement("label", {className: "radio-inline"}, 
-                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.state.type=='box', onChange: this.mappingType}), "Bounding Box"
+                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.state.type=='box', onChange: this.mappingType}), "Box"
                         ), 
                         React.createElement("label", {className: "radio-inline"}, 
                             React.createElement("input", {type: "radio", name: "mapping-type", id: "radius", value: "radius", checked: this.state.type=='radius', onChange: this.mappingType}), "Radius"

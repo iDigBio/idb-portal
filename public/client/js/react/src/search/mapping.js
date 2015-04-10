@@ -39,13 +39,13 @@ module.exports = React.createClass({
         return(
             <div className={"clearfix section "+this.props.active} id="mapping">
                 <div className="option-group" id="mapping-options"> 
-                    <span className="title">Lat/Lon Contraints</span>
+                    <span className="title">Lat/Lon Bounds</span>
                     <a className="btn" onClick={this.resetBounds}>
                         Clear
                     </a>
                     <div className="form" >
                         <label className="radio-inline">
-                            <input type="radio" name="mapping-type" id="box" value="box" checked={this.state.type=='box'} onChange={this.mappingType}/>Bounding Box
+                            <input type="radio" name="mapping-type" id="box" value="box" checked={this.state.type=='box'} onChange={this.mappingType}/>Box
                         </label>
                         <label className="radio-inline">
                             <input type="radio" name="mapping-type" id="radius" value="radius" checked={this.state.type=='radius'} onChange={this.mappingType}/>Radius

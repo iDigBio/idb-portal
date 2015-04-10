@@ -845,6 +845,7 @@
 .map-item-nav span.nav-left:not(.disable):hover,
 .map-item-nav span.nav-right:not(.disable):hover {
   border-color: #607d8b;
+  background-color: #ddd;
 }
 .map-popup-wrapper {
   margin-top: 5px;

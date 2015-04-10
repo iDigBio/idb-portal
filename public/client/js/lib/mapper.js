@@ -235,43 +235,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     }));
 
     /*
-    * iDBLayer and UTF8Grid interactions control and rendering with events
-    ****/
-    var idblayer,utf8grid;
-    var idbloading = function(){
-        self.map.fire('dataloading');
-    }
-    var idbload = function(){
-        self.map.fire('dataload');
-    }
-    var makeIdblayer = function(tilePath){
-        idblayer = L.tileLayer(tilePath,{minZoom: 0});
-        idblayer.on('loading',idbloading);
-        idblayer.on('load',idbload)
-        return idblayer;
-    }
-    var removeIdblayer = function(){
-        if(typeof idblayer == 'object'){
-            idblayer.off('loading',idbloading);
-            idblayer.off('load',idbload);
-        }
-        return idblayer;
-    }
-    var makeUtflayer = function(path){
-        utf8grid = L.utfGrid(path,{
-            useJsonP: false
-        })
-        utf8grid.on('click',mapClick);
-        return utf8grid;
-    }
-    var removeUtflayer = function(){
-        if(typeof utf8grid == 'object'){
-            utf8grid.off('click',mapClick);
-        }
-        return utf8grid;
-    }
-    /*
-    * used to call Map API points endpoint. 
+    * used to call Map API points endpoint with click detected by UTF8grid layer. 
     ****/
 
     var mapClick = function(e){
@@ -307,7 +271,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 )
                
                 items.push(
-                    '<tr class="map-popup-item"><td>'+(ind+offset+1)+'</td><td><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
+                    '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
                 helpers.filter([title,index.institutioncode,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
                 )
             })
@@ -383,7 +347,42 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         });
     }
 
-
+    /*
+    * iDBLayer and UTF8Grid interactions control and rendering with events
+    ****/
+    var idblayer,utf8grid;
+    var idbloading = function(){
+        self.map.fire('dataloading');
+    }
+    var idbload = function(){
+        self.map.fire('dataload');
+    }
+    var makeIdblayer = function(tilePath){
+        idblayer = L.tileLayer(tilePath,{minZoom: 0});
+        idblayer.on('loading',idbloading);
+        idblayer.on('load',idbload)
+        return idblayer;
+    }
+    var removeIdblayer = function(){
+        if(typeof idblayer == 'object'){
+            idblayer.off('loading',idbloading);
+            idblayer.off('load',idbload);
+        }
+        return idblayer;
+    }
+    var makeUtflayer = function(path){
+        utf8grid = L.utfGrid(path,{
+            useJsonP: false
+        })
+        utf8grid.on('click',mapClick);
+        return utf8grid;
+    }
+    var removeUtflayer = function(){
+        if(typeof utf8grid == 'object'){
+            utf8grid.off('click',mapClick);
+        }
+        return utf8grid;
+    }
 
     /*
     *Instance Methods
@@ -450,23 +449,8 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     }, 100,{'leading': false, 'trailing': true});
     
     /*
-    * Event Actions
+    * Map Events Actions
     ***/
-   
-
-    /*this.map.on('click', function(e) {
-        $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + e.latlng.lat + "&lon=" + e.latlng.lng + "&zoom=" + self.map.getZoom(), function(data){
-            var cont;
-            if(data.itemCount>0){
-                if(_.isUndefined(popupContent)){
-                    cont = "You clicked the map at " + e.latlng.toString() + ".<br>There are " + data.itemCount + " records in this map cell.";
-                }else{
-                    cont = popupContent(e,data,self.map);
-                }
-                popup.setLatLng(e.latlng).setContent(cont).openOn(self.map);
-            }
-        });
-    });*/ 
 
     this.map.on('zoomend',function(e){
         if(typeof legend == 'object'){

@@ -113,20 +113,33 @@
         display:inline-block;        
         font-weight:bold;
         &.map-count-legend{     
-            width:90%;
+            width:50%;
             text-align:center;
         }
         &.nav-left{
             float:left;
             cursor:pointer;
+            margin-right:5px;
         }
         &.nav-right{
             float:right;
             cursor:pointer;
+            margin-left:5px;
         }
         &.disable{
             color:#ddd;
             cursor:auto;
+        }
+        &.nav-left, &.nav-right{
+            border:1px solid #ccc;
+            border-radius:2px;
+            background-color:#efefef;
+            padding:0px 2px;
+            width:20px;
+            text-align: center;
+            &:not(.disable):hover{
+                border-color:@bluegrey;
+            }
         }
     }
 }

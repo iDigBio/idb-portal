@@ -15,7 +15,9 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 /*
 *Map object
 *initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
-*popupContent: optional function for returning popup content(must return string) function(event,resp,map)
+*titleOutLink (optional)[string or function that returns string] html for adding extra info to popup boxes.
+* if its a function then its passed the data used to render popup content on init and every paging click.
+*titleOutClick (optional) [Function] for setting event binders on titleOutLink [its run after titleOutLink is rendered] 
 ***/
 module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var self=this;
@@ -284,20 +286,29 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         }
         var nextPoints=false,prevPoints=false;
         var navClick=function(e){
-            if(e.target.attributes['data-load'].value==='next' && typeof nextPoints === 'function'){
+            var load=e.target.attributes['data-load'].value;
+            if(load==='next' && typeof nextPoints === 'function'){
                 nextPoints();
-            }else if(e.target.attributes['data-load'].value==='prev' && typeof prevPoints === 'function'){
+            }else if(load==='prev' && typeof prevPoints === 'function'){
                 prevPoints();
+            }else if(load==='first' && typeof prevPoints === 'function'){
+                prevPoints(true);
+            }else if(load==='last' && typeof nextPoints === 'function'){
+                nextPoints(true);
             }
         }
         var makeContent = function(data,offset){
             var items=[],nextstyle='',prevstyle='';
             data.items.forEach(function(item,ind){
                 var index = item.indexTerms;
-                var title = _.capitalize(helpers.filterFirst([index.scientificname,helpers.filter([index.genus,index.specificepithet]).join(' ')]));
+                
+                var title = helpers.filterFirst(
+                    [index.scientificname,index.catalognumber,index.uuid]
+                )
+               
                 items.push(
                     '<tr class="map-popup-item"><td>'+(ind+offset+1)+'</td><td><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
-                helpers.filter([title,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
+                helpers.filter([title,index.institutioncode,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
                 )
             })
             if(data.itemCount <= offset+data.items.length){
@@ -307,9 +318,9 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 prevstyle='disable';
             }
             var table='<div class="map-item-count clearfix"><span class="map-count-title">'+helpers.formatNum(data.itemCount)+' Record'+(data.itemCount>1?'s</span>':'</span>')+'<span class="map-title-outlink">'+coords+'</span></div>'+
-            '<div class="map-item-nav clearfix"><span class="nav-left '+prevstyle+'" data-load="prev">&lt;</span>'+
+            '<div class="map-item-nav clearfix"><span class="nav-left '+prevstyle+'" data-load="first">&lt;&lt;</span><span class="nav-left '+prevstyle+'" data-load="prev">&lt;</span>'+
             '<span class="map-count-legend">'+helpers.formatNum(offset+1)+'-'+helpers.formatNum(offset+data.items.length)+'</span>'+
-            '<span class="nav-right '+nextstyle+'" data-load="next">&gt;</span></div>'+
+            '<span class="nav-right '+nextstyle+'" data-load="last">&gt;&gt;</span><span class="nav-right '+nextstyle+'" data-load="next">&gt;</span></div>'+
             '<div class="map-popup-wrapper">'+
             '<table class="map-items">'+items.join('')+'</table></div>';
             return table;
@@ -317,10 +328,18 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         var getPoints = function(offset,callback){
             $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
                 if(data.itemCount > data.items.length+offset){
-                    nextPoints = function(){
-                        getPoints(offset+100,function(d){
+                    nextPoints = function(last){
+                        var off=offset+100;
+                        if(last){
+                            if(data.itemCount % 100 === 0){
+                                off=data.itemCount-100;
+                            }else{
+                                off=Math.floor(data.itemCount / 100)*100;
+                            }        
+                        }
+                        getPoints(off,function(d){
                             $('.nav-left, .nav-right').off('click',navClick);
-                            popup.setContent(makeContent(d,offset+100));
+                            popup.setContent(makeContent(d,off));
                             $('.nav-left, .nav-right').on('click',navClick);
                         });
                     }
@@ -328,10 +347,14 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                     nextPoints=false;
                 }
                 if(offset>=100){
-                    prevPoints = function(){
-                        getPoints(offset-100,function(d){
+                    prevPoints = function(first){
+                        var off=offset-100;
+                        if(first){
+                            off=0;
+                        }
+                        getPoints(off,function(d){
                             $('.nav-left, .nav-right').off('click',navClick);
-                            popup.setContent(makeContent(d,offset-100));
+                            popup.setContent(makeContent(d,off));
                             $('.nav-left, .nav-right').on('click',navClick);
                         });
                     }

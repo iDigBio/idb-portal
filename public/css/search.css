@@ -816,20 +816,35 @@
   font-weight: bold;
 }
 .map-item-nav span.map-count-legend {
-  width: 90%;
+  width: 50%;
   text-align: center;
 }
 .map-item-nav span.nav-left {
   float: left;
   cursor: pointer;
+  margin-right: 5px;
 }
 .map-item-nav span.nav-right {
   float: right;
   cursor: pointer;
+  margin-left: 5px;
 }
 .map-item-nav span.disable {
   color: #ddd;
   cursor: auto;
+}
+.map-item-nav span.nav-left,
+.map-item-nav span.nav-right {
+  border: 1px solid #ccc;
+  border-radius: 2px;
+  background-color: #efefef;
+  padding: 0px 2px;
+  width: 20px;
+  text-align: center;
+}
+.map-item-nav span.nav-left:not(.disable):hover,
+.map-item-nav span.nav-right:not(.disable):hover {
+  border-color: #607d8b;
 }
 .map-popup-wrapper {
   margin-top: 5px;

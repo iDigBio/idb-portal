@@ -85,7 +85,7 @@ var helpers = module.exports = {
     ****/
     filter: function(vals){
         return _.filter(vals,function(item){
-            return !_.isUndefined(item);
+            return !_.isUndefined(item) || !_.isEmpty(item);
         })
     },
     /*

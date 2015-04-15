@@ -151,6 +151,16 @@
   height: 20px;
   padding: 1px 2px;
 }
-.map-popup-wrapper .map-popup-item td a:hover {
+.map-popup-wrapper .map-popup-item td div.cont {
+  display: block;
+}
+.map-popup-wrapper .map-popup-item td div.cont a:hover {
   text-decoration: underline;
+}
+.map-popup-wrapper .map-popup-item td div.cont img {
+  display: inline-block;
+  max-width: 25px;
+  max-height: 40px;
+  margin: 2px;
+  float: right;
 }

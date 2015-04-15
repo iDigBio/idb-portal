@@ -27,7 +27,8 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
         minZoom: 0,
-        reuseTiles: true
+        reuseTiles: true,
+        continuousWorld: false,
     });
 
     this.defaults = {
@@ -37,7 +38,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         scrollWheelZoom: true,
         boxZoom: true,
         zoomControl: true,
-        worldCopyJump: true,
+        //worldCopyJump: true,
         loadingControl: true
     };
 
@@ -269,10 +270,14 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 var title = helpers.filterFirst(
                     [index.scientificname,index.catalognumber,index.uuid]
                 )
-               
+                var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
+                helpers.filter([title,index.institutioncode,index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
+                /*if(index.hasImage){
+                    row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';
+                }*/
+                row+='</div></td></tr>';
                 items.push(
-                    '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
-                helpers.filter([title,index.institutioncode,index.eventdate]).join(', ').replace('-','&#8209;')+'</a></td></tr>'
+                    row
                 )
             })
             if(data.itemCount <= offset+data.items.length){
@@ -291,6 +296,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         }
         var getPoints = function(offset,callback){
             $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
+                debugger
                 if(data.itemCount > data.items.length+offset){
                     nextPoints = function(last){
                         var off=offset+100;
@@ -342,11 +348,25 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 }
                 $('.nav-left, .nav-right').off('click',navClick);
                 popup.setLatLng(e.latlng).setContent(makeContent(data,0)).openOn(self.map);
+                //L.circle(e.latlng,5,{color: 'white',fill: 'red',opacity: 1, weight: 5}).addTo(self.map);
                 $('.nav-left, .nav-right').on('click',navClick);
             }
         });
     }
 
+    var circle = L.circle([0,0],5,{color: 'white',fill: 'red',opacity: 1, weight: 5});
+    
+    var mapHover = function(e){
+        if(_.has(e,'data') && _.has(e.data,'lat')){ 
+            circle.addTo(self.map);
+            //circle.setLatLng(e.latlng);
+            //use leaflet latlng and not utf8grid data latlng
+            circle.setLatLng(e.latlng);
+        }
+    }
+    var mapHoverout = function(e){
+        self.map.removeLayer(circle);
+    }
     /*
     * iDBLayer and UTF8Grid interactions control and rendering with events
     ****/
@@ -375,11 +395,15 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
             useJsonP: false
         })
         utf8grid.on('click',mapClick);
+        utf8grid.on('mouseover', mapHover);
+        utf8grid.on('mouseout', mapHoverout);
         return utf8grid;
     }
     var removeUtflayer = function(){
         if(typeof utf8grid == 'object'){
             utf8grid.off('click',mapClick);
+            utf8grid.off('mouseover',mapHover);
+            utf8grid.off('mouseout',mapHoverout)
         }
         return utf8grid;
     }

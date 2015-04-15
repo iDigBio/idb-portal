@@ -53,6 +53,9 @@ module.exports = Main = React.createClass({displayName: "Main",
 
             state['resultsTab']=localStorage.getItem('resultsTab');
         }
+        if(localStorage.getItem('optionsTab')){
+            state['optionsTab']=localStorage.getItem('optionsTab');
+        }
         var search;
         //set current search
         if(url('?rq') || url('?sort')){

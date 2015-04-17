@@ -19,6 +19,10 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 * if its a function then its passed the data used to render popup content on init and every paging click.
 *titleOutClick (optional) [Function] for setting event binders on titleOutLink [its run after titleOutLink is rendered] 
 ***/
+Math.trunc = Math.trunc || function(x) {
+  return x < 0 ? Math.ceil(x) : Math.floor(x);
+}
+
 module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var self=this;
     /*
@@ -27,8 +31,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
         minZoom: 0,
-        reuseTiles: true,
-        continuousWorld: false,
+        reuseTiles: true
     });
 
     this.defaults = {
@@ -38,7 +41,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         scrollWheelZoom: true,
         boxZoom: true,
         zoomControl: true,
-        //worldCopyJump: true,
+        worldCopyJump: true,
         loadingControl: true
     };
 
@@ -296,7 +299,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         }
         var getPoints = function(offset,callback){
             $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
-                debugger
+               
                 if(data.itemCount > data.items.length+offset){
                     nextPoints = function(last){
                         var off=offset+100;
@@ -359,9 +362,12 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var mapHover = function(e){
         if(_.has(e,'data') && _.has(e.data,'lat')){ 
             circle.addTo(self.map);
-            //circle.setLatLng(e.latlng);
+            //var lon=e.data.lon;
+            //provide offset degree additive for fake world coords.
+            var ad=Math.floor(Math.trunc(e.latlng.lng/180))*360;
+            circle.setLatLng([e.data.lat,e.data.lon+ad]);
             //use leaflet latlng and not utf8grid data latlng
-            circle.setLatLng(e.latlng);
+            //circle.setLatLng(e.latlng);
         }
     }
     var mapHoverout = function(e){

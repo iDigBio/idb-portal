@@ -65,11 +65,11 @@ var Publishers = React.createClass({displayName: "Publishers",
       return (
         React.createElement("tr", {key: key}, 
           React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, toTitleCase(val.name))), 
-          React.createElement("td", {className: "valcol"}, formatNum(ar)), 
           React.createElement("td", {className: "valcol"}, formatNum(dr)), 
+          React.createElement("td", {className: "valcol"}, formatNum(ar)), 
           React.createElement("td", {className: "valcol"}, formatNum(ir)), 
-          React.createElement("td", {className: "valcol"}, formatNum(am)), 
           React.createElement("td", {className: "valcol"}, formatNum(dm)), 
+          React.createElement("td", {className: "valcol"}, formatNum(am)), 
           React.createElement("td", {className: "valcol"}, formatNum(im))
         )
       );
@@ -251,7 +251,6 @@ async.parallel([
     });
   }
 ],function(error){
-  debugger
     React.render(
       React.createElement(Page, null),
       document.getElementById('main')

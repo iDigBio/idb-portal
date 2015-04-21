@@ -65,11 +65,11 @@ var Publishers = React.createClass({
       return (
         <tr key={key}>
           <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{toTitleCase(val.name)}</a></td>
-          <td className="valcol">{formatNum(ar)}</td>
           <td className="valcol">{formatNum(dr)}</td>
+          <td className="valcol">{formatNum(ar)}</td>
           <td className="valcol">{formatNum(ir)}</td>
-          <td className="valcol">{formatNum(am)}</td>
           <td className="valcol">{formatNum(dm)}</td>
+          <td className="valcol">{formatNum(am)}</td>
           <td className="valcol">{formatNum(im)}</td>
         </tr>
       );
@@ -251,7 +251,6 @@ async.parallel([
     });
   }
 ],function(error){
-  debugger
     React.render(
       <Page/>,
       document.getElementById('main')

@@ -362,12 +362,9 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var mapHover = function(e){
         if(_.has(e,'data') && _.has(e.data,'lat')){ 
             circle.addTo(self.map);
-            //var lon=e.data.lon;
             //provide offset degree additive for fake world coords.
             var ad=Math.floor(Math.trunc(e.latlng.lng/180))*360;
             circle.setLatLng([e.data.lat,e.data.lon+ad]);
-            //use leaflet latlng and not utf8grid data latlng
-            //circle.setLatLng(e.latlng);
         }
     }
     var mapHoverout = function(e){

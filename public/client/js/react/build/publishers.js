@@ -167,7 +167,7 @@ var defsets = function(){
 var totals = defsets();
 async.parallel([
   function(callback){
-    idbapi.publishers({"fields":["data.idigbio:data.name","data.idigbio:data.base_url"],"limit":1000},function(resp){
+    idbapi.publishers({"fields":["data.name","data.base_url"],"limit":1000},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.uuid])){
             pubs[item.uuid]=defpub();
@@ -185,7 +185,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.recordsets({"fields":["data.idigbio:data.collection_name","publisher"],"limit":1000},function(resp){
+    idbapi.recordsets({"fields":["data.collection_name","publisher"],"limit":1000},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.indexTerms.publisher])){
           pubs[item.indexTerms.publisher]=defpub();
@@ -251,6 +251,7 @@ async.parallel([
     });
   }
 ],function(error){
+  debugger
     React.render(
       React.createElement(Page, null),
       document.getElementById('main')

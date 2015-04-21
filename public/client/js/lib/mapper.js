@@ -269,12 +269,13 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
             var items=[],nextstyle='',prevstyle='';
             data.items.forEach(function(item,ind){
                 var index = item.indexTerms;
-                
+                var dwc=item.data;
+                var n = helpers.filter([dwc['dwc:genus'],dwc['dwc:specificEpithet']]).join(' ');
                 var title = helpers.filterFirst(
-                    [index.scientificname,index.catalognumber,index.uuid]
+                    [dwc['dwc:scientificName'],n,index.catalognumber,index.uuid]
                 )
                 var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
-                helpers.filter([title,index.institutioncode,index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
+                helpers.filter([title,dwc['dwc:institutionCode'],index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
                 /*if(index.hasImage){
                     row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';
                 }*/
@@ -357,7 +358,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         });
     }
 
-    var circle = L.circle([0,0],5,{color: 'white',fill: 'red',opacity: 1, weight: 5});
+    var circle = L.circle([0,0],5,{color: 'red',fill: 'red',opacity: 1, weight: 5});
     
     var mapHover = function(e){
         if(_.has(e,'data') && _.has(e.data,'lat')){ 

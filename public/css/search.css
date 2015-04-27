@@ -309,7 +309,7 @@
   margin-left: 8px;
 }
 #results #result-list #data-table th:hover {
-  background-color: #BFF2F7;
+  background-color: #e5e5e5;
 }
 #results #result-list #data-table tbody tr {
   height: 30px;
@@ -872,6 +872,14 @@
   max-height: 40px;
   margin: 2px;
   float: right;
+}
+i.spinner {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin: 0px;
+  margin-bottom: -3px;
+  background-image: url(/portal/img/spinner.gif);
 }
 #main,
 #react-wrapper,

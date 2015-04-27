@@ -56,7 +56,8 @@ module.exports = Results =  React.createClass({
         //debugger
         //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
        // if(isNewSearch){
-            this.setState({search: _.cloneDeep(nextProps.search)},function(){
+            this.setState({search: _.cloneDeep(nextProps.search), loading: true},function(){
+                this.forceUpdate();
                 this.getResults(this.state.search); 
             });
        // }
@@ -223,10 +224,17 @@ var ResultsList = React.createClass({
         columns.forEach(function(item){
             if(sorted.name===item){
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
+                //sort click spinner
+                var sym;
+                if(self.props.loading && self.props.search.from===0){
+                    sym = <i className="spinner"></i>;
+                }else{
+                    sym = <i className={"glyphicon "+icon}></i>;
+                }
                 headers.push(
                     <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={self.sortColumn}>
                         {fields.byTerm[item].name}
-                        <i className={"glyphicon "+icon}></i>
+                        {sym}
                     </th>
                 ) 
             }else{
@@ -273,7 +281,7 @@ var ResultsList = React.createClass({
             rows.push(
                 <tr key={'loading-row'} className="no-results-row">
                     <td colSpan={columns.length+1}>
-                        <img src={'/portal/img/ajax-loader.gif'} />
+                        <i className="spinner" />
                     </td>
                 </tr>
             );

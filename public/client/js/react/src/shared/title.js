@@ -22,7 +22,7 @@ module.exports = Title = React.createClass({
             title = <em>No Name</em>;
         } 
         //build info ids,inst
-        info = _.without([data.scientificnameauthorship,index.institutioncode,index.collectioncode,index.catalognumber],undefined); 
+        info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
 
         return (
             <h1 id="title" className="clearfix">

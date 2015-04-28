@@ -246,7 +246,7 @@ var ResultsList = React.createClass({
         //add column list button
         headers.push(
             <th key={'header-select'} style={{width: '60px'}}>
-                <button className="pull-right" data-toggle="modal" data-target="#column-list">
+                <button className="pull-left" data-toggle="modal" data-target="#column-list">
                     <i className="glyphicon glyphicon-list"/>
                 </button>
             </th>
@@ -265,12 +265,15 @@ var ResultsList = React.createClass({
                     val = <span className="no-data">no data</span>;
                 }
 
-                if(columns.length-1 === ind){
+                /*if(columns.length-1 === ind){
                     tds.push(<td key={'row-'+index+'-cell-'+ind} colSpan="2">{val}</td>);
                 }else{
                     tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
-                }
+                }*/
+                tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
             })
+            //add openrecord column
+            tds.push(<td key={'row-'+index+'-open'} className="open"><button className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
             rows.push(
                 <tr id={item.uuid} key={'row-'+index} onClick={self.openRecord}>
                     {tds}

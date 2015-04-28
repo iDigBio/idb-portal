@@ -246,7 +246,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         //add column list button
         headers.push(
             React.createElement("th", {key: 'header-select', style: {width: '60px'}}, 
-                React.createElement("button", {className: "pull-right", "data-toggle": "modal", "data-target": "#column-list"}, 
+                React.createElement("button", {className: "pull-left", "data-toggle": "modal", "data-target": "#column-list"}, 
                     React.createElement("i", {className: "glyphicon glyphicon-list"})
                 )
             )
@@ -265,12 +265,15 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                     val = React.createElement("span", {className: "no-data"}, "no data");
                 }
 
-                if(columns.length-1 === ind){
-                    tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind, colSpan: "2"}, val));
+                /*if(columns.length-1 === ind){
+                    tds.push(<td key={'row-'+index+'-cell-'+ind} colSpan="2">{val}</td>);
                 }else{
-                    tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
-                }
+                    tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
+                }*/
+                tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
             })
+            //add openrecord column
+            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
             rows.push(
                 React.createElement("tr", {id: item.uuid, key: 'row-'+index, onClick: self.openRecord}, 
                     tds

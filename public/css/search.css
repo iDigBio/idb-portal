@@ -340,6 +340,10 @@
   color: #aaa;
   font-style: italic;
 }
+#results #result-list #data-table tbody tr td.open button {
+  width: 30px;
+  height: 22px;
+}
 #results #result-labels {
   padding-top: 10px;
 }

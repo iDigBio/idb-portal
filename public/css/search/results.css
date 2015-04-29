@@ -143,6 +143,7 @@
 }
 #results #result-labels .result-label:hover {
   cursor: pointer;
+  background-color: #e5e5e5;
 }
 #results #result-labels .result-label p {
   margin-top: 1px;
@@ -190,6 +191,9 @@
   border-radius: 0px;
   border: 1px solid #cccccc;
   position: relative;
+}
+#results #results-images .image:hover {
+  background-color: #e5e5e5;
 }
 @media (max-width: 992px) {
   #results #results-images .image {

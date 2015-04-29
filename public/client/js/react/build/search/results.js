@@ -25,6 +25,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
         and ensures that the last key press results in the proper set of results as responses can be out of 
         order*/
         this.getResults = _.debounce(function(){
+            //self.setState({results: []})
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
             self.lastQueryTime = now;
@@ -129,7 +130,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
         )
     }
 });
-
+var sortClick=false;
 var ResultsList = React.createClass({displayName: "ResultsList",
     
     getInitialState: function(){
@@ -186,6 +187,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         if(sorting.length>curlength && curlength > 0){
             sorting.pop();
         }
+        sortClick=true;
         this.props.searchChange('sorting',sorting);
     },
     openRecord: function(e){
@@ -226,8 +228,9 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
                 //sort click spinner
                 var sym;
-                if(self.props.loading && self.props.search.from===0){
+                if(self.props.loading && sortClick){
                     sym = React.createElement("i", {className: "spinner"});
+                    sortClick=false;
                 }else{
                     sym = React.createElement("i", {className: "glyphicon "+icon});
                 }

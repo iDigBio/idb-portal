@@ -10,6 +10,7 @@ var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
 var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
+//require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
 //elid: string name of element id;
 //options: object map of settings
 /*
@@ -96,7 +97,8 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                     });
                     L.DomEvent.addListener(window, 'resize', resizeFunction);
                     $('#map-maximize-button.maximize-button').removeClass('maximize-button').addClass('minimize-button');
-                    control.expanded=true;                 
+                    control.expanded=true;   
+
                 }else{
                     L.DomEvent.stopPropagation(e);
                     L.DomEvent.removeListener(window, 'resize', resizeFunction);

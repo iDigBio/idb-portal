@@ -276,7 +276,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 var title = helpers.filterFirst(
                     [dwc['dwc:scientificName'],n,index.catalognumber,'No Name']
                 )
-                var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="/portal/records/'+item.uuid+'">'+
+                var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">'+
                 helpers.filter([title,dwc['dwc:institutionCode'],index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
                 /*if(index.hasImage){
                     row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';

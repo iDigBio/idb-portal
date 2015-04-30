@@ -3,6 +3,5 @@ public/components/
 client/js/react/build/.module-cache/
 *~
 .nide
-public/js/app.min.js
-public/js/app.js
+
 

@@ -104,7 +104,10 @@ module.exports = Downloads = React.createClass({
         var q = searchHistory.history[val];
         this.props.searchChange(q);
     },
-
+    clearHistory: function(){
+        searchHistory.clear();
+        this.forceUpdate();
+    },
     render: function(){
         var options = [],self=this, time='';
 
@@ -118,9 +121,14 @@ module.exports = Downloads = React.createClass({
             <div className={"clearfix section "+this.props.active} id="download">
                 <div className="sub" id="current">
                     <label>Current Search</label>
-                    <select className="form-control history-select" onChange={this.historySelect} value="0">
-                        {options}
-                    </select>
+                    <div className="input-group">
+                        <select className="form-control history-select"  onChange={this.historySelect} value="0">
+                            {options}
+                        </select>
+                        <a className="btn input-group-addon" title="click to clear search history" onClick={this.clearHistory}>
+                            <i className="glyphicon glyphicon-refresh"></i>
+                        </a>
+                    </div>
                 </div>
                 <Downloader search={this.props.search} time="calculating" />
             </div>

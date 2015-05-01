@@ -104,7 +104,10 @@ module.exports = Downloads = React.createClass({displayName: "Downloads",
         var q = searchHistory.history[val];
         this.props.searchChange(q);
     },
-
+    clearHistory: function(){
+        searchHistory.clear();
+        this.forceUpdate();
+    },
     render: function(){
         var options = [],self=this, time='';
 
@@ -118,8 +121,13 @@ module.exports = Downloads = React.createClass({displayName: "Downloads",
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "download"}, 
                 React.createElement("div", {className: "sub", id: "current"}, 
                     React.createElement("label", null, "Current Search"), 
-                    React.createElement("select", {className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
-                        options
+                    React.createElement("div", {className: "input-group"}, 
+                        React.createElement("select", {className: "form-control history-select", onChange: this.historySelect, value: "0"}, 
+                            options
+                        ), 
+                        React.createElement("a", {className: "btn input-group-addon", title: "click to clear search history", onClick: this.clearHistory}, 
+                            React.createElement("i", {className: "glyphicon glyphicon-refresh"})
+                        )
                     )
                 ), 
                 React.createElement(Downloader, {search: this.props.search, time: "calculating"})

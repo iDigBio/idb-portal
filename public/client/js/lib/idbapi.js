@@ -26,6 +26,9 @@ module.exports = {
     summary: function(type,query,callback){
         this._basic('POST','summary/'+type,query,callback);
     },
+    countRecords: function(query,callback){
+        this.summary('count/records/',query,callback);
+    },
     _basic: function(method,arg1,arg2,arg3){
         var options={
             error: function(jqxhr,status,error){

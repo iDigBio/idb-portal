@@ -274,14 +274,23 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 var dwc=item.data;
                 var n = helpers.filter([dwc['dwc:genus'],dwc['dwc:specificEpithet']]).join(' ');
                 var title = helpers.filterFirst(
-                    [dwc['dwc:scientificName'],n,index.catalognumber,'No Name']
+                    [dwc['dwc:scientificName'],n,'No Name']
                 )
-                var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">'+
-                helpers.filter([title,dwc['dwc:institutionCode'],index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
+                
+                var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">View Record</a></b>'];
+                _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','datecollected'],function(term){
+                    if(_.has(dwc,fields.byTerm[term].dataterm)){
+                        inf.push(
+                            '<span><b>'+fields.byTerm[term].name+':</b>'+' '+dwc[fields.byTerm[term].dataterm]+'</span>'
+                        )
+                    }
+                });
                 /*if(index.hasImage){
                     row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';
-                }*/
-                row+='</div></td></tr>';
+                }<td>'+helpers.formatNum(ind+offset+1)+'</td>*/
+                var row = '<tr class="map-popup-item"><td><div class="cont clearfix">'
+                
+                row+=inf.join('<br/>')+'</div></td></tr>';
                 items.push(
                     row
                 )

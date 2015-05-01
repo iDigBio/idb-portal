@@ -6,16 +6,16 @@ echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 node_modules/bower/bin/bower install
 
 # Build Leaflet
-#cd public/components/leaflet
-#npm install
-#cd ../../..
+cd public/components/leaflet
+npm install
+cd ../../..
 
 # Build Knockout
 #cd public/components/knockout/
 #npm install
 #cd ../../..
 
-#node_modules/browserify/bin/cmd.js -o public/js/app.js  public/client/js/main.js -t reactify
+node_modules/browserify/bin/cmd.js -o public/js/app.js  public/client/js/main.js -t reactify
 
 node_modules/uglify-js/bin/uglifyjs -o public/js/app.js public/js/app.js
 

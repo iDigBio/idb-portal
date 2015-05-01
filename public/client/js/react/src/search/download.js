@@ -1,6 +1,6 @@
 
 var React = require('react');
-
+var idbapi = require('../../../lib/idbapi');
 module.exports = Downloads = React.createClass({
     statics: {
         queryToSentence: function(query){
@@ -229,14 +229,12 @@ var Downloader = React.createClass({
     },
     setDownloadTime: function(search){
         var self=this;
-        //debugger
-        var q = queryBuilder.makeQuery(search);
-        $.post('//search.idigbio.org/idigbio/records/_count',JSON.stringify({query: q.query}),function(resp){
+        idbapi.countRecords({rq: queryBuilder.buildQueryShim(search)},function(resp){
                 var state;
-                if(resp.count===0){
+                if(resp.itemCount===0){
                     state = {time: 'not available', disabled: true};
                 }else{
-                    var time = Math.floor((resp.count / 10000) * 7);
+                    var time = Math.floor((resp.itemCount / 10000) * 7);
                     time = time < 10 ? 10 : time;//always lag time for download
                     var timehour = Math.floor(time / 3600);
                     var timemin = Math.floor(time / 60) % 60;

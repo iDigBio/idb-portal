@@ -44973,6 +44973,9 @@ module.exports = {
     summary: function(type,query,callback){
         this._basic('POST','summary/'+type,query,callback);
     },
+    countRecords: function(query,callback){
+        this.summary('count/records/',query,callback);
+    },
     _basic: function(method,arg1,arg2,arg3){
         var options={
             error: function(jqxhr,status,error){
@@ -45279,14 +45282,23 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 var dwc=item.data;
                 var n = helpers.filter([dwc['dwc:genus'],dwc['dwc:specificEpithet']]).join(' ');
                 var title = helpers.filterFirst(
-                    [dwc['dwc:scientificName'],n,index.catalognumber,'No Name']
+                    [dwc['dwc:scientificName'],n,'No Name']
                 )
-                var row = '<tr class="map-popup-item"><td>'+helpers.formatNum(ind+offset+1)+'</td><td><div class="cont clearfix"><a target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">'+
-                helpers.filter([title,dwc['dwc:institutionCode'],index.eventdate]).join(', ').replace('-','&#8209;')+'</a>';
+                
+                var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">View Record</a></b>'];
+                _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','datecollected'],function(term){
+                    if(_.has(dwc,fields.byTerm[term].dataterm)){
+                        inf.push(
+                            '<span><b>'+fields.byTerm[term].name+':</b>'+' '+dwc[fields.byTerm[term].dataterm]+'</span>'
+                        )
+                    }
+                });
                 /*if(index.hasImage){
                     row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';
-                }*/
-                row+='</div></td></tr>';
+                }<td>'+helpers.formatNum(ind+offset+1)+'</td>*/
+                var row = '<tr class="map-popup-item"><td><div class="cont clearfix">'
+                
+                row+=inf.join('<br/>')+'</div></td></tr>';
                 items.push(
                     row
                 )
@@ -46782,7 +46794,7 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
 },{"./search/download":199,"./search/filters":200,"./search/lib/params_parser":201,"./search/map":202,"./search/mapping":203,"./search/results":204,"./search/sorting":205,"react":178}],199:[function(require,module,exports){
 
 var React = require('react');
-
+var idbapi = require('../../../lib/idbapi');
 module.exports = Downloads = React.createClass({displayName: "Downloads",
     statics: {
         queryToSentence: function(query){
@@ -47011,14 +47023,12 @@ var Downloader = React.createClass({displayName: "Downloader",
     },
     setDownloadTime: function(search){
         var self=this;
-        //debugger
-        var q = queryBuilder.makeQuery(search);
-        $.post('//search.idigbio.org/idigbio/records/_count',JSON.stringify({query: q.query}),function(resp){
+        idbapi.countRecords({rq: queryBuilder.buildQueryShim(search)},function(resp){
                 var state;
-                if(resp.count===0){
+                if(resp.itemCount===0){
                     state = {time: 'not available', disabled: true};
                 }else{
-                    var time = Math.floor((resp.count / 10000) * 7);
+                    var time = Math.floor((resp.itemCount / 10000) * 7);
                     time = time < 10 ? 10 : time;//always lag time for download
                     var timehour = Math.floor(time / 3600);
                     var timemin = Math.floor(time / 60) % 60;
@@ -47096,7 +47106,7 @@ var Downloader = React.createClass({displayName: "Downloader",
     }
 })
 
-},{"react":178}],200:[function(require,module,exports){
+},{"../../../lib/idbapi":188,"react":178}],200:[function(require,module,exports){
 
 var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;

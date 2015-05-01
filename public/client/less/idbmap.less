@@ -148,16 +148,28 @@
 .map-popup-wrapper{
     margin-top:5px;
     min-height:40px;
-    max-height:140px;
+    max-height:170px;
     width:220px;
     word-break:keep-all;
     overflow:auto;
     font-size:.9em;
-
+    .map-items{
+        width:100%;
+    }
     .map-popup-item{
+        border:1px solid #bbb;
+        border-left:none;
+        border-right:none;
+        .record-link{
+            display:inline-block;
+           
+        }
+        .record-count{
+            color:#888;
+             float:right;
+        }
         td{ 
-            height:20px;
-            padding:1px 2px;
+            padding:6px 4px;
             div.cont{
                 display:block;
                 //border:1px solid #ccc;

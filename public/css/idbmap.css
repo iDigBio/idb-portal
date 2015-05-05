@@ -142,7 +142,7 @@
   margin-top: 5px;
   min-height: 40px;
   max-height: 175px;
-  width: 220px;
+  width: 225px;
   word-break: keep-all;
   overflow: auto;
   font-size: .9em;
@@ -157,10 +157,10 @@
 }
 .map-popup-wrapper .map-popup-item .record-link {
   display: inline-block;
+  float: right;
 }
 .map-popup-wrapper .map-popup-item .record-count {
   color: #888;
-  float: right;
 }
 .map-popup-wrapper .map-popup-item td {
   padding: 6px 4px;

@@ -129,6 +129,13 @@
     }
     #result-labels{
         padding-top:10px;
+        width:100%;
+        .label-loading{
+            width:100%;
+            height:40px;
+            text-align: center;
+            padding:10px;
+        }
         .result-label{
             //width:15.9%;
             //height:70px;
@@ -196,11 +203,26 @@
     }
     #results-images{
         padding-top:10px;
+
+        #images-wrapper{
+            display:block;
+            margin:auto;
+            width:98%;
+            #loading-images{
+                clear:both;
+                width:100%;
+                height:40px;
+                text-align: center;
+                padding:10px;
+                display:block;
+            }
+        }
+        
         .image{
             height:230px;
-            width:260px;
+            width:13.80%;
             background-color:@bggreydark;
-            margin:3px;
+            margin:4px;
             float:left;
             border-radius:0px;
             border:@brd;

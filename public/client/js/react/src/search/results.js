@@ -276,9 +276,9 @@ var ResultsList = React.createClass({
                 tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
             })
             //add openrecord column
-            tds.push(<td key={'row-'+index+'-open'} className="open"><button className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
+            tds.push(<td key={'row-'+index+'-open'} className="open"><button id={item.uuid} onClick={self.openRecord} className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
             rows.push(
-                <tr id={item.uuid} key={'row-'+index} onClick={self.openRecord}>
+                <tr key={'row-'+index} >
                     {tds}
                 </tr>
             );
@@ -457,10 +457,10 @@ var ResultsLabels = React.createClass({
             labels.push(self.makeLabel(result,'label-'+ind));
         })
         if(this.props.loading){
-            var style={width:"100%",height:"30px",textAlign:"center"};
+            
             labels.push(
-                <div key={'loading-div'} style={style}>
-                    <img src={"/portal/img/ajax-loader.gif"}/>
+                <div key={'loading-div'} className="label-loading clearfix pull-left">
+                    <i className="spinner" />
                 </div>
             )
         }
@@ -480,6 +480,7 @@ var ResultsImages = React.createClass({
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         self.lastQueryTime = now;
+        self.setState({loading: true})
         idbapi.search(query,function(response){
             //make sure last query run is the last one that renders
             //as responses can be out of order
@@ -509,7 +510,7 @@ var ResultsImages = React.createClass({
     },
     componentWillReceiveProps: function(nextProps){
         if(nextProps.search.image){
-            this.setState({results: nextProps.results})
+            this.setState({results: nextProps.results, loading: false})
         }else{
             this.getImageOnlyResults(nextProps.search);
         }
@@ -555,16 +556,25 @@ var ResultsImages = React.createClass({
                 })
             }
         });
-        if(images.length === 0){
+        if(images.length === 0 && !self.state.loading){
             images.push(
                 <div className="no-images">
                     <h4>No Images Available</h4>
                 </div>
             )
         }
+        if(self.state.loading){
+            images.push(
+                <div key="loading-images" id="loading-images" className="clearfix">
+                    <i className="spinner" />
+                </div>
+            )
+        }
         return (
             <div id="results-images" className="panel">
-                {images}
+                <div id="images-wrapper" className="clearfix">
+                    {images}
+                </div>
             </div>
         )
     }

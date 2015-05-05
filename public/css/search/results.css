@@ -113,6 +113,13 @@
 }
 #results #result-labels {
   padding-top: 10px;
+  width: 100%;
+}
+#results #result-labels .label-loading {
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  padding: 10px;
 }
 #results #result-labels .result-label {
   width: 19.55%;
@@ -182,11 +189,24 @@
 #results #results-images {
   padding-top: 10px;
 }
+#results #results-images #images-wrapper {
+  display: block;
+  margin: auto;
+  width: 98%;
+}
+#results #results-images #images-wrapper #loading-images {
+  clear: both;
+  width: 100%;
+  height: 40px;
+  text-align: center;
+  padding: 10px;
+  display: block;
+}
 #results #results-images .image {
   height: 230px;
-  width: 260px;
+  width: 13.80%;
   background-color: #f0f0f0;
-  margin: 3px;
+  margin: 4px;
   float: left;
   border-radius: 0px;
   border: 1px solid #cccccc;

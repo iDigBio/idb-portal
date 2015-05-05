@@ -276,9 +276,9 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
             })
             //add openrecord column
-            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
+            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {id: item.uuid, onClick: self.openRecord, className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
             rows.push(
-                React.createElement("tr", {id: item.uuid, key: 'row-'+index, onClick: self.openRecord}, 
+                React.createElement("tr", {key: 'row-'+index}, 
                     tds
                 )
             );
@@ -457,10 +457,10 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             labels.push(self.makeLabel(result,'label-'+ind));
         })
         if(this.props.loading){
-            var style={width:"100%",height:"30px",textAlign:"center"};
+            
             labels.push(
-                React.createElement("div", {key: 'loading-div', style: style}, 
-                    React.createElement("img", {src: "/portal/img/ajax-loader.gif"})
+                React.createElement("div", {key: 'loading-div', className: "label-loading clearfix pull-left"}, 
+                    React.createElement("i", {className: "spinner"})
                 )
             )
         }
@@ -480,6 +480,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         self.lastQueryTime = now;
+        self.setState({loading: true})
         idbapi.search(query,function(response){
             //make sure last query run is the last one that renders
             //as responses can be out of order
@@ -509,7 +510,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
     },
     componentWillReceiveProps: function(nextProps){
         if(nextProps.search.image){
-            this.setState({results: nextProps.results})
+            this.setState({results: nextProps.results, loading: false})
         }else{
             this.getImageOnlyResults(nextProps.search);
         }
@@ -555,16 +556,25 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
                 })
             }
         });
-        if(images.length === 0){
+        if(images.length === 0 && !self.state.loading){
             images.push(
                 React.createElement("div", {className: "no-images"}, 
                     React.createElement("h4", null, "No Images Available")
                 )
             )
         }
+        if(self.state.loading){
+            images.push(
+                React.createElement("div", {key: "loading-images", id: "loading-images", className: "clearfix"}, 
+                    React.createElement("i", {className: "spinner"})
+                )
+            )
+        }
         return (
             React.createElement("div", {id: "results-images", className: "panel"}, 
-                images
+                React.createElement("div", {id: "images-wrapper", className: "clearfix"}, 
+                    images
+                )
             )
         )
     }

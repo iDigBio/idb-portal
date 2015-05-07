@@ -10,6 +10,7 @@ var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
 var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
+var fields = require('./fields');
 //require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
 //elid: string name of element id;
 //options: object map of settings

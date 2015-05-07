@@ -742,6 +742,9 @@
   display: table;
   content: " ";
 }
+.clearfix {
+  overflow: auto;
+}
 #map-maximize-button {
   background-color: white;
   background-repeat: no-repeat;

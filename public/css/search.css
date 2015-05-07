@@ -737,6 +737,10 @@
   height: 27px;
   width: 60px;
 }
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}
 #map-maximize-button {
   background-color: white;
   background-repeat: no-repeat;

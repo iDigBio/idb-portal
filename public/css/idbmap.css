@@ -1,5 +1,9 @@
 @import '../../components/leaflet/dist/leaflet.css';
 @import '../../components/leaflet-loading/src/Control.Loading.css';
+.clearfix {
+  overflow: auto;
+  zoom: 1;
+}
 #map-maximize-button {
   background-color: white;
   background-repeat: no-repeat;

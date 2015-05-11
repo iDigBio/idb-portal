@@ -3,13 +3,7 @@
 @import '../../components/leaflet-loading/src/Control.Loading.css';
 
 //@import '../../components/leaflet/dist/leaflet.ie.css';
-.clearfix:before, .clearfix:after {
-  display: table;
-  content: " ";
-}
-.clearfix{
-    overflow:auto;
-}
+
 #map-maximize-button{
     background-color: white;
     background-repeat: no-repeat;
@@ -112,8 +106,24 @@
         display: inline-block;
         float:right;
     }
+    &.clearfix{
+        overflow: auto;
+        &:before, &:after {
+            display: table;
+            content: " ";
+        }
+    }
 }
 .map-item-nav{
+
+    &.clearfix{
+        overflow: auto;
+        &:before, &:after {
+            display: table;
+            content: " ";
+        }
+    }
+
     width:100%;
     margin:2px 2px;
     span{

@@ -491,14 +491,14 @@ var ResultsImages = React.createClass({
                 }else{
                     res = response.items;
                 }
-                self.setState({results: res},function(){
+                self.setState({results: res, loading: false},function(){
                     self.forceUpdate();
                 });
             }
         });
     },
     getInitialState: function(){
-        return {results: this.props.results};
+        return {results: this.props.results, loading: false};
     },
     errorImage: function(event){
 

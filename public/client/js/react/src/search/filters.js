@@ -297,7 +297,7 @@ var TextFilter = React.createClass({
         }        
     },
     render: function(){
-        var filter = this.props.filter,disabled=false;
+        var filter = this.props.filter,disabled=false,textval;
         var name = filter.name, label = fields.byTerm[name].name;
         var syn = <span/>,cl='text';
         if(fields.byTerm[name].synonyms){
@@ -306,6 +306,9 @@ var TextFilter = React.createClass({
         }
         if(filter.exists || filter.missing){
             disabled=true;
+            textval='';
+        }else{
+            textval=this.state.text;
         }
         return(
             <div className="option-group filter" id={name+'-filter'} key={name}>
@@ -320,7 +323,7 @@ var TextFilter = React.createClass({
                         disabled={disabled} 
                         onChange={this.textType} 
                         onFocus={this.setAutocomplete}
-                        value={this.state.text}
+                        value={textval}
                     >
                     </textarea>
                     

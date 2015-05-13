@@ -248,7 +248,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     var mapClick = function(e){
         var lat, lon, zoom,coords='';
         var popup = L.popup();
-        if(_.has(e.data,'lat')&&_.has(e.data,'lon')){
+        if(_.has(e.data,'lat') && _.has(e.data,'lon')){
             lat=e.data.lat;
             lon=e.data.lon;
         }else{

@@ -143,7 +143,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         }
     },
     defaultColumns: function(){
-        return ['genus','specificepithet','datecollected','collectioncode'];
+        return ['genus','specificepithet','datecollected','institutioncode'];
     },
     setColumns: function(columns){
         this.setState({columns: columns});
@@ -196,11 +196,11 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         //to prevent opening if hiliting text
         
         if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
-           window.open('/portal/records/'+e.currentTarget.id,'_blank'); 
+           window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id); 
         }
         
     },
-    setSortable: function(){
+    /*setSortable: function(){
         var self=this;
         $('#results-headers').sortable({
             update: function(event,ui){
@@ -219,7 +219,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
     },
     componentDidUpdate: function(){
         //this.setSortable();
-    },
+    },*/
     render: function(){
         var columns = this.state.columns,self=this;
      

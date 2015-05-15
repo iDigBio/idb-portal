@@ -192,7 +192,12 @@ var ResultsList = React.createClass({
     },
     openRecord: function(e){
         e.preventDefault();
-        window.open('/portal/records/'+e.currentTarget.id,'_blank');
+        e.stopPropagation();
+        //to prevent opening if hiliting text
+        if(window.getSelection().toString().length===0){
+           window.open('/portal/records/'+e.currentTarget.id,'_blank'); 
+        }
+        
     },
     setSortable: function(){
         var self=this;
@@ -276,9 +281,9 @@ var ResultsList = React.createClass({
                 tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
             })
             //add openrecord column
-            tds.push(<td key={'row-'+index+'-open'} className="open"><button id={item.uuid} onClick={self.openRecord} className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
+            tds.push(<td key={'row-'+index+'-open'} className="open"><button className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
             rows.push(
-                <tr key={'row-'+index} >
+                <tr key={'row-'+index} id={item.uuid} onClick={self.openRecord}>
                     {tds}
                 </tr>
             );

@@ -192,7 +192,12 @@ var ResultsList = React.createClass({displayName: "ResultsList",
     },
     openRecord: function(e){
         e.preventDefault();
-        window.open('/portal/records/'+e.currentTarget.id,'_blank');
+        e.stopPropagation();
+        //to prevent opening if hiliting text
+        if(window.getSelection().toString().length===0){
+           window.open('/portal/records/'+e.currentTarget.id,'_blank'); 
+        }
+        
     },
     setSortable: function(){
         var self=this;
@@ -276,9 +281,9 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
             })
             //add openrecord column
-            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {id: item.uuid, onClick: self.openRecord, className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
+            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
             rows.push(
-                React.createElement("tr", {key: 'row-'+index}, 
+                React.createElement("tr", {key: 'row-'+index, id: item.uuid, onClick: self.openRecord}, 
                     tds
                 )
             );

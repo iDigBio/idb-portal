@@ -194,7 +194,8 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         e.preventDefault();
         e.stopPropagation();
         //to prevent opening if hiliting text
-        if(window.getSelection().toString().length===0){
+        
+        if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
            window.open('/portal/records/'+e.currentTarget.id,'_blank'); 
         }
         

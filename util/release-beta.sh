@@ -42,8 +42,8 @@ do
         done
     fi
     script+="
-    cd /var/www/node/idb-portal/public/js/app; 
-    su -c 'browserify main.js -o ../app.js -t reactify' www-data; 
+    cd /var/www/node/idb-portal/public/client/js/; 
+    su -c 'browserify main.js -o ../../js/app.js -t reactify' www-data; 
     cd /var/www/node/idb-portal;
     "
     ssh root@idb-portal$i-beta.acis.ufl.edu $script

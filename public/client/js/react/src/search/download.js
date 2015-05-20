@@ -247,7 +247,7 @@ var Downloader = React.createClass({
                     var timehour = Math.floor(time / 3600);
                     var timemin = Math.floor(time / 60) % 60;
                     var timesec = (time % 60);
-                    state = {time: timehour + ':'+timemin+':'+timesec, disabled: false};
+                    state = {time: timehour + ' hrs '+timemin+' mins '+timesec+ ' secs', disabled: false};
                 }
                 self.setState(state);      
             }
@@ -293,7 +293,7 @@ var Downloader = React.createClass({
         return (
             <div className="sub">
                 <div id="downloader">
-                    <label>Download CSV</label> - <span>Approx. time: {this.state.time}</span>
+                    <label>Download CSV</label> - <span>Approx. build time: {this.state.time}</span>
                     <div className="input-group">
                         <span className="input-group-addon">Email</span>
                         <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={this.state.disabled}/>

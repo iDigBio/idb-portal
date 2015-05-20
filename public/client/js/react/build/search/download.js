@@ -247,7 +247,7 @@ var Downloader = React.createClass({displayName: "Downloader",
                     var timehour = Math.floor(time / 3600);
                     var timemin = Math.floor(time / 60) % 60;
                     var timesec = (time % 60);
-                    state = {time: timehour + ':'+timemin+':'+timesec, disabled: false};
+                    state = {time: timehour + ' hrs '+timemin+' mins '+timesec+ ' secs', disabled: false};
                 }
                 self.setState(state);      
             }
@@ -293,7 +293,7 @@ var Downloader = React.createClass({displayName: "Downloader",
         return (
             React.createElement("div", {className: "sub"}, 
                 React.createElement("div", {id: "downloader"}, 
-                    React.createElement("label", null, "Download CSV"), " - ", React.createElement("span", null, "Approx. time: ", this.state.time), 
+                    React.createElement("label", null, "Download CSV"), " - ", React.createElement("span", null, "Approx. build time: ", this.state.time), 
                     React.createElement("div", {className: "input-group"}, 
                         React.createElement("span", {className: "input-group-addon"}, "Email"), 
                         React.createElement("input", {id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 

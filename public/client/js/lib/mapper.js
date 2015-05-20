@@ -278,7 +278,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                     [dwc['dwc:scientificName'],n,'No Name']
                 )
                 
-                var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//beta-next.idigbio.org:19199/portal/records/'+item.uuid+'">View Record</a></b>'];
+                var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//beta-portal.idigbio.org/portal/records/'+item.uuid+'">View Record</a></b>'];
                 _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','datecollected'],function(term){
                     if(_.has(dwc,fields.byTerm[term].dataterm)){
                         inf.push(

@@ -45,7 +45,7 @@ module.exports = Sort = React.createClass({
         });
     },
     render: function(){
-        var sorts=[],self=this;
+        var sorts=[],self=this,disabled=false;
         var options = [], names=this.getSortNames();
         
         var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
@@ -110,10 +110,13 @@ module.exports = Sort = React.createClass({
                 )
             }
         })
+        if(sorts.length>=6){
+            disabled=true;
+        }
         return (
             <div className={"clearfix section "+this.props.active} id="sorting">
                 <div id="sort-add">
-                     Add a sort &nbsp;<button onClick={this.addClick}><span className="glyphicon glyphicon-plus"></span></button>
+                     Add a sort &nbsp;<button onClick={this.addClick} disabled={disabled}><span className="glyphicon glyphicon-plus"></span></button>
                 </div>
                 <div id="sort-group">
                     {sorts}

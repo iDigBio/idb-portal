@@ -45,7 +45,7 @@ module.exports = Sort = React.createClass({displayName: "Sort",
         });
     },
     render: function(){
-        var sorts=[],self=this;
+        var sorts=[],self=this,disabled=false;
         var options = [], names=this.getSortNames();
         
         var groups = ['taxonomy','specimen','collectionevent','locality','paleocontext'];
@@ -110,10 +110,13 @@ module.exports = Sort = React.createClass({displayName: "Sort",
                 )
             }
         })
+        if(sorts.length>=6){
+            disabled=true;
+        }
         return (
             React.createElement("div", {className: "clearfix section "+this.props.active, id: "sorting"}, 
                 React.createElement("div", {id: "sort-add"}, 
-                     "Add a sort  ", React.createElement("button", {onClick: this.addClick}, React.createElement("span", {className: "glyphicon glyphicon-plus"}))
+                     "Add a sort  ", React.createElement("button", {onClick: this.addClick, disabled: disabled}, React.createElement("span", {className: "glyphicon glyphicon-plus"}))
                 ), 
                 React.createElement("div", {id: "sort-group"}, 
                     sorts

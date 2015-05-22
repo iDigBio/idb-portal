@@ -4,7 +4,7 @@ var idbapi = require('../../../lib/idbapi');
 React.initializeTouchEvents(true);
 
 module.exports = Results =  React.createClass({
-
+    lastQueryStringed: '',
     getInitialState: function(){
         //this.getResults();
 
@@ -25,27 +25,38 @@ module.exports = Results =  React.createClass({
         and ensures that the last key press results in the proper set of results as responses can be out of 
         order*/
         this.getResults = _.debounce(function(){
-            //self.setState({results: []})
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
-            self.lastQueryTime = now;
-            //self.setState({loading: true});
-            idbapi.search(query,function(response){
-                if(now>= self.lastQueryTime){
-                    var res, more=false;
-                    if(searchState.from > 0){
-                        res = self.state.results.concat(response.items);
-                    }else{
-                        res = response.items;
-                    }
-                    if(response.itemCount > (searchState.from+searchState.size)){
-                        more=true;
-                    }
-                    self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
-                        self.forceUpdate();
-                    });
+            //constant passing of props forces many unncessary request. This cheap method checks
+            //see if there truely is a new query to run
+            if(JSON.stringify(query) !== self.lastQueryStringed){
+                //setting results to empty array forces
+                //spinner to show for new searches
+                if(searchState.from === 0){
+                    self.setState({results: [], loading: true})
                 }
-            })
+                self.lastQueryTime = now;
+                idbapi.search(query,function(response){
+                    if(now>= self.lastQueryTime){
+                        var res, more=false;
+                        if(searchState.from > 0){
+                            res = self.state.results.concat(response.items);
+                        }else{
+                            res = response.items;
+                        }
+                        if(response.itemCount > (searchState.from+searchState.size)){
+                            more=true;
+                        }
+                        self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
+                            self.forceUpdate();
+                        });
+                    }
+                })
+            }
+            
+            self.lastQueryStringed = JSON.stringify(query);
+
+
         },300,{leading: true, trailing: true});
     },
     componentDidMount: function(){
@@ -130,6 +141,7 @@ module.exports = Results =  React.createClass({
         )
     }
 });
+
 var sortClick=false;
 var ResultsList = React.createClass({
     

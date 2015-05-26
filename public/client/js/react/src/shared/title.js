@@ -6,6 +6,9 @@ var React = require('react');
 var _ = require('lodash');
 
 module.exports = Title = React.createClass({
+    click: function(e){
+        window.location="/portal/records/"+this.props.data.uuid
+    },
     render: function(){
         var title = '',info=[];
         //build title
@@ -25,10 +28,12 @@ module.exports = Title = React.createClass({
         info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
 
         return (
-            <h1 id="title" className="clearfix">
-                <em>{title}</em>
-                <span className="title-addition">
-                    {info.join(', ')}
+            <h1 id="title" className="clearfix" onClick={this.click}>
+                <span className="title">
+                    <em>{title}</em>
+                    <span className="title-addition">
+                        {info.join(', ')}
+                    </span>
                 </span>
             </h1>
         );       

@@ -6,6 +6,9 @@ var React = require('react');
 var _ = require('lodash');
 
 module.exports = Title = React.createClass({displayName: "Title",
+    click: function(e){
+        window.location="/portal/records/"+this.props.data.uuid
+    },
     render: function(){
         var title = '',info=[];
         //build title
@@ -25,10 +28,12 @@ module.exports = Title = React.createClass({displayName: "Title",
         info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
 
         return (
-            React.createElement("h1", {id: "title", className: "clearfix"}, 
-                React.createElement("em", null, title), 
-                React.createElement("span", {className: "title-addition"}, 
-                    info.join(', ')
+            React.createElement("h1", {id: "title", className: "clearfix", onClick: this.click}, 
+                React.createElement("span", {className: "title"}, 
+                    React.createElement("em", null, title), 
+                    React.createElement("span", {className: "title-addition"}, 
+                        info.join(', ')
+                    )
                 )
             )
         );       

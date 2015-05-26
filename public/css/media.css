@@ -1,3 +1,23 @@
+#title span.title {
+  margin: 10px 0px;
+  max-width: 1600px;
+  color: #666;
+  cursor: pointer;
+  font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 30px;
+}
+#title span.title .title-addition {
+  font-size: .65em;
+  margin: 0px 15px;
+  color: #999;
+}
+#title span.title:hover {
+  color: #6aaa51;
+}
+#title span.title:hover .title-addition {
+  color: #6aaa51;
+}
 h3 {
   color: #333;
   font-size: 1.63em;
@@ -25,25 +45,6 @@ h3 {
 }
 #container {
   margin-top: 20px;
-}
-#container #title {
-  margin: 10px 0px;
-  max-width: 1600px;
-  color: #666;
-  line-height: .7em;
-  font-weight: bold;
-  padding-bottom: 5px;
-  font-size: 30px;
-}
-#container #title .title-addition {
-  font-size: .65em;
-  margin: 0px 15px;
-  color: #999;
-}
-#container #title .authors {
-  font-size: .7em;
-  margin-left: 15px;
-  color: #999;
 }
 #data-container {
   max-width: 1600px;

@@ -371,17 +371,24 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
     }
 
     var circle = L.circle([0,0],5,{color: 'red',fill: 'red',opacity: 1, weight: 5});
-    
+    var rectangle = L.rectangle([[0,0],[0,0]], {color: "blue", weight: 1});
+    var hover;
     var mapHover = function(e){
         if(_.has(e,'data') && _.has(e.data,'lat')){ 
-            circle.addTo(self.map);
             //provide offset degree additive for fake world coords.
             var ad=Math.floor(Math.trunc(e.latlng.lng/180))*360;
             circle.setLatLng([e.data.lat,e.data.lon+ad]);
+            circle.addTo(self.map);
+            hover=circle;
+        }else{
+
+            //rectangle.setBounds([]);
+            rectangle.addTo(self.map);
+            hover=rectangle;
         }
     }
     var mapHoverout = function(e){
-        self.map.removeLayer(circle);
+        self.map.removeLayer(hover);
     }
     /*
     * iDBLayer and UTF8Grid interactions control and rendering with events

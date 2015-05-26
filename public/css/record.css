@@ -1,3 +1,23 @@
+#title span.title {
+  margin: 10px 0px;
+  max-width: 1600px;
+  color: #666;
+  cursor: pointer;
+  font-weight: bold;
+  padding-bottom: 5px;
+  font-size: 30px;
+}
+#title span.title .title-addition {
+  font-size: .65em;
+  margin: 0px 15px;
+  color: #999;
+}
+#title span.title:hover {
+  color: #6aaa51;
+}
+#title span.title:hover .title-addition {
+  color: #6aaa51;
+}
 h3 {
   color: #333;
   font-size: 1.63em;
@@ -35,24 +55,6 @@ body {
   max-width: 1600px;
   margin: 10px auto;
   padding: 10px;
-}
-#data-container .title {
-  color: #666;
-  font-weight: bold;
-  margin: 4px 0px;
-}
-#data-container #title {
-  margin: 10px 0px;
-  max-width: 1600px;
-  color: #666;
-  font-weight: bold;
-  padding-bottom: 5px;
-  font-size: 30px;
-}
-#data-container #title .title-addition {
-  font-size: .65em;
-  margin: 0px 15px;
-  color: #999;
 }
 #data-container #data-content {
   width: 65%;

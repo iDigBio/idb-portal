@@ -13,7 +13,7 @@ var SearchHistory = require('./js/lib/history');
 window.searchHistory = new SearchHistory;
 //window.React = require('react');
 require('../components/bootstrap/dist/js/bootstrap.min');
-
+require('../components/jquery.tablesorter/js/jquery.tablesorter.min');
 //$.fn.datetimepicker = require('eonasdan-bootstrap-datetimepicker/src/js/bootstrap-datetimepicker');
 require('es5-shim/es5-shim.min');
 require('es5-shim/es5-sham.min');

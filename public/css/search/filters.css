@@ -16,12 +16,10 @@
   color: #fdfdfd;
   font-weight: bold;
   padding: 4px;
+  cursor: pointer;
 }
 #filters #filter-scroller i {
   margin: 5px 10%;
-}
-#filters #filter-scroller:hover {
-  cursor: pointer;
 }
 #filters #filter-select {
   margin: 0px;

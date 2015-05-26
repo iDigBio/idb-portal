@@ -11,3 +11,16 @@
 .griddle-filter .row input {
   width: 206px;
 }
+#map {
+  margin-top: 20px;
+  width: 100%;
+  height: 450px;
+}
+div.map-popup label {
+  font-size: 12px;
+  font-weight: bold;
+}
+.multi {
+  max-height: 180px;
+  overflow: auto;
+}

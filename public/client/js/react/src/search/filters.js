@@ -61,9 +61,7 @@ module.exports = Filters = React.createClass({
         });
         //this.setState({filters: filters},function(){
             this.props.searchChange({
-                'filters': filters,
-                'image': false,
-                "geopoint": false
+                'filters': filters
             });
         //})
     },

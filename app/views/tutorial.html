@@ -25,9 +25,9 @@
       <div class="col-lg-6 col-lg-offset-2" style="text-align:justify;margin-top:16px;">
          <div style="margin:10px;">
         		<div style="background-color: #E5E5E5;border-bottom: 1px solid #FFFFFF;height: 1px;margin: 9px 1px;width:100%;"></div>
-            	<h4 id="introduction">Introduction</h4>
+            	<h3 id="introduction">Introduction</h3>
             	<p><u>The iDigBio specimen portal</u> (<em>https://www.idigbio.org/portal</em>) provides access to millions of records about neontological and paleontological specimens curated at museums and other institutions in the US. Records might include information about the specimen, when, where and by whom it was collected, the institution providing the data, and media related to the specimen (currently only images of the specimen or the specimen label are available). The main intent of this tutorial is to familiarize the user with the search capabilities of this portal.</p>
-              <h4 id="requirements" style="margin-top:30px;">Requirements</h4>
+              <h3 id="requirements" style="margin-top:30px;">Requirements</h3>
               <p>
                 The iDigBio Portal requires the use of an HTML5 compliant browser with cookies enabled. The Portal has been tested succesfully against the following browsers:<br>
                 <b>Chrome</b><br>
@@ -35,7 +35,7 @@
                 <b>Safari</b><br>
                 <b>Internet Explorer</b> 10,11<br>
               </p>
-            	<h4 id="navigating" style="margin-top:30px;">Portal Navigation</h4>
+            	<h3 id="navigating" style="margin-top:30px;">Portal Navigation</h3>
             	<p>The main features of the portal can be accessed through the <b>Green Menu Bar</b> <em>(Fig. 1)</em> near the top of the page.  The menu choices include links to the <em><b>iDigBio Home</b></em>, the <em><b>Portal Home</b></em> page, the <em><b>Search Records</b></em> page, <em><b>Tutorial</b></em> (this page), and <em><b>Feedback</b></em>, which are detailed next.</p>
               <div class="clearfix">
                 <figure id="fig1" >
@@ -75,30 +75,16 @@
           			  <img src="/portal/img/tutorial/search-form.png">
           		</figure>
             </div>
-        		<p>The <b>Advanced Search</b> section of the page <em>(Fig. 3)</em>, allows you to specify which fields to search and display (the <b>Table view</b> displays up to seven columns, depending on screen size).  The default list of search fields includes: family, scientific name, genus, country, and state/province.
-            </p>
+
+            <h4 id="filters" style="margin-top:30px;">Sorting Results</h4>
         		<p>
             <div class="clearfix">
           		<figure id="fig3" >
           	      <figcaption>Fig. 3</figcaption>
-          				<img src="/portal/img/tutorial/advanced.png" style="max-width:650px;">
+          				<img src="/portal/img/tutorial/sort-panel.png" style="max-width:650px;">
           		</figure>
             </div>
-        		You can add additional fields by selecting the desired field in the <b>Add a field</b> box <em>(Fig. 4)</em>, and reorder the fields by dragging the field box using the icon  or the field name (only fields that have been indexed by iDigBio are presented in this list, the Specimen Records might have additional fields that are currently not indexed). To remove a field, click the <b>x</b> icon on the top right corner of each field box. The <b>Sort by</b> box <em>(Fig. 5)</em> gives a choice of fields on which to sort the results, while the <b>Direction</b> box <em>(Fig. 6)</em> allows you to switch between ordering the results in an ascending (a-to-z) or descending (z-to-a) manner. Alternatively, you can click the column that you would like sorted in the results; a second click changes the direction of the sorting.</p>
-            <div class="clearfix">
-              <figure id="fig4">
-                  <figcaption>Fig. 4</figcaption>
-          		    <img src="/portal/img/tutorial/addTerm.png"> 
-              </figure>
-              <figure id="fig5">
-                  <figcaption>Fig. 5</figcaption>
-                  <img src="/portal/img/tutorial/sortBy.png">
-              </figure>
-              <figure id="fig6">
-                  <figcaption>Fig. 6</figcaption>
-                  <img src="/portal/img/tutorial/direction.png">
-              </figure>
-            </div> 
+        	  </p>
         		
 
         		<p>The individual search boxes offer to autocomplete with a prediction of your search criteria that is based on data already in the system <em>(Fig. 7)</em>. To return results, use the 
@@ -108,41 +94,36 @@
 
         		<p><b>Present</b> and <b>Missing</b> check boxes under each field refer to the presence or absence of data in the specified field for a record.
         		For example, if you want to find specimens identified only to genus, you can use this feature, and the search would be genus (check box <b>Present</b>), specific epithet (check box <b>Missing</b>). <em>(Fig. 8)</em></p> 
+
+            <h4>Adding map boundaries</h4>
+
             <div class="clearfix">
               <figure id="fig7" >
                   <figcaption>Fig. 7</figcaption>
-                  <img src="/portal/img/tutorial/genus.png"> 
+                  <img src="/portal/img/tutorial/mapping-panel.png"> 
               </figure>
-              <figure id="fig8" >
-                  <figcaption>Fig. 8</figcaption>
-                  <img src="/portal/img/tutorial/specificepithet.png">
-          		</figure>
             </div>
+
+            <p>Searching for georefenced specimens can be achieved by selecting the <b>Mapping</b> tab in the search form. This tab provides the ability to search within a rectangular set of bounds or within a radius from a given map point. The bounding corners display and use default global values for fields not filled. Searching for just the presence or absence of records with a geopoint can be achieved by using the <b>present</b> and <b>missing</b> checkboxes <em>(Fig. 11)</em>. 
+            </p>
+
         		<p style="margin-top:10px;">To restart or revise a search, use the <b>Reset</b> button <em>(Fig. 10)</em> or use the <b>Clear</b> button to simply clear the text boxes and check boxes on screen. To go back to a previous search, look up your history of queries under the <b>Query</b> drop-down box <em>(Fig. 9)</em>. Not sure you can remember everything? The <b>Tips & Hints</b> link <em>(Fig. 10)</em> can give you short reminders. </p>
+            
+            <h4>Downloading results and search history</h4>
             <div class="clearfix">
               <figure id="fig9">
                   <figcaption>Fig. 9</figcaption>
-                  <img src="/portal/img/tutorial/history2.png"> 
-              </figure>
-              <figure id="fig10" >
-                  <figcaption>Fig. 10</figcaption>
-                  <img src="/portal/img/tutorial/searchTips.png">		
+                  <img src="/portal/img/tutorial/download-panel.png"> 
               </figure>
             </div>
+            <p>The <em>Download</em> tab allows you to obtain all the record data in the current search query in Darwin Core Archive (DwC-A) format. You must provide a valid email address in the Email input box in order to run the download. An email is required so a link to the DwC-A file can be sent to you should you run another query or navigate away from the <b>Search Records</b> page. The Approx. Build Time provides a rough calculation of the time it will take to generate the DwC-A. Once you click the download button, your download will appear in the <em>Available Downloads</em> box with a status of "pending". Once your download is ready, a link to the download will replace the "pending" status.</p>
 
-            <h4 id="georeferenced" style="margin-top:30px;">Georeferenced Searches</h4>
-            <p>Searching for georefenced specimens can be achieved by selecting the <b>Latitude/Longitude Bounds</b> field in the <b>Add a field</b> select box <em>(Fig. 4)</em>. This field provides the ability to search within a rectangular set of bounds by supplying latitude and longitude points for the northwest and southeast corners of the bounding box <em>(Fig. 11)</em>. The bounding corners display and use default global values for fields not filled. Searching for just the presence or absence of records with a geopoint can be achieved by using the <b>present</b> and <b>missing</b> checkboxes <em>(Fig. 11)</em>. 
+            <p>A Darwin Core Archive is a zip file that includes one or more text CSV (comma separated value) files, each with a .txt extension and a descriptor (meta.xml) that contains metadata about the data set that you downloaded (e.g., who provided the data and the format).  A data download that has images or other media associated with it will have two CSV files, one for specimen data and the other describing the media.  The CSV file can be opened by any text editor or can be imported into a database or spreadsheet.  A modestly sized download (100,000 records) can be readily opened in software like MS Excel.  The easiest way to open a CSV file with Excel is to change the .txt extension to .csv before you open the file.  
             </p>
-            <div class="clearfix">
-              <figure id="fig11" >
-                  <figcaption>Fig. 11</figcaption>
-                  <img src="/portal/img/tutorial/geobounds.png">   
-              </figure>
-            </div>
 
-        		<h4 id="viewing" style="margin-top:30px;">Viewing Search Results</h4>
+        		<h3 id="viewing" style="margin-top:30px;">Viewing Results</h3>
 
-        		<p><b>Current Results</b> displays your current and previous searches, the number of records returned, and an option to download a CSV (comma separated value) file of the results.  The formatted results can be displayed in <b>Table view</b>, <b>Label view</b> or the <b>Images</b> gallery. The <b>Table view</b> allows you to display up to seven columns (depending on your screen size).  The <b>Label view</b> displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record.</p> 
+        		<p>Results data are displayed belowe the search form and mapped results sections. This section displays the total number of results matching search criteria and gives you three options for formatting the results.  The formatted results can be displayed in <b>Table view</b>, <b>Label view</b> or the <b>Images</b> gallery. The <b>Table view</b> allows you to display any number of columns of DWC data that are searchable in iDigBio. The right side of the Table view headers provides a configuration button that allows you to select which columns are viewable in the table. The <b>Label view</b> displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record.</p> 
 
         		<p>Clicking on a single row of the table or a single label presents the a complete specimen record page <em>(Fig. 12)</em>, including all specimen data, any associated media if available and a map with the location where the specimen and similar specimens were collected (if georeferenced). Clicking on the image in the 
             specimen page allows you to access the full-size image as well as metadata about the image. You can go back to the specimen information, using the <b>Go To Specimen Record</b> link, under the smaller version of the image.</p>
@@ -161,9 +142,9 @@
               </figure>
             </div>
 
-            <h4 id="map" style="margin-top:30px;">Georeferenced Results</h4>
+            <h4 id="map" style="margin-top:30px;">Mapped Results</h4>
 
-            <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the small map visualization near the top of the search page.  You can pan and zoom within this “maplet.”  The button in the top right corner is a toggle between the maplet and a full-size version that fills your browser window.  The visualization shows a heat map <em>(Fig. 14)</em> when the area displayed represents more than 5,000 records; the color of the square cells indicates density of specimen occurrences and corresponds to the legend.  The size of the cells is dependent on your zoom level.  Clustered points with record counts are displayed when there are less then 5,000 records and multipled points occur in or close to the same location on the map. Individual points are shown when the displayed area encompasses 5,000 records or less <em>(Fig. 15)</em>.  You can view summary data by clicking on individual points.   Clicking on the taxon name in the summary pop-up will open a new page for the full specimen record.  The full-size map has a second button in the top right that allows you to specify a zoom area by drawing a rectangle around your area of interest.</p>
+            <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the map view.  You can pan and zoom within the map. You can also draw a boundry to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary. The button in the top right corner is a toggle between the regular and a full-size version that fills your browser window. The map displays results in two styles depending on the number of mapped results. When the mapped results has more than 100,000 points the results will be displayed as a geohashed heat map. When the mapped results are a 100,000 or less, the results are displayed as individual color coded points. Color coded points are displayed as such to disguish between different taxa. The map legend in the lower left corner displays the color to taxa labeling of the top 10 taxa in the results (all other taxa are displayed with a brown colored point by default). Both the heat map and point displays allow you to click on them to display the results in a pop-up box in the location you clicked. In the case of the heat map, the results will be all records with in the boundary of the geohash box you click. In the case of clicking a point the results displayed will be all those that fall within a radius of the point you click (the radius length varies depending on the zoom level of the map).  The results pop-up box also provides a <i>Set Map Bounds</i> button. This feature allows you to set the <em>Mapping</em> tab boundaries to the same parameters used to retrieve the results in the pop-up box and as a results will set all results views to display only those results within those boundaries.</p>
 
             <div class="clearfix">
               <figure id="fig13"  style="float:left;margin:20px;" >
@@ -176,18 +157,7 @@
               </figure>
             </div>
 
-            <h4 id="downloading" style="margin-top:30px;">Downloading Search Results</h4>
 
-            <p>Below the <b>Query</b> drop-down box <em>(Fig. 9)</em> is the results <b>Download</b> feature <em>(Fig. 16)</em>. This feature allows you to obtain all the record data in the current search query in Darwin Core Archive (DwC-A) format. You must provide a valid email address in the Email input box in order to run the download. An email is required so a link to the DwC-A file can be sent to you should you run another query or navigate away from the <b>Search Records</b> page. The Approx. Download Time provides a rough calculation of the time it will take to generate the DwC-A. Once your download is ready, the time estimate is replaced with a link to the download.</p>
-
-            <p>A Darwin Core Archive is a zip file that includes one or more text CSV (comma separated value) files, each with a .txt extension and a descriptor (meta.xml) that contains metadata about the data set that you downloaded (e.g., who provided the data and the format).  A data download that has images or other media associated with it will have two CSV files, one for specimen data and the other describing the media.  The CSV file can be opened by any text editor or can be imported into a database or spreadsheet.  A modestly sized download (100,000 records) can be readily opened in software like MS Excel.  The easiest way to open a CSV file with Excel is to change the .txt extension to .csv before you open the file.  
-            </p>
-            <div class="clearfix">
-              <figure id="fig15" >
-                  <figcaption>Fig. 16</figcaption>          
-                  <img src="/portal/img/tutorial/download.png"> 
-              </figure>
-            </div>
         </div>
       </div>
       <div id="tutorial-nav" class="col-lg-2" style="text-align:left;">

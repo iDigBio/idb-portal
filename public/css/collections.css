@@ -4,11 +4,11 @@
 .griddle-body table thead tr th {
   text-align: left;
 }
-.griddle-filter .row {
+.griddle-filter .filter-container {
   margin-left: 0px;
   margin-bottom: 10px;
 }
-.griddle-filter .row input {
+.griddle-filter .filter-container input {
   width: 206px;
 }
 #map {

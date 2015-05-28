@@ -4,7 +4,7 @@
 var idbapi = require('./lib/idbapi');
 
 var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
-var kingdomColor={'plantae': '#6aaa51','fungi':'#d3b833' ,'chromista': '#3782cd','animalia': '#cf7a0b', 'protozoa': '#DD5656' },colorsIndex=0;
+var kingdomColor={'plantae': '#6aaa51','fungi':'#d3b833' ,'chromista': '#cf7a0b','animalia': '#3782cd', 'protozoa': '#DD5656' },colorsIndex=0;
 var setGetColor = function(kingdom){
     if(_.isUndefined(colors[colorsIndex])){
         colorsIndex=0;

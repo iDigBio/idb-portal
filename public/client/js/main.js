@@ -4,11 +4,7 @@
 *****/
 "use strict"
 
-//DEV SETTING
-    //localStorage.clear();
-//
-$(document).ready(function(){
-	var path = url(1) == 'portal' ? url(2) : url(1);
+function loadPage(path){
 	switch(path){
 		case '':
 			require('./home');
@@ -38,5 +34,20 @@ $(document).ready(function(){
 				require('./collections');
 			}
 			break;
+	}
+}
+
+$(document).ready(function(){
+	//try once to clear localStore and refresh if errors occur;
+	try{
+		var path = url(1) == 'portal' ? url(2) : url(1);
+		loadPage(path);
+		localStorage.removeItem('reloaded');
+	}catch(e){
+		if(typeof localStorage !== undefined && localStorage.getItem('reloaded') === null){
+			localStorage.clear();
+			localStorage.setItem('reloaded','true');
+			location.reload();
+		}
 	}
 });	

@@ -3,8 +3,18 @@
 //var HomePage = React.createFactory(require('./react/build/home'));
 var idbapi = require('./lib/idbapi');
 
-var colors = ['#cf7a0b','#3782cd','#d3b833','#6aaa51','#ED475A','#A7EC7C','#56E4F4'];
-
+var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
+var kingdomColor={'plantae': '#6aaa51','fungi':'#d3b833' ,'chromista': '#3782cd','animalia': '#cf7a0b', 'protozoa': '#DD5656' },colorsIndex=0;
+var setGetColor = function(kingdom){
+    if(_.isUndefined(colors[colorsIndex])){
+        colorsIndex=0;
+    }
+    if(_.isUndefined(kingdomColor[kingdom])){
+        kingdomColor[kingdom]=colors[colorsIndex];
+        colorsIndex++;
+    }
+    return kingdomColor[kingdom];
+};
 var record = {"rq":{"kingdom":{"type":"exists"}},"top_fields": ["kingdom"]};
 idbapi.summary('top/records/',record,function(response){
     var kingdoms = {
@@ -12,15 +22,31 @@ idbapi.summary('top/records/',record,function(response){
         "ichnofossil": "other",
         "taxon indet.": "other"
     }
-    var king=[],other=['other'];
+    var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
         if(_.isUndefined(kingdoms[k])){
             king.push([k,v.itemCount]);
+            
         }else{
             other.push(v.itemCount)
         }
     })
     king.push(other);
+    king.sort(function(a,b){
+        if (a[1] > b[1]) {
+            return -1;
+        }
+        if (a[1] < b[1]) {
+            return 1;
+        }
+
+        // a must be equal to b
+        return 0;
+    });
+    king.forEach(function(item){
+        colorOrder.push(setGetColor(item[0]));
+    });
+
     var chart = c3.generate({
         data:{
             columns: king,
@@ -40,7 +66,7 @@ idbapi.summary('top/records/',record,function(response){
             }
         },
         color:{
-            pattern: colors
+            pattern: colorOrder
         },
         size:{
             height:280
@@ -58,15 +84,30 @@ idbapi.summary('top/records/',media,function(response){
         "monocotyledonae": "other",
         "pteridophyta": "other"
     }
-    var king=[],other=['other'];
+    var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
         if(_.isUndefined(kingdoms[k])){
             king.push([k,v.itemCount]);
         }else{
             other.push(v.itemCount)
         }
-    })
+    });
     king.push(other);
+    king.sort(function(a,b){
+        if (a[1] > b[1]) {
+            return -1;
+        }
+        if (a[1] < b[1]) {
+            return 1;
+        }
+        // a must be equal to b
+        return 0;
+    });
+    
+    king.forEach(function(item){
+        colorOrder.push(setGetColor(item[0]));
+    });
+    
     var chart = c3.generate({
         data:{
             columns: king,
@@ -79,7 +120,7 @@ idbapi.summary('top/records/',media,function(response){
         },
         bindto:'#media-chart',
         color:{
-            pattern: colors
+            pattern: colorOrder
         },
         size:{
             height:280

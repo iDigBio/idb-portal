@@ -67,7 +67,8 @@ module.exports = Provider = React.createClass({
         var data = this.props.data;
         if(_.has(data,'name')){
             rows.push(
-                <div key="title" className="title">{data.name}</div>
+                <div key="title" className="title">
+                    <a href={"/portal/recordsets/"+data.uuid}>{data.name}</a></div>
             )
         }
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){

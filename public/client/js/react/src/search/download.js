@@ -303,7 +303,7 @@ var Downloader = React.createClass({
                     </div>
                 </div>
                 <div id="downloads-section" className="clearfix">
-                    <label>Available Downloads</label>
+                    <label>Downloads</label>
                     <table id="download-header">
                         <thead>
                             <tr><th className="title">Search</th><th className="status">Status</th></tr>

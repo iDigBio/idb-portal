@@ -67,7 +67,8 @@ module.exports = Provider = React.createClass({displayName: "Provider",
         var data = this.props.data;
         if(_.has(data,'name')){
             rows.push(
-                React.createElement("div", {key: "title", className: "title"}, data.name)
+                React.createElement("div", {key: "title", className: "title"}, 
+                    React.createElement("a", {href: "/portal/recordsets/"+data.uuid}, data.name))
             )
         }
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){

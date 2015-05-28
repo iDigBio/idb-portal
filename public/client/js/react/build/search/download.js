@@ -303,7 +303,7 @@ var Downloader = React.createClass({displayName: "Downloader",
                     )
                 ), 
                 React.createElement("div", {id: "downloads-section", className: "clearfix"}, 
-                    React.createElement("label", null, "Available Downloads"), 
+                    React.createElement("label", null, "Downloads"), 
                     React.createElement("table", {id: "download-header"}, 
                         React.createElement("thead", null, 
                             React.createElement("tr", null, React.createElement("th", {className: "title"}, "Search"), React.createElement("th", {className: "status"}, "Status"))

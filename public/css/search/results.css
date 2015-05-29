@@ -47,9 +47,24 @@
 }
 #results #result-list .modal-dialog {
   z-index: 3050;
+  width: 70%;
+  margin: 20px auto;
+}
+@media (max-width: 992px) {
+  #results #result-list .modal-dialog {
+    width: 70%;
+  }
+}
+@media (max-width: 600px) {
+  #results #result-list .modal-dialog {
+    width: 80%;
+  }
 }
 #results #result-list #column-list table {
+  float: left;
   width: 210px;
+  margin-bottom: 20px;
+  clear: none;
 }
 #results #result-list #column-list table tr {
   height: 20px;

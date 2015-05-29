@@ -318,7 +318,8 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         //fgroups.push(<option value="0">select a field</option>);
 
         _.each(fields.searchGroups,function(val){
-            list.push(
+            var group = [];
+            group.push(
                 React.createElement("tr", {key: val}, React.createElement("td", {className: "bold"}, fields.groupNames[val]))
             )
             _.each(fields.byGroup[val],function(field){
@@ -332,7 +333,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                             disabled=true;
                         }
                     }
-                    list.push(
+                    group.push(
                         React.createElement("tr", {key: 'column-select-'+field.term}, 
                             React.createElement("td", null, 
                                 React.createElement("label", null, 
@@ -343,6 +344,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                     )
                 }
             });
+            list.push(React.createElement("table", {className: "group-table"}, group))
         });
 
         return(
@@ -359,10 +361,10 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                                     React.createElement("span", {"aria-hidden": "true"}, "×")
                                 )
                             ), 
-                            React.createElement("div", {className: "modal-body"}, 
-                                React.createElement("table", null, 
+                            React.createElement("div", {className: "modal-body clearfix"}, 
+                                
                                     list
-                                )
+                                
                             ), 
                             React.createElement("div", {className: "modal-footer"}
 

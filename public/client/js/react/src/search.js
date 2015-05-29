@@ -130,13 +130,14 @@ var SearchAny = React.createClass({
             <div id="search-any" className="clearfix">
                 <h3>
                     <img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching
-                    <a className="btn btn-lg pull-right" title="help" data-toggle="modal" data-target="#search-help">
+
+                    <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
+                    <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">
                         <i className="glyphicon glyphicon-question-sign"></i>
                     </a>
                 </h3>
-                <div className="input-group">
+                <div >
                     <input type="text" className="form-control" placeholder="search all fields" onChange={this.textType} value={this.props.search.fulltext}/>
-                    <a className="btn input-group-addon" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
                 </div>
                 <div className="checkbox">
                     <label>

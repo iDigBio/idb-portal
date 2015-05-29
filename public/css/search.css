@@ -278,9 +278,24 @@
 }
 #results #result-list .modal-dialog {
   z-index: 3050;
+  width: 70%;
+  margin: 20px auto;
+}
+@media (max-width: 992px) {
+  #results #result-list .modal-dialog {
+    width: 70%;
+  }
+}
+@media (max-width: 600px) {
+  #results #result-list .modal-dialog {
+    width: 80%;
+  }
 }
 #results #result-list #column-list table {
+  float: left;
   width: 210px;
+  margin-bottom: 20px;
+  clear: none;
 }
 #results #result-list #column-list table tr {
   height: 20px;
@@ -650,6 +665,16 @@
     height: 75px;
   }
 }
+@media (max-width: 992px) {
+  #download #downloads-section #downloads-available {
+    height: 55px;
+  }
+}
+@media (max-width: 600px) {
+  #download #downloads-section #downloads-available {
+    height: 75px;
+  }
+}
 #download #downloads-section table {
   border-top: 1px solid #cccccc;
   width: 100%;
@@ -999,6 +1024,9 @@ input::-webkit-input-placeholder {
 }
 #search .checkbox:first-of-type {
   padding-left: 40px;
+}
+#search a#reset-button {
+  color: #9D0C0C;
 }
 #options {
   width: 100%;

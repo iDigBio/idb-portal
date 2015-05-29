@@ -56,10 +56,22 @@
     #result-list{
         .modal-dialog{
             z-index: 3050;
+            width:70%;
+            @media(max-width: @screenmed){
+                width:70%;
+            }
+            @media(max-width: @screensmall){
+                width:80%;
+            }
+            margin:20px auto;
         }
         #column-list{
             table{ 
+                float:left;
                 width:210px;
+                margin-bottom:20px;
+                clear:none;
+             
                 tr{
                     height:20px;
                 }

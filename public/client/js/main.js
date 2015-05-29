@@ -4,7 +4,8 @@
 *****/
 "use strict"
 
-function loadPage(path){
+function loadPage(){
+	var path = url(1) == 'portal' ? url(2) : url(1);
 	switch(path){
 		case '':
 			require('./home');
@@ -38,16 +39,19 @@ function loadPage(path){
 }
 
 $(document).ready(function(){
-	//try once to clear localStore and refresh if errors occur;
+	//if errors occur on page load try once to clear localStore and refresh
 	try{
-		var path = url(1) == 'portal' ? url(2) : url(1);
-		loadPage(path);
+		loadPage();
 		localStorage.removeItem('reloaded');
 	}catch(e){
-		if(typeof localStorage !== undefined && localStorage.getItem('reloaded') === null){
-			localStorage.clear();
-			localStorage.setItem('reloaded','true');
-			location.reload();
+		if(typeof localStorage !== undefined){
+			if(localStorage.getItem('reloaded') === null){
+				localStorage.clear();
+				localStorage.setItem('reloaded','true');
+				location.reload();
+			}else{
+				localStorage.removeItem('reloaded');
+			}
 		}
 	}
 });	

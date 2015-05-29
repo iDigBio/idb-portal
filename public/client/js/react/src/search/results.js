@@ -318,7 +318,8 @@ var ResultsList = React.createClass({
         //fgroups.push(<option value="0">select a field</option>);
 
         _.each(fields.searchGroups,function(val){
-            list.push(
+            var group = [];
+            group.push(
                 <tr key={val}><td className="bold">{fields.groupNames[val]}</td></tr>
             )
             _.each(fields.byGroup[val],function(field){
@@ -332,7 +333,7 @@ var ResultsList = React.createClass({
                             disabled=true;
                         }
                     }
-                    list.push(
+                    group.push(
                         <tr key={'column-select-'+field.term}>
                             <td>
                                 <label>
@@ -343,6 +344,7 @@ var ResultsList = React.createClass({
                     )
                 }
             });
+            list.push(<table className="group-table">{group}</table>)
         });
 
         return(
@@ -359,10 +361,10 @@ var ResultsList = React.createClass({
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div className="modal-body">
-                                <table>
+                            <div className="modal-body clearfix">
+                                
                                     {list}
-                                </table>
+                                
                             </div>
                             <div className="modal-footer">
 

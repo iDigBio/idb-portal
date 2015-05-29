@@ -278,12 +278,16 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 var val;
                 if(_.isUndefined(fields.byTerm[name].dataterm)){
                     val = helpers.check(item.indexTerms[name]);
+                }else if( _.isUndefined(fields.byTerm[name].dataterm) === false && _.isUndefined(item.indexTerms[name]) === false && _.isUndefined(item.data[fields.byTerm[name].dataterm])){
+                    val = helpers.check(item.indexTerms[name]);
                 }else{
                     val = helpers.check(item.data[fields.byTerm[name].dataterm]);
                 }
 
                 if(_.isEmpty(val)){
                     val = React.createElement("span", {className: "no-data"}, "no data");
+                }else if(name!=='specificepithet'){
+                    val = helpers.firstToUpper(val);
                 }
 
                 /*if(columns.length-1 === ind){

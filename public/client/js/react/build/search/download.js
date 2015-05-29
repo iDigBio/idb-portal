@@ -293,7 +293,7 @@ var Downloader = React.createClass({displayName: "Downloader",
         return (
             React.createElement("div", {className: "sub"}, 
                 React.createElement("div", {id: "downloader"}, 
-                    React.createElement("label", null, "Download CSV"), " - ", React.createElement("span", null, "Approx. build time: ", this.state.time), 
+                    React.createElement("label", null, "Download CSV"), " - ", React.createElement("span", null, "Build time: ", this.state.time), 
                     React.createElement("div", {className: "input-group"}, 
                         React.createElement("span", {className: "input-group-addon"}, "Email"), 
                         React.createElement("input", {id: "email", type: "email", className: "form-control email", placeholder: "enter an email to download", disabled: this.state.disabled}), 

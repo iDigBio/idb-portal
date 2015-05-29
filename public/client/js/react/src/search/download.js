@@ -293,7 +293,7 @@ var Downloader = React.createClass({
         return (
             <div className="sub">
                 <div id="downloader">
-                    <label>Download CSV</label> - <span>Approx. build time: {this.state.time}</span>
+                    <label>Download CSV</label> - <span>Build time: {this.state.time}</span>
                     <div className="input-group">
                         <span className="input-group-addon">Email</span>
                         <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={this.state.disabled}/>

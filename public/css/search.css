@@ -665,16 +665,6 @@
     height: 75px;
   }
 }
-@media (max-width: 992px) {
-  #download #downloads-section #downloads-available {
-    height: 55px;
-  }
-}
-@media (max-width: 600px) {
-  #download #downloads-section #downloads-available {
-    height: 75px;
-  }
-}
 #download #downloads-section table {
   border-top: 1px solid #cccccc;
   width: 100%;

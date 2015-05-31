@@ -68,7 +68,7 @@ module.exports = Results =  React.createClass({displayName: "Results",
         //debugger
         //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
        // if(isNewSearch){
-            this.setState({search: _.cloneDeep(nextProps.search), loading: true},function(){
+            this.setState({search: _.cloneDeep(nextProps.search), results: [], loading: true},function(){
                 this.forceUpdate();
                 this.getResults(this.state.search); 
             });

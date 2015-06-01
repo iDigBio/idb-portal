@@ -40,11 +40,10 @@ module.exports = (function(){
             var sort=[];
             search.sorting.forEach(function(item){
                 var s={}
-          
                 if(!_.isEmpty(item.name)){
                     s[item.name] = item.order;
+                    sort.push(s);
                 }
-                sort.push(s);
             });
             if(!_.isEmpty(sort)){
                 query.sort = sort;
@@ -289,11 +288,11 @@ module.exports = (function(){
             params["rq"] = this.buildQueryShim(search);
             var sort=[];
             search.sorting.forEach(function(item){
-                var s={}
                 if(!_.isEmpty(item.name)){
+                    var s = {};                
                     s[item.name] = item.order;
+                    sort.push(s);
                 }
-                sort.push(s);
             });
             if(!_.isEmpty(sort)){
                 params["sort"] = sort;

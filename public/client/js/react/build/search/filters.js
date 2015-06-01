@@ -139,14 +139,12 @@ module.exports = Filters = React.createClass({displayName: "Filters",
                         React.createElement("option", {value: "0", defaultValue: true, className: "default"}, "Add a field"), 
                         fgroups
                     ), 
-                    React.createElement("a", {className: "btn", onClick: this.clearFilters}, 
+                    React.createElement("a", {className: "btn", onClick: this.clearFilters, title: "Clear all filter inputs"}, 
                         "Clear"
                     )
                 ), 
                 React.createElement("div", {id: "filters-holder", className: "options-holder"}, 
-       
-                        filters
-                
+                    filters
                 ), 
                 React.createElement("div", {id: "filter-scroller", onClick: this.scrollFilters}, 
                     React.createElement("span", {style: {'display': scrollDisplay}}, 

@@ -25,6 +25,7 @@ module.exports = Results =  React.createClass({
         and ensures that the last key press results in the proper set of results as responses can be out of 
         order*/
         this.getResults = _.debounce(function(){
+         
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
             //constant passing of props forces many unncessary request. This cheap method checks
@@ -32,6 +33,7 @@ module.exports = Results =  React.createClass({
             if(JSON.stringify(query) !== self.lastQueryStringed){
                 //setting results to empty array forces
                 //spinner to show for new searches
+                //THESE state change tricks should not happen anywhere else
                 if(searchState.from === 0){
                     self.setState({results: [], loading: true})
                 }
@@ -68,7 +70,7 @@ module.exports = Results =  React.createClass({
         //debugger
         //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
        // if(isNewSearch){
-            this.setState({search: _.cloneDeep(nextProps.search), results: [], loading: true},function(){
+            this.setState({search: _.cloneDeep(nextProps.search)},function(){
                 this.forceUpdate();
                 this.getResults(this.state.search); 
             });

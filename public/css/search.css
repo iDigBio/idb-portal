@@ -376,17 +376,17 @@
   padding: 10px;
 }
 #results #result-labels .result-label {
-  width: 19.55%;
-  height: 98px;
+  position: relative;
+  width: 24.55%;
+  height: 150px;
   overflow: hidden;
-  border: 1px solid #bbb;
-  border-radius: 3px;
+  border: 4px double #bbb;
+  border-radius: 1px;
   -webkit-border-radius: 3px;
   -moz-border-radius: 3px;
   background-color: #f5f5f5;
-  margin: 2px;
-  padding: 3px 5px;
-  text-shadow: 0px 1px 0px #fff;
+  margin: 4px;
+  padding: 3px 8px;
   /*webkit only */
   display: -webkit-box;
   -webkit-line-clamp: 7;
@@ -406,16 +406,47 @@
   cursor: pointer;
   background-color: #e5e5e5;
 }
-#results #result-labels .result-label p {
-  margin-top: 1px;
+#results #result-labels .result-label h5.title {
+  font-weight: bold;
+  display: inline-block;
+  max-width: 60%;
+  font-style: italic;
+  margin: 2px;
+  paddding: 6px;
+}
+#results #result-labels .result-label h5.title .author {
+  font-style: normal;
+  color: #666;
+}
+#results #result-labels .result-label h5.family {
+  font-color: #333;
+  font-size: .9em;
+  position: absolute;
+  right: 10px;
+  top: 5px;
+  margin: 2px;
+  padding: 0px;
+  font-weight: bold;
+}
+#results #result-labels .result-label .content {
+  margin-top: 5px;
   line-height: 1.19em;
   font-size: .85em;
   height: 102px;
+  max-width: 70%;
+}
+#results #result-labels .result-label .content span {
+  font-weight: normal;
+  display: inline-block;
+  margin: 2px;
+  float: left;
+  clear: both;
 }
 #results #result-labels .result-label .image-wrapper {
-  position: relative;
-  float: right;
-  display: inline-block;
+  position: absolute;
+  right: 5px;
+  top: 25px;
+  margin-top: 5px;
 }
 #results #result-labels .result-label .image-wrapper .image-count {
   font-size: .8em;
@@ -432,8 +463,8 @@
 }
 #results #result-labels .result-label .image-wrapper img {
   margin: 3px 5px;
-  max-height: 78px;
-  max-width: 78px;
+  max-height: 98px;
+  max-width: 98px;
   /*box-shadow:1px 1px 0px #bbb;
                     -webkit-box-shadow:1px 1px 0px #bbb;
                     -moz-box-shadow:1px 1px 0px #bbb;*/

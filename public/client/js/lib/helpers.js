@@ -100,5 +100,9 @@ var helpers = module.exports = {
             }
         }
         return out;
-    }       
+    },   
+
+    convertDecimalDegrees: function(D){
+        return [0|D, '&deg;', 0|(D<0?D=-D:D)%1*60, "' ", 0|D*60%1*60, '"'].join('');
+    }    
 }     

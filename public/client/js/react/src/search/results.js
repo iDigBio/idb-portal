@@ -396,7 +396,54 @@ var ResultsLabels = React.createClass({
         var data = result.indexTerms, raw = result.data;
         var txt = '';
         var content=[];
-        if(typeof data.scientificname == 'string') { 
+        var title = '',info=[];
+        //build title
+        //var index = this.props.data.indexTerms, data=this.props.data.data;
+        if(_.has(data,'scientificname')) { 
+            title = _.capitalize(data['scientificname']);
+        }else if(_.has(data, 'genus')){
+            title = _.capitalize(data['genus']);
+            if(_.has(data, 'specificepithet')){
+                title += ' '+data['specificepithet'];
+            }
+        }
+        if(_.isEmpty(title)){
+            title = <em>No Name</em>;
+        } 
+        var auth='';
+        if(_.has(raw, 'dwc:scientificNameAuthorship')){
+            auth = <span className="author">{raw['dwc:scientificNameAuthorship']}</span>;
+        }
+
+        var family='';
+        if(_.has(data,'family')){
+            family= _.capitalize(data.family);
+        }
+        if(_.has(raw, 'dwc:eventDate')){
+            content.push(<span className="date">{raw['dwc:eventDate']}</span>);
+        }
+         var l=[];
+        ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
+            if(_.has(raw,item)){
+                l.push(raw[item])
+            }
+        })
+        if(l.length>0){
+            content.push(<span className="locality">{l.join(', ')}</span>);
+        }
+        if(_.has(data, 'geopoint')){
+            content.push(<span className="geopoint" dangerouslySetInnerHTML={{__html: 'Lat: '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ ' Lon: '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
+        }
+        var c=[];
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
+            if(_.has(raw,item)){
+                c.push(raw[item])
+            }
+        })
+        if(c.length>0){
+            content.push(<span className="collection">{c.join(', ')}</span>)
+        }
+        /*if(typeof data.scientificname == 'string') { 
             txt += helpers.check(raw["dwc:scientificName"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
             content.push(
                 <em>
@@ -423,9 +470,9 @@ var ResultsLabels = React.createClass({
             )
         } 
 
-  
+  */
         if( data.hasImage ){ 
-            var imgcount;
+            var imgcount,img;
             if(data.mediarecords.length > 1){ 
                 imgcount = (
                     <span className="image-count">
@@ -435,7 +482,7 @@ var ResultsLabels = React.createClass({
             }else{
                 imgcount = <span/>;
             } 
-            content.push(
+            img = (
                 <span key={'media-'+result.uuid+this.props.stamp} className="image-wrapper">
                     {imgcount}
                     <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"} /> 
@@ -443,7 +490,9 @@ var ResultsLabels = React.createClass({
             )
      
          } 
-        var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
+
+
+        /*var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
 
         var para = []
         _.each(terms,function(term){
@@ -461,15 +510,18 @@ var ResultsLabels = React.createClass({
         var out = clean.join(', ');
         if ((txt+out).length > 255) {
             out = out.substring(0, out.length-txt.length);// + ' ...';
-        }
+        }*/
       
         return (
             <div key={'label-'+id} id={result.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
-                <p>
-                   {content}
-                    <span style={{lineHeight: '1em', fontSize:'1em'}}>
-                        &nbsp;{out}
-                    </span>     
+                <h5 className="title">{title}&nbsp;{auth}</h5>
+                <h5 className="family">{family}</h5>
+                {img}
+                <p className="content">
+                    
+
+                    {content}
+                      
                 </p>
             </div>
         )

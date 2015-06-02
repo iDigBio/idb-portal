@@ -396,36 +396,83 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
         var data = result.indexTerms, raw = result.data;
         var txt = '';
         var content=[];
-        if(typeof data.scientificname == 'string') { 
+        var title = '',info=[];
+        //build title
+        //var index = this.props.data.indexTerms, data=this.props.data.data;
+        if(_.has(data,'scientificname')) { 
+            title = _.capitalize(data['scientificname']);
+        }else if(_.has(data, 'genus')){
+            title = _.capitalize(data['genus']);
+            if(_.has(data, 'specificepithet')){
+                title += ' '+data['specificepithet'];
+            }
+        }
+        if(_.isEmpty(title)){
+            title = React.createElement("em", null, "No Name");
+        } 
+        var auth='';
+        if(_.has(raw, 'dwc:scientificNameAuthorship')){
+            auth = React.createElement("span", {className: "author"}, raw['dwc:scientificNameAuthorship']);
+        }
+
+        var family='';
+        if(_.has(data,'family')){
+            family= _.capitalize(data.family);
+        }
+        if(_.has(raw, 'dwc:eventDate')){
+            content.push(React.createElement("span", {className: "date"}, raw['dwc:eventDate']));
+        }
+         var l=[];
+        ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
+            if(_.has(raw,item)){
+                l.push(raw[item])
+            }
+        })
+        if(l.length>0){
+            content.push(React.createElement("span", {className: "locality"}, l.join(', ')));
+        }
+        if(_.has(data, 'geopoint')){
+            content.push(React.createElement("span", {className: "geopoint", dangerouslySetInnerHTML: {__html: 'Lat: '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ ' Lon: '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
+        }
+        var c=[];
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
+            if(_.has(raw,item)){
+                c.push(raw[item])
+            }
+        })
+        if(c.length>0){
+            content.push(React.createElement("span", {className: "collection"}, c.join(', ')))
+        }
+        /*if(typeof data.scientificname == 'string') { 
             txt += helpers.check(raw["dwc:scientificName"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
             content.push(
-                React.createElement("em", null, 
-                    React.createElement("b", null, 
-                      helpers.check(raw["dwc:scientificName"])
-                    )
-                )          
+                <em>
+                    <b>
+                      {helpers.check(raw["dwc:scientificName"])}
+                    </b>
+                </em>          
             );
             content.push(
-                React.createElement("span", null,  helpers.check(raw["dwc:scientificNameAuthorship"], ' ') ) 
+                <span>{ helpers.check(raw["dwc:scientificNameAuthorship"], ' ') }</span> 
             );
          
         } else {  
             //txt += helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
             content.push(
-                React.createElement("em", null, 
-                   React.createElement("b", null, 
-                helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"],' ')
-                   )
-                )
+                <em>
+                   <b>
+                {helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"],' ') }
+                   </b>
+                </em>
             )
             content.push(
-               React.createElement("span", null, helpers.check(raw["dwc:scientificNameAuthorship"], ' '))
+               <span>{helpers.check(raw["dwc:scientificNameAuthorship"], ' ')}</span>
             )
         } 
 
-  
+  */
         if( data.hasImage ){ 
-            var imgcount;
+            var imgcount,img;
             if(data.mediarecords.length > 1){ 
                 imgcount = (
                     React.createElement("span", {className: "image-count"}, 
@@ -435,7 +482,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }else{
                 imgcount = React.createElement("span", null);
             } 
-            content.push(
+            img = (
                 React.createElement("span", {key: 'media-'+result.uuid+this.props.stamp, className: "image-wrapper"}, 
                     imgcount, 
                     React.createElement("img", {"data-onerror": "$(this).attr('src','/portal/img/notavailable.png')", "data-onload": "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: " loading image...", src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
@@ -443,7 +490,9 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             )
      
          } 
-        var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
+
+
+        /*var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
 
         var para = []
         _.each(terms,function(term){
@@ -461,15 +510,18 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
         var out = clean.join(', ');
         if ((txt+out).length > 255) {
             out = out.substring(0, out.length-txt.length);// + ' ...';
-        }
+        }*/
       
         return (
             React.createElement("div", {key: 'label-'+id, id: result.uuid, className: "pull-left result-item result-label", title: "click to view record", onClick: this.openRecord}, 
-                React.createElement("p", null, 
-                   content, 
-                    React.createElement("span", {style: {lineHeight: '1em', fontSize:'1em'}}, 
-                        " ", out
-                    )
+                React.createElement("h5", {className: "title"}, title, " ", auth), 
+                React.createElement("h5", {className: "family"}, family), 
+                img, 
+                React.createElement("p", {className: "content"}, 
+                    
+
+                    content
+                      
                 )
             )
         )

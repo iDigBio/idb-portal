@@ -419,6 +419,7 @@ var ResultsLabels = React.createClass({
         if(_.has(data,'family')){
             family= _.capitalize(data.family);
         }
+
         if(_.has(raw, 'dwc:eventDate')){
             content.push(<span className="date">{raw['dwc:eventDate']}</span>);
         }
@@ -432,10 +433,10 @@ var ResultsLabels = React.createClass({
             content.push(<span className="locality">{l.join(', ')}</span>);
         }
         if(_.has(data, 'geopoint')){
-            content.push(<span className="geopoint" dangerouslySetInnerHTML={{__html: 'Lat: '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ ' Lon: '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
+            content.push(<span className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
         }
-        var c=[];
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item){
+        var c=[],tits=['Institution','Collection','Catalog Number'];
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
             if(_.has(raw,item)){
                 c.push(raw[item])
             }
@@ -443,34 +444,16 @@ var ResultsLabels = React.createClass({
         if(c.length>0){
             content.push(<span className="collection">{c.join(', ')}</span>)
         }
-        /*if(typeof data.scientificname == 'string') { 
-            txt += helpers.check(raw["dwc:scientificName"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
-            content.push(
-                <em>
-                    <b>
-                      {helpers.check(raw["dwc:scientificName"])}
-                    </b>
-                </em>          
-            );
-            content.push(
-                <span>{ helpers.check(raw["dwc:scientificNameAuthorship"], ' ') }</span> 
-            );
-         
-        } else {  
-            //txt += helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"]) + helpers.check(raw["dwc:scientificNameAuthorship"]);
-            content.push(
-                <em>
-                   <b>
-                {helpers.check(raw["dwc:genus"]) + helpers.check(raw["dwc:specificEpithet"],' ') }
-                   </b>
-                </em>
-            )
-            content.push(
-               <span>{helpers.check(raw["dwc:scientificNameAuthorship"], ' ')}</span>
-            )
-        } 
+        var taxa=[];
+        ['kingdom','phylum','class','order'].forEach(function(item){
+            if(_.has(data,item)){
+                taxa.push(_.capitalize(data[item]));
+            }
+        });
+        if(taxa.length>0){
+            content.push(<span className="highertaxa">{taxa.join(', ')}</span>);
+        }
 
-  */
         if( data.hasImage ){ 
             var imgcount,img;
             if(data.mediarecords.length > 1){ 
@@ -482,51 +465,33 @@ var ResultsLabels = React.createClass({
             }else{
                 imgcount = <span/>;
             } 
+          
             img = (
-                <span key={'media-'+result.uuid+this.props.stamp} className="image-wrapper">
+                <span key={'media-'+result.uuid+this.props.stamp} className="image-wrapper" id={data.mediarecords[0]} onClick={this.openMedia} title="click to open media record">
                     {imgcount}
                     <img data-onerror="$(this).attr('src','/portal/img/notavailable.png')" data-onload="$(this).attr('alt','image thumbnail')" className="pull-right label-image" alt=" loading image..." src={"https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"} /> 
                 </span>  
             )
      
          } 
-
-
-        /*var terms = ['kingdom','phylum','class','order','family','country', 'stateprovince','locality','collector','fieldnumber','datecollected','institutioncode','collectioncode'];
-
-        var para = []
-        _.each(terms,function(term){
-            if(helpers.check(raw[fields.byTerm[term].dataterm]) !== ''){
-                if(term === 'datecollected'){
-                    para.push(raw[fields.byTerm[term].dataterm].substring(0,10));
-                }else{
-                    para.push(raw[fields.byTerm[term].dataterm])
-                }
-            }
-        })
-        var clean = para.filter(function(i){
-            return !_.isEmpty(i);
-        });
-        var out = clean.join(', ');
-        if ((txt+out).length > 255) {
-            out = out.substring(0, out.length-txt.length);// + ' ...';
-        }*/
       
         return (
-            <div key={'label-'+id} id={result.uuid} className="pull-left result-item result-label" title="click to view record" onClick={this.openRecord}>
-                <h5 className="title">{title}&nbsp;{auth}</h5>
+            <div key={'label-'+id}  className="pull-left result-item result-label" >
+                <h5 className="title" onClick={this.openRecord} id={result.uuid} title="click to open record">{title}&nbsp;{auth}</h5>
                 <h5 className="family">{family}</h5>
                 {img}
                 <p className="content">
-                    
-
-                    {content}
-                      
+                    {content}  
                 </p>
             </div>
         )
     },
+    openMedia: function(e){
+        e.preventDefault();
+        window.open('/portal/mediarecords/'+e.currentTarget.id,'_blank');
+    },
     openRecord: function(e){
+        e.preventDefault();
         window.open('/portal/records/'+e.currentTarget.id,'_blank');
     },
     render: function(){

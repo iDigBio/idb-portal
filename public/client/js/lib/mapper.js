@@ -214,7 +214,7 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                     }
                     colors=_.map(resp.order,function(val){
                         var swatch = '<div class="legend-item">';
-                        swatch+=formatNum(val);
+                        swatch+=helpers.firstToUpper(formatNum(val));
                         swatch+='<span class="legend-swatch" style="background-color:'+resp.colors[val.toString()].fill+'"></span></div>';
                         return swatch;
                     });

@@ -211,7 +211,14 @@ module.exports = Page = React.createClass({displayName: "Page",
         //first adding indexTerms which are most correct
         _.forOwn(index,function(v,k){
             if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
-                canonical[fields.byTerm[k].dataterm]=v;
+                var dt=fields.byTerm[k].dataterm;
+                //use data dictionary term if it is exists because its not corrected data
+                //and contains the orginal text caseing.
+                if(_.has(data,dt)){
+                    canonical[dt]=data[dt];
+                }else{
+                    canonical[dt]=v;
+                }   
             }
         })
         //then add raw data that isn't supplied by indexTerms

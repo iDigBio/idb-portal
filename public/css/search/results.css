@@ -46,7 +46,7 @@
   font-weight: bolder;
 }
 #results #result-list .modal-dialog {
-  z-index: 3050;
+  z-index: 4050;
   width: 70%;
   margin: 20px auto;
 }
@@ -179,6 +179,7 @@
   text-overflow: '...';
   font-style: italic;
   line-height: 1.25em;
+  text-decoration: underline;
   margin: 2px;
   paddding: 6px;
 }

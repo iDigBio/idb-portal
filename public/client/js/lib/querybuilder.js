@@ -197,6 +197,7 @@ module.exports = (function(){
                     "value": search.fulltext
                 }
             }
+
             search.filters.forEach(function(item){
                 var term = item.name;//fields.byName[item.name].term;
                 if(item.exists){
@@ -210,7 +211,8 @@ module.exports = (function(){
                     }else{
                         idbq[term] = text[0];
                     }
-                }else if(item.range && (!_.isEmpty(item.range.gte) || !_.isEmpty(item.range.lte))){
+                }else if(item.range && ( item.range.gte || item.range.lte )){
+                    
                     idbq[term]={'type':'range'};
                     if(item.type=='daterange'){
                         if(reg.test(item.range.gte)){

@@ -302,7 +302,7 @@ var TextFilter = React.createClass({displayName: "TextFilter",
         }
         if(filter.exists || filter.missing){
             disabled=true;
-            textval='';
+            textval=fields.byTerm[name].dataterm;
         }else{
             textval=this.state.text;
         }
@@ -464,12 +464,12 @@ var NumericRangeFilter = React.createClass({displayName: "NumericRangeFilter",
     },
     valueChange: function(event){
         var filter = this.props.filter;
-        var val = event.currentTarget.value;
-        if(_.isEmpty(val) || !_.isFinite(val)){
+        var val = event.target.value;
+        if(_.isEmpty(val) || !_.isFinite(parseInt(val))){
             val = false;
         }
-        filter.range[event.currentTarget.name] = val;
-
+        filter.range[event.currentTarget.name] = parseInt(val);
+        
         this.props.changeFilter(filter);
     },
     render: function(){

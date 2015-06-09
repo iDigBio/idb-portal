@@ -1,6 +1,8 @@
 
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
+var queryBuilder = require('../../../lib/querybuilder');
+
 React.initializeTouchEvents(true);
 
 module.exports = Results =  React.createClass({

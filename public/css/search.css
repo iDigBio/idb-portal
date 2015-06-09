@@ -132,6 +132,10 @@
     width: 240px;
   }
 }
+#filters #filters-holder .filter .text textarea:disabled {
+  font-size: 15px;
+  color: #666;
+}
 #filters #filters-holder .filter .text.syn textarea {
   width: 199px;
   margin-right: 0px;
@@ -176,6 +180,7 @@
 }
 #filters #filters-holder .filter .dates input.date:disabled {
   color: #bbb;
+  font-size: 15px;
 }
 @media (max-width: 992px) {
   #filters #filters-holder .filter .dates input.date {

@@ -310,6 +310,23 @@
     width: 32.0%;
   }
 }
+@media (max-width: 1790px) {
+  #results #results-images .image {
+    width: 19.0%;
+    margin: 5px;
+  }
+}
+@media (max-width: 1210px) {
+  #results #results-images .image {
+    width: 31.0%;
+    margin: 8px;
+  }
+}
+@media (max-width: 820px) {
+  #results #results-images .image {
+    width: 46%;
+  }
+}
 @media (max-width: 600px) {
   #results #results-images .image {
     width: 98%;

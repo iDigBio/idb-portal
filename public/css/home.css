@@ -88,6 +88,11 @@ h4 {
   margin: 10px;
   text-align: justify;
 }
+@media (max-width: 992px) {
+  #welcome {
+    font-size: 1.2em;
+  }
+}
 #search {
   margin-bottom: 30px;
   padding: 0px 10px;
@@ -100,4 +105,10 @@ h4 {
   margin: 10px;
   font-size: 1.3em;
   display: inline-block;
+}
+@media (max-width: 992px) {
+  #jump .jump {
+    font-size: 1.2em;
+    margin: 6px;
+  }
 }

@@ -498,6 +498,7 @@ var NumericRangeFilter = React.createClass({
                             disabled={disabled} 
                             onChange={this.valueChange} 
                             value={filter.range.gte ?  filter.range.gte : ''}
+                            placeholder={fields.byTerm[name].dataterm}
                         />
                     </div>
                     <div className="pull-left">
@@ -509,6 +510,7 @@ var NumericRangeFilter = React.createClass({
                             disabled={disabled} 
                             onChange={this.valueChange} 
                             value={filter.range.lte ? filter.range.lte : ''}
+                            placeholder={fields.byTerm[name].dataterm}
                         />
                     </div>
                 </div>

@@ -208,7 +208,7 @@ module.exports = Page = React.createClass({
         var record = {};
 
         //build canonical dictionary
-        //first adding indexTerms which are most correct
+        //first adding indexTerms which can contain corrected/added data not in the raw data
         _.forOwn(index,function(v,k){
             if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
                 var dt=fields.byTerm[k].dataterm;

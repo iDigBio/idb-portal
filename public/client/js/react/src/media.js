@@ -192,7 +192,6 @@ module.exports = React.createClass({
                             </div>
                             <Group record={this.props.record} keyid={source.uuid}/>
                             <Provider data={this.props.mediarecord.attribution} />
-                            
                         </div>
                     </div>
                 </div>

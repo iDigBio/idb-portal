@@ -497,7 +497,8 @@ var NumericRangeFilter = React.createClass({displayName: "NumericRangeFilter",
                             className: "form-control date", 
                             disabled: disabled, 
                             onChange: this.valueChange, 
-                            value: filter.range.gte ?  filter.range.gte : ''}
+                            value: filter.range.gte ?  filter.range.gte : '', 
+                            placeholder: fields.byTerm[name].dataterm}
                         )
                     ), 
                     React.createElement("div", {className: "pull-left"}, 
@@ -508,7 +509,8 @@ var NumericRangeFilter = React.createClass({displayName: "NumericRangeFilter",
                             className: "form-control date", 
                             disabled: disabled, 
                             onChange: this.valueChange, 
-                            value: filter.range.lte ? filter.range.lte : ''}
+                            value: filter.range.lte ? filter.range.lte : '', 
+                            placeholder: fields.byTerm[name].dataterm}
                         )
                     )
                 ), 

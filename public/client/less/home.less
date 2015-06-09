@@ -36,6 +36,9 @@ h4{
 }
 .chart{
     max-height:200px;
+    @media(max-width: @screenmed){
+      
+    }
 }
 #search-form-group{
     width:100%;
@@ -70,6 +73,8 @@ h4{
     background: -ms-linear-gradient(top,  @top 0%,@bottom 100%); /* IE10+ */
     background: linear-gradient(to bottom,  @top 0%,@bottom 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr=@top, endColorstr=@bottom,GradientType=0 ); /* IE6-9 */
+
+
 }
 #notes{
     border-bottom:2px solid lighten(@idbgreen,35%);
@@ -92,6 +97,9 @@ h4{
         margin:10px;
         text-align: justify;
     }
+    @media(max-width: @screenmed){
+        font-size:1.2em;
+    }
 }
 #search{
     margin-bottom:30px;
@@ -104,5 +112,9 @@ h4{
         margin:10px;
         font-size:1.3em;
         display:inline-block;
+        @media(max-width: @screenmed){
+            font-size:1.2em;
+            margin:6px;
+        }
     }
 }

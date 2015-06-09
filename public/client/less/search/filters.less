@@ -165,17 +165,17 @@
                     display:block;
                     height:30px;
                     margin:2px;
-                    &:disabled{
-                        color:#bbb;
-                        font-size: 15px;
-                    }
                     @media(max-width: @screenmed){
                         width:110px;
                     }
                     @media(max-width: @screenlarge){
                         width: 120px;
                     }
-                }            
+                }     
+                input:disabled{
+                    color:#333;
+                    font-size: 15px;
+                }       
             }
 
             .presence{

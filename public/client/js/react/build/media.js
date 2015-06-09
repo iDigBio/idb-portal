@@ -192,7 +192,6 @@ module.exports = React.createClass({displayName: "exports",
                             ), 
                             React.createElement(Group, {record: this.props.record, keyid: source.uuid}), 
                             React.createElement(Provider, {data: this.props.mediarecord.attribution})
-                            
                         )
                     )
                 ), 

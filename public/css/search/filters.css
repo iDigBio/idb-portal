@@ -176,10 +176,6 @@
   height: 30px;
   margin: 2px;
 }
-#filters #filters-holder .filter .dates input.date:disabled {
-  color: #bbb;
-  font-size: 15px;
-}
 @media (max-width: 992px) {
   #filters #filters-holder .filter .dates input.date {
     width: 110px;
@@ -189,6 +185,10 @@
   #filters #filters-holder .filter .dates input.date {
     width: 120px;
   }
+}
+#filters #filters-holder .filter .dates input:disabled {
+  color: #333;
+  font-size: 15px;
 }
 #filters #filters-holder .filter .presence {
   width: 260px;

@@ -56,7 +56,7 @@ module.exports = function(app, config) {
             };
             var missing={};
             var stotal=0,mtotal=0;
-            var rset={},rbody={};
+            var rset={},rbody={},use;
             var keys = Object.keys(fields.byDataTerm);
             request.get({"url": 'https://search.idigbio.org/idigbio/recordsets/'+req.params.id, "json": true}, function(err, resp, body){
                 if(body.found===false){
@@ -92,16 +92,24 @@ module.exports = function(app, config) {
                                 mtotal = body.hits.total;
                                 cback(null,'two')                            
                             });
+                        },
+                        function(cback){
+                            var params={"dateInterval":"month","recordset": req.params.id,"minDate":"2015-01-15"};
+                            request.post({"url": 'https://beta-search.idigbio.org/v2/summary/stats/search', "json": true, "body": params},function(err,resp,body){
+                                use=body;
+                                cback(null,'three');
+                            })
                         }
                     ],function(err,results){
                         var React = require('react');
+                        var Rp = React.createFactory(RecordsetPage);
                         res.render('recordset',{
                             activemenu: 'publishers',
                             user: req.user,
                             token: req.session._csrf,
                             id: req.params.id,
                             recordset: rset,
-                            content: React.renderComponentToString(RecordsetPage({mtotal: mtotal, stotal: stotal, missing: missing, recordset: rbody}))
+                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, missing: missing, recordset: rbody, use: use, uuid: req.params.id}))
                         });
                     })                           
                 }

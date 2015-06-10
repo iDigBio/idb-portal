@@ -66,7 +66,7 @@ var FieldsTable = React.createClass({
             var perc = Number(((100/self.props.stotal) * (self.props.stotal-self.props.missing[key])).toFixed(3));
             return <Fieldrow key={key} keyid={key} name={fields.byDataTerm[key].name} total={formatNum(self.props.stotal-self.props.missing[key])} value={perc} />
         });
-        var sty = {'text-align': 'center'};
+        var sty = {'textAlign': 'center'};
         return (
             <div id="fields-table">
                 <h2 className="title">Specimen Fields Used for Search</h2>
@@ -171,13 +171,13 @@ var Contacts = React.createClass({
             } 
             return val;           
         }
-        function makeContact(contact){
+        function makeContact(contact,ind){
             var name = check(contact.first_name,'',' ') + check(contact.last_name);
             var email = check(contact.email);
             var phone = check(contact.phone);
             var role = check(contact.role);
             return (
-                <ul className="contact">
+                <ul className="contact" key={"contact-"+ind}>
                     <li>{name}</li>
                     <li>{role}</li>
                     <li><a href={'mailto: '+email}>{email}</a></li>
@@ -187,8 +187,8 @@ var Contacts = React.createClass({
         }
         
         var contacts = [];
-        _.each(this.props.data.contacts, function(item){
-            contacts.push(makeContact(item));
+        _.each(this.props.data.contacts, function(item,ind){
+            contacts.push(makeContact(item,ind));
         });
         var link;
 

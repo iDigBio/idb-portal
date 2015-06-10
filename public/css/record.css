@@ -12,12 +12,6 @@
   margin: 0px 15px;
   color: #999;
 }
-#title span.title:hover {
-  color: #6aaa51;
-}
-#title span.title:hover .title-addition {
-  color: #6aaa51;
-}
 h3 {
   color: #333;
   font-size: 1.63em;

@@ -66,7 +66,7 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
             var perc = Number(((100/self.props.stotal) * (self.props.stotal-self.props.missing[key])).toFixed(3));
             return React.createElement(Fieldrow, {key: key, keyid: key, name: fields.byDataTerm[key].name, total: formatNum(self.props.stotal-self.props.missing[key]), value: perc})
         });
-        var sty = {'text-align': 'center'};
+        var sty = {'textAlign': 'center'};
         return (
             React.createElement("div", {id: "fields-table"}, 
                 React.createElement("h2", {className: "title"}, "Specimen Fields Used for Search"), 
@@ -171,13 +171,13 @@ var Contacts = React.createClass({displayName: "Contacts",
             } 
             return val;           
         }
-        function makeContact(contact){
+        function makeContact(contact,ind){
             var name = check(contact.first_name,'',' ') + check(contact.last_name);
             var email = check(contact.email);
             var phone = check(contact.phone);
             var role = check(contact.role);
             return (
-                React.createElement("ul", {className: "contact"}, 
+                React.createElement("ul", {className: "contact", key: "contact-"+ind}, 
                     React.createElement("li", null, name), 
                     React.createElement("li", null, role), 
                     React.createElement("li", null, React.createElement("a", {href: 'mailto: '+email}, email)), 
@@ -187,8 +187,8 @@ var Contacts = React.createClass({displayName: "Contacts",
         }
         
         var contacts = [];
-        _.each(this.props.data.contacts, function(item){
-            contacts.push(makeContact(item));
+        _.each(this.props.data.contacts, function(item,ind){
+            contacts.push(makeContact(item,ind));
         });
         var link;
 

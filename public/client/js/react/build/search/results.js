@@ -352,7 +352,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                     )
                 }
             });
-            list.push(React.createElement("table", {className: "group-table"}, group))
+            list.push(React.createElement("table", {key: "group-"+group, className: "group-table"}, group))
         });
 
         return(
@@ -423,7 +423,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
         }
 
         if(_.has(raw, 'dwc:eventDate')){
-            content.push(React.createElement("span", {className: "date"}, raw['dwc:eventDate']));
+            content.push(React.createElement("span", {key: "event-date", className: "date"}, raw['dwc:eventDate']));
         }
          var l=[];
         ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
@@ -432,10 +432,10 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }
         })
         if(l.length>0){
-            content.push(React.createElement("span", {className: "locality"}, l.join(', ')));
+            content.push(React.createElement("span", {key: "locality", className: "locality"}, l.join(', ')));
         }
         if(_.has(data, 'geopoint')){
-            content.push(React.createElement("span", {className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
+            content.push(React.createElement("span", {key: "geopoint", className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
         ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
@@ -444,7 +444,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }
         })
         if(c.length>0){
-            content.push(React.createElement("span", {className: "collection"}, c.join(', ')))
+            content.push(React.createElement("span", {key: "collection", className: "collection"}, c.join(', ')))
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -453,7 +453,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }
         });
         if(taxa.length>0){
-            content.push(React.createElement("span", {className: "highertaxa"}, taxa.join(', ')));
+            content.push(React.createElement("span", {key: "higher", className: "highertaxa"}, taxa.join(', ')));
         }
 
         if( data.hasImage ){ 
@@ -499,7 +499,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
     render: function(){
         var labels = [],self=this;
         this.props.results.forEach(function(result,ind){
-            labels.push(self.makeLabel(result,'label-'+ind));
+            labels.push(self.makeLabel(result,result.uuid));
         })
         if(this.props.loading){
             
@@ -563,7 +563,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
     makeImageText: function(data){
 
     },
-    makeImage: function(uuid,record,key){
+    makeImage: function(uuid,record){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
         var name=[], specimen = record.data, index=record.indexTerms;
         if(typeof index.scientificname == 'string') { 
@@ -577,7 +577,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
 
         return (
-            React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+key}, 
+            React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+uuid}, 
                 React.createElement("span", {className: "img-count"}, count), 
                 React.createElement("img", {alt: "loading...", 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
@@ -596,14 +596,14 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         this.state.results.forEach(function(record,index){
             if(_.isArray(record.indexTerms.mediarecords)){
                 record.indexTerms.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record,key));
+                    images.push(self.makeImage(uuid,record));
                     key++;
                 })
             }
         });
         if(images.length === 0 && !self.state.loading){
             images.push(
-                React.createElement("div", {className: "no-images"}, 
+                React.createElement("div", {key: "no-images", className: "no-images"}, 
                     React.createElement("h4", null, "No Images Available")
                 )
             )

@@ -352,7 +352,7 @@ var ResultsList = React.createClass({
                     )
                 }
             });
-            list.push(<table className="group-table">{group}</table>)
+            list.push(<table key={"group-"+group} className="group-table">{group}</table>)
         });
 
         return(
@@ -423,7 +423,7 @@ var ResultsLabels = React.createClass({
         }
 
         if(_.has(raw, 'dwc:eventDate')){
-            content.push(<span className="date">{raw['dwc:eventDate']}</span>);
+            content.push(<span key="event-date" className="date">{raw['dwc:eventDate']}</span>);
         }
          var l=[];
         ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
@@ -432,10 +432,10 @@ var ResultsLabels = React.createClass({
             }
         })
         if(l.length>0){
-            content.push(<span className="locality">{l.join(', ')}</span>);
+            content.push(<span key="locality" className="locality">{l.join(', ')}</span>);
         }
         if(_.has(data, 'geopoint')){
-            content.push(<span className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
+            content.push(<span key="geopoint" className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
         ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
@@ -444,7 +444,7 @@ var ResultsLabels = React.createClass({
             }
         })
         if(c.length>0){
-            content.push(<span className="collection">{c.join(', ')}</span>)
+            content.push(<span key="collection" className="collection">{c.join(', ')}</span>)
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -453,7 +453,7 @@ var ResultsLabels = React.createClass({
             }
         });
         if(taxa.length>0){
-            content.push(<span className="highertaxa">{taxa.join(', ')}</span>);
+            content.push(<span key="higher" className="highertaxa">{taxa.join(', ')}</span>);
         }
 
         if( data.hasImage ){ 
@@ -499,7 +499,7 @@ var ResultsLabels = React.createClass({
     render: function(){
         var labels = [],self=this;
         this.props.results.forEach(function(result,ind){
-            labels.push(self.makeLabel(result,'label-'+ind));
+            labels.push(self.makeLabel(result,result.uuid));
         })
         if(this.props.loading){
             
@@ -563,7 +563,7 @@ var ResultsImages = React.createClass({
     makeImageText: function(data){
 
     },
-    makeImage: function(uuid,record,key){
+    makeImage: function(uuid,record){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
         var name=[], specimen = record.data, index=record.indexTerms;
         if(typeof index.scientificname == 'string') { 
@@ -577,7 +577,7 @@ var ResultsImages = React.createClass({
         var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
 
         return (
-            <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+key}>
+            <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+uuid}>
                 <span className="img-count">{count}</span>
                 <img alt="loading..." 
                 src={"https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail"}
@@ -596,14 +596,14 @@ var ResultsImages = React.createClass({
         this.state.results.forEach(function(record,index){
             if(_.isArray(record.indexTerms.mediarecords)){
                 record.indexTerms.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record,key));
+                    images.push(self.makeImage(uuid,record));
                     key++;
                 })
             }
         });
         if(images.length === 0 && !self.state.loading){
             images.push(
-                <div className="no-images">
+                <div key="no-images" className="no-images">
                     <h4>No Images Available</h4>
                 </div>
             )

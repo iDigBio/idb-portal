@@ -4,7 +4,7 @@
 var idbapi = require('./lib/idbapi');
 
 var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
-var kingdomColor={'plantae': '#6aaa51','fungi':'#d3b833' ,'chromista': '#cf7a0b','animalia': '#3782cd', 'protozoa': '#DD5656' },colorsIndex=0;
+var kingdomColor={'Plantae': '#6aaa51','Fungi':'#d3b833' ,'Chromista': '#cf7a0b','Animalia': '#3782cd', 'Protozoa': '#DD5656' },colorsIndex=0;
 var setGetColor = function(kingdom){
     if(_.isUndefined(colors[colorsIndex])){
         colorsIndex=0;
@@ -17,15 +17,15 @@ var setGetColor = function(kingdom){
 };
 var record = {"rq":{"kingdom":{"type":"exists"}},"top_fields": ["kingdom"]};
 idbapi.summary('top/records/',record,function(response){
-    var kingdoms = {
+    var others = {
         "incertae": "other",
         "ichnofossil": "other",
         "taxon indet.": "other"
     }
     var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
-        if(_.isUndefined(kingdoms[k])){
-            king.push([k,v.itemCount]);
+        if(_.isUndefined(others[k])){
+            king.push([helpers.firstToUpper(k),v.itemCount]);
             
         }else{
             other.push(v.itemCount)
@@ -77,7 +77,7 @@ idbapi.summary('top/records/',record,function(response){
 var media = {"rq":{"kingdom":{"type":"exists"},"hasImage":true},"top_fields": ["kingdom"]};
 
 idbapi.summary('top/records/',media,function(response){
-    var kingdoms = {
+    var others = {
         "incertae": "other",
         "ichnofossil": "other",
         "taxon indet.": "other",
@@ -86,8 +86,8 @@ idbapi.summary('top/records/',media,function(response){
     }
     var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
-        if(_.isUndefined(kingdoms[k])){
-            king.push([k,v.itemCount]);
+        if(_.isUndefined(others[k])){
+            king.push([helpers.firstToUpper(k),v.itemCount]);
         }else{
             other.push(v.itemCount)
         }

@@ -195,7 +195,7 @@ module.exports = React.createClass({
                         </div>
                     </div>
                 </div>
-                <Raw data={source.data} />
+                <Raw data={source} />
             </div>
         )
     }

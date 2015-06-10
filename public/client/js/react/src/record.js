@@ -269,7 +269,7 @@ module.exports = Page = React.createClass({
                         </div>
                     </div>
                 </div>
-                <Raw data={data} />
+                <Raw data={this.props.record} />
             </div>
         )
     }

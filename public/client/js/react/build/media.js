@@ -195,7 +195,7 @@ module.exports = React.createClass({displayName: "exports",
                         )
                     )
                 ), 
-                React.createElement(Raw, {data: source.data})
+                React.createElement(Raw, {data: source})
             )
         )
     }

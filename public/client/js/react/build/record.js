@@ -269,7 +269,7 @@ module.exports = Page = React.createClass({displayName: "Page",
                         )
                     )
                 ), 
-                React.createElement(Raw, {data: data})
+                React.createElement(Raw, {data: this.props.record})
             )
         )
     }

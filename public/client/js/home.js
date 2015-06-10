@@ -3,8 +3,10 @@
 //var HomePage = React.createFactory(require('./react/build/home'));
 var idbapi = require('./lib/idbapi');
 
+
 var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
 var kingdomColor={'Plantae': '#6aaa51','Fungi':'#d3b833' ,'Chromista': '#cf7a0b','Animalia': '#3782cd', 'Protozoa': '#DD5656' },colorsIndex=0;
+var others = ["incertae","ichnofossil","taxon indet.","monocotyledonae","pteridophyta","dicotyledonae"]
 var setGetColor = function(kingdom){
     if(_.isUndefined(colors[colorsIndex])){
         colorsIndex=0;
@@ -15,34 +17,31 @@ var setGetColor = function(kingdom){
     }
     return kingdomColor[kingdom];
 };
+var sortFunc = function(a,b){
+    if (a[1] > b[1]) {
+        return -1;
+    }
+    if (a[1] < b[1]) {
+        return 1;
+    }
+
+    // a must be equal to b
+    return 0;
+};
+
 var record = {"rq":{"kingdom":{"type":"exists"}},"top_fields": ["kingdom"]};
 idbapi.summary('top/records/',record,function(response){
-    var others = {
-        "incertae": "other",
-        "ichnofossil": "other",
-        "taxon indet.": "other"
-    }
+
     var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
-        if(_.isUndefined(others[k])){
+        if(others.indexOf(k)===-1){
             king.push([helpers.firstToUpper(k),v.itemCount]);
-            
         }else{
             other.push(v.itemCount)
         }
     })
     king.push(other);
-    king.sort(function(a,b){
-        if (a[1] > b[1]) {
-            return -1;
-        }
-        if (a[1] < b[1]) {
-            return 1;
-        }
-
-        // a must be equal to b
-        return 0;
-    });
+    king.sort(sortFunc);
     king.forEach(function(item){
         colorOrder.push(setGetColor(item[0]));
     });
@@ -77,32 +76,17 @@ idbapi.summary('top/records/',record,function(response){
 var media = {"rq":{"kingdom":{"type":"exists"},"hasImage":true},"top_fields": ["kingdom"]};
 
 idbapi.summary('top/records/',media,function(response){
-    var others = {
-        "incertae": "other",
-        "ichnofossil": "other",
-        "taxon indet.": "other",
-        "monocotyledonae": "other",
-        "pteridophyta": "other"
-    }
+
     var king=[],other=['other'],colorOrder=[];
     _.each(response.kingdom, function(v,k){
-        if(_.isUndefined(others[k])){
+        if(others.indexOf(k)===-1){
             king.push([helpers.firstToUpper(k),v.itemCount]);
         }else{
             other.push(v.itemCount)
         }
     });
     king.push(other);
-    king.sort(function(a,b){
-        if (a[1] > b[1]) {
-            return -1;
-        }
-        if (a[1] < b[1]) {
-            return 1;
-        }
-        // a must be equal to b
-        return 0;
-    });
+    king.sort(sortFunc);
     
     king.forEach(function(item){
         colorOrder.push(setGetColor(item[0]));

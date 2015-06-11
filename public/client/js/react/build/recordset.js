@@ -111,7 +111,8 @@ var Description = React.createClass({displayName: "Description",
             React.createElement("div", {id: "description"}, 
                 React.createElement("p", null, 
                 logo, 
-                React.createElement("span", {dangerouslySetInnerHTML: {__html: desc}}
+                React.createElement("span", null, 
+                    desc
                 )
                 )
             )

@@ -111,7 +111,8 @@ var Description = React.createClass({
             <div id="description">
                 <p>
                 {logo}
-                <span dangerouslySetInnerHTML={{__html: desc}}>
+                <span>
+                    {desc}
                 </span>
                 </p>
             </div>

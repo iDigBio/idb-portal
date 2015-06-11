@@ -99,17 +99,15 @@ var Title = React.createClass({
 
 var Description = React.createClass({
     render: function(){
-        var logo = [];
+        var logo = '';
         if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
-            logo.push(
-                <img className="logo" src={this.props.data.logo_url}/>
-            );
+            logo = <img className="logo" src={this.props.data.logo_url}/>;
         }
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
             <div id="description">
-                <p>
+                <p className="clearfix">
                 {logo}
                 <span>
                     {desc}

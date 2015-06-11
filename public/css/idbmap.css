@@ -13,10 +13,10 @@
   cursor: pointer;
 }
 #map-maximize-button.maximize-button {
-  background-image: url('//idigbio.org/portal/img/expand2.png');
+  background-image: url("//beta-portal.idigbio.org/portal/img/expand2.png");
 }
 #map-maximize-button.minimize-button {
-  background-image: url('//idigbio.org/portal/img/contract2.png');
+  background-image: url("//beta-portal.idigbio.org/portal/img/contract2.png");
 }
 @media handheld {
   #image-button {

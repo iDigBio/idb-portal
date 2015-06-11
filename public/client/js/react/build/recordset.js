@@ -99,17 +99,15 @@ var Title = React.createClass({displayName: "Title",
 
 var Description = React.createClass({displayName: "Description",
     render: function(){
-        var logo = [];
+        var logo = '';
         if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
-            logo.push(
-                React.createElement("img", {className: "logo", src: this.props.data.logo_url})
-            );
+            logo = React.createElement("img", {className: "logo", src: this.props.data.logo_url});
         }
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
             React.createElement("div", {id: "description"}, 
-                React.createElement("p", null, 
+                React.createElement("p", {className: "clearfix"}, 
                 logo, 
                 React.createElement("span", null, 
                     desc

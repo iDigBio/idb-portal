@@ -64,7 +64,7 @@ var Publishers = React.createClass({
     
       return (
         <tr key={key}>
-          <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{toTitleCase(val.name)}</a></td>
+          <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
           <td className="valcol">{formatNum(dr)}</td>
           <td className="valcol">{formatNum(ar)}</td>
           <td className="valcol">{formatNum(ir)}</td>
@@ -104,7 +104,7 @@ var Recordsets = React.createClass({
       }
       return (
         <tr>
-          <td><a href={'/portal/recordsets/'+uuid} target="_new">{toTitleCase(name)}</a></td>
+          <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
           <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
           <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
           <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
@@ -117,7 +117,7 @@ var Recordsets = React.createClass({
 
     return (
       <div id={this.props.uuid}>
-        <h4>{toTitleCase(this.props.name)}</h4>
+        <h4>{this.props.name}</h4>
         <table className="table table-bordered datatable table-condensed tablesorter-blue">
           <thead>
             <tr><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>

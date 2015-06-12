@@ -290,8 +290,6 @@ var ResultsList = React.createClass({
 
                 if(_.isEmpty(val)){
                     val = <span className="no-data">no data</span>;
-                }else if(name!=='specificepithet'){
-                    val = helpers.firstToUpper(val);
                 }
 
                 /*if(columns.length-1 === ind){
@@ -574,7 +572,7 @@ var ResultsImages = React.createClass({
         } 
         name.push(specimen["dwc:scientificnameauthorship"]); 
         _.pull(name,undefined);
-        var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
+        var text=_.without([specimen['dwc:institutionCode'],specimen['dwc:collectionCode'],specimen['dwc:eventdate']],undefined);
 
         return (
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+uuid}>

@@ -290,8 +290,6 @@ var ResultsList = React.createClass({displayName: "ResultsList",
 
                 if(_.isEmpty(val)){
                     val = React.createElement("span", {className: "no-data"}, "no data");
-                }else if(name!=='specificepithet'){
-                    val = helpers.firstToUpper(val);
                 }
 
                 /*if(columns.length-1 === ind){
@@ -574,7 +572,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         } 
         name.push(specimen["dwc:scientificnameauthorship"]); 
         _.pull(name,undefined);
-        var text=_.without([index.institutioncode,index.collectioncode,specimen['dwc:eventdate']],undefined);
+        var text=_.without([specimen['dwc:institutionCode'],specimen['dwc:collectionCode'],specimen['dwc:eventdate']],undefined);
 
         return (
             React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+uuid}, 

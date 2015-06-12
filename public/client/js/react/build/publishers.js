@@ -64,7 +64,7 @@ var Publishers = React.createClass({displayName: "Publishers",
     
       return (
         React.createElement("tr", {key: key}, 
-          React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, toTitleCase(val.name))), 
+          React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, val.name)), 
           React.createElement("td", {className: "valcol"}, formatNum(dr)), 
           React.createElement("td", {className: "valcol"}, formatNum(ar)), 
           React.createElement("td", {className: "valcol"}, formatNum(ir)), 
@@ -104,7 +104,7 @@ var Recordsets = React.createClass({displayName: "Recordsets",
       }
       return (
         React.createElement("tr", null, 
-          React.createElement("td", null, React.createElement("a", {href: '/portal/recordsets/'+uuid, target: "_new"}, toTitleCase(name))), 
+          React.createElement("td", null, React.createElement("a", {href: '/portal/recordsets/'+uuid, target: "_new"}, name)), 
           React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestrecords)), 
           React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apirecords)), 
           React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexrecords)), 
@@ -117,7 +117,7 @@ var Recordsets = React.createClass({displayName: "Recordsets",
 
     return (
       React.createElement("div", {id: this.props.uuid}, 
-        React.createElement("h4", null, toTitleCase(this.props.name)), 
+        React.createElement("h4", null, this.props.name), 
         React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue"}, 
           React.createElement("thead", null, 
             React.createElement("tr", null, React.createElement("th", null), React.createElement("th", {colSpan: "3"}, "Records"), React.createElement("th", {colSpan: "3"}, "Media")), 

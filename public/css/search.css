@@ -1,5 +1,30 @@
 @import '../../components/leaflet/dist/leaflet.css';
 @import '../../components/leaflet-loading/src/Control.Loading.css';
+.ui-autocomplete li.item-wrapper:hover {
+  background-color: blue;
+  cursor: pointer;
+}
+.ui-autocomplete li.item-wrapper:hover a.all {
+  display: inline-block;
+  text-decoration: underline;
+}
+.ui-autocomplete li.item-wrapper a.all {
+  display: none;
+  float: right;
+}
+.ui-autocomplete li.item-wrapper a.item {
+  display: inline-block;
+  float: left;
+}
+.ui-autocomplete li.item-wrapper a.item:hover {
+  background-color: none;
+}
+.ui-autocomplete li.item-wrapper a.item:hover a.all {
+  display: inline-block;
+}
+.ui-autocomplete li.item-wrapper a:hover {
+  background-color: none;
+}
 #filters {
   z-index: 10;
   position: relative;

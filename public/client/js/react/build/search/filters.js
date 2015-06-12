@@ -3,6 +3,7 @@ var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;
 var idbapi = require('../../../lib/idbapi');
 
+
 module.exports = Filters = React.createClass({displayName: "Filters",
     statics: {
         newFilterProps: function(term){
@@ -156,6 +157,14 @@ module.exports = Filters = React.createClass({displayName: "Filters",
     }
 });
 
+$.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
+    _renderItem: function(ul, item){
+        var link = $('<a>').attr('href','#').addClass('item').append(item.label);
+        var addall = $('<a>').attr('href','#').addClass('all').append('add all')
+        return $( "<li>" ).addClass('item-wrapper').append(link).append(addall).appendTo( ul );
+    }
+})
+
 var TextFilter = React.createClass({displayName: "TextFilter",
     componentWillMount: function(){
         var self = this;
@@ -198,10 +207,10 @@ var TextFilter = React.createClass({displayName: "TextFilter",
         this.setState({text: nextProps.filter.text});
     },
     setAutocomplete: function(event){
-        var self=this;
-        $(event.currentTarget).autocomplete({
+        var self=this,name;
+        var options = {
             source: function(searchString, respCallback) {
-                var name = this.element[0].name;//$(event.currentTarget).attr('data-name');
+                name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
                 last = split[split.length-1].toLowerCase(),
                 rq ={};
@@ -230,14 +239,31 @@ var TextFilter = React.createClass({displayName: "TextFilter",
             select: function(event,ui){
                 var filter = self.props.filter;//, filter=filters[ind];   
                 var cont = filter.text.split('\n');
-           
-                cont[cont.length-1] = ui.item.label;
-
-                filter.text = cont.join('\n');
-                self.props.changeFilter(filter);                 
+                cont.pop();
+                //cont[cont.length-1] = ui.item.label;
+                if(_.has(event,'toElement') && event.toElement.classList.contains('all')){
+                    var rq ={};
+                    rq[name]={'type':'prefix', 'value': ui.item.label};
+                    var query = {rq: rq, count: 300, top_fields:[name]};
+                    idbapi.summary('top/basic/',query, function(resp) {
+                        _.each(resp[name], function(v,k){
+                            cont.push(k);
+                        })
+                        filter.text = cont.join('\n');
+                        self.props.changeFilter(filter);  
+                    })
+                }else{
+                    filter.text = cont.join('\n');
+                    self.props.changeFilter(filter);  
+                }
             }
-            
-        });
+        }
+        var fld = fields.byTerm[this.props.filter.name];
+        if(_.has(fld,'addall') && fld.addall){
+            $(event.currentTarget).IDBAutocomplete(options);
+        }else{
+            $(event.currentTarget).autocomplete(options);
+        }
     },
     getSynonyms: function(event){
         event.preventDefault();

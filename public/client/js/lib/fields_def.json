@@ -36,6 +36,7 @@
         "term": "scientificname",
         "type": "text",
         "synonyms": true,
+        "addall": true,
         "default": true,
         "group": "taxonomy",
         "dataterm": "dwc:scientificName"
@@ -52,7 +53,8 @@
         "term": "specificepithet",
         "type": "text",
         "group": "taxonomy",
-        "dataterm": "dwc:specificEpithet"
+        "dataterm": "dwc:specificEpithet",
+        "addall": true
     },
     "Infraspecific Epithet": {
         "term": "infraspecificepithet",

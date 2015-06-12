@@ -241,7 +241,8 @@ var TextFilter = React.createClass({
                 var cont = filter.text.split('\n');
                 cont.pop();
                 //cont[cont.length-1] = ui.item.label;
-                if(_.has(event,'toElement') && event.toElement.classList.contains('all')){
+
+                if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
                     var rq ={};
                     rq[name]={'type':'prefix', 'value': ui.item.label};
                     var query = {rq: rq, count: 300, top_fields:[name]};
@@ -259,11 +260,11 @@ var TextFilter = React.createClass({
             }
         }
         var fld = fields.byTerm[this.props.filter.name];
-        if(_.has(fld,'addall') && fld.addall){
+        /*if(_.has(fld,'addall') && fld.addall){
             $(event.currentTarget).IDBAutocomplete(options);
-        }else{
+        }else{*/
             $(event.currentTarget).autocomplete(options);
-        }
+        //}
     },
     getSynonyms: function(event){
         event.preventDefault();

@@ -29,6 +29,9 @@ h3 {
   list-style: none;
   word-break: break-word;
 }
+.modal-dialog {
+  z-index: 4050;
+}
 #contacts {
   margin-top: 15px;
 }

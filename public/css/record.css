@@ -48,6 +48,9 @@ body {
 .section-hide {
   display: none;
 }
+.modal-dialog {
+  z-index: 4050;
+}
 #data-container {
   max-width: 1600px;
   margin: 10px auto;

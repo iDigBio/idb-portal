@@ -4,7 +4,7 @@ var RCTgroup = React.addons.CSSTransitionGroup;
 var idbapi = require('../../../lib/idbapi');
 
 
-module.exports = Filters = React.createClass({
+var Filters = module.exports = React.createClass({
     statics: {
         newFilterProps: function(term){
             var type = fields.byTerm[term].type;

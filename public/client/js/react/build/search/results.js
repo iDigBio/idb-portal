@@ -5,7 +5,7 @@ var queryBuilder = require('../../../lib/querybuilder');
 
 React.initializeTouchEvents(true);
 
-module.exports = Results =  React.createClass({displayName: "Results",
+var Results = module.exports =  React.createClass({displayName: "exports",
     lastQueryStringed: '',
     getInitialState: function(){
         //this.getResults();

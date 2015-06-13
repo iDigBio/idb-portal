@@ -18,30 +18,40 @@
         margin:0px;
         margin-left:20px;
         padding:0px;
+        background-color:@lightgrey;
+        box-shadow:  @shadow1;
         li:first-letter{
             text-transform: capitalize;
         }
         li{
+            width: 96px;
             text-transform: capitalize;
-            display:inline;
-            margin:0px 4px;
+            display:inline-block;
+            margin:0px 0px 0px 0px;
             font-size:1.3em;
             letter-spacing:.08em;
             font-weight:bold;
-            border: @brd;
+            text-align: center;
+            //border: @brd;
             border-bottom:none;
-            padding:4px 8px 4px 8px;
+            padding:5px 10px;
             border-radius:3px 3px 0px 0px;
             cursor: pointer;
-            background-color:@idblightgreen;
+            //background-color:@idblightgreen;
             color:#444;
             &.active{
                 position:relative;
-                background-color:white;
-                padding-pottom:5px;
+                background-color: white;
+                padding:5px 10px;
                 cursor: auto;
                 color:#333;
                 box-shadow: 0px -1px 1px #eee;
+                border-bottom: 4px solid @idbgreen;
+            }
+            &:not(.active):hover{
+                background-color: #f4f4f4;
+                border-bottom: 4px solid #f4f4f4;
+
             }
         }
     }
@@ -140,7 +150,7 @@
         }
     }
     #result-labels{
-        padding-top:10px;
+        padding:10px;
         width:100%;
         .label-loading{
             width:100%;
@@ -152,15 +162,14 @@
             //width:15.9%;
             //height:70px;
             position:relative;
-            width:24.55%;
+            width:24.05%;
             height:150px;
             overflow:hidden;
-            border: 4px double #bbb; 
-            border-radius:1px; 
-            -webkit-border-radius:3px;
-            -moz-border-radius:3px;
-            background-color:#f5f5f5;
-            margin:3px;
+            //border: 1px solid #ccc; 
+            //border-radius: 3px;
+            box-shadow: @shadow1;
+            background-color:@lightgrey;
+            margin:8px 8px 8px 8px;
             padding:3px 8px;
 
             //text-shadow: 0px 1px 0px #fff;
@@ -171,7 +180,7 @@
             @media (max-width: 1790px){
               
                 width:32.0%;
-                margin:5px;
+                margin:8px;
               
             }
             @media (max-width: 1210px){
@@ -188,7 +197,7 @@
                 //background-color: #e5e5e5;
             }
             h5.title{
-                
+                color:@lightblue;
                 font-weight:bold;
                 display:inline-block;
                 max-width:65%;
@@ -200,7 +209,7 @@
                 text-decoration: underline;
                 .author{
                     font-style:normal;
-                    color:#666;
+                    //color:#666;
                 }
                 margin:2px;
                 paddding:6px;
@@ -211,8 +220,8 @@
                 }
             }
             h5.family{
-                font-color:#333;
-                font-size:.9em;
+                
+                font-size:1em;
                 position:absolute;
                 right:10px;
                 top:5px;
@@ -283,13 +292,13 @@
                     margin:3px 5px;
                     max-height:90px;
                     max-width:98px;
-                    /*box-shadow:1px 1px 0px #bbb;
-                    -webkit-box-shadow:1px 1px 0px #bbb;
-                    -moz-box-shadow:1px 1px 0px #bbb;*/
-                    border: @brd;
+                    box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
+                    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
+                    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
+                    border: 1px solid #aaa;
                     border-radius:3px;
                     &:hover{
-                        border:1px solid blue;
+                        border:1px solid @lightblue;
                     }
                 }
             }
@@ -318,13 +327,14 @@
         
         .image{
             height:230px;
-            width:13.80%;
+            width:15.40%;
             background-color:@bggreydark;
-            margin:4px;
+            margin:10px;
             float:left;
-            border-radius:0px;
-            border:@brd;
+            border-radius:3px;
+            border:1px solid #ddd;
             position: relative;
+            box-shadow:  0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
             &:hover{
                 background-color: #e5e5e5;
             }
@@ -334,8 +344,8 @@
 
             @media (max-width: 1790px){
               
-                width:19.0%;
-                margin:5px;
+                width:18.5%;
+                margin:8px;
               
             }
             @media (max-width: 1210px){
@@ -374,7 +384,7 @@
                 bottom:0px;
                 color:white;
                 font-size:1em;
-                border-radius: 0px;
+                border-radius: 0px 0px 3px 3px;
                 .title{
                     font-weight:bold;
                     font-style: italic;

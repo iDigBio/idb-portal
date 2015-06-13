@@ -48,6 +48,9 @@ input::-webkit-input-placeholder{
     border-radius:4px;
     position:relative;  
     //width:500px;
+    box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 
 #search{
@@ -58,7 +61,9 @@ input::-webkit-input-placeholder{
     border-right: @brd;
     border-bottom: @brd;
     border-top: @brd;
-    box-shadow: 0px 0px 1px #ccc;
+    box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
     display:inline-block;
     #search-any{
         margin:0px 10px;
@@ -109,7 +114,7 @@ input::-webkit-input-placeholder{
                     cursor:pointer;
                 }
                 &.active{
-                    background-color: @bggreydark;
+                    background-color: @lightgrey;
                    
                     padding-bottom:4px; 
                 }
@@ -139,7 +144,7 @@ input::-webkit-input-placeholder{
     .option-group{
         margin:0px;
         margin-bottom:0px;
-        background-color: @bggreydark;
+        background-color: @lightgrey;
         display:table;
         width:100%;
         padding:5px;

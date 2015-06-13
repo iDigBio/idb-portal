@@ -9,17 +9,16 @@ var Map = require('./search/map');
 
 var paramsParser = require('./search/lib/params_parser');
 
-module.exports = Main = React.createClass({
+var Main = module.exports =  React.createClass({
 
     statics: {
         defaultSearch: function(){
-            var filters = Filters.defaultFilters();
             return {
-                filters: filters,
+                filters: Filters.defaultFilters(),
                 fulltext:'',
                 image:false,
                 geopoint:false,
-                sorting:[],
+                sorting: Sorting.defaultSorts(),
                 from: 0,
                 size: 100,
                 mapping: {

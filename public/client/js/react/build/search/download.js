@@ -1,7 +1,8 @@
 
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
-module.exports = Downloads = React.createClass({displayName: "Downloads",
+
+var Downloads = module.exports = React.createClass({displayName: "exports",
     statics: {
         queryToSentence: function(query){
             var q = query;

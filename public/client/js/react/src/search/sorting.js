@@ -5,7 +5,16 @@
 var React = require('react/addons')
 var RCTgroup = React.addons.CSSTransitionGroup;
 
-module.exports = Sort = React.createClass({
+var Sort = module.exports = React.createClass({
+    statics: {
+        defaultSorts: function(){
+            return [
+                {name: 'genus', order: 'asc'},
+                {name: 'specificepithet', order: 'asc'},
+                {name: 'datecollected', order: 'asc'}
+            ]
+        } 
+    },
     getSortNames: function(){
         var list=[];
         this.props.sorting.forEach(function(item){

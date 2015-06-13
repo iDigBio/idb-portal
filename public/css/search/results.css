@@ -29,11 +29,11 @@
   letter-spacing: .08em;
   font-weight: bold;
   text-align: center;
-  border-bottom: none;
+  border-bottom: 4px solid #ececec;
   padding: 5px 10px;
   border-radius: 3px 3px 0px 0px;
   cursor: pointer;
-  color: #444;
+  color: #555;
 }
 #results #results-menu li.active {
   position: relative;
@@ -47,6 +47,17 @@
 #results #results-menu li:not(.active):hover {
   background-color: #f4f4f4;
   border-bottom: 4px solid #f4f4f4;
+  color: #777;
+  -webkit-transition: background-color 1500ms ease;
+  -moz-transition: background-color 1500ms ease;
+  -o-transition: background-color 1500ms ease;
+  -ms-transition: background-color 1500ms ease;
+  transition: background-color 1500ms ease;
+  -webkit-transition: border 700ms ease;
+  -moz-transition: border 700ms ease;
+  -o-transition: border 700ms ease;
+  -ms-transition: border 700ms ease;
+  transition: border 700ms ease;
 }
 #results .total {
   margin-right: 10px;
@@ -196,6 +207,7 @@
   text-decoration: underline;
 }
 #results #result-labels .result-label h5.family {
+  color: #555;
   font-size: 1em;
   position: absolute;
   right: 10px;

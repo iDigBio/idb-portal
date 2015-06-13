@@ -79,6 +79,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
        // }
     },
     viewChange: function(event){
+        event.preventDefault();
         var view = event.currentTarget.attributes['data-value'].value;
         this.props.viewChange('resultsTab', view);
     },
@@ -180,6 +181,7 @@ var ResultsList = React.createClass({displayName: "ResultsList",
         this.setColumns(this.defaultColumns());
     },
     sortColumn: function(e){
+        e.preventDefault();
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
         var dir, search = _.cloneDeep(this.props.search), name=e.currentTarget.attributes['data-term'].value,

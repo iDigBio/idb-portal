@@ -221,6 +221,7 @@ var TextFilter = React.createClass({
                     var list = _.map(resp[name], function(v,k){
                         return k;
                     })
+                    list.sort();
                     respCallback(list);
                 })
             },

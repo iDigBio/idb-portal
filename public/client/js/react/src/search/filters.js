@@ -112,9 +112,9 @@ module.exports = Filters = React.createClass({
                 }else{
                     var disabled = flist.indexOf(field.term) === -1 ? '' : 'disabled';
                     fltrs.push(
-                            <option disabled={disabled} value={field.term} key={field.term}>
-                                {field.name}
-                            </option>
+                        <option disabled={disabled} value={field.term} key={field.term}>
+                            {field.name}
+                        </option>
                     );
                 }
             });
@@ -156,7 +156,7 @@ module.exports = Filters = React.createClass({
         );
     }
 });
-
+//custom autocomplete for add all feature
 $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     _renderItem: function(ul, item){
         var link = $('<a>').attr('href','#').addClass('item').append(item.label);
@@ -241,8 +241,9 @@ var TextFilter = React.createClass({
                 var cont = filter.text.split('\n');
                 cont.pop();
                 //cont[cont.length-1] = ui.item.label;
-
+                var mozilla;
                 if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
+                    //|| (!_.isUndefined(event.originalEvent.originalEvent.originalEvent.originalTarget.classList) && event.originalEvent.originalEvent.originalEvent.originalTarget.classList.contains('all'))){
                     var rq ={};
                     rq[name]={'type':'prefix', 'value': ui.item.label};
                     var query = {rq: rq, count: 300, top_fields:[name]};
@@ -254,17 +255,18 @@ var TextFilter = React.createClass({
                         self.props.changeFilter(filter);  
                     })
                 }else{
+                    cont.push(ui.item.value);
                     filter.text = cont.join('\n');
                     self.props.changeFilter(filter);  
                 }
             }
         }
         var fld = fields.byTerm[this.props.filter.name];
-        /*if(_.has(fld,'addall') && fld.addall){
+        if(_.has(fld,'addall') && fld.addall){
             $(event.currentTarget).IDBAutocomplete(options);
-        }else{*/
+        }else{
             $(event.currentTarget).autocomplete(options);
-        //}
+        }
     },
     getSynonyms: function(event){
         event.preventDefault();

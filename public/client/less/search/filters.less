@@ -13,8 +13,11 @@
         a.all{
             display:none;
             float:right;
+            background-image:none;
         }
         a.item{
+            background-color: none;
+            background-image:none;
             &:hover{
                 background-color: none;
                 a.all{
@@ -24,10 +27,15 @@
             display:inline-block;
             float:left;
         }
-        a:hover{
-            background-color: none;
+
+        a{
+
+            .ui-state-focus, .ui-state-hover{
+                background-image:none;
+            }
         }
     }
+
 }
 #filters{
     z-index:10;

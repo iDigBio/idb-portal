@@ -9,8 +9,11 @@
 .ui-autocomplete li.item-wrapper a.all {
   display: none;
   float: right;
+  background-image: none;
 }
 .ui-autocomplete li.item-wrapper a.item {
+  background-color: none;
+  background-image: none;
   display: inline-block;
   float: left;
 }
@@ -20,8 +23,9 @@
 .ui-autocomplete li.item-wrapper a.item:hover a.all {
   display: inline-block;
 }
-.ui-autocomplete li.item-wrapper a:hover {
-  background-color: none;
+.ui-autocomplete li.item-wrapper a .ui-state-focus,
+.ui-autocomplete li.item-wrapper a .ui-state-hover {
+  background-image: none;
 }
 #filters {
   z-index: 10;

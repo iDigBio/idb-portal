@@ -23,24 +23,58 @@ module.exports = React.createClass({
     componentDidMount: function(){
         var self=this;
         map = new IDBMap('map',{
-            queryChange: function(e,data){
-                if(_.has(data,'bbox')){
-                    self.props.viewChange('optionsTab','mapping');
-                    self.props.searchChange('mapping',{
-                        type: 'box',
-                        bounds: {
-                            top_left: data.bbox.nw,
-                            bottom_right: data.bbox.se
+            queryChange: function(e,extra){
+                var mapping;
+                if(typeof extra === 'string' && extra == 'drawing'){
+                    
+                    switch(e.layerType){
+                        case 'rectangle':
+                            mapping={
+                                type: 'box',
+                                bounds: {
+                                    top_left: { 
+                                        lat: e.layer._latlngs[1].lat,
+                                        lon: e.layer._latlngs[1].lng
+                                    },
+                                    bottom_right: {
+                                        lat: e.layer._latlngs[3].lat,
+                                        lon: e.layer._latlngs[3].lng
+                                    }
+                                }
+                            }
+                            break;
+                        case 'circle':
+                            mapping={
+                                type: 'radius',
+                                bounds: {
+                                    distance: Math.round(e.layer._mRadius/1000),
+                                    lat: e.layer._latlng.lat,
+                                    lon: e.layer._latlng.lng
+                                }
+                            }
+                            break;
+                    }
+                   
+                }else if(typeof extra === 'object'){
+                    var data = extra;
+                    if(_.has(data,'bbox')){
+                        mapping = {
+                            type: 'box',
+                            bounds: {
+                                top_left: data.bbox.nw,
+                                bottom_right: data.bbox.se
+                            }
+                        }           
+                    }
+                    if(_.has(data,'radius')){  
+                        mapping = {
+                            type: 'radius',
+                            bounds: data.radius
                         }
-                    })           
+                    }                    
                 }
-                if(_.has(data,'radius')){  
-                    self.props.viewChange('optionsTab','mapping');
-                    self.props.searchChange('mapping',{
-                        type: 'radius',
-                        bounds: data.radius
-                    })
-                }
+                self.props.viewChange('optionsTab','mapping');
+                self.props.searchChange('mapping',mapping)
             }
         });
 

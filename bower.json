@@ -21,7 +21,8 @@
     "leaflet-loading": "ebrelsford/Leaflet.loading",
     "canvasblob": "eligrey/canvas-toBlob.js",
     "blobjs": "eligrey/Blob.js",
-    "filesaver": "eligrey/FileSaver.js"
+    "filesaver": "eligrey/FileSaver.js",
+    "leaflet.draw": "Leaflet/Leaflet.draw"
   },
   "ignore": [
     "**/.*",

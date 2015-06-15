@@ -11,6 +11,8 @@ require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
 var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
 var fields = require('./fields');
+require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
+
 //require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
 //elid: string name of element id;
 //options: object map of settings
@@ -36,7 +38,21 @@ module.exports = IDBMap =  function(elid, options){
         reuseTiles: true
     });
 
-    this.defaults = {
+    var optionsDefaults = {
+        imageButton: true,
+        fullScreenButton: true,
+        drawControl: true,
+        legend: true,
+        scale: true,
+        queryChange: false,
+        drawControl: true
+    }
+    if(typeof options == 'object'){
+        _.defaults(options,optionsDefaults);
+    }else{
+        options=optionsDefaults;
+    }
+    var mapDefaults = {
         center: [0,0],
         zoom: 2,
         layers: [base],
@@ -46,19 +62,6 @@ module.exports = IDBMap =  function(elid, options){
         worldCopyJump: true,
         loadingControl: true
     };
-
-    var optionsDefaults = {
-        imageButton: true,
-        fullScreenButton: true,
-        legend: true,
-        scale: true,
-        queryChange: false
-    }
-    if(typeof options == 'object'){
-        _.defaults(options,optionsDefaults);
-    }else{
-        options=optionsDefaults;
-    }
     /*
     * Map Controls
     ****/
@@ -241,7 +244,7 @@ module.exports = IDBMap =  function(elid, options){
 
 
     //init map
-    this.map = L.map(elid,this.defaults);
+    this.map = L.map(elid,mapDefaults);
 
     if(options.fullScreenButton){
         this.map.addControl(new MaximizeButton());
@@ -256,7 +259,27 @@ module.exports = IDBMap =  function(elid, options){
             position:'bottomright'
         }));        
     }
+    if(options.drawControl){
+        var drawnItems = new L.FeatureGroup();
+        this.map.addLayer(drawnItems); 
 
+        var drawControl = new L.Control.Draw({
+            draw:{
+                polygon: false,
+                marker: false,
+                polyline: false
+            }
+        });
+        this.map.addControl(drawControl);  
+        this.map.on('draw:created', function(e){
+            //L.DomEvent.stop(e);
+            if(typeof options.queryChange === 'function'){
+                options.queryChange(e, 'drawing');
+            }else{
+                //write local query change
+            }
+        }) 
+    }
 
     /*
     * used to call Map API points endpoint with click detected by UTF8grid layer. 

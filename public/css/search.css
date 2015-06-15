@@ -1,5 +1,6 @@
 @import '../../components/leaflet/dist/leaflet.css';
 @import '../../components/leaflet-loading/src/Control.Loading.css';
+@import '../../components/leaflet.draw/dist/leaflet.draw.css';
 .ui-autocomplete li.item-wrapper:hover {
   background-color: blue;
   cursor: pointer;

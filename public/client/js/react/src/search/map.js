@@ -22,16 +22,9 @@ module.exports = React.createClass({
     },
     componentDidMount: function(){
         var self=this;
-        var func = _.noop;
-        var clickFunc = function(e){
-            e.preventDefault();
-            e.stopPropagation();
-            func();
-        }
-        map = new IDBMap('map',{},function(data){
-            
-            if(_.has(data,'bbox')){
-                func = function(){
+        map = new IDBMap('map',{
+            queryChange: function(e,data){
+                if(_.has(data,'bbox')){
                     self.props.viewChange('optionsTab','mapping');
                     self.props.searchChange('mapping',{
                         type: 'box',
@@ -39,11 +32,9 @@ module.exports = React.createClass({
                             top_left: data.bbox.nw,
                             bottom_right: data.bbox.se
                         }
-                    })
+                    })           
                 }
-            }
-            if(_.has(data,'radius')){
-                func = function(){
+                if(_.has(data,'radius')){  
                     self.props.viewChange('optionsTab','mapping');
                     self.props.searchChange('mapping',{
                         type: 'radius',
@@ -51,11 +42,6 @@ module.exports = React.createClass({
                     })
                 }
             }
-
-            return '<a href="#" class="set-bounds-link">Set Map Bounds</a>';
-        }, function(){
-            $('.set-bounds-link').off('click',clickFunc);
-            $('.set-bounds-link').on('click',clickFunc);
         });
 
         var query = queryBuilder.buildQueryShim(this.props.search);

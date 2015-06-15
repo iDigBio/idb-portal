@@ -25,7 +25,7 @@ Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 }
 
-module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
+module.exports = IDBMap =  function(elid, options){
     var self=this;
     /*
     * Basic Options
@@ -47,8 +47,17 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
         loadingControl: true
     };
 
+    var optionsDefaults = {
+        imageButton: true,
+        fullScreenButton: true,
+        legend: true,
+        scale: true,
+        queryChange: false
+    }
     if(typeof options == 'object'){
-        _.merge(this.defaults,options);
+        _.defaults(options,optionsDefaults);
+    }else{
+        options=optionsDefaults;
     }
     /*
     * Map Controls
@@ -233,13 +242,21 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
 
     //init map
     this.map = L.map(elid,this.defaults);
-    this.map.addControl(new MaximizeButton());
-    //add mapper modal for maximize view
-    $('body').append('<div id="mapper-modal"></div>');
-    this.map.addControl(new ImageButton());
-    this.map.addControl(new L.control.scale({
-        position:'bottomright'
-    }));
+
+    if(options.fullScreenButton){
+        this.map.addControl(new MaximizeButton());
+        //add mapper modal for maximize view
+        $('body').append('<div id="mapper-modal"></div>');        
+    }
+    if(options.imageButton){
+        this.map.addControl(new ImageButton());
+    }
+    if(options.scale){
+        this.map.addControl(new L.control.scale({
+            position:'bottomright'
+        }));        
+    }
+
 
     /*
     * used to call Map API points endpoint with click detected by UTF8grid layer. 
@@ -268,6 +285,40 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 nextPoints(true);
             }
         }
+        var setClickFunction = function(data){
+            var func;
+            if(typeof options.queryChange !== 'function'){
+                var geopoint;
+                if(_.has(data,'bbox')){
+                    geopoint = {
+                        type: 'geo_bounding_box',
+                        top_left: data.bbox.nw,
+                        bottom_right: data.bbox.se
+                    }
+                }
+                if(_.has(data,'radius')){
+                    geopoint = {
+                        type: 'geo_distance',
+                        distance: data.radius.distance,
+                        lat: data.radius.lat,
+                        lon: data.radius.lon
+                    }
+                }
+                var query = _.cloneDeep(idbquery);
+                query.geopoint = geopoint;
+                func = function(e){
+                    e.preventDefault();
+                    self.query(query);
+                }
+            }else{
+                func = function(e){
+                    e.preventDefault();
+                    options.queryChange(e,data); 
+                }
+            }
+            return func;
+        }
+        var setClick=_.noop;
         var makeContent = function(data,offset){
             var items=[],nextstyle='',prevstyle='';
             data.items.forEach(function(item,ind){
@@ -295,14 +346,14 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 items.push(
                     row
                 )
-            })
+            });
             if(data.itemCount <= offset+data.items.length){
                 nextstyle='disable';
             }
             if(offset==0){
                 prevstyle='disable';
             }
-            var table='<div class="map-item-count clearfix"><span class="map-count-title">'+helpers.formatNum(data.itemCount)+' Record'+(data.itemCount>1?'s</span>':'</span>')+'<span class="map-title-outlink">'+coords+'</span></div>'+
+            var table='<div class="map-item-count clearfix"><span class="map-count-title">'+helpers.formatNum(data.itemCount)+' Record'+(data.itemCount>1?'s</span>':'</span>')+'<span class="map-title-outlink"><a href="#" class="set-bounds-link">Set Map Bounds</a></span></div>'+
             '<div class="map-item-nav clearfix"><span class="nav-left '+prevstyle+'" data-load="first">&lt;&lt;</span><span class="nav-left '+prevstyle+'" data-load="prev">&lt;</span>'+
             '<span class="map-count-legend">'+helpers.formatNum(offset+1)+'-'+helpers.formatNum(offset+data.items.length)+'</span>'+
             '<span class="nav-right '+nextstyle+'" data-load="last">&gt;&gt;</span><span class="nav-right '+nextstyle+'" data-load="next">&gt;</span></div>'+
@@ -311,8 +362,11 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
             return table;
         }
         var getPoints = function(offset,callback){
+
             $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
                
+                setClick = setClickFunction(data);
+
                 if(data.itemCount > data.items.length+offset){
                     nextPoints = function(last){
                         var off=offset+100;
@@ -325,13 +379,16 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                         }
                         getPoints(off,function(d){
                             $('.nav-left, .nav-right').off('click',navClick);
+                            $('.set-bounds-link').off('click',setClick);
                             popup.setContent(makeContent(d,off));
                             $('.nav-left, .nav-right').on('click',navClick);
+                            $('.set-bounds-link').on('click',setClick);
                         });
                     }
                 }else{
                     nextPoints=false;
                 }
+
                 if(offset>=100){
                     prevPoints = function(first){
                         var off=offset-100;
@@ -340,32 +397,33 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                         }
                         getPoints(off,function(d){
                             $('.nav-left, .nav-right').off('click',navClick);
+                            $('.set-bounds-link').off('click',setClick);
                             popup.setContent(makeContent(d,off));
                             $('.nav-left, .nav-right').on('click',navClick);
+                            $('.set-bounds-link').on('click',setClick);
                         });
                     }
                 }else{
                     prevPoints=false;
                 }
                 callback(data);
-                if(_.isFunction(titleOutClick)){
-                    titleOutClick();
-                }
             });
         }        
         getPoints(0, function(data){
             var cont;
             if(data.itemCount>0){
                 //setCoords is a init param for map
-                if(_.isFunction(titleOutLink)){
+               /* if(_.isFunction(titleOutLink)){
                     coords=titleOutLink(data);
                 }else if(_.isString(titleOutLink)){
                     coords=titleOutLink;
-                }
+                }*/
                 $('.nav-left, .nav-right').off('click',navClick);
+                $('.set-bounds-link').off('click',setClick);
                 popup.setLatLng(e.latlng).setContent(makeContent(data,0)).openOn(self.map);
                 //L.circle(e.latlng,5,{color: 'white',fill: 'red',opacity: 1, weight: 5}).addTo(self.map);
                 $('.nav-left, .nav-right').on('click',navClick);
+                $('.set-bounds-link').on('click',setClick);
             }
         });
     }
@@ -472,12 +530,14 @@ module.exports = IDBMap =  function(elid, options, titleOutLink, titleOutClick){
                 self.map.mapCode = resp.shortCode;
                 self.map.resp=resp;
                 if(time>=self.currentQueryTime){
-                    if(typeof legend == 'object'){
-                        //self.map.removeControl(legend);
-                        legend.removeFrom(self.map)
+                    if(options.legend){
+                        if(typeof legend == 'object'){
+                            //self.map.removeControl(legend);
+                            legend.removeFrom(self.map)
+                        }
+                        legend = new legendPanel();
+                        self.map.addControl(legend);                        
                     }
-                    legend = new legendPanel();
-                    self.map.addControl(legend);
                     if(typeof idblayer == 'object'){
                         self.map.removeLayer(removeIdblayer());
                     }

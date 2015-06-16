@@ -604,7 +604,33 @@ module.exports = IDBMap =  function(elid, options){
             if(typeof options.queryChange === 'function'){
                 options.queryChange(e, 'drawing');
             }else{
-                //write local query change
+                var geopoint
+                switch(e.layerType){
+                    case 'rectangle':
+                        geopoint={
+                            type: 'geo_bounding_box',
+                            top_left: { 
+                                lat: e.layer._latlngs[1].lat,
+                                lon: e.layer._latlngs[1].lng
+                            },
+                            bottom_right: {
+                                lat: e.layer._latlngs[3].lat,
+                                lon: e.layer._latlngs[3].lng
+                            } 
+                        }
+                        break;
+                    case 'circle':
+                        geopoint={
+                            type: 'geo_distance',
+                            distance: Math.round(e.layer._mRadius/1000)+'km',
+                            lat: e.layer._latlng.lat,
+                            lon: e.layer._latlng.lng
+                        }
+                        break;
+                }
+                var query = _.cloneDeep(idbquery);
+                query.geopoint = geopoint;
+                self.query(query);
             }
             
         });

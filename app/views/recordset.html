@@ -30,6 +30,16 @@
 {% endblock %} 
 
 {% block appblock %}
+<script type="text/javascript">
+{% autoescape false %}
+  var mtotal={{ mtotal }};
+  var stotal={{ stotal }};
+  var uuid={{ uuid }};
+  var flags={{ flags }};
+  var recordset={{ recordset }};
+  var use={{ use }};
+{% endautoescape %}
+</script>
   {% parent %}
 
   <script type="text/javascript" src="/portal/components/jquery.tablesorter/js/jquery.tablesorter.min.js"></script>

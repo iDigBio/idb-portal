@@ -3,7 +3,7 @@
   max-width: 1600px;
   color: #666;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: normal;
   padding-bottom: 5px;
   font-size: 30px;
 }
@@ -18,7 +18,7 @@ h3 {
 }
 h4.title {
   color: #555;
-  font-weight: bold;
+  font-weight: normal;
   margin: 4px 0px;
   font-size: 1.3em;
 }
@@ -67,7 +67,7 @@ body {
   }
 }
 #data-container #data-content #record-container .tabs {
-  margin: 7px 0px -1px -2px;
+  margin: 7px 0px -1px 0px;
   padding: 0px;
   display: block;
   list-style: none;
@@ -75,7 +75,7 @@ body {
 #data-container #data-content #record-container .tabs .tab {
   display: inline-block;
   padding: 0px;
-  margin: 0px 2px;
+  margin: 0px 0px;
 }
 #data-container #data-content #record-container .tabs .tab a {
   position: relative;
@@ -86,7 +86,7 @@ body {
   letter-spacing: .01em;
   text-decoration: none;
   margin: 0px;
-  font-weight: bolder;
+  font-weight: normal;
   border-bottom: 4px solid transparent;
 }
 @media (max-width: 992px) {
@@ -127,7 +127,7 @@ body {
   width: 99%;
 }
 #data-container #data-content #record-container .record .record-table .field-name {
-  font-weight: bold;
+  font-weight: normal;
   color: #555;
   width: 300px;
 }

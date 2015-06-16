@@ -7,7 +7,7 @@
 }
 #container #title {
   font-size: 1.75em;
-  font-weight: bold;
+  font-weight: normal;
   color: #666;
 }
 #container h2.title {
@@ -17,14 +17,14 @@
   font-weight: bold;
   padding-bottom: 5px;
 }
-#container #description,
-#container #fields-table {
+#container #stats-tables,
+#container #description {
   float: left;
   width: 64%;
 }
 @media (max-width: 992px) {
-  #container #description,
-  #container #fields-table {
+  #container #stats-tables,
+  #container #description {
     float: none;
     width: 100%;
   }
@@ -65,25 +65,62 @@
   border: 1px solid #ccc;
   background-color: white;
 }
+#container #stats-tables {
+  float: left;
+  margin-top: 20px;
+}
+#container #stats-tabs {
+  margin: 0px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  margin-left: 0px;
+  display: block;
+  padding: 0px;
+  z-index: 10;
+  list-style: none;
+}
+#container #stats-tabs li {
+  font-weight: normal;
+  color: #999;
+  display: inline-block;
+  padding: 4px 7px;
+  padding-bottom: 6px;
+  border-bottom: 4px solid transparent;
+  cursor: pointer;
+}
+#container #stats-tabs li.active {
+  border-bottom: 4px solid #6aaa51;
+  color: #333;
+}
+#container #stats-tabs li:not(.active):hover {
+  border-bottom: 4px solid #87bc72;
+  -webkit-transition: border 700ms ease;
+  -moz-transition: border 700ms ease;
+  -o-transition: border 700ms ease;
+  -ms-transition: border 700ms ease;
+  transition: border 700ms ease;
+}
 #container #fields-table {
-  margin-top: 15px;
+  border-top: 1px solid #cccccc;
+  border-bottom: 1px solid #cccccc;
+  padding: 5px 10px;
+  background-color: #ececec;
+  /*h4{
+            border-bottom:@brd;
+            font-size:1.3em;
+            color: #555;
+            font-weight: bold;
+            padding-bottom:5px;
+        }*/
 }
 #container #fields-table .blurb {
   margin-bottom: 15px;
 }
-#container #fields-table h4 {
+#container #use-table {
+  border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
-  font-size: 1.3em;
-  color: #555;
-  font-weight: bold;
-  padding-bottom: 5px;
-}
-#container #fields-table .tablesorter-blue th,
-#container #fields-table .tablesorter-blue thead td {
-  background-color: #6aaa51;
-  text-shadow: none;
-  color: white;
-  font-weight: bold;
+  padding: 5px 10px;
+  background-color: #ececec;
 }
 #container #buttons {
   padding: 0px;

@@ -3,7 +3,7 @@
   max-width: 1600px;
   color: #666;
   cursor: pointer;
-  font-weight: bold;
+  font-weight: normal;
   padding-bottom: 5px;
   font-size: 30px;
 }
@@ -127,7 +127,7 @@ h3 {
   white-space: pre-line;
 }
 #data-container #data-meta #data-table #meta-table table tbody tr td.name {
-  font-weight: bold;
+  font-weight: normal;
   width: 50%;
 }
 #data-container #other-images {
@@ -186,7 +186,7 @@ h3 {
 }
 .title {
   color: #555;
-  font-weight: bold;
+  font-weight: normal;
   margin: 4px 0px;
 }
 h1.title {

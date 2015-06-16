@@ -9,7 +9,7 @@
     margin:auto;
     #title{
         font-size: 1.75em;
-        font-weight: bold;
+        font-weight: normal;
         color:#666;
     }
     h2.title{
@@ -19,7 +19,7 @@
         font-weight: bold;
         padding-bottom:5px;        
     }
-    #description,#fields-table{
+    #stats-tables,#description{
         float:left;
         width:64%;
         @media(max-width:@screenmed){
@@ -57,25 +57,65 @@
         display:block;
         clear:both;
     }
+    #stats-tables{
+        float:left;
+        margin-top:20px;
+
+    }
+    #stats-tabs{
+
+        margin:0px;
+        margin-top:0px;
+        margin-bottom:0px;
+        margin-left:0px;
+        display:block;
+        padding:0px;
+        z-index:10;
+        list-style: none;
+        li{
+            font-weight:normal;
+            color:#999;
+            display:inline-block;
+            padding:4px 7px;
+            padding-bottom:6px;
+            border-bottom: 4px solid transparent;
+            cursor:pointer;
+            &.active{
+                border-bottom: 4px solid @idbgreen;
+                color:#333;
+            }
+            &:not(.active):hover{
+                 border-bottom: 4px solid lighten(@idbgreen,10%);
+                -webkit-transition: border 700ms ease;
+                -moz-transition: border 700ms ease;
+                -o-transition: border 700ms ease;
+                -ms-transition: border 700ms ease;
+                transition: border 700ms ease;                
+            }        
+        }
+    }
     #fields-table{
-        margin-top:15px;
+        border-top:@brd;
+        border-bottom: @brd;
+        padding:5px 10px;
+        background-color: @lightgrey;
         .blurb{
             margin-bottom:15px;
         }
-        h4{
+        /*h4{
             border-bottom:@brd;
             font-size:1.3em;
             color: #555;
             font-weight: bold;
             padding-bottom:5px;
-        }
+        }*/
 
-        .tablesorter-blue th, .tablesorter-blue thead td{
-            background-color: @idbgreen;
-            text-shadow:none;
-            color:white;
-            font-weight:bold;
-        }
+    }
+    #use-table{
+        border-top:@brd;
+        border-bottom: @brd;
+        padding:5px 10px;
+        background-color: @lightgrey;
     }
     #buttons{
         padding:0px;
@@ -116,6 +156,7 @@
             padding-left:0px;
         }
     }
+
 }
 
 

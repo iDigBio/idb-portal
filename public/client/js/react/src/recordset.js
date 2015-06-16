@@ -41,8 +41,8 @@ var Fieldrow = React.createClass({
         var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
-            <tr key={this.props.keyid}>
-                <td><b>{this.props.name}</b> &nbsp;({this.props.keyid})</td>
+            <tr>
+                <td><b>{this.props.name}</b></td>
                 <td style={sty2} className="value-column record-count">{this.checkVal(this.props.total)}</td>
                 <td className="value-column">
                     <div className="perc-box">
@@ -62,26 +62,26 @@ var Fieldrow = React.createClass({
 var FieldsTable = React.createClass({
     render: function(){
         var self = this;
-        var fieldrows = _.map(keys,function(key){
-            var perc = Number(((100/self.props.stotal) * (self.props.stotal-self.props.missing[key])).toFixed(3));
-            return <Fieldrow key={key} keyid={key} name={fields.byDataTerm[key].name} total={formatNum(self.props.stotal-self.props.missing[key])} value={perc} />
-        });
+        var flagrows = _.map(Object.keys(this.props.flags),function(flag){
+            var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
+            return <Fieldrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc}/>
+        })
         var sty = {'textAlign': 'center'};
         return (
-            <div id="fields-table">
-                <h2 className="title">Specimen Fields Used for Search</h2>
-                <div className="blurb">This table represents the fields in specimen records that are used for iDigBio <a href="/portal/search">search</a>. The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of 
-                 records that provide the field.</div>
+            <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="clearfix" >
+                <h4>Data Correction Statistics</h4>
+                <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction flag. The last two columns represent the number and percentage of 
+                 records that were corrected.</div>
                 <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                     <thead>
                         <tr>
-                            <th>Field</th>
-                            <th>Records With This Field</th>
-                            <th style={sty}>(%) Percent Used</th>
+                            <th>Flag</th>
+                            <th>Records With This Flag</th>
+                            <th style={sty}>(%) Percent With This Flag</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {fieldrows}
+                        {flagrows}
                     </tbody>
                 </table> 
             </div>
@@ -89,6 +89,66 @@ var FieldsTable = React.createClass({
     }
 });
 
+var UseTable = React.createClass({
+    render: function(){
+        var rows=[], uuid=this.props.uuid;
+        _.each(this.props.use.dates,function(val,key){
+            var r = val[uuid];
+           
+            var date=key.substring(5,7)+' / '+key.substring(0,4);
+
+            rows.push(
+                <tr key={key}>
+                    <td>{date}</td>
+                    <td className="value">{formatNum(r.search)}</td>
+                    <td className="value">{formatNum(r.download)}</td>
+                    <td className="value">{formatNum(r.seen)}</td>
+                    <td className="value">{formatNum(r.viewed_records)}</td>
+                    <td className="value">{formatNum(r.viewed_media)}</td>
+                </tr>
+            )
+        })
+
+        return (
+            <div id="use-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix">
+                <h4>Data Use Statistics</h4>
+                <div className="clearfix">
+                    The table below represents monthly iDigBio portal use statistics for this recordset. <em><b>Search</b></em> indicates in how many instances a record from this recordset matched a search query. <em><b>Download</b></em> indicates in how many instances a record from this recordset was downloaded. <em><b>Seen</b></em> indicates in how many instances a record from this recordset appeared (visually) in the search results in a browser window. 
+                     &nbsp;<em><b>Records Viewed</b></em> and <em><b>Media Viewed</b></em> indicate how many specimen and media records were opened and viewed in full detail.   
+                    Note: Monthly statistics aggregation began on Jan 15th 2015; therefore, the month of (01 / 2015) represents approximately half a month of statistics reporting.
+                </div>
+                <table className="table table-condensed pull-left tablesorter-blue" id="table-use">
+                    <thead><tr><th>Month of</th><th>Search</th><th>Download</th><th>Seen</th><th>Records Viewed</th><th>Media Viewed</th></tr></thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+});
+
+var StatsTables = React.createClass({
+    click: function(e){
+        e.preventDefault();
+        this.setState({active: e.currentTarget.attributes['data-active'].value})
+    },
+    getInitialState: function(){
+        return {active: 'flags' };
+    },
+    render: function(){
+        return (
+            <div id="stats-tables" className="clearfix">
+                <ul id="stats-tabs">
+                    <li className={this.state.active == 'flags' ?  'active': ''} id="corrected-tab" onClick={this.click} data-active="flags">Data Corrected</li>
+                    <li className={this.state.active == 'use' ?  'active': ''} id="use-tab" onClick={this.click} data-active="use">Data Use</li>
+                </ul>
+                <FieldsTable active={this.state.active=='flags'} flags={this.props.flags} stotal={this.props.stotal}/>
+                <UseTable active={this.state.active=='use'} use={this.props.use} uuid={this.props.uuid}/>
+            </div>
+        )
+    }
+})
 var Title = React.createClass({
     render: function(){
         return(
@@ -215,8 +275,9 @@ var Raw = require('./shared/raw');
 
 module.exports = React.createClass({
     render: function(){
-        var data = this.props.recordset._source.data['idigbio:data'];
-        var id = this.props.recordset._source.data['idigbio:uuid'];
+        var raw = this.props.recordset;
+        var data = raw.data;
+        var id = raw.uuid;
         var last = data.update.substring(0,10);
         return (
             <div id="container">
@@ -243,8 +304,9 @@ module.exports = React.createClass({
                     </div>
                 </div>
                 <Contacts data={data} />
-                <FieldsTable missing={this.props.missing} stotal={this.props.stotal} />
-                <Raw data={data} />
+                <StatsTables uuid={raw.uuid} use={this.props.use} flags={this.props.flags} stotal={this.props.stotal}/>
+               
+                <Raw data={raw} />
             </div>
         )
     }

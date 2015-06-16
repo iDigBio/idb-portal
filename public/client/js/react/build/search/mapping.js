@@ -45,10 +45,10 @@ module.exports = React.createClass({displayName: "exports",
                     ), 
                     React.createElement("div", {className: "form"}, 
                         React.createElement("label", {className: "radio-inline"}, 
-                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.state.type=='box', onChange: this.mappingType}), "Box"
+                            React.createElement("input", {type: "radio", name: "mapping-type", id: "box", value: "box", checked: this.state.type=='box', onChange: this.mappingType}), "Rectange"
                         ), 
                         React.createElement("label", {className: "radio-inline"}, 
-                            React.createElement("input", {type: "radio", name: "mapping-type", id: "radius", value: "radius", checked: this.state.type=='radius', onChange: this.mappingType}), "Radius"
+                            React.createElement("input", {type: "radio", name: "mapping-type", id: "radius", value: "radius", checked: this.state.type=='radius', onChange: this.mappingType}), "Circle"
                         )
                     ), 
                     type

@@ -25,12 +25,12 @@
   text-transform: capitalize;
   display: inline-block;
   margin: 0px 0px 0px 0px;
-  font-size: 1.3em;
+  font-size: 1.2em;
   letter-spacing: .08em;
-  font-weight: bold;
+  font-weight: normal;
   text-align: center;
   border-bottom: 4px solid #ececec;
-  padding: 5px 10px;
+  padding: 4px 10px;
   border-radius: 3px 3px 0px 0px;
   cursor: pointer;
   color: #555;
@@ -38,7 +38,7 @@
 #results #results-menu li.active {
   position: relative;
   background-color: white;
-  padding: 5px 10px;
+  padding: 4px 10px;
   cursor: auto;
   color: #333;
   box-shadow: 0px -1px 1px #eeeeee;

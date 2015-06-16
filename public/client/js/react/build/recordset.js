@@ -41,8 +41,8 @@ var Fieldrow = React.createClass({displayName: "Fieldrow",
         var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
-            React.createElement("tr", {key: this.props.keyid}, 
-                React.createElement("td", null, React.createElement("b", null, this.props.name), "  (", this.props.keyid, ")"), 
+            React.createElement("tr", null, 
+                React.createElement("td", null, React.createElement("b", null, this.props.name)), 
                 React.createElement("td", {style: sty2, className: "value-column record-count"}, this.checkVal(this.props.total)), 
                 React.createElement("td", {className: "value-column"}, 
                     React.createElement("div", {className: "perc-box"}, 
@@ -62,26 +62,26 @@ var Fieldrow = React.createClass({displayName: "Fieldrow",
 var FieldsTable = React.createClass({displayName: "FieldsTable",
     render: function(){
         var self = this;
-        var fieldrows = _.map(keys,function(key){
-            var perc = Number(((100/self.props.stotal) * (self.props.stotal-self.props.missing[key])).toFixed(3));
-            return React.createElement(Fieldrow, {key: key, keyid: key, name: fields.byDataTerm[key].name, total: formatNum(self.props.stotal-self.props.missing[key]), value: perc})
-        });
+        var flagrows = _.map(Object.keys(this.props.flags),function(flag){
+            var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
+            return React.createElement(Fieldrow, {key: flag, name: flag, total: self.props.flags[flag].itemCount, value: perc})
+        })
         var sty = {'textAlign': 'center'};
         return (
-            React.createElement("div", {id: "fields-table"}, 
-                React.createElement("h2", {className: "title"}, "Specimen Fields Used for Search"), 
-                React.createElement("div", {className: "blurb"}, "This table represents the fields in specimen records that are used for iDigBio ", React.createElement("a", {href: "/portal/search"}, "search"), ". The first column represents the field name and equivalent DWC term. The last two columns represent the number and percentage of" + ' ' + 
-                 "records that provide the field."), 
+            React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "clearfix"}, 
+                React.createElement("h4", null, "Data Correction Statistics"), 
+                React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction flag. The last two columns represent the number and percentage of" + ' ' + 
+                 "records that were corrected."), 
                 React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.createElement("thead", null, 
                         React.createElement("tr", null, 
-                            React.createElement("th", null, "Field"), 
-                            React.createElement("th", null, "Records With This Field"), 
-                            React.createElement("th", {style: sty}, "(%) Percent Used")
+                            React.createElement("th", null, "Flag"), 
+                            React.createElement("th", null, "Records With This Flag"), 
+                            React.createElement("th", {style: sty}, "(%) Percent With This Flag")
                         )
                     ), 
                     React.createElement("tbody", null, 
-                        fieldrows
+                        flagrows
                     )
                 )
             )
@@ -89,6 +89,66 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
     }
 });
 
+var UseTable = React.createClass({displayName: "UseTable",
+    render: function(){
+        var rows=[], uuid=this.props.uuid;
+        _.each(this.props.use.dates,function(val,key){
+            var r = val[uuid];
+           
+            var date=key.substring(5,7)+' / '+key.substring(0,4);
+
+            rows.push(
+                React.createElement("tr", {key: key}, 
+                    React.createElement("td", null, date), 
+                    React.createElement("td", {className: "value"}, formatNum(r.search)), 
+                    React.createElement("td", {className: "value"}, formatNum(r.download)), 
+                    React.createElement("td", {className: "value"}, formatNum(r.seen)), 
+                    React.createElement("td", {className: "value"}, formatNum(r.viewed_records)), 
+                    React.createElement("td", {className: "value"}, formatNum(r.viewed_media))
+                )
+            )
+        })
+
+        return (
+            React.createElement("div", {id: "use-table", style: {display: (this.props.active ? 'block':'none')}, className: "stat-table clearfix"}, 
+                React.createElement("h4", null, "Data Use Statistics"), 
+                React.createElement("div", {className: "clearfix"}, 
+                    "The table below represents monthly iDigBio portal use statistics for this recordset. ", React.createElement("em", null, React.createElement("b", null, "Search")), " indicates in how many instances a record from this recordset matched a search query. ", React.createElement("em", null, React.createElement("b", null, "Download")), " indicates in how many instances a record from this recordset was downloaded. ", React.createElement("em", null, React.createElement("b", null, "Seen")), " indicates in how many instances a record from this recordset appeared (visually) in the search results in a browser window." + ' ' + 
+                     " ", React.createElement("em", null, React.createElement("b", null, "Records Viewed")), " and ", React.createElement("em", null, React.createElement("b", null, "Media Viewed")), " indicate how many specimen and media records were opened and viewed in full detail." + ' ' +   
+                    "Note: Monthly statistics aggregation began on Jan 15th 2015; therefore, the month of (01 / 2015) represents approximately half a month of statistics reporting."
+                ), 
+                React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-use"}, 
+                    React.createElement("thead", null, React.createElement("tr", null, React.createElement("th", null, "Month of"), React.createElement("th", null, "Search"), React.createElement("th", null, "Download"), React.createElement("th", null, "Seen"), React.createElement("th", null, "Records Viewed"), React.createElement("th", null, "Media Viewed"))), 
+                    React.createElement("tbody", null, 
+                        rows
+                    )
+                )
+            )
+        )
+    }
+});
+
+var StatsTables = React.createClass({displayName: "StatsTables",
+    click: function(e){
+        e.preventDefault();
+        this.setState({active: e.currentTarget.attributes['data-active'].value})
+    },
+    getInitialState: function(){
+        return {active: 'flags' };
+    },
+    render: function(){
+        return (
+            React.createElement("div", {id: "stats-tables", className: "clearfix"}, 
+                React.createElement("ul", {id: "stats-tabs"}, 
+                    React.createElement("li", {className: this.state.active == 'flags' ?  'active': '', id: "corrected-tab", onClick: this.click, "data-active": "flags"}, "Data Corrected"), 
+                    React.createElement("li", {className: this.state.active == 'use' ?  'active': '', id: "use-tab", onClick: this.click, "data-active": "use"}, "Data Use")
+                ), 
+                React.createElement(FieldsTable, {active: this.state.active=='flags', flags: this.props.flags, stotal: this.props.stotal}), 
+                React.createElement(UseTable, {active: this.state.active=='use', use: this.props.use, uuid: this.props.uuid})
+            )
+        )
+    }
+})
 var Title = React.createClass({displayName: "Title",
     render: function(){
         return(
@@ -215,8 +275,9 @@ var Raw = require('./shared/raw');
 
 module.exports = React.createClass({displayName: "exports",
     render: function(){
-        var data = this.props.recordset._source.data['idigbio:data'];
-        var id = this.props.recordset._source.data['idigbio:uuid'];
+        var raw = this.props.recordset;
+        var data = raw.data;
+        var id = raw.uuid;
         var last = data.update.substring(0,10);
         return (
             React.createElement("div", {id: "container"}, 
@@ -243,8 +304,9 @@ module.exports = React.createClass({displayName: "exports",
                     )
                 ), 
                 React.createElement(Contacts, {data: data}), 
-                React.createElement(FieldsTable, {missing: this.props.missing, stotal: this.props.stotal}), 
-                React.createElement(Raw, {data: data})
+                React.createElement(StatsTables, {uuid: raw.uuid, use: this.props.use, flags: this.props.flags, stotal: this.props.stotal}), 
+               
+                React.createElement(Raw, {data: raw})
             )
         )
     }

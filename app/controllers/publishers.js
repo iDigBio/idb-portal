@@ -2,7 +2,7 @@ var request = require('request');
 var async = require('async');
 var path = require('path'),
     appDir = path.dirname(require.main.filename);
-
+var config = require(appDir+'/config/config');
 var RecordsetPage = require(appDir+'/public/client/js/react/build/recordset');
 var fields = require(appDir+'/public/client/js/lib/fields');
 //var RecordsetPage = require(appDir+'/public/react/build/recordset');
@@ -54,11 +54,11 @@ module.exports = function(app, config) {
                     "aggs": {}  
                 }
             };
-            var missing={};
+            var flags;
             var stotal=0,mtotal=0;
             var rset={},rbody={},use;
             var keys = Object.keys(fields.byDataTerm);
-            request.get({"url": 'https://search.idigbio.org/idigbio/recordsets/'+req.params.id, "json": true}, function(err, resp, body){
+            request.get({"url": config.api+'view/recordsets/'+req.params.id, "json": true}, function(err, resp, body){
                 if(body.found===false){
                     res.status(404);
                     res.render('404',{
@@ -69,35 +69,32 @@ module.exports = function(app, config) {
                     });                    
                 }else{
                     rbody = body;
-                    rset = body._source.data['idigbio:data'];
+                    rset = body.data;
                     async.parallel([
                         function(cback){
-                            async.each(keys,function(key,callback){
-                                var q = recordquery();
-                                var aggkey = key.replace(':','_');//can't have : in agg name
-                                q.aggs[aggkey]={"missing":{"field":'data.idigbio:data.'+key}};
-                                request.post({"url": 'https://search.idigbio.org/idigbio/records/_search', "json": true, "body": q}, function(err, resp, body){
-                                    missing[key]= body.aggregations[aggkey].doc_count;
-                                    stotal = body.hits.total;
-                                    callback(null);            
-                                });    
-                            },function(err){
-                                //build table
-                                cback(null,'one');
-         
-                            });                    
+                            var q ={top_fields:["flags"],count: 100, rq: {"recordset": req.params.id}};
+                            request.post({"url": config.api+'summary/top/records/', "json": true, "body": q}, function(err, resp, body){
+                                flags = body.flags;
+                                cback(null,'one');            
+                            });                
                         },
                         function(cback){
-                            request.post({"url": 'https://search.idigbio.org/idigbio/mediarecords/_search', "json": true, "body": recordquery()}, function(err, resp, body){
-                                mtotal = body.hits.total;
+                            request.post({"url": config.api+'summary/count/records/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(err, resp, body){
+                                stotal = body.itemCount;
                                 cback(null,'two')                            
                             });
                         },
                         function(cback){
+                            request.post({"url": config.api+'summary/count/media/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(err, resp, body){
+                                mtotal = body.itemCount;
+                                cback(null,'three')                            
+                            });
+                        },
+                        function(cback){
                             var params={"dateInterval":"month","recordset": req.params.id,"minDate":"2015-01-15"};
-                            request.post({"url": 'https://beta-search.idigbio.org/v2/summary/stats/search', "json": true, "body": params},function(err,resp,body){
+                            request.post({"url": config.api+'summary/stats/search', "json": true, "body": params},function(err,resp,body){
                                 use=body;
-                                cback(null,'three');
+                                cback(null,'four');
                             })
                         }
                     ],function(err,results){
@@ -107,14 +104,17 @@ module.exports = function(app, config) {
                             activemenu: 'publishers',
                             user: req.user,
                             token: req.session._csrf,
-                            id: req.params.id,
-                            recordset: rset,
-                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, missing: missing, recordset: rbody, use: use, uuid: req.params.id}))
+                            uuid: "'"+req.params.id+"'",
+                            mtotal: mtotal,
+                            stotal: stotal,
+                            flags: JSON.stringify(flags),
+                            recordset: JSON.stringify(rbody),
+                            use: JSON.stringify(use),
+                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, uuid: req.params.id}))
                         });
                     })                           
                 }
             });
-
         },
         recordsetRedirect: function(req,res){
             res.redirect('/portal/recordsets/'+req.params.id);

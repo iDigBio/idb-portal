@@ -3,9 +3,12 @@
 * Supports iDigBio API params  (rq,sort) 
 *
 ****/
+var Filters = require('../filters');
+
 module.exports = function(search){
     if(url('?rq')){
         try{
+            debugger
             var rq = JSON.parse(decodeURIComponent(url('?rq')));
             var filters=[],filter;
             _.forOwn(rq,function(v,k){

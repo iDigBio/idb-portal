@@ -13,5 +13,9 @@ var keys=Object.keys(fields.byDataTerm);
 var missing={};
 var stotal=0,mtotal=0;
 */
+var Recordset = require('./react/build/recordset');
+var React = require('react');
+
+React.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} uuid={uuid}/>, document.getElementById('main'));
 var rs = $('#recordsetID').val();
-$('#table-fields').tablesorter();
+$('#table-fields, #table-use').tablesorter();

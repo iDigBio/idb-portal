@@ -8,6 +8,7 @@ var client = new pg.Client(dbstring);
 client.connect();
 */
 var config = {
+	api: 'https://beta-search.idigbio.org/v2/',
 	crypt_key: process.env.IDB_CRYPT_KEY,
 	//client: client,
 	secret: process.env.IDB_SECRET,

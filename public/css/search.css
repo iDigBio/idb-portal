@@ -1,6 +1,7 @@
 @import '../../components/leaflet/dist/leaflet.css';
 @import '../../components/leaflet-loading/src/Control.Loading.css';
 @import '../../components/leaflet.draw/dist/leaflet.draw.css';
+@import '../../components/leaflet.fullscreen/Control.FullScreen.css';
 .ui-autocomplete li.item-wrapper:hover {
   background-color: blue;
   cursor: pointer;
@@ -320,7 +321,7 @@
 }
 #results #results-menu li:not(.active):hover {
   background-color: #f4f4f4;
-  border-bottom: 4px solid #f4f4f4;
+  border-bottom: 4px solid #87bc72;
   color: #777;
   -webkit-transition: background-color 1500ms ease;
   -moz-transition: background-color 1500ms ease;
@@ -900,6 +901,9 @@
 #mapping-options.option-group .ordinates .distance input.coordinate {
   height: 27px;
   width: 60px;
+}
+.fullscreen {
+  margin: 0px;
 }
 #map-maximize-button {
   background-color: white;

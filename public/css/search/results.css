@@ -46,7 +46,7 @@
 }
 #results #results-menu li:not(.active):hover {
   background-color: #f4f4f4;
-  border-bottom: 4px solid #f4f4f4;
+  border-bottom: 4px solid #87bc72;
   color: #777;
   -webkit-transition: background-color 1500ms ease;
   -moz-transition: background-color 1500ms ease;

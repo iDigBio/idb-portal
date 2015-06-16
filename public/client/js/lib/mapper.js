@@ -3,6 +3,7 @@ var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
 var helpers = require('./helpers');
+var comploc = '../../../../public/components/';
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 require('../../../../public/components/leaflet-loading/src/Control.Loading');
 var leafletImage = require('leaflet-image/leaflet-image');
@@ -12,6 +13,7 @@ require('../../../../public/components/canvasblob/canvas-toBlob.js');
 var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
 var fields = require('./fields');
 require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
+require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
 
 //require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
 //elid: string name of element id;
@@ -32,36 +34,23 @@ module.exports = IDBMap =  function(elid, options){
     /*
     * Basic Options
     ****/
-    var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution: 'Map data © OpenStreetMap',
-        minZoom: 0,
-        reuseTiles: true
-    });
-
     var optionsDefaults = {
         imageButton: true,
-        fullScreenButton: true,
+        maximizeControl: false,
         drawControl: true,
         legend: true,
         scale: true,
         queryChange: false,
-        drawControl: true
+        loadingControl: true,
+        zoomControl: true,
+        fullScreenControl: true
     }
     if(typeof options == 'object'){
         _.defaults(options,optionsDefaults);
     }else{
         options=optionsDefaults;
     }
-    var mapDefaults = {
-        center: [0,0],
-        zoom: 2,
-        layers: [base],
-        scrollWheelZoom: true,
-        boxZoom: true,
-        zoomControl: true,
-        worldCopyJump: true,
-        loadingControl: true
-    };
+
     /*
     * Map Controls
     ****/
@@ -138,7 +127,7 @@ module.exports = IDBMap =  function(elid, options){
 
     var ImageButton = L.Control.extend({
         options: {
-            position:"topright"
+            position:"topleft"
         },
         _div: L.DomUtil.create('a', 'image-button'),
         imageClick: function(map,control){
@@ -243,50 +232,7 @@ module.exports = IDBMap =  function(elid, options){
     });
 
 
-    //init map
-    this.map = L.map(elid,mapDefaults);
 
-    if(options.fullScreenButton){
-        this.map.addControl(new MaximizeButton());
-        //add mapper modal for maximize view
-        $('body').append('<div id="mapper-modal"></div>');        
-    }
-    if(options.imageButton){
-        this.map.addControl(new ImageButton());
-    }
-    if(options.scale){
-        this.map.addControl(new L.control.scale({
-            position:'bottomright'
-        }));        
-    }
-    if(options.drawControl){
-        var drawnItems = new L.FeatureGroup();
-        this.map.addLayer(drawnItems); 
-
-        var drawControl = new L.Control.Draw({
-            draw:{
-                polygon: false,
-                marker: false,
-                polyline: false
-            }
-        });
-        this.map.addControl(drawControl);
-        this.map.on('draw:drawstart', function(e){
-            utf8grid.off('click',mapClick);
-        });  
-        this.map.on('draw:created', function(e){
-            //L.DomEvent.stop(e);
-            if(typeof options.queryChange === 'function'){
-                options.queryChange(e, 'drawing');
-            }else{
-                //write local query change
-            }
-            
-        });
-        this.map.on('draw:drawend', function(e){
-            utf8grid.on('click',mapClick);
-        }) 
-    }
 
     /*
     * used to call Map API points endpoint with click detected by UTF8grid layer. 
@@ -584,7 +530,91 @@ module.exports = IDBMap =  function(elid, options){
             crossDomain: true
         })
     }, 100,{'leading': false, 'trailing': true});
-    
+
+    /* 
+    * Init MAP, Options and Event Handlers
+    ****/
+    var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution: 'Map data © OpenStreetMap',
+        minZoom: 0,
+        reuseTiles: true
+    });
+    var mapDefaults = {
+        center: [0,0],
+        zoom: 2,
+        layers: [base],
+        scrollWheelZoom: true,
+        boxZoom: true,
+        zoomControl: false,
+        worldCopyJump: true
+    };
+    this.map = L.map(elid,mapDefaults);
+
+    if(options.maximizeControl){
+        this.map.addControl(new MaximizeButton());
+        //add mapper modal for maximize view
+        $('body').append('<div id="mapper-modal"></div>');        
+    }
+    if(options.fullScreenControl){
+        L.control.fullscreen({
+            position: 'topright'
+        }).addTo(this.map);
+        this.map.on('enterFullscreen',function(){
+            $('#'+elid).attr('style','margin:0px;');
+        })
+        this.map.on('exitFullscreen',function(){
+            $('#'+elid).removeAttr('style');
+        })
+    }
+    if(options.zoomControl){
+        this.map.addControl(L.control.zoom({
+            position: 'topright'
+        }));
+    }
+    if(options.imageButton){
+        this.map.addControl(new ImageButton());
+    }
+    if(options.scale){
+        this.map.addControl(new L.control.scale({
+            position:'bottomright'
+        }));        
+    }
+    if(options.drawControl){
+        var drawnItems = new L.FeatureGroup();
+        this.map.addLayer(drawnItems); 
+
+        var drawControl = new L.Control.Draw({
+            position: 'topleft',
+            draw:{
+                polygon: false,
+                marker: false,
+                polyline: false
+            }
+        });
+        this.map.addControl(drawControl);
+        //must deactivate utf8grid clicks when drawing
+        this.map.on('draw:drawstart', function(e){
+            utf8grid.off('click',mapClick);
+        });  
+        this.map.on('draw:drawend', function(e){
+            utf8grid.on('click',mapClick);
+        }); 
+        this.map.on('draw:created', function(e){
+            //L.DomEvent.stop(e);
+            if(typeof options.queryChange === 'function'){
+                options.queryChange(e, 'drawing');
+            }else{
+                //write local query change
+            }
+            
+        });
+    }
+    if(options.loadingControl){
+        var loading = L.Control.loading({
+            separate: true
+        });
+        this.map.addControl(loading);
+    }    
     /*
     * Map Events Actions
     ***/

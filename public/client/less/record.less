@@ -87,11 +87,17 @@ body{
                         padding:6px 4px 6px 4px;
                         font-size: .9em;
                     }
+                    border-bottom: 4px solid transparent;
                 }
                 .tab a:hover{
-                    //background-color:#dfdfdf;
+                    border-bottom: 4px solid lighten(@idbgreen,10%);
+                    color:#aaa;
+                    -webkit-transition: border 700ms ease;
+                    -moz-transition: border 700ms ease;
+                    -o-transition: border 700ms ease;
+                    -ms-transition: border 700ms ease;
+                    transition: border 700ms ease;
                     text-decoration: none;
-                    color:@idbgreen;
                 }
                 .tab.active a{
                     background-color:white;

@@ -87,6 +87,7 @@ body {
   text-decoration: none;
   margin: 0px;
   font-weight: bolder;
+  border-bottom: 4px solid transparent;
 }
 @media (max-width: 992px) {
   #data-container #data-content #record-container .tabs .tab a {
@@ -95,8 +96,14 @@ body {
   }
 }
 #data-container #data-content #record-container .tabs .tab a:hover {
+  border-bottom: 4px solid #87bc72;
+  color: #aaa;
+  -webkit-transition: border 700ms ease;
+  -moz-transition: border 700ms ease;
+  -o-transition: border 700ms ease;
+  -ms-transition: border 700ms ease;
+  transition: border 700ms ease;
   text-decoration: none;
-  color: #6aaa51;
 }
 #data-container #data-content #record-container .tabs .tab.active a {
   background-color: white;

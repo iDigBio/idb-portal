@@ -1,6 +1,10 @@
 @import '../../components/leaflet/dist/leaflet.css';
 @import '../../components/leaflet-loading/src/Control.Loading.css';
 @import '../../components/leaflet.draw/dist/leaflet.draw.css';
+@import '../../components/leaflet.fullscreen/Control.FullScreen.css';
+.fullscreen {
+  margin: 0px;
+}
 #map-maximize-button {
   background-color: white;
   background-repeat: no-repeat;

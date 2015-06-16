@@ -270,7 +270,10 @@ module.exports = IDBMap =  function(elid, options){
                 polyline: false
             }
         });
-        this.map.addControl(drawControl);  
+        this.map.addControl(drawControl);
+        this.map.on('draw:drawstart', function(e){
+            utf8grid.off('click',mapClick);
+        });  
         this.map.on('draw:created', function(e){
             //L.DomEvent.stop(e);
             if(typeof options.queryChange === 'function'){
@@ -278,6 +281,10 @@ module.exports = IDBMap =  function(elid, options){
             }else{
                 //write local query change
             }
+            
+        });
+        this.map.on('draw:drawend', function(e){
+            utf8grid.on('click',mapClick);
         }) 
     }
 

@@ -560,7 +560,7 @@ module.exports = IDBMap =  function(elid, options){
             position: 'topright'
         }).addTo(this.map);
         this.map.on('enterFullscreen',function(){
-            $('#'+elid).attr('style','margin:0px;');
+            $('#'+elid).attr('style','margin:0px;position:relative;');
         })
         this.map.on('exitFullscreen',function(){
             $('#'+elid).removeAttr('style');

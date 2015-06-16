@@ -70,7 +70,7 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
         return (
             React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "clearfix"}, 
                 React.createElement("h4", null, "Data Correction Statistics"), 
-                React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction flag. The last two columns represent the number and percentage of" + ' ' + 
+                React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction performed. The last two columns represent the number and percentage of" + ' ' + 
                  "records that were corrected."), 
                 React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.createElement("thead", null, 

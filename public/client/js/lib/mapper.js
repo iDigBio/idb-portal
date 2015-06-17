@@ -451,6 +451,7 @@ module.exports = IDBMap =  function(elid, options){
         utf8grid = L.utfGrid(path,{
             useJsonP: false
         })
+       
         utf8grid.on('click',mapClick);
         utf8grid.on('mouseover', mapHover);
         utf8grid.on('mouseout', mapHoverout);
@@ -471,19 +472,7 @@ module.exports = IDBMap =  function(elid, options){
     this.currentQueryTime = 0;
     var idbquery,legend;
     var mapapi = idbapi.host+"mapping/";
-    var toRad = function(d){
-        return d * (Math.PI / 180);
-    }
-    var toDeg = function(r){
-        return r * (180/Math.PI);
-    }
-    var getBounds = function(lat,lon,distance,bearing){
-        /*var radius = 6378.1;
-        var newLat = toDeg(Math.asin(Math.sin(toRad(lat)) * Math.cos(distance/radius) + Math.cos(toRad(lat)) * Math.sin(distance/radius) * Math.cos(toRad(bearing))));
-        var newLon = toDeg(toRad(lon) + Math.atan2(Math.sin(toRad(bearing)) * Math.sin(distance/radius) * Math.cos(toRad(lat)) * Math.sin(distance/radius) * Math.cos(toRad(bearing))));
-        */
-       
-    }
+
     this.query = function(query){
         idbquery=query;
         _query();
@@ -599,6 +588,7 @@ module.exports = IDBMap =  function(elid, options){
         }));        
     }
     if(options.drawControl){
+        var drew=false;//for detecting draw control cancel clicks;
         var drawControl = new L.Control.Draw({
             position: 'topleft',
             draw:{
@@ -610,13 +600,21 @@ module.exports = IDBMap =  function(elid, options){
         this.map.addControl(drawControl);
         //must deactivate utf8grid clicks when drawing
         this.map.on('draw:drawstart', function(e){
+            drew=false;
             utf8grid.off('click',mapClick);
+            //removeUtflayer()
+            //utf8grid.clearAllEventListeners();
         });  
-        this.map.on('draw:drawend', function(e){
-            utf8grid.on('click',mapClick);
+        this.map.on('draw:drawstop', function(e,f){
+            if(drew===false){
+                utf8grid.on('click',mapClick);
+            }
+            //if drew = true the utf8grid will be reinitialized by the query command
+            //as this event comes after draw:created (though I'm not sure this is guarenteed :))
         }); 
         this.map.on('draw:created', function(e){
             //L.DomEvent.stop(e);
+            drew=true;
             if(typeof options.queryChange === 'function'){
                 options.queryChange(e, 'drawing');
             }else{

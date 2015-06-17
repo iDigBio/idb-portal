@@ -69,7 +69,7 @@ var FieldsTable = React.createClass({
         var sty = {'textAlign': 'center'};
         return (
             <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="clearfix" >
-                <h4>Data Correction Statistics</h4>
+               
                 <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction performed. The last two columns represent the number and percentage of 
                  records that were corrected.</div>
                 <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
@@ -111,7 +111,7 @@ var UseTable = React.createClass({
 
         return (
             <div id="use-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix">
-                <h4>Data Use Statistics</h4>
+               
                 <div className="clearfix">
                     The table below represents monthly iDigBio portal use statistics for this recordset. <em><b>Search</b></em> indicates in how many instances a record from this recordset matched a search query. <em><b>Download</b></em> indicates in how many instances a record from this recordset was downloaded. <em><b>Seen</b></em> indicates in how many instances a record from this recordset appeared (visually) in the search results in a browser window. 
                      &nbsp;<em><b>Records Viewed</b></em> and <em><b>Media Viewed</b></em> indicate how many specimen and media records were opened and viewed in full detail.   

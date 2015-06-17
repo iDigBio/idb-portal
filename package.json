@@ -50,7 +50,8 @@
     "jquery-ui-browserify": "*",
     "pouchdb": "*",
     "griddle-react": "*",
-    "es5-shim": "*"
+    "es5-shim": "*",
+    "geopoint": "*"
   },
   "devDependencies": {
     "assert": "*",

@@ -14,7 +14,7 @@ var FileSaver = require('../../../../public/components/filesaver/FileSaver.min')
 var fields = require('./fields');
 require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
-
+var GeoPoint = require('geopoint');
 //require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
 //elid: string name of element id;
 //options: object map of settings
@@ -471,7 +471,19 @@ module.exports = IDBMap =  function(elid, options){
     this.currentQueryTime = 0;
     var idbquery,legend;
     var mapapi = idbapi.host+"mapping/";
-    
+    var toRad = function(d){
+        return d * (Math.PI / 180);
+    }
+    var toDeg = function(r){
+        return r * (180/Math.PI);
+    }
+    var getBounds = function(lat,lon,distance,bearing){
+        /*var radius = 6378.1;
+        var newLat = toDeg(Math.asin(Math.sin(toRad(lat)) * Math.cos(distance/radius) + Math.cos(toRad(lat)) * Math.sin(distance/radius) * Math.cos(toRad(bearing))));
+        var newLon = toDeg(toRad(lon) + Math.atan2(Math.sin(toRad(bearing)) * Math.sin(distance/radius) * Math.cos(toRad(lat)) * Math.sin(distance/radius) * Math.cos(toRad(bearing))));
+        */
+       
+    }
     this.query = function(query){
         idbquery=query;
         _query();
@@ -479,7 +491,14 @@ module.exports = IDBMap =  function(elid, options){
         //this.map.fitWorld();
         if(_.has(query,'geopoint')){
             if(query.geopoint.type=='geo_distance'){
-                this.map.setView([query.geopoint.lat,query.geopoint.lon]);
+                var g = new GeoPoint(query.geopoint.lat,query.geopoint.lon);
+                var dist = parseFloat(query.geopoint.distance.split('km')[0]);
+                //keeps fitBounds from zooming in too much with point clicks
+                if(dist < 10){
+                    dist=10;
+                }
+                var co = g.boundingCoordinates(dist);
+                this.map.fitBounds([[co[0]._degLat,co[0]._degLon],[co[1]._degLat,co[1]._degLon]]);
             }else if(query.geopoint.type=='geo_bounding_box'){
                 var g=query.geopoint;
                 this.map.fitBounds([[g.top_left.lat,g.top_left.lon],[g.bottom_right.lat,g.bottom_right.lon]]);
@@ -580,9 +599,6 @@ module.exports = IDBMap =  function(elid, options){
         }));        
     }
     if(options.drawControl){
-        var drawnItems = new L.FeatureGroup();
-        this.map.addLayer(drawnItems); 
-
         var drawControl = new L.Control.Draw({
             position: 'topleft',
             draw:{
@@ -604,7 +620,7 @@ module.exports = IDBMap =  function(elid, options){
             if(typeof options.queryChange === 'function'){
                 options.queryChange(e, 'drawing');
             }else{
-                var geopoint
+                var geopoint;
                 switch(e.layerType){
                     case 'rectangle':
                         geopoint={
@@ -617,7 +633,7 @@ module.exports = IDBMap =  function(elid, options){
                                 lat: e.layer._latlngs[3].lat,
                                 lon: e.layer._latlngs[3].lng
                             } 
-                        }
+                        };
                         break;
                     case 'circle':
                         geopoint={
@@ -625,7 +641,7 @@ module.exports = IDBMap =  function(elid, options){
                             distance: Math.round(e.layer._mRadius/1000)+'km',
                             lat: e.layer._latlng.lat,
                             lon: e.layer._latlng.lng
-                        }
+                        };
                         break;
                 }
                 var query = _.cloneDeep(idbquery);

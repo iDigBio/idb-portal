@@ -67,7 +67,7 @@
 }
 #container #stats-tables {
   float: left;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 #container #stats-tabs {
   margin: 0px;
@@ -103,7 +103,7 @@
 #container #fields-table {
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
-  padding: 5px 10px;
+  padding: 40px 10px 5px 10px;
   background-color: #ececec;
   /*h4{
             border-bottom:@brd;
@@ -119,7 +119,7 @@
 #container #use-table {
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
-  padding: 5px 10px;
+  padding: 30px 10px 5px 10px;
   background-color: #ececec;
 }
 #container #buttons {

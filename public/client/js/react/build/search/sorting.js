@@ -63,7 +63,7 @@ var Sort = module.exports = React.createClass({displayName: "exports",
 
         this.props.sorting.forEach(function(item,ind){
             var fgroups =[];
-            fgroups.push(React.createElement("option", {value: "0"}, "select a field"));
+            fgroups.push(React.createElement("option", {key: "default", value: "0"}, "select a field"));
             _.each(groups,function(val){
                 var flist = [];
                 _.each(fields.byGroup[val],function(field){
@@ -98,8 +98,8 @@ var Sort = module.exports = React.createClass({displayName: "exports",
                             fgroups
                         ), 
                         React.createElement("select", {className: "direction form-control", value: item.order, onChange: self.sortChange, "data-index": ind, "data-name": "order"}, 
-                            React.createElement("option", {value: "asc", selected: asc}, "Ascending"), 
-                            React.createElement("option", {value: "desc", selected: desc}, "Descending")
+                            React.createElement("option", {value: "asc"}, "Ascending"), 
+                            React.createElement("option", {value: "desc"}, "Descending")
                         )
                     )
                 )

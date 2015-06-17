@@ -69,7 +69,7 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
         var sty = {'textAlign': 'center'};
         return (
             React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "clearfix"}, 
-                React.createElement("h4", null, "Data Correction Statistics"), 
+               
                 React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction performed. The last two columns represent the number and percentage of" + ' ' + 
                  "records that were corrected."), 
                 React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
@@ -111,7 +111,7 @@ var UseTable = React.createClass({displayName: "UseTable",
 
         return (
             React.createElement("div", {id: "use-table", style: {display: (this.props.active ? 'block':'none')}, className: "stat-table clearfix"}, 
-                React.createElement("h4", null, "Data Use Statistics"), 
+               
                 React.createElement("div", {className: "clearfix"}, 
                     "The table below represents monthly iDigBio portal use statistics for this recordset. ", React.createElement("em", null, React.createElement("b", null, "Search")), " indicates in how many instances a record from this recordset matched a search query. ", React.createElement("em", null, React.createElement("b", null, "Download")), " indicates in how many instances a record from this recordset was downloaded. ", React.createElement("em", null, React.createElement("b", null, "Seen")), " indicates in how many instances a record from this recordset appeared (visually) in the search results in a browser window." + ' ' + 
                      " ", React.createElement("em", null, React.createElement("b", null, "Records Viewed")), " and ", React.createElement("em", null, React.createElement("b", null, "Media Viewed")), " indicate how many specimen and media records were opened and viewed in full detail." + ' ' +   

@@ -128,7 +128,7 @@ var SearchAny = React.createClass({
         return(
             <div id="search-any" className="clearfix">
                 <h3>
-                    <img id="search-arrow-img" src="/portal/img/arrow-green.png"/>Start Searching
+                    Start Searching
 
                     <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
                     <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">
@@ -232,7 +232,7 @@ var OptionsPanel = React.createClass({
                 <ul id="options-menu" >
                     {menu}
                 </ul>
-                <Filters searchChange={this.props.searchChange} filters={this.props.search.filters} active={panels.filters}/>
+                <Filters searchChange={this.props.searchChange} search={this.props.search} filters={this.props.search.filters} active={panels.filters}/>
                 <Sorting searchChange={this.props.searchChange} sorting={this.props.search.sorting} active={panels.sorting}/>
                 <Mapping searchChange={this.props.searchChange} mapping={this.props.search.mapping} active={panels.mapping}/>
                 <Download search={this.props.search} searchChange={this.props.searchChange} active={panels.download}/>

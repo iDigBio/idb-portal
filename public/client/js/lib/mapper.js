@@ -610,7 +610,7 @@ module.exports = IDBMap =  function(elid, options){
                 utf8grid.on('click',mapClick);
             }
             //if drew = true the utf8grid will be reinitialized by the query command
-            //as this event comes after draw:created (though I'm not sure this is guarenteed :))
+            //as this event comes after draw:created (though I'm not sure this is guaranteed :))
         }); 
         this.map.on('draw:created', function(e){
             //L.DomEvent.stop(e);

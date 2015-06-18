@@ -89,7 +89,7 @@
 }
 #filters #filters-holder {
   overflow-y: scroll;
-  height: 260px;
+  height: 265px;
   margin: 0px;
   padding: 0px;
 }
@@ -100,7 +100,7 @@
 }
 @media (max-width: 1060px) {
   #filters #filters-holder {
-    height: 231px;
+    height: 235px;
   }
 }
 #filters #filters-holder .filter-trans-enter {
@@ -335,7 +335,7 @@
   transition: border 700ms ease;
 }
 #results .total {
-  margin-right: 10px;
+  margin-right: 20px;
   font-weight: bolder;
 }
 #results #result-list .modal-dialog {
@@ -1140,7 +1140,7 @@ input::-webkit-input-placeholder {
   margin-top: 0px;
   margin-left: 470px;
   margin-right: 15px;
-  height: 496px;
+  height: 490px;
   border: 1px solid #cccccc;
   border-radius: 4px;
   position: relative;
@@ -1150,7 +1150,7 @@ input::-webkit-input-placeholder {
 }
 #search {
   width: 450px;
-  height: 496px;
+  height: 490px;
   float: left;
   background-color: #fafafa;
   border-right: 1px solid #cccccc;
@@ -1298,7 +1298,7 @@ input::-webkit-input-placeholder {
     width: 90%;
     margin: 10px 20px;
     border-left: 1px solid #cccccc;
-    height: 466px;
+    height: 460px;
   }
   #filter-selects select {
     width: 160px;

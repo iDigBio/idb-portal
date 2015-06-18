@@ -85,7 +85,7 @@
 }
 #filters #filters-holder {
   overflow-y: scroll;
-  height: 260px;
+  height: 265px;
   margin: 0px;
   padding: 0px;
 }
@@ -96,7 +96,7 @@
 }
 @media (max-width: 1060px) {
   #filters #filters-holder {
-    height: 231px;
+    height: 235px;
   }
 }
 #filters #filters-holder .filter-trans-enter {

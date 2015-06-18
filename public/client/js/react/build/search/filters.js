@@ -42,7 +42,7 @@ var Filters = module.exports = React.createClass({displayName: "exports",
         switch(filter.type){
             case 'text':         
                 return(
-                    React.createElement(TextFilter, {key: key, filter: filter, removeFilter: this.removeFilter, changeFilter: this.filterPropsChange})
+                    React.createElement(TextFilter, {key: key, filter: filter, removeFilter: this.removeFilter, search: this.props.search, changeFilter: this.filterPropsChange})
                 ); 
             case 'daterange':
                 return (
@@ -213,7 +213,7 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                 name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
                 last = split[split.length-1].toLowerCase(),
-                rq ={};
+                rq = queryBuilder.buildQueryShim(self.props.search);
                 rq[name]={'type':'prefix', 'value': last};
                 query = {rq: rq, count: 15, top_fields:[name]};
 
@@ -245,9 +245,10 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                 var mozilla;
                 if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
                     //|| (!_.isUndefined(event.originalEvent.originalEvent.originalEvent.originalTarget.classList) && event.originalEvent.originalEvent.originalEvent.originalTarget.classList.contains('all'))){
-                    var rq ={};
-                    rq[name]={'type':'prefix', 'value': ui.item.label};
+                    var rq =queryBuilder.buildQueryShim(self.props.search);;
+                    rq[name]={'type':'prefix', 'value': ui.item.label.trim()+' '};
                     var query = {rq: rq, count: 300, top_fields:[name]};
+                    cont.push(ui.item.label);
                     idbapi.summary('top/basic/',query, function(resp) {
                         _.each(resp[name], function(v,k){
                             cont.push(k);
@@ -256,7 +257,7 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                         self.props.changeFilter(filter);  
                     })
                 }else{
-                    cont.push(ui.item.value);
+                    cont.push(ui.item.label);
                     filter.text = cont.join('\n');
                     self.props.changeFilter(filter);  
                 }

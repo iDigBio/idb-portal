@@ -60,7 +60,7 @@
   transition: border 700ms ease;
 }
 #results .total {
-  margin-right: 10px;
+  margin-right: 20px;
   font-weight: bolder;
 }
 #results #result-list .modal-dialog {

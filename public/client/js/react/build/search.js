@@ -128,7 +128,7 @@ var SearchAny = React.createClass({displayName: "SearchAny",
         return(
             React.createElement("div", {id: "search-any", className: "clearfix"}, 
                 React.createElement("h3", null, 
-                    React.createElement("img", {id: "search-arrow-img", src: "/portal/img/arrow-green.png"}), "Start Searching", 
+                    "Start Searching", 
 
                     React.createElement("a", {className: "btn pull-right", id: "reset-button", onClick: this.resetSearch, title: "reset"}, React.createElement("i", {className: "glyphicon glyphicon-refresh"})), 
                     React.createElement("a", {className: "btn pull-right", title: "help", "data-toggle": "modal", "data-target": "#search-help"}, 
@@ -232,7 +232,7 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
                 React.createElement("ul", {id: "options-menu"}, 
                     menu
                 ), 
-                React.createElement(Filters, {searchChange: this.props.searchChange, filters: this.props.search.filters, active: panels.filters}), 
+                React.createElement(Filters, {searchChange: this.props.searchChange, search: this.props.search, filters: this.props.search.filters, active: panels.filters}), 
                 React.createElement(Sorting, {searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
                 React.createElement(Mapping, {searchChange: this.props.searchChange, mapping: this.props.search.mapping, active: panels.mapping}), 
                 React.createElement(Download, {search: this.props.search, searchChange: this.props.searchChange, active: panels.download})

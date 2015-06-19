@@ -211,12 +211,30 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
         })*/
         this.props.viewChange('optionsTab',val);
     },
-
+    optionPanel: function(name){
+        switch(name){
+            case 'filters':
+                return React.createElement(Filters, {searchChange: this.props.searchChange, search: this.props.search, filters: this.props.search.filters, active: "active"});
+                break;
+            case 'sorting':
+                return React.createElement(Sorting, {searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: "active"});
+                break;
+            case 'mapping':
+                return React.createElement(Mapping, {searchChange: this.props.searchChange, mapping: this.props.search.mapping, active: "active"});
+                break;
+            case 'download':
+                return React.createElement(Download, {search: this.props.search, searchChange: this.props.searchChange, active: "active"});
+                break;
+        }
+    },
     render: function(){
-        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''};
+    
+        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''},panel;
+
         Object.keys(panels).forEach(function(item,ind){
             if(item==self.props.view){
                 panels[item]='active';
+                panel = self.optionPanel(item);
             }else{
                 panels[item]='';
             }
@@ -232,10 +250,7 @@ var OptionsPanel = React.createClass({displayName: "OptionsPanel",
                 React.createElement("ul", {id: "options-menu"}, 
                     menu
                 ), 
-                React.createElement(Filters, {searchChange: this.props.searchChange, search: this.props.search, filters: this.props.search.filters, active: panels.filters}), 
-                React.createElement(Sorting, {searchChange: this.props.searchChange, sorting: this.props.search.sorting, active: panels.sorting}), 
-                React.createElement(Mapping, {searchChange: this.props.searchChange, mapping: this.props.search.mapping, active: panels.mapping}), 
-                React.createElement(Download, {search: this.props.search, searchChange: this.props.searchChange, active: panels.download})
+                panel
             )
         )
     }

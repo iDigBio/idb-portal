@@ -7,7 +7,7 @@
 #sorting #sort-add {
   text-align: right;
   padding: 4px 20px;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   border-bottom: 1px solid #cccccc;
   margin-top: 0px;
 }
@@ -38,18 +38,18 @@
 #sorting #sort-group {
   overflow-y: scroll;
   position: relative;
-  height: 271px;
+  height: 275px;
   margin: 0px;
   padding: 0px;
 }
 @media (max-width: 992px) {
   #sorting #sort-group {
-    height: 241px;
+    height: 245px;
   }
 }
 @media (max-width: 1060px) {
   #sorting #sort-group {
-    height: 241px;
+    height: 245px;
   }
 }
 #sorting #sort-group .sort-trans-enter {

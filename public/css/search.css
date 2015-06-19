@@ -432,6 +432,13 @@
   text-align: center;
   padding: 10px;
 }
+#results #result-labels .no-records {
+  text-align: center;
+  height: 30px;
+}
+#results #result-labels .no-records h4 {
+  font-weight: bold;
+}
 #results #result-labels .result-label {
   position: relative;
   width: 24.05%;
@@ -462,6 +469,11 @@
   #results #result-labels .result-label {
     width: 98%;
   }
+}
+#results #result-labels .result-label:hover {
+  background-color: #f4f4f4;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
 }
 #results #result-labels .result-label h5.title {
   color: #03a9f4;
@@ -563,7 +575,7 @@
   border-radius: 3px;
 }
 #results #result-labels .result-label .image-wrapper img:hover {
-  border: 1px solid #03a9f4;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.39), 0 1px 1px rgba(0, 0, 0, 0.43);
 }
 #results #result-labels .result-label .links {
   display: inline-block;
@@ -588,7 +600,7 @@
 #results #results-images .image {
   height: 230px;
   width: 15.40%;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   margin: 10px;
   float: left;
   border-radius: 3px;
@@ -597,7 +609,9 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 #results #results-images .image:hover {
-  background-color: #e5e5e5;
+  background-color: #f4f4f4;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
 }
 @media (max-width: 992px) {
   #results #results-images .image {
@@ -642,8 +656,8 @@
 #results #results-images .image .gallery-image-text {
   width: 100%;
   min-height: 50px;
-  background-color: #555;
-  opacity: .8;
+  background-color: #6d6d6d;
+  opacity: .95;
   /*display:none;*/
   line-height: 1.1em;
   position: absolute;
@@ -701,7 +715,7 @@
 #sorting #sort-add {
   text-align: right;
   padding: 4px 20px;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   border-bottom: 1px solid #cccccc;
   margin-top: 0px;
 }
@@ -732,18 +746,18 @@
 #sorting #sort-group {
   overflow-y: scroll;
   position: relative;
-  height: 271px;
+  height: 275px;
   margin: 0px;
   padding: 0px;
 }
 @media (max-width: 992px) {
   #sorting #sort-group {
-    height: 241px;
+    height: 245px;
   }
 }
 @media (max-width: 1060px) {
   #sorting #sort-group {
-    height: 241px;
+    height: 245px;
   }
 }
 #sorting #sort-group .sort-trans-enter {
@@ -813,11 +827,11 @@
 #download #downloads-section #downloads-available {
   display: block;
   overflow: scroll;
-  height: 105px;
+  height: 111px;
 }
 @media (max-width: 1060px) {
   #download #downloads-section #downloads-available {
-    height: 75px;
+    height: 82px;
   }
 }
 #download #downloads-section table {

@@ -168,6 +168,13 @@
             text-align: center;
             padding:10px;
         }
+        .no-records{
+            text-align: center;
+            height:30px;
+            h4{
+                font-weight:bold;
+            }
+        }
         .result-label{
             //width:15.9%;
             //height:70px;
@@ -203,7 +210,9 @@
                 width:98%;
             }
             &:hover{
-                
+                background-color: lighten(@lightgrey, 3%);
+                -webkit-transition: background-color .5s;
+                transition: background-color .5s;
                 //background-color: #e5e5e5;
             }
             h5.title{
@@ -302,13 +311,14 @@
                     margin:3px 5px;
                     max-height:90px;
                     max-width:98px;
-                    box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
-                    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
-                    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);;
+                    box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+                    -webkit-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
+                    -moz-box-shadow:0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
                     border: 1px solid #aaa;
                     border-radius:3px;
                     &:hover{
-                        border:1px solid @lightblue;
+                        
+                        box-shadow: 0 3px 6px rgba(0, 0, 0, 0.39), 0 1px 1px rgba(0, 0, 0, 0.43);
                     }
                 }
             }
@@ -338,7 +348,7 @@
         .image{
             height:230px;
             width:15.40%;
-            background-color:@bggreydark;
+            background-color:@lightgrey;
             margin:10px;
             float:left;
             border-radius:3px;
@@ -346,7 +356,9 @@
             position: relative;
             box-shadow:  0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
             &:hover{
-                background-color: #e5e5e5;
+                background-color: lighten(@lightgrey, 3%);
+                -webkit-transition: background-color .5s;
+                transition: background-color .5s;
             }
             @media(max-width: @screenmed){
                 width:32.0%;
@@ -386,8 +398,8 @@
             .gallery-image-text{
                 width:100%;
                 min-height:50px;
-                background-color:#555;
-                opacity:.8;
+                background-color:darken(@lightgrey,50%);
+                opacity:.95;
                 /*display:none;*/
                 line-height:1.1em;
                 position:absolute;

@@ -154,6 +154,13 @@
   text-align: center;
   padding: 10px;
 }
+#results #result-labels .no-records {
+  text-align: center;
+  height: 30px;
+}
+#results #result-labels .no-records h4 {
+  font-weight: bold;
+}
 #results #result-labels .result-label {
   position: relative;
   width: 24.05%;
@@ -184,6 +191,11 @@
   #results #result-labels .result-label {
     width: 98%;
   }
+}
+#results #result-labels .result-label:hover {
+  background-color: #f4f4f4;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
 }
 #results #result-labels .result-label h5.title {
   color: #03a9f4;
@@ -285,7 +297,7 @@
   border-radius: 3px;
 }
 #results #result-labels .result-label .image-wrapper img:hover {
-  border: 1px solid #03a9f4;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.39), 0 1px 1px rgba(0, 0, 0, 0.43);
 }
 #results #result-labels .result-label .links {
   display: inline-block;
@@ -310,7 +322,7 @@
 #results #results-images .image {
   height: 230px;
   width: 15.40%;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   margin: 10px;
   float: left;
   border-radius: 3px;
@@ -319,7 +331,9 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 #results #results-images .image:hover {
-  background-color: #e5e5e5;
+  background-color: #f4f4f4;
+  -webkit-transition: background-color 0.5s;
+  transition: background-color 0.5s;
 }
 @media (max-width: 992px) {
   #results #results-images .image {
@@ -364,8 +378,8 @@
 #results #results-images .image .gallery-image-text {
   width: 100%;
   min-height: 50px;
-  background-color: #555;
-  opacity: .8;
+  background-color: #6d6d6d;
+  opacity: .95;
   /*display:none;*/
   line-height: 1.1em;
   position: absolute;

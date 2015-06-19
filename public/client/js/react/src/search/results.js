@@ -13,8 +13,8 @@ var Results = module.exports =  React.createClass({
         return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
-        //
-        if(nextProps.view!==this.props.view){
+
+        if(nextProps.view !== this.props.view){
             return true;
         }else{
             return false;
@@ -32,6 +32,7 @@ var Results = module.exports =  React.createClass({
             var now = d.getTime();
             //constant passing of props forces many unncessary request. This cheap method checks
             //see if there truely is a new query to run
+
             if(JSON.stringify(query) !== self.lastQueryStringed){
                 //setting results to empty array forces
                 //spinner to show for new searches
@@ -71,12 +72,13 @@ var Results = module.exports =  React.createClass({
         //component should only recieve search as props
         //debugger
         //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
-       // if(isNewSearch){
+       
+       if(!_.isEqual(nextProps.search,this.props.search)){
             this.setState({search: _.cloneDeep(nextProps.search)},function(){
                 this.forceUpdate();
                 this.getResults(this.state.search); 
             });
-       // }
+       }
     },
     viewChange: function(event){
         event.preventDefault();
@@ -501,6 +503,13 @@ var ResultsLabels = React.createClass({
         this.props.results.forEach(function(result,ind){
             labels.push(self.makeLabel(result,result.uuid));
         })
+        if(labels.length===0 && this.props.loading===false){
+            labels.push(                
+                <div key="no-records" className="no-records">
+                    <h4>No Matching Records</h4>
+                </div>
+            );
+        }
         if(this.props.loading){
             
             labels.push(

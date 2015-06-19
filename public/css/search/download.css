@@ -25,11 +25,11 @@
 #download #downloads-section #downloads-available {
   display: block;
   overflow: scroll;
-  height: 105px;
+  height: 111px;
 }
 @media (max-width: 1060px) {
   #download #downloads-section #downloads-available {
-    height: 75px;
+    height: 82px;
   }
 }
 #download #downloads-section table {

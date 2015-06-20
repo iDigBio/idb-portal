@@ -27,7 +27,7 @@ module.exports = React.createClass({
                             mapping={
                                 type: 'radius',
                                 bounds: {
-                                    distance: parseFloat(query.geopoint.distance.split('km')[0]),
+                                    distance: query.geopoint.distance,
                                     lat: query.geopoint.lat,//e.layer._latlng.lat,
                                     lon: query.geopoint.lon //e.layer._latlng.lng
                                 }

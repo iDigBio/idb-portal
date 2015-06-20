@@ -654,7 +654,7 @@ module.exports = IDBMap =  function(elid, options){
                 case 'circle':
                     geopoint={
                         type: 'geo_distance',
-                        distance: Math.round(e.layer._mRadius/1000)+'km',
+                        distance: Math.round(e.layer._mRadius/1000),
                         lat: e.layer._latlng.lat,
                         lon: e.layer._latlng.lng
                     };

@@ -73,12 +73,12 @@ var Results = module.exports =  React.createClass({displayName: "exports",
         //debugger
         //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
        
-       if(!_.isEqual(nextProps.search,this.props.search)){
+       //if(!_.isEqual(nextProps.search,this.props.search)){
             this.setState({search: _.cloneDeep(nextProps.search)},function(){
                 this.forceUpdate();
                 this.getResults(this.state.search); 
             });
-       }
+       //}
     },
     viewChange: function(event){
         event.preventDefault();

@@ -8,7 +8,6 @@ var Filters = require('../filters');
 module.exports = function(search){
     if(url('?rq')){
         try{
-            debugger
             var rq = JSON.parse(decodeURIComponent(url('?rq')));
             var filters=[],filter;
             _.forOwn(rq,function(v,k){
@@ -41,7 +40,7 @@ module.exports = function(search){
                     }
                     filters.push(filter);                   
                 }
-            })
+            });
             if(filters.length > 0){
                 search.filters = filters;
             }  

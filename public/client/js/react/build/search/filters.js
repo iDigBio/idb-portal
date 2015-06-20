@@ -245,7 +245,7 @@ var TextFilter = React.createClass({displayName: "TextFilter",
                 var mozilla;
                 if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
                     //|| (!_.isUndefined(event.originalEvent.originalEvent.originalEvent.originalTarget.classList) && event.originalEvent.originalEvent.originalEvent.originalTarget.classList.contains('all'))){
-                    var rq =queryBuilder.buildQueryShim(self.props.search);;
+                    var rq = queryBuilder.buildQueryShim(self.props.search);;
                     rq[name]={'type':'prefix', 'value': ui.item.label.trim()+' '};
                     var query = {rq: rq, count: 300, top_fields:[name]};
                     cont.push(ui.item.label);

@@ -21,9 +21,16 @@ var GeoPoint = require('geopoint');
 /*
 *Map object
 *initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
-*titleOutLink (optional)[string or function that returns string] html for adding extra info to popup boxes.
-* if its a function then its passed the data used to render popup content on init and every paging click.
-*titleOutClick (optional) [Function] for setting event binders on titleOutLink [its run after titleOutLink is rendered] 
+*options:
+*   imageButton: true|false (defautl: true)
+*   maximizeControl: true|false (default: false) (alternative to fullscreen control)
+*   drawControl: true|false
+*   legend: true|false
+*   scale: true|false
+*   queryChange: function that is passed an rq query object from the mapper. If this function is provided, 
+*      drawing boundaries and "set mapping bounds" links will call this function instead of running the 
+*      query internally to update the map.  This is useful for when the map is bound to some external system
+*      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
 ***/
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
@@ -235,6 +242,7 @@ module.exports = IDBMap =  function(elid, options){
 
 
     /*
+    * mapClick - builds scopped functions for popups.
     * used to call Map API points endpoint with click detected by UTF8grid layer. 
     ****/
 
@@ -248,7 +256,9 @@ module.exports = IDBMap =  function(elid, options){
             lat=e.latlng.lat;
             lon=e.latlng.lng;
         }
-        var nextPoints=false,prevPoints=false;
+        
+        var nextPoints=false, prevPoints=false;
+        
         var navClick=function(e){
             var load=e.target.attributes['data-load'].value;
             if(load==='next' && typeof nextPoints === 'function'){
@@ -261,40 +271,39 @@ module.exports = IDBMap =  function(elid, options){
                 nextPoints(true);
             }
         }
+
         var setClickFunction = function(data){
-            var func;
-            if(typeof options.queryChange !== 'function'){
-                var geopoint;
-                if(_.has(data,'bbox')){
-                    geopoint = {
-                        type: 'geo_bounding_box',
-                        top_left: data.bbox.nw,
-                        bottom_right: data.bbox.se
-                    }
-                }
-                if(_.has(data,'radius')){
-                    geopoint = {
-                        type: 'geo_distance',
-                        distance: data.radius.distance,
-                        lat: data.radius.lat,
-                        lon: data.radius.lon
-                    }
-                }
-                var query = _.cloneDeep(idbquery);
-                query.geopoint = geopoint;
-                func = function(e){
-                    e.preventDefault();
-                    self.query(query);
-                }
-            }else{
-                func = function(e){
-                    e.preventDefault();
-                    options.queryChange(e,data); 
+
+            var geopoint;
+            
+            if(_.has(data,'bbox')){
+                geopoint = {
+                    type: 'geo_bounding_box',
+                    top_left: data.bbox.nw,
+                    bottom_right: data.bbox.se
                 }
             }
-            return func;
+            if(_.has(data,'radius')){
+                geopoint = {
+                    type: 'geo_distance',
+                    distance: data.radius.distance,
+                    lat: data.radius.lat,
+                    lon: data.radius.lon
+                }
+            }
+
+            var query = _.cloneDeep(idbquery);
+            
+            query.geopoint = geopoint;
+
+            return function(e){
+                e.preventDefault();
+                internalQuery(query);
+            }
         }
+        
         var setClick=_.noop;
+
         var makeContent = function(data,offset){
             var items=[],nextstyle='',prevstyle='';
             data.items.forEach(function(item,ind){
@@ -469,7 +478,6 @@ module.exports = IDBMap =  function(elid, options){
     /*
     *Instance Methods
     **/
-    this.currentQueryTime = 0;
     var idbquery,legend;
     var mapapi = idbapi.host+"mapping/";
 
@@ -477,7 +485,7 @@ module.exports = IDBMap =  function(elid, options){
         idbquery=query;
         _query();
         this.map.closePopup();
-        //this.map.fitWorld();
+        //set map view on query change
         if(_.has(query,'geopoint')){
             if(query.geopoint.type=='geo_distance'){
                 var g = new GeoPoint(query.geopoint.lat,query.geopoint.lon);
@@ -498,11 +506,21 @@ module.exports = IDBMap =  function(elid, options){
         
     }
 
+    var internalQuery = function(query){
+        if(_.isFunction(options.queryChange)){
+            options.queryChange(query);
+        }else{
+            self.query(query); 
+        }
+    }
+
+   self.currentQueryTime=0;
+    
     var _query = _.debounce(function(){
         var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
-        self.currentQueryTime=time;
+        self.currentQueryTime = time;
 
         $.ajax(mapapi,{
             data: q,
@@ -536,7 +554,9 @@ module.exports = IDBMap =  function(elid, options){
             contentType: 'application/json',
             type: 'POST',
             crossDomain: true
-        })
+        });            
+        
+
     }, 100,{'leading': false, 'trailing': true});
 
     /* 
@@ -615,38 +635,34 @@ module.exports = IDBMap =  function(elid, options){
         this.map.on('draw:created', function(e){
             //L.DomEvent.stop(e);
             drew=true;
-            if(typeof options.queryChange === 'function'){
-                options.queryChange(e, 'drawing');
-            }else{
-                var geopoint;
-                switch(e.layerType){
-                    case 'rectangle':
-                        geopoint={
-                            type: 'geo_bounding_box',
-                            top_left: { 
-                                lat: e.layer._latlngs[1].lat,
-                                lon: e.layer._latlngs[1].lng
-                            },
-                            bottom_right: {
-                                lat: e.layer._latlngs[3].lat,
-                                lon: e.layer._latlngs[3].lng
-                            } 
-                        };
-                        break;
-                    case 'circle':
-                        geopoint={
-                            type: 'geo_distance',
-                            distance: Math.round(e.layer._mRadius/1000)+'km',
-                            lat: e.layer._latlng.lat,
-                            lon: e.layer._latlng.lng
-                        };
-                        break;
-                }
-                var query = _.cloneDeep(idbquery);
-                query.geopoint = geopoint;
-                self.query(query);
+
+            var geopoint;
+            switch(e.layerType){
+                case 'rectangle':
+                    geopoint={
+                        type: 'geo_bounding_box',
+                        top_left: { 
+                            lat: e.layer._latlngs[1].lat,
+                            lon: e.layer._latlngs[1].lng
+                        },
+                        bottom_right: {
+                            lat: e.layer._latlngs[3].lat,
+                            lon: e.layer._latlngs[3].lng
+                        } 
+                    };
+                    break;
+                case 'circle':
+                    geopoint={
+                        type: 'geo_distance',
+                        distance: Math.round(e.layer._mRadius/1000)+'km',
+                        lat: e.layer._latlng.lat,
+                        lon: e.layer._latlng.lng
+                    };
+                    break;
             }
-            
+            var query = _.cloneDeep(idbquery);
+            query.geopoint = geopoint;
+            internalQuery(query);
         });
     }
     if(options.loadingControl){

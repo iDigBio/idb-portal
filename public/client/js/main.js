@@ -45,6 +45,7 @@ $(document).ready(function(){
 		localStorage.removeItem('reloaded');
 	}catch(e){
 		if(typeof localStorage !== undefined){
+			console.log(e);
 			if(localStorage.getItem('reloaded') === null){
 				localStorage.clear();
 				localStorage.setItem('reloaded','true');

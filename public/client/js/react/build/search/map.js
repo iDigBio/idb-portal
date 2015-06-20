@@ -6,75 +6,37 @@ var helpers = require('../../../lib/helpers');
 var map; 
 module.exports = React.createClass({displayName: "exports",
     currentQuery: '',
-    makeMapQuery: function(settings){
-        var params = {};
-        params["rq"] = queryBuilder.buildQueryShim(settings.search);
-        if(_.has(settings,'style')){
-            params["style"]=settings.style;
-        }
-        if(_.has(settings,'type')){
-            params['type']=settings.type;
-        }
-        if(_.has(settings, 'threshold')){
-            params['threshold']=settings.threshold;
-        }
-        return params;
-    },
+
     componentDidMount: function(){
         var self=this;
         map = new IDBMap('map',{
-            queryChange: function(e,extra){
+            queryChange: function(query){
                 var mapping;
-                if(typeof extra === 'string' && extra == 'drawing'){
-                    
-                    switch(e.layerType){
-                        case 'rectangle':
+                if(_.has(query,'geopoint')){
+                    switch(query.geopoint.type){
+                        case 'geo_bounding_box':
                             mapping={
                                 type: 'box',
                                 bounds: {
-                                    top_left: { 
-                                        lat: e.layer._latlngs[1].lat,
-                                        lon: e.layer._latlngs[1].lng
-                                    },
-                                    bottom_right: {
-                                        lat: e.layer._latlngs[3].lat,
-                                        lon: e.layer._latlngs[3].lng
-                                    }
+                                    top_left: query.geopoint.top_left,
+                                    bottom_right: query.geopoint.bottom_right
                                 }
                             }
                             break;
-                        case 'circle':
+                        case 'geo_distance':
                             mapping={
                                 type: 'radius',
                                 bounds: {
-                                    distance: Math.round(e.layer._mRadius/1000),
-                                    lat: e.layer._latlng.lat,
-                                    lon: e.layer._latlng.lng
+                                    distance: parseFloat(query.geopoint.distance.split('km')[0]),
+                                    lat: query.geopoint.lat,//e.layer._latlng.lat,
+                                    lon: query.geopoint.lon //e.layer._latlng.lng
                                 }
                             }
                             break;
-                    }
-                   
-                }else if(typeof extra === 'object'){
-                    var data = extra;
-                    if(_.has(data,'bbox')){
-                        mapping = {
-                            type: 'box',
-                            bounds: {
-                                top_left: data.bbox.nw,
-                                bottom_right: data.bbox.se
-                            }
-                        }           
-                    }
-                    if(_.has(data,'radius')){  
-                        mapping = {
-                            type: 'radius',
-                            bounds: data.radius
-                        }
-                    }                    
+                    } 
+                    self.props.viewChange('optionsTab','mapping');
+                    self.props.searchChange('mapping',mapping);                     
                 }
-                self.props.viewChange('optionsTab','mapping');
-                self.props.searchChange('mapping',mapping)
             }
         });
 

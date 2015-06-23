@@ -16,7 +16,7 @@ module.exports = function(app, config) {
         });
         app.use(express.compress());
         //set cache expiration on public directory
-        //app.use(express.static(config.root + '/public',{maxAge: 86400000}));
+        app.use(express.static(config.root + '/public',{maxAge: 86400000}));
         app.use(express.static(config.root + '/public'));
         app.engine('html', cons.swig);
         app.engine('haml', cons.haml);

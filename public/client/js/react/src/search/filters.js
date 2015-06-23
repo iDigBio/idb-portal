@@ -2,9 +2,10 @@
 var React = require('react/addons');
 var RCTgroup = React.addons.CSSTransitionGroup;
 var idbapi = require('../../../lib/idbapi');
-
+var PureRender = require('react/addons').addons.PureRenderMixin;
 
 var Filters = module.exports = React.createClass({
+    mixins: [PureRender],
     statics: {
         newFilterProps: function(term){
             var type = fields.byTerm[term].type;

@@ -2,12 +2,19 @@
 
 #download{
     padding:0px;
-    background-color: @bggreydark;
+    background-color: @lightgrey;
     border-bottom:@brd;
     margin:0px;
     .sub{
         &#current{
             margin:15px;
+            select{
+                max-width: 400px;
+                option{
+                    max-width:400px;
+                    display:inline-block;
+                }
+            }
         }
         .input-group{
             width:100%;
@@ -73,14 +80,6 @@
                     max-width:200px;
                 }
             }
-        }
-    }
-    .form-control.history-select{
-      
-        width: 100%;
-
-        option{
-            overflow: ellipses;
         }
     }
 }

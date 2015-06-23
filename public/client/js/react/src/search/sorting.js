@@ -4,8 +4,10 @@
 
 var React = require('react/addons')
 var RCTgroup = React.addons.CSSTransitionGroup;
+var PureRender = require('react/addons').addons.PureRenderMixin;
 
 var Sort = module.exports = React.createClass({
+    //mixins: [PureRender],
     statics: {
         defaultSorts: function(){
             return [

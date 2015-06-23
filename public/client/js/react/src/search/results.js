@@ -2,10 +2,12 @@
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
 var queryBuilder = require('../../../lib/querybuilder');
+var PureRender = require('react/addons').addons.PureRenderMixin;
 
 React.initializeTouchEvents(true);
 
 var Results = module.exports =  React.createClass({
+    //mixins: [PureRender],
     lastQueryStringed: '',
     getInitialState: function(){
         //this.getResults();
@@ -151,7 +153,7 @@ var Results = module.exports =  React.createClass({
 
 var sortClick=false;
 var ResultsList = React.createClass({
-    
+    mixins: [PureRender],
     getInitialState: function(){
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
             var cols = this.defaultColumns();
@@ -396,6 +398,7 @@ var ResultsList = React.createClass({
 });
 
 var ResultsLabels = React.createClass({
+    mixins: [PureRender],
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
@@ -527,6 +530,7 @@ var ResultsLabels = React.createClass({
 });
 
 var ResultsImages = React.createClass({
+    mixins: [PureRender],
     getImageOnlyResults: function(search){
 
         var d = new Date, self=this, searchState = _.cloneDeep(search);

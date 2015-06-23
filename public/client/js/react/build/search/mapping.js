@@ -1,7 +1,8 @@
 
 var React = require('react');
-
+//var PureRender = require('react/addons').addons.PureRenderMixin;
 module.exports = React.createClass({displayName: "exports",
+    //mixins: [PureRender],
     getInitialState: function(){
         return {type: this.props.mapping.type};
     },

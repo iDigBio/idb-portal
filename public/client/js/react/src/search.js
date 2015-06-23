@@ -48,13 +48,13 @@ var Main = module.exports =  React.createClass({
             }else{
                 state['resultsTab']='list';
             }
-        }else if(localStorage.getItem('resultsTab')){
+        }/*else if(localStorage.getItem('resultsTab')){
 
             state['resultsTab']=localStorage.getItem('resultsTab');
         }
         if(localStorage.getItem('optionsTab')){
             state['optionsTab']=localStorage.getItem('optionsTab');
-        }
+        }*/
         var search;
         //set current search
         if(url('?rq') || url('?sort')){
@@ -229,7 +229,7 @@ var OptionsPanel = React.createClass({
     },
     render: function(){
     
-        var menu = [],self=this,panels={filters: '',sorting: '', mapping: '', download:''},panel;
+        var menu = [],self=this,panels={filters: '', mapping: '',sorting: '', download:''},panel;
 
         Object.keys(panels).forEach(function(item,ind){
             if(item==self.props.view){

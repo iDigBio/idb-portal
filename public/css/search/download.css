@@ -1,11 +1,18 @@
 #download {
   padding: 0px;
-  background-color: #f0f0f0;
+  background-color: #ececec;
   border-bottom: 1px solid #cccccc;
   margin: 0px;
 }
 #download .sub#current {
   margin: 15px;
+}
+#download .sub#current select {
+  max-width: 400px;
+}
+#download .sub#current select option {
+  max-width: 400px;
+  display: inline-block;
 }
 #download .sub .input-group {
   width: 100%;
@@ -71,10 +78,4 @@
   #download #downloads-section table td.title {
     max-width: 200px;
   }
-}
-#download .form-control.history-select {
-  width: 100%;
-}
-#download .form-control.history-select option {
-  overflow: ellipses;
 }

@@ -6,8 +6,8 @@ echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 node_modules/bower/bin/bower install
 
 # Build Leaflet
-cd public/components/leaflet
-npm install
+#cd public/components/leaflet
+#npm install
 cd ../../..
 
 # Build Knockout

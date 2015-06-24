@@ -43,7 +43,7 @@ do
     fi
     script+="
     cd /var/www/node/idb-portal/public/client/js/; 
-    su -c 'browserify main.js -o ../../js/app.js -t reactify' www-data; 
+    su -c 'browserify main.js -o ../../js/client.js -t reactify' www-data; 
     cd /var/www/node/idb-portal;
     supervisorctl restart idigbio-portal-service;
     "

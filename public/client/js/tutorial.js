@@ -1,7 +1,9 @@
-
+window.scrollToId = function(id){
+      $('html,body').animate({scrollTop: $("#"+id).offset().top},'slow');
+}
 
 $(window).scroll(function() {
-
+   
     if($('#content').width() > 700){
         var pos = $('#tutorial-nav').offset();
         $('#static-menu').css('width', $('#tutorial-nav').css('width'));

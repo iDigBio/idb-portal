@@ -41,6 +41,7 @@ function loadPage(){
 $(document).ready(function(){
 	//if errors occur on page load try once to clear localStore and refresh
 	try{
+		//Download.queryToSentence(JSON.parse(localStorage.getItem('history'))[0]);
 		loadPage();
 		localStorage.removeItem('reloaded');
 	}catch(e){

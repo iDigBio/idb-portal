@@ -1,12 +1,17 @@
 module.exports = function(){
     //initialize history on new [function name]
     this.history=[];
+    this.version= 1;
     var self=this;
     (function(){
         if(!_.isUndefined(localStorage)){
             if(!_.isUndefined(localStorage.history)){
                 var history = JSON.parse(localStorage.getItem('history'));
-                self.history = history.hstates;
+                if(typeof history.version == 'number' && history.version === self.version){
+                    self.history = history.hstates;
+                }else{
+                    self.history = [];
+                }
             }
         }else{
             console.log('history will not work on this browser!');
@@ -22,7 +27,7 @@ module.exports = function(){
     }
 
     this.save = function(){
-        localStorage.setItem('history', JSON.stringify({hstates: this.history}));
+        localStorage.setItem('history', JSON.stringify({hstates: this.history, version: self.version}));
     }
 
     this.updateLast = function(searchState){
@@ -32,7 +37,7 @@ module.exports = function(){
     
     this.clear = function(){
         this.history = [];
-        localStorage.setItem('history',JSON.stringify({hstates: []}));
+        localStorage.setItem('history',JSON.stringify({hstates: [], version: self.version}));
     }
 
     this.isEmpty = function(){

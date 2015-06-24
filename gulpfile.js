@@ -36,12 +36,12 @@ gulp.task('default',function(){
             gutil.log('Browserify Error:', e);
         })
         //.pipe(uglify())
-        .pipe(source('app.js'))
+        .pipe(source('client.js'))
         .pipe(gulp.dest('./public/js'))
     }
     //live reload of compiled files
     livereload.listen();
-    gulp.watch(['app/views/*','public/js/app.js','public/css/*']).on('change',livereload.changed);
+    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
 
     //build less css changes
     gulp.watch('public/client/less/**').on('change', function(){

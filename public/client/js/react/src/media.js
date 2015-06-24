@@ -41,7 +41,7 @@ var Buttons = React.createClass({
             var link = '/portal/records/'+this.props.data.records[0];
             el.push(
                 <a className="btn button" href={link} key={link} keyid={link}>
-                    Go To Specimen Record
+                    Go To Record
                 </a>
             )
         }else{
@@ -67,7 +67,7 @@ var Buttons = React.createClass({
             <div id="action-buttons" key={'buttons'}>
                 {el}
                 <button className="btn button" title="print this page" onClick={this.print}>
-                    <i className="glyphicon glyphicon-print"> </i>
+                    Print
                 </button>
             </div>
         );

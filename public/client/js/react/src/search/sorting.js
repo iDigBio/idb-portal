@@ -134,10 +134,11 @@ var Sort = module.exports = React.createClass({
                 </div>
                 <div id="sort-scroller" >
                     <span style={{'display': 'block' }} onClick={this.scrollSorts}>
-                        &darr; Scroll To Bottom &darr;
+                        
                     </span>
                 </div>
             </div>
         )
     }
-})
+});
+//&darr; Scroll To Bottom &darr;

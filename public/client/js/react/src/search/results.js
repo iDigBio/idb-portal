@@ -306,9 +306,9 @@ var ResultsList = React.createClass({
                 tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
             })
             //add openrecord column
-            tds.push(<td key={'row-'+index+'-open'} className="open"><button className="pull-left" title="view full record"><i className="glyphicon glyphicon-eye-open"></i></button></td>);
+            tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" id={item.uuid} onClick={self.openRecord} title="view full record">view</a></td>);
             rows.push(
-                <tr key={'row-'+index} id={item.uuid} onClick={self.openRecord}>
+                <tr key={'row-'+index}>
                     {tds}
                 </tr>
             );
@@ -484,7 +484,7 @@ var ResultsLabels = React.createClass({
       
         return (
             <div key={'label-'+id}  className="pull-left result-item result-label" >
-                <h5 className="title" onClick={this.openRecord} id={result.uuid} title="click to open record">{title}&nbsp;{auth}</h5>
+                <h5 className="title" title="click to open record"><a href={'/portal/records/'+result.uuid} target={result.uuid}>{title}&nbsp;{auth}</a></h5>
                 <h5 className="family">{family}</h5>
                 {img}
                 <p className="content">

@@ -306,9 +306,9 @@ var ResultsList = React.createClass({displayName: "ResultsList",
                 tds.push(React.createElement("td", {key: 'row-'+index+'-cell-'+ind}, val));
             })
             //add openrecord column
-            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("button", {className: "pull-left", title: "view full record"}, React.createElement("i", {className: "glyphicon glyphicon-eye-open"}))));
+            tds.push(React.createElement("td", {key: 'row-'+index+'-open', className: "open"}, React.createElement("a", {className: "pull-left", id: item.uuid, onClick: self.openRecord, title: "view full record"}, "view")));
             rows.push(
-                React.createElement("tr", {key: 'row-'+index, id: item.uuid, onClick: self.openRecord}, 
+                React.createElement("tr", {key: 'row-'+index}, 
                     tds
                 )
             );
@@ -484,7 +484,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
       
         return (
             React.createElement("div", {key: 'label-'+id, className: "pull-left result-item result-label"}, 
-                React.createElement("h5", {className: "title", onClick: this.openRecord, id: result.uuid, title: "click to open record"}, title, " ", auth), 
+                React.createElement("h5", {className: "title", title: "click to open record"}, React.createElement("a", {href: '/portal/records/'+result.uuid, target: result.uuid}, title, " ", auth)), 
                 React.createElement("h5", {className: "family"}, family), 
                 img, 
                 React.createElement("p", {className: "content"}, 

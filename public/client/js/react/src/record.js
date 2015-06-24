@@ -168,7 +168,7 @@ var Buttons = React.createClass({
                         View Raw Data
                     </button>
                     <button className="btn" title="print this page" onClick={this.print}>
-                        <i className="glyphicon glyphicon-print"> </i>
+                        Print
                     </button>
                 </div>
             </div>

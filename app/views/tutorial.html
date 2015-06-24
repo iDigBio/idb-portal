@@ -68,88 +68,91 @@
               </figure>
         		<h4 id="searching" style="margin-top:30px;">Understanding and Performing Searches</h4>
 
-        		<p>The search form section of the <em><b>Search Records</b></em> page provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have image</b> restricts mapped and record results to those specimens that have related images. Checking the <b>Must have map point</b> restricts the record results section to only show records that contain geopoint data (mapping results can only contain records with geopoint data).</p>
+        		<p>The search form section of the <em><b>Search Records</b></em> <em>(Fig. 3)</em> page provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have image</b> restricts mapped and record results to those specimens that have related images. Checking the <b>Must have map point</b> restricts the record results section to only show records that contain geopoint data (mapping results can only contain records with geopoint data).</p>
             <div class="clearfix">      		
-              <figure id="fig2">
-                  <figcaption>Fig. 2</figcaption>
+              <figure id="fig3">
+                  <figcaption>Fig. 3</figcaption>
           			  <img src="/portal/img/tutorial/search-form.png">
           		</figure>
             </div>
         		
             <h4>Filters tab</h4>
-            <p>The <em>Filters</em> tab allows you provide exact text match and range searches for data fields. Multiple exact matches are possible with text matching filters by using a new line for each entry. In the case of date and range (elevation, depth, etc.) filters, only a single entry is possible per field box. Text filters also offer an autocomplete list (once you start typing) that filters based on already provided data in the system. The autocomplete feature for the Scientific Name and Specific Epithet filters also offers an "add all" feature next to each suggestion. This allows you to add all names that start with the suggested match as a whole word (i.e. add all <i>californica</i> would add <i>calfifornica borealis</i> not <i>californicalis</i>).</p>
+            <p>The <em>Filters</em> tab <em>(Fig. 3)</em> allows you provide exact text match and range searches for data fields. Multiple exact matches are possible with text matching filters by using a new line for each entry. In the case of date and range (elevation, depth, etc.) filters, only a single entry is possible per field box. Text filters also offer an autocomplete list (once you start typing) that filters based on already provided data in the system. The autocomplete feature for the Scientific Name and Specific Epithet filters also offers an "add all" feature next to each suggestion. This allows you to add all names that start with the suggested match as a whole word (i.e. add all <i>californica</i> would add <i>calfifornica borealis</i> not <i>californicalis</i>).</p>
 
-            <p>The Family, Genus and Scientifc Name filters provide an "Add Synonyms" button <em>(Fig. 7)</em> which uses the <a href="http://eol.org/api" target="EOL API" alt="EOL API">Encyclopedia of Life API</a> to find synonyms for names entered in the text box. Clicking the button once you have entered a name or multiple names will add any found synonyms to the text box.</p> 
+            <p>The Family, Genus and Scientifc Name filters provide an "Add Synonyms" button which uses the <a href="http://eol.org/api" target="EOL API" alt="EOL API">Encyclopedia of Life API</a> to find synonyms for names entered in the text box. Clicking the button once you have entered a name or multiple names will add any found synonyms to the text box.</p> 
 
-        		<p>Alternatively, each filter offers the possibility to match a record by the presence or absence of the data field in a record using the <em>Present</em> and <em>Missing</em> checkboxes respectively. <em>(Fig. 8)</em></p> 
+        		<p>Alternatively, each filter offers the possibility to match a record by the presence or absence of the data field in a record using the <em>Present</em> and <em>Missing</em> checkboxes respectively.</p> 
+            
+            <p style="margin-top:10px;">To reset the search form to its default state, use the reset button <img src="/portal/img/tutorial/reset-button.jpg"/> or use the <b>Clear</b> button to simply clear the text boxes and check boxes on screen.</p>
 
             <h4>Mapping tab</h4>
 
             <div class="clearfix">
-              <figure id="fig7" >
-                  <figcaption>Fig. 7</figcaption>
+              <figure id="fig4" >
+                  <figcaption>Fig. 4</figcaption>
                   <img src="/portal/img/tutorial/mapping-panel.png"> 
               </figure>
             </div>
 
-            <p>Searching for georefenced specimens can be achieved by selecting the <b>Mapping</b> tab in the search form. This tab provides the ability to search within a rectangular set of bounds or within a radius from a given map point. The bounding corners display and use default global values for fields not filled. Searching for just the presence or absence of records with a geopoint can be achieved by using the <b>present</b> and <b>missing</b> checkboxes <em>(Fig. 11)</em>. 
+            <p>The <em>Mapping</em> tab <em>(Fig. 4)</em> provides the ability to specify a geographic boundaries for records through either a circlular or recatangular boundaries. Using this feature limits all results to records with geopoint data. You can specify your bounding by either supplying a NorthWest and SouthEast lat/lon coordinates of a rectangle or provide a lat/lon point with a radius to create a circular boundry. Alternatively you can also draw the rectangle or circle boundary by using the draw feature provided on the map. This feature is covered in the <a href='#map'>map</a> section of this tutorial. 
             </p>
             <h4 id="filters" style="margin-top:30px;">Sorting tab</h4>
+            <p>The sorting tab <em>(Fig. 5)</em> provides the ability on up to six data fields. The default settings for this tab sorts results based Genus then Specific Epithet and then Date Collected. Sort rules can be added with the "Add a sort" button and removed with the <img src="/portal/img/tutorial/"/>button</p>
             <p>
             <div class="clearfix">
-              <figure id="fig3" >
-                  <figcaption>Fig. 3</figcaption>
+              <figure id="fig5" >
+                  <figcaption>Fig. 5</figcaption>
                   <img src="/portal/img/tutorial/sort-panel.png" style="max-width:650px;">
               </figure>
             </div>
             </p>
-        		<p style="margin-top:10px;">To restart or revise a search, use the <b>Reset</b> button <em>(Fig. 10)</em> or use the <b>Clear</b> button to simply clear the text boxes and check boxes on screen. To go back to a previous search, look up your history of queries under the <b>Query</b> drop-down box <em>(Fig. 9)</em>. Not sure you can remember everything? The <b>Tips & Hints</b> link <em>(Fig. 10)</em> can give you short reminders. </p>
-            
+
             <h4>Download tab</h4>
+
+            <p>The <em>Download</em> tab <em>(Fig. 6)</em> allows you to obtain all the record data in the current search query in Darwin Core Archive (DwC-A) format. You must provide a valid email address in the Email input box in order to run the download. An email is required so a link to the DwC-A file can be sent to you should you run another query or navigate away from the <b>Search Records</b> page. The Approx. Build Time provides a rough calculation of the time it will take to generate the DwC-A. Once you click the download button, your download will appear in the <em>Available Downloads</em> box with a status of "pending". Once your download is ready, a link to the download will replace the "pending" status.</p>
             <div class="clearfix">
-              <figure id="fig9">
-                  <figcaption>Fig. 9</figcaption>
+              <figure id="fig6">
+                  <figcaption>Fig. 6</figcaption>
                   <img src="/portal/img/tutorial/download-panel.png"> 
               </figure>
             </div>
-            <p>The <em>Download</em> tab allows you to obtain all the record data in the current search query in Darwin Core Archive (DwC-A) format. You must provide a valid email address in the Email input box in order to run the download. An email is required so a link to the DwC-A file can be sent to you should you run another query or navigate away from the <b>Search Records</b> page. The Approx. Build Time provides a rough calculation of the time it will take to generate the DwC-A. Once you click the download button, your download will appear in the <em>Available Downloads</em> box with a status of "pending". Once your download is ready, a link to the download will replace the "pending" status.</p>
-
             <p>A Darwin Core Archive is a zip file that includes one or more text CSV (comma separated value) files, each with a .txt extension and a descriptor (meta.xml) that contains metadata about the data set that you downloaded (e.g., who provided the data and the format).  A data download that has images or other media associated with it will have two CSV files, one for specimen data and the other describing the media.  The CSV file can be opened by any text editor or can be imported into a database or spreadsheet.  A modestly sized download (100,000 records) can be readily opened in software like MS Excel.  The easiest way to open a CSV file with Excel is to change the .txt extension to .csv before you open the file.  
             </p>
 
         		<h3 id="viewing" style="margin-top:30px;">Viewing Results</h3>
 
-        		<p>Results data are displayed belowe the search form and mapped results sections. This section displays the total number of results matching search criteria and gives you three options for formatting the results.  The formatted results can be displayed in <b>Table view</b>, <b>Label view</b> or the <b>Images</b> gallery. The <b>Table view</b> allows you to display any number of columns of DWC data that are searchable in iDigBio. The right side of the Table view headers provides a configuration button that allows you to select which columns are viewable in the table. The <b>Label view</b> displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record.</p> 
+        		<p>Results data are displayed below the search form and mapped results sections. This section displays the total number of results matching search criteria and gives you three options for formatting the results.  The formatted results can be displayed in <b>Table view</b>, <b>Label view</b> or the <b>Images</b> gallery. The <b>Table view</b> allows you to display any number of columns of DWC data that are searchable in iDigBio. The right side of the Table view headers provides a configuration button that allows you to select which columns are viewable in the table. The <b>Label view</b> displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record.</p> 
 
-        		<p>Clicking on a single row of the table or a single label presents the a complete specimen record page <em>(Fig. 12)</em>, including all specimen data, any associated media if available and a map with the location where the specimen and similar specimens were collected (if georeferenced). Clicking on the image in the 
-            specimen page allows you to access the full-size image as well as metadata about the image. You can go back to the specimen information, using the <b>Go To Specimen Record</b> link, under the smaller version of the image.</p>
+        		<p>Clicking on a single row of the table or a single label presents the a complete specimen record page <em>(Fig. 7)</em>, including all specimen data, any associated media if available and a map with the location where the specimen and similar specimens were collected (if georeferenced). Clicking on the image in the 
+            specimen page allows you to access the full-size image as well as metadata about the image. You can go back to the specimen information, using the <b>Go To Record</b> link, under the smaller version of the image.</p>
             <div class="clearfix">
-              <figure id="fig12" >
-                  <figcaption>Fig. 12</figcaption>
+              <figure id="fig7" >
+                  <figcaption>Fig. 7</figcaption>
                   <img style="max-width:650px;" src="/portal/img/tutorial/fullrecord.png">
               </figure>
             </div>
-            The specimen record page also provides you with a view of the raw data in JSON format <em>(Fig. 13)</em> through the <b>View Raw Data</b> button. With the raw view you can have a peek at the data that is available to you or could be used to add value to other portals. It can also be used to view additional information created by iDigBio, such as the internal GUID or when it was ingested or updated in our system, and to detect if iDigBio is not accurately displaying the data as it came from the provider.</p>
+            The specimen record page also provides you with a view of the raw data in JSON format <em>(Fig. 8)</em> through the <b>View Raw Data</b> button. With the raw view you can have a peek at the data that is available to you or could be used to add value to other portals. It can also be used to view additional information created by iDigBio, such as the internal GUID or when it was ingested or updated in our system, and to detect if iDigBio is not accurately displaying the data as it came from the provider.</p>
 
             <div class="clearfix">
-              <figure id="fig13" >
-                  <figcaption>Fig. 13</figcaption>          
+              <figure id="fig8" >
+                  <figcaption>Fig. 8</figcaption>          
           		    <img style="max-width:370px;" src="/portal/img/tutorial/rawRecord.png"> 
               </figure>
             </div>
 
             <h4 id="map" style="margin-top:30px;">Mapped Results</h4>
+            <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the map view. The map displays results in two styles depending on the number of mapped results. When the results contain more than 100,000 points they will be displayed as a geohashed heat map <em>(Fig. 9)</em>. When the results are a 100,000 or less, the results are displayed as individual color coded points <em>(Fig. 10)</em>. Color coded points are displayed as such to disguish between different taxa. The map legend in the lower left corner displays the color to taxa labeling of the top 10 taxa in the results (all other taxa are displayed with a brown colored point by default). Both the heat map and point displays allow you to click on them to display the results in a pop-up box in the location you clicked. In the case of the heat map, the results will be all records with in the boundary of the geohash (heat) box you click. In the case of clicking a point the results displayed will be all those that fall within a radius of the point you click (the radius length varies depending on the zoom level of the map).  The results pop-up box also provides a <i>Set Map Bounds</i> button. This feature allows you to set the <em>Mapping</em> tab parameters to the same parameters as the box or point that you click on.</p>
 
-            <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the map view.  You can pan and zoom within the map. You can also draw a boundry to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary. The button in the top right corner is a toggle between the regular and a full-size version that fills your browser window. The map displays results in two styles depending on the number of mapped results. When the mapped results has more than 100,000 points the results will be displayed as a geohashed heat map. When the mapped results are a 100,000 or less, the results are displayed as individual color coded points. Color coded points are displayed as such to disguish between different taxa. The map legend in the lower left corner displays the color to taxa labeling of the top 10 taxa in the results (all other taxa are displayed with a brown colored point by default). Both the heat map and point displays allow you to click on them to display the results in a pop-up box in the location you clicked. In the case of the heat map, the results will be all records with in the boundary of the geohash (heat) box you click. In the case of clicking a point the results displayed will be all those that fall within a radius of the point you click (the radius length varies depending on the zoom level of the map).  The results pop-up box also provides a <i>Set Map Bounds</i> button. This feature allows you to set the <em>Mapping</em> tab parameters to the same parameters as the box or point that you click on.</p>
+            <p>The map provides several controls for further interacting with the map. The top left corner provides two sets of controls. The camera button <img src="/portal/img/tutorial/camera-button.png" /> allows you to create a PNG image of the map as displayed the moment you click the button. This feature can take several seconds to generate the image. The buttons below camera button provide boundary drawing capabilities. Clicking the rectangle <img src="/portal/img/tutorial/rectangle-button.png" /> or circle button <img src="/portal/img/tutorial/circle-button.png" /> allows you to draw a rectangular or circular boundary around a geographic area to further limit your results to records with geopoints inside the boundry. The button in the top right corner is a toggle between the regular and a full screen mode that fills your entire screen. Below the full screen button are the zoom-in and zoom-out buttons that provide map zoom capabilites. The map zoom can also be changed with a mouse scroll wheel when the mouse pointer is over the map. You can also draw a boundry to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary.</p>
 
             <div class="clearfix">
               <figure id="fig13"  style="float:left;margin:20px;" >
-                  <figcaption>Fig. 14</figcaption>          
-                  <img src="/portal/img/tutorial/heatmap.png"> 
+                  <figcaption>Fig. 9</figcaption>          
+                  <img src="/portal/img/tutorial/heatmap.jpg"> 
               </figure>
               <figure id="fig14"  style="float:right;margin:20px;">
-                  <figcaption>Fig. 15</figcaption>          
-                  <img src="/portal/img/tutorial/pointmap.png"> 
+                  <figcaption>Fig. 10</figcaption>          
+                  <img src="/portal/img/tutorial/pointmap.jpg"> 
               </figure>
             </div>
 

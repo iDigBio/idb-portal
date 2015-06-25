@@ -29,9 +29,8 @@ module.exports = function(app, config) {
 		},
 		record: function(req,res){
 			var id = req.params.id;
-			var base = 'https://beta-search.idigbio.org/v2/view/';
 			//var Page = React.renderComponentToString(RecordPage({record: record, provider: recordset}));
-			request.get({"url": base+'records/'+id, "json": true}, function(err, resp, body){
+			request.get({"url": config.api+'view/records/'+id, "json": true}, function(err, resp, body){
 		
 				if(body.uuid){
 					var record = body;
@@ -64,10 +63,9 @@ module.exports = function(app, config) {
 		media: function(req,res){
 			//var qu = {size:1,from:0,query:{term:{uuid: id}}};
 			var id = req.params.id;
-			var base = 'https://beta-search.idigbio.org/v2/view/';
 			var recordset, name='';
 			
-			request.get({"url": base+'mediarecords/'+id, "json": true}, function(err, resp, body){
+			request.get({"url": config.api+'view/mediarecords/'+id, "json": true}, function(err, resp, body){
 				if(body.uuid){
 					var mediarecord = body;
 					var record = {};
@@ -88,7 +86,7 @@ module.exports = function(app, config) {
 			            }); 					
 					}
 					if(_.has(mediarecord.indexTerms,'records')){
-						request.get({url: base+'records/'+mediarecord.indexTerms.records[0], "json": true},function(err, resp, body){
+						request.get({url: config.api+'view/records/'+mediarecord.indexTerms.records[0], "json": true},function(err, resp, body){
 		                    record = body;
 							render();
 						});

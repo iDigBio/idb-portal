@@ -476,7 +476,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             img = (
                 React.createElement("span", {key: 'media-'+result.uuid+this.props.stamp, className: "image-wrapper", id: data.mediarecords[0], onClick: this.openMedia, title: "click to open media record"}, 
                     imgcount, 
-                    React.createElement("img", {"data-onerror": "$(this).attr('src','/portal/img/notavailable.png')", "data-onload": "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: " loading image...", src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
+                    React.createElement("img", {"data-onerror": "$(this).attr('src','/portal/img/notavailable.png')", "data-onload": "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: title, src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
                 )  
             )
      
@@ -592,7 +592,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         return (
             React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+uuid}, 
                 React.createElement("span", {className: "img-count"}, count), 
-                React.createElement("img", {alt: "loading...", 
+                React.createElement("img", {alt: name.join(' '), 
                 src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
                 onError: this.errorImage}), 
                 React.createElement("div", {className: "gallery-image-text"}, 

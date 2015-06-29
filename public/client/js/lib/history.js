@@ -1,16 +1,15 @@
 module.exports = function(){
     //initialize history on new [function name]
-    this.history=[];
-    this.version= 1;
-    var self=this;
+    this.history = [];
+    this.version = 1; //increment this when shit changes
     (function(){
         if(!_.isUndefined(localStorage)){
             if(!_.isUndefined(localStorage.history)){
                 var history = JSON.parse(localStorage.getItem('history'));
-                if(typeof history.version == 'number' && history.version === self.version){
-                    self.history = history.hstates;
+                if(typeof history.version == 'number' && history.version === this.version){
+                    this.history = history.hstates;
                 }else{
-                    self.history = [];
+                    this.history = [];
                 }
             }
         }else{
@@ -27,7 +26,7 @@ module.exports = function(){
     }
 
     this.save = function(){
-        localStorage.setItem('history', JSON.stringify({hstates: this.history, version: self.version}));
+        localStorage.setItem('history', JSON.stringify({hstates: this.history, version: this.version}));
     }
 
     this.updateLast = function(searchState){
@@ -37,7 +36,7 @@ module.exports = function(){
     
     this.clear = function(){
         this.history = [];
-        localStorage.setItem('history',JSON.stringify({hstates: [], version: self.version}));
+        localStorage.setItem('history',JSON.stringify({hstates: [], version: this.version}));
     }
 
     this.isEmpty = function(){

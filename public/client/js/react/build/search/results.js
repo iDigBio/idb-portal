@@ -474,9 +474,18 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             } 
           
             img = (
-                React.createElement("span", {key: 'media-'+result.uuid+this.props.stamp, className: "image-wrapper", id: data.mediarecords[0], onClick: this.openMedia, title: "click to open media record"}, 
+                React.createElement("span", {
+                    key: 'media-'+result.uuid+this.props.stamp, 
+                    className: "image-wrapper", 
+                    id: data.mediarecords[0], 
+                    onClick: this.openMedia, 
+                    title: "click to open media record"}, 
                     imgcount, 
-                    React.createElement("img", {"data-onerror": "$(this).attr('src','/portal/img/notavailable.png')", "data-onload": "$(this).attr('alt','image thumbnail')", className: "pull-right label-image", alt: title, src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
+                    React.createElement("img", {
+                        onError: this.errorImage, 
+                        className: "pull-right label-image", 
+                        alt: title, 
+                        src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
                 )  
             )
      
@@ -492,6 +501,10 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
                 )
             )
         )
+    },
+    errorImage: function(e){
+        //debugger
+        e.target.attributes['src'].value='/portal/img/notavailable.jpg';
     },
     openMedia: function(e){
         e.preventDefault();
@@ -558,8 +571,8 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
     getInitialState: function(){
         return {results: this.props.results, loading: false};
     },
-    errorImage: function(event){
-
+    errorImage: function(e){
+        e.target.attributes['src'].value = '/portal/img/missing.gif';
     },
     componentWillMount: function(){
         if(!this.props.search.image){

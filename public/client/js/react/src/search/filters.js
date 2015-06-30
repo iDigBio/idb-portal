@@ -26,7 +26,6 @@ var Filters = module.exports = React.createClass({
             return filters;
         }      
     }, 
-
     filterPropsChange: function(filterObj){
         var list = this.filters(),self=this;
         var filters = this.props.filters;

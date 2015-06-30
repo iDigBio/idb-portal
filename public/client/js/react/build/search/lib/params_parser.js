@@ -38,7 +38,7 @@ module.exports = function(search){
                     }else if(_.isArray(v)){
                         filter.text = v.join('\n');
                     }
-                    filters.push(filter);                   
+                    filters.unshift(filter);                   
                 }
             });
             if(filters.length > 0){

@@ -139,7 +139,6 @@
 }
 #filters #filters-holder .filter .filter-name {
   word-wrap: break-all;
-  word-break: break-word;
   width: 20%;
   font-size: .88em;
 }

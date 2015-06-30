@@ -15,7 +15,7 @@ module.exports = function(){
         }else{
             console.log('history will not work on this browser!');
         }
-    })(this)
+    }).call(this)
 
     this.push = function(searchState){
         this.history.unshift(_.cloneDeep(searchState));

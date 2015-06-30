@@ -55,18 +55,19 @@ var Main = module.exports =  React.createClass({
         if(localStorage.getItem('optionsTab')){
             state['optionsTab']=localStorage.getItem('optionsTab');
         }*/
-        var search;
+        var search = Main.defaultSearch();
         //set current search
         if(url('?rq') || url('?sort')){
-            search = Main.defaultSearch();
             paramsParser(search);
+            _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
+                search.filters.push(Filters.newFilterProps(filter));
+            });
             window.history.pushState({},'search',url('path'));
-        /*}else if(searchHistory.history.length > 0){
-            search = searchHistory.history[0];*/
-        }else{
-            search = Main.defaultSearch();
+        }else if(searchHistory.history.length > 0){
+            search.filters = _.map(searchHistory.history[0].filters, function(filter){
+                return Filters.newFilterProps(filter.name);
+            });
         }
-     
         searchHistory.push(search);
         state['search']=search;
         return state;

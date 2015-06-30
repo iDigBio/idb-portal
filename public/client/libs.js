@@ -6,7 +6,7 @@ window._ = require('lodash');
 window.helpers = require('./js/lib/helpers');
 window.fields = require('./js/lib/fields');
 window.dwc = require('./js/lib/dwc_fields');
-require('./js/lib/searchserver');
+//require('./js/lib/searchserver');
 window.queryBuilder = require('./js/lib/querybuilder');
 window.async = require('async');
 var SearchHistory = require('./js/lib/history');

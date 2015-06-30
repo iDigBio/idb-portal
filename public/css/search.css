@@ -143,7 +143,6 @@
 }
 #filters #filters-holder .filter .filter-name {
   word-wrap: break-all;
-  word-break: break-word;
   width: 20%;
   font-size: .88em;
 }
@@ -425,12 +424,24 @@
 #results #result-labels {
   padding: 10px;
   width: 100%;
+  display: -ms-flexbox;
+  display: -webkit-flex;
   display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
   flex-direction: row;
-  justify-content: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  align-items: flex-start;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  -webkit-align-content: flex-start;
+  -ms-flex-line-pack: start;
   align-content: flex-start;
+  -webkit-align-items: flex-start;
+  -ms-flex-align: start;
+  align-items: flex-start;
 }
 #results #result-labels .label-loading {
   width: 100%;
@@ -455,10 +466,6 @@
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   background-color: #ececec;
   padding: 3px 8px;
-  /*webkit only */
-  display: -webkit-box;
-  -webkit-line-clamp: 7;
-  -webkit-box-orient: vertical;
 }
 @media (max-width: 1790px) {
   #results #result-labels .result-label {

@@ -1,7 +1,7 @@
 module.exports = function(){
     //initialize history on new [function name]
     this.history = [];
-    this.version = 1; //increment this when shit changes
+    this.version = 2; //increment this when shit changes
     (function(){
         if(!_.isUndefined(localStorage)){
             if(!_.isUndefined(localStorage.history)){

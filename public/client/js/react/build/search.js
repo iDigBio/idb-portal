@@ -58,7 +58,7 @@ var Main = module.exports =  React.createClass({displayName: "exports",
         var search = Main.defaultSearch();
         //set current search
         if(url('?rq') || url('?sort')){
-            paramsParser(search);
+            paramsParser(search);//mutates search object filters
             _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
                 search.filters.push(Filters.newFilterProps(filter));
             });
@@ -131,10 +131,8 @@ var SearchAny = React.createClass({displayName: "SearchAny",
                 React.createElement("h3", null, 
                     "Start Searching", 
 
-                    React.createElement("a", {className: "btn pull-right", id: "reset-button", onClick: this.resetSearch, title: "reset"}, React.createElement("i", {className: "glyphicon glyphicon-refresh"})), 
-                    React.createElement("a", {className: "btn pull-right", title: "help", "data-toggle": "modal", "data-target": "#search-help"}, 
-                        React.createElement("i", {className: "glyphicon glyphicon-question-sign"})
-                    )
+                    React.createElement("a", {className: "btn pull-right", id: "reset-button", onClick: this.resetSearch, title: "reset search form"}, "Reset"), 
+                    React.createElement("a", {className: "btn pull-right", title: "help", "data-toggle": "modal", "data-target": "#search-help"}, "Help")
                 ), 
                 React.createElement("div", null, 
                     React.createElement("input", {type: "text", className: "form-control", placeholder: "search all fields", onChange: this.textType, value: this.props.search.fulltext})

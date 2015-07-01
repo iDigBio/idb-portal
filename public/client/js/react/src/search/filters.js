@@ -20,7 +20,7 @@ var Filters = module.exports = React.createClass({
         },
         defaultFilters: function(){
             var filters=[],self=this;
-            ['datecollected','genus','specificepithet'].forEach(function(item){
+            ['scientificname','datecollected','country'].forEach(function(item){
                 filters.push(Filters.newFilterProps(item));
             });   
             return filters;

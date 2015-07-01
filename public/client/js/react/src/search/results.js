@@ -164,7 +164,7 @@ var ResultsList = React.createClass({
         }
     },
     defaultColumns: function(){
-        return ['genus','specificepithet','datecollected','institutioncode'];
+        return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
     },
     setColumns: function(columns){
         this.setState({columns: columns});
@@ -276,9 +276,9 @@ var ResultsList = React.createClass({
         });
         //add column list button
         headers.push(
-            <th key={'header-select'} style={{width: '60px'}}>
+            <th key={'header-select'} style={{width: '80px', fontSize: '10px', textAlign: 'center'}}>
                 <button className="pull-left" data-toggle="modal" data-target="#column-list">
-                    <i className="glyphicon glyphicon-list"/>
+                    Columns
                 </button>
             </th>
         )

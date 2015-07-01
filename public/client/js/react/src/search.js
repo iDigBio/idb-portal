@@ -58,7 +58,7 @@ var Main = module.exports =  React.createClass({
         var search = Main.defaultSearch();
         //set current search
         if(url('?rq') || url('?sort')){
-            paramsParser(search);
+            paramsParser(search);//mutates search object filters
             _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
                 search.filters.push(Filters.newFilterProps(filter));
             });
@@ -131,10 +131,8 @@ var SearchAny = React.createClass({
                 <h3>
                     Start Searching
 
-                    <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset"><i className="glyphicon glyphicon-refresh"></i></a>
-                    <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">
-                        <i className="glyphicon glyphicon-question-sign"></i>
-                    </a>
+                    <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset search form">Reset</a>
+                    <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>
                 </h3>
                 <div >
                     <input type="text" className="form-control" placeholder="search all fields" onChange={this.textType} value={this.props.search.fulltext}/>

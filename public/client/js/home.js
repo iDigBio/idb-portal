@@ -125,13 +125,27 @@ idbapi.summary('count/recordset/',function(resp){
     $('#recordsets-total').html(formatNum(resp.itemCount));
 });
 
+function searchRq(value){
+    var rq, type=$('#select-field').val();
+    switch(type){
+        case 'fulltext':
+            rq = '{"data":{"type":"fulltext","value":"'+value+'"}}';
+            break;
+        case 'scientificname':
+            rq = '{"scientificname":"'+value+'"}';
+            break;
+    }
+    window.location = '/portal/search?rq='+rq;
+}
+
 $('#searchbox').keypress(function(e) {
     if(e.which == 13) {
         e.preventDefault();
-        window.location = '/portal/search?rq={"data":{"type":"fulltext","value":"'+this.value+'"}}';
+        searchRq(this.value);
     }
 });
+
 $('#searchbtn').click(function(e){
     e.preventDefault();
-    window.location = '/portal/search?rq={"data":{"type":"fulltext","value":"'+$('#searchbox').val()+'"}}';
+    searchRq($('#searchbox').val());
 });

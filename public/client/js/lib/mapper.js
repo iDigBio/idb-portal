@@ -322,15 +322,10 @@ module.exports = IDBMap =  function(elid, options){
                         )
                     }
                 });
-                /*if(index.hasImage){
-                    row+='<img class="pop-img" src="https://api.idigbio.org/v1/records/'+index.uuid+'/media?quality=thumbnail"/>';
-                }<td>'+helpers.formatNum(ind+offset+1)+'</td>*/
                 var row = '<tr class="map-popup-item"><td><div class="cont clearfix">'
                 
                 row+=inf.join('<br/>')+'</div></td></tr>';
-                items.push(
-                    row
-                )
+                items.push(row);
             });
             if(data.itemCount <= offset+data.items.length){
                 nextstyle='disable';

@@ -419,14 +419,15 @@ module.exports = IDBMap =  function(elid, options){
             circle.addTo(self.map);
             hover=circle;
         }else{
-
             //rectangle.setBounds([]);
             rectangle.addTo(self.map);
             hover=rectangle;
         }
     }
     var mapHoverout = function(e){
-        self.map.removeLayer(hover);
+        if(typeof hover != undefined){
+            self.map.removeLayer(hover);
+        }
     }
     /*
     * iDBLayer and UTF8Grid interactions control and rendering with events

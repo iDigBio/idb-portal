@@ -123,7 +123,7 @@ var Img = React.createClass({
     render: function(){
         return (
             <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
-                <img className="gallery-image" onError={this.error} src={'//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview'} /> 
+                <img className="gallery-image" onError={this.error} src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} /> 
             </a>
         );
     }

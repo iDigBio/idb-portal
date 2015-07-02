@@ -1210,9 +1210,6 @@ input::-webkit-input-placeholder {
 #search .checkbox:first-of-type {
   padding-left: 40px;
 }
-#search a#reset-button {
-  color: #9D0C0C;
-}
 #options {
   width: 100%;
   margin: 0px;

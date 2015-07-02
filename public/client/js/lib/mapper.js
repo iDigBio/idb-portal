@@ -212,7 +212,7 @@ module.exports = IDBMap =  function(elid, options){
                 if(time >= self.currentQueryTime){
                     //control response
                     map.legend=resp;
-                    if(resp.order.length===0){
+                    if(resp.order.length === 0 && resp.itemCount === 0){
                         header='<span class="legend-header">No Map Points Available</span>';
                     }else if(isNaN(resp.order[0])){
                         header='<span class="legend-header">Top '+resp.order.length+' Taxa</span>';

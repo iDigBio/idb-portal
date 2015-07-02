@@ -485,7 +485,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
                         onError: this.errorImage, 
                         className: "pull-right label-image", 
                         alt: title, 
-                        src: "https://api.idigbio.org/v1/records/"+result.uuid+"/media?quality=thumbnail"})
+                        src: "https://media.idigbio.org/mrlookup/"+data.mediarecords[0]+"?size=thumbnail"})
                 )  
             )
      
@@ -606,7 +606,7 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
             React.createElement("a", {className: "image", target: uuid, href: "/portal/mediarecords/"+uuid, key: 'image-'+uuid}, 
                 React.createElement("span", {className: "img-count"}, count), 
                 React.createElement("img", {alt: name.join(' '), 
-                src: "https://api.idigbio.org/v1/mediarecords/"+uuid+"/media?quality=thumbnail", 
+                src: "https://media.idigbio.org/mrlookup/"+uuid+"?size=thumbnail", 
                 onError: this.errorImage}), 
                 React.createElement("div", {className: "gallery-image-text"}, 
                     React.createElement("div", {className: "image-text"}, 

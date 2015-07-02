@@ -20,7 +20,7 @@ var Media = React.createClass({
         return (
             <div key={this.props.keyid} id="media-wrapper" className="clearfix">
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
-                    <img className="media" src={'//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview'} onError={this.error}/>
+                    <img className="media" src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
                 <a href={link} download={this.props.keyid} target={'_'+this.props.keyid} className="hidden-print">
                     Download Media File
@@ -144,7 +144,7 @@ var Group = React.createClass({
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
-                            <img className="gallery-image" src={'//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview'} onError={this.error} /> 
+                            <img className="gallery-image" src={'https://media.idigbio.org/mrlookup/'+media[id]+'?size=webview'} onError={this.error} /> 
                         </a>
                     )                    
                 }

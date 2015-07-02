@@ -20,7 +20,7 @@ var Media = React.createClass({displayName: "Media",
         return (
             React.createElement("div", {key: this.props.keyid, id: "media-wrapper", className: "clearfix"}, 
                 React.createElement("a", {className: "clearfix", target: '_'+this.props.keyid, href: link, title: "click to open original media file"}, 
-                    React.createElement("img", {className: "media", src: '//api.idigbio.org/v1/mediarecords/'+this.props.keyid+'/media?quality=webview', onError: this.error})
+                    React.createElement("img", {className: "media", src: 'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview', onError: this.error})
                 ), 
                 React.createElement("a", {href: link, download: this.props.keyid, target: '_'+this.props.keyid, className: "hidden-print"}, 
                     "Download Media File"
@@ -144,7 +144,7 @@ var Group = React.createClass({displayName: "Group",
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         React.createElement("a", {href: '/portal/mediarecords/'+media[id], title: "click to open media record", key: media[id]}, 
-                            React.createElement("img", {className: "gallery-image", src: '//api.idigbio.org/v1/mediarecords/'+media[id]+'/media?quality=webview', onError: this.error})
+                            React.createElement("img", {className: "gallery-image", src: 'https://media.idigbio.org/mrlookup/'+media[id]+'?size=webview', onError: this.error})
                         )
                     )                    
                 }

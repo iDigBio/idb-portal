@@ -172,15 +172,15 @@
         -webkit-flex-wrap: wrap;
         -ms-flex-wrap: wrap;
         flex-wrap: wrap;
-        -webkit-justify-content: center;
-        -ms-flex-pack: center;
-        justify-content: center;
+        -webkit-justify-content: flex-start;
+        -ms-flex-pack: start;
+        justify-content: flex-start;
         -webkit-align-content: flex-start;
         -ms-flex-line-pack: start;
         align-content: flex-start;
         -webkit-align-items: flex-start;
         -ms-flex-align: start;
-        align-items: stretch;
+        align-items: flex-start;
         .label-loading{
             width:100%;
             height:40px;
@@ -197,15 +197,13 @@
         .result-label{
             //width:15.9%;
             //flex-grow:3;
-            //height:70px;
-            -webkit-flex-grow: 1;
-            -mx-flex-gro: 1;
-            flex-grow: 1;
+            //height:140px;
+
             margin:8px;
             position:relative;
 
             width:24.05%;
-            //height:150px;
+            height:150px;
             overflow:hidden;
             box-shadow: @shadow1;
             background-color:@lightgrey;
@@ -213,10 +211,8 @@
             padding:3px 8px;
    
             @media (max-width: 1790px){
-              
                 width:32.0%;
                 //margin:8px;
-              
             }
             @media (max-width: 1235px){
               
@@ -359,15 +355,15 @@
             -webkit-flex-wrap: wrap;
             -ms-flex-wrap: wrap;
             flex-wrap: wrap;
-            -webkit-justify-content: center;
-            -ms-flex-pack: center;
-            justify-content: center;
+            -webkit-justify-content: flex-start;
+            -ms-flex-pack: start;
+            justify-content: flex-start;
             -webkit-align-content: flex-start;
             -ms-flex-line-pack: start;
             align-content: flex-start;
             -webkit-align-items: flex-start;
             -ms-flex-align: start;
-            align-items: stretch;
+            align-items: flex-start;
             margin:auto;
             width:98%;
             #loading-images{
@@ -381,11 +377,9 @@
         }
         
         .image{
-            -webkit-flex-grow: 1;
-            -mx-flex-gro: 1;
-            flex-grow: 1;
+
             height:230px;
-            width:15.40%;
+            width:15.50%;
             background-color:@lightgrey;
             margin:10px;
             float:left;

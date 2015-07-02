@@ -402,8 +402,8 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
-        var content=[];
-        var title = '',info=[];
+        var content = [];
+        var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
         if(_.has(data,'scientificname')) { 

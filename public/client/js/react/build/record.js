@@ -38,8 +38,8 @@ var Row = React.createClass({displayName: "Row",
         });
         return (
             React.createElement("tr", {className: "data-row"}, 
-                React.createElement("td", {className: "field-name"}, name), 
-                React.createElement("td", {className: "field-value", dangerouslySetInnerHTML: {__html: str}})
+                React.createElement("td", {className: "field-name", style: {width:'35%'}}, name), 
+                React.createElement("td", {className: "field-value", style: {width:'65%'}, dangerouslySetInnerHTML: {__html: str}})
             )
         );   
     }
@@ -77,14 +77,27 @@ var Section = React.createClass({displayName: "Section",
         }
         return (
             React.createElement("div", {id: this.props.name, className: cl}, 
-                React.createElement("table", {className: "record-table"}, 
+                React.createElement("h4", null, dwc.names[this.props.name]), 
+                React.createElement("table", {className: "table table-striped table-condensed table-bordered"}, 
                     rows
                 )
             )
         );
     }
 });
-
+var Tabs = React.createClass({displayName: "Tabs",
+    render: function(){
+        return (
+            React.createElement("ul", {className: "tabs"}, 
+                React.createElement("li", {className: "tab active"}, React.createElement("a", null, "Data")), 
+                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Media")), 
+                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Notifications")), 
+                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Attribution")), 
+                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Raw Data"))
+            )
+        )
+    }
+});
 var Record = React.createClass({displayName: "Record",
     render: function(){
         var has = [];
@@ -93,11 +106,11 @@ var Record = React.createClass({displayName: "Record",
         var cnt = 0;
         sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
-                var active=false;
+                var active=true;
                 if(cnt===0){
                     active=true;
                 }
-                tabs.push(React.createElement(Tab, {key: 'tab-'+sec, keyid: 'tab-'+sec, name: sec, active: active}))
+                //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
                 record.push(React.createElement(Section, {key: 'sec-'+sec, key: 'sec-'+sec, name: sec, data: self.props.record[sec], active: active}));
                 cnt++;
             } 
@@ -105,9 +118,7 @@ var Record = React.createClass({displayName: "Record",
 
         return (
             React.createElement("div", {id: "record-container"}, 
-                React.createElement("ul", {className: "tabs hidden-print"}, 
-                    tabs
-                ), 
+                React.createElement(Tabs, null), 
                 React.createElement("div", {className: "record"}, 
                     record
                 )
@@ -250,6 +261,21 @@ module.exports = Page = React.createClass({displayName: "Page",
             }
         });
        
+       var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'],function(item){
+            return index[item];
+       }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+       }).join(' > ');
+
+       var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'],function(item){
+            return index[item];
+       }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+       }).join('>');
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
@@ -257,6 +283,20 @@ module.exports = Page = React.createClass({displayName: "Page",
 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
                             React.createElement(Title, {data: this.props.record}), 
+                            React.createElement("div", {id: "summary"}, 
+                                React.createElement("div", null, 
+                                    React.createElement("h3", null, "Locality"), 
+                                    React.createElement("p", null, 
+                                        locality
+                                    )
+                                ), 
+                                React.createElement("div", null, 
+                                    React.createElement("h3", null, "Higher Taxonomy"), 
+                                    React.createElement("p", null, 
+                                        highertaxon
+                                    )
+                                )
+                            ), 
                             React.createElement("div", {id: "data-content"}, 
                                 React.createElement(Record, {record: record})
                             ), 

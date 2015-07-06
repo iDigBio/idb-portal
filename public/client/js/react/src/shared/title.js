@@ -28,14 +28,19 @@ module.exports = Title = React.createClass({
         info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
 
         return (
-            <h1 id="title" className="clearfix" onClick={this.click}>
-                <span className="title">
-                    <em>{title}</em>
-                    <span className="title-addition">
-                        {info.join(', ')}
+            <div id="title">
+                <h1  className="clearfix" onClick={this.click}>
+                    <span className="title">
+                        <em>{title}</em>
+                        <span className="title-addition">
+                            {info.join(', ')}
+                        </span>
                     </span>
-                </span>
-            </h1>
+                </h1>
+                <h2>
+                    From:  <a href={'/portal/recordsets/'+this.props.data.attribution.uuid}>{this.props.data.attribution.name}</a>
+                </h2>
+            </div>
         );       
     }
 });

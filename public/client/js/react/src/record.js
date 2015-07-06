@@ -38,8 +38,8 @@ var Row = React.createClass({
         });
         return (
             <tr className="data-row">
-                <td className="field-name">{name}</td>
-                <td className="field-value" dangerouslySetInnerHTML={{__html: str}}></td>
+                <td className="field-name" style={{width:'35%'}}>{name}</td>
+                <td className="field-value" style={{width:'65%'}} dangerouslySetInnerHTML={{__html: str}}></td>
             </tr>
         );   
     }
@@ -77,14 +77,27 @@ var Section = React.createClass({
         }
         return (
             <div id={this.props.name} className={cl} >
-                <table className="record-table">
+                <h4>{dwc.names[this.props.name]}</h4>
+                <table className="table table-striped table-condensed table-bordered">
                     {rows}
                 </table>
             </div>
         );
     }
 });
-
+var Tabs = React.createClass({
+    render: function(){
+        return (
+            <ul className="tabs">
+                <li className="tab active"><a>Data</a></li>
+                <li className="tab"><a>Media</a></li>
+                <li className="tab"><a>Notifications</a></li>
+                <li className="tab"><a>Attribution</a></li>
+                <li className="tab"><a>Raw Data</a></li>
+            </ul>
+        )
+    }
+});
 var Record = React.createClass({
     render: function(){
         var has = [];
@@ -93,11 +106,11 @@ var Record = React.createClass({
         var cnt = 0;
         sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
-                var active=false;
+                var active=true;
                 if(cnt===0){
                     active=true;
                 }
-                tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
+                //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
                 record.push(<Section key={'sec-'+sec} key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
                 cnt++;
             } 
@@ -105,9 +118,7 @@ var Record = React.createClass({
 
         return (
             <div id="record-container">
-                <ul className="tabs hidden-print">
-                    {tabs}
-                </ul>
+                <Tabs />
                 <div className="record">
                     {record}
                 </div>
@@ -250,6 +261,21 @@ module.exports = Page = React.createClass({
             }
         });
        
+       var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'],function(item){
+            return index[item];
+       }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+       }).join(' > ');
+
+       var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'],function(item){
+            return index[item];
+       }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+       }).join('>');
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -257,6 +283,20 @@ module.exports = Page = React.createClass({
 
                         <div id="data-container" className="clearfix">
                             <Title data={this.props.record}/>
+                            <div id="summary">
+                                <div>
+                                    <h3>Locality</h3>
+                                    <p>
+                                        {locality}
+                                    </p>
+                                </div>
+                                <div >
+                                    <h3>Higher Taxonomy</h3>
+                                    <p>
+                                        {highertaxon}
+                                    </p>
+                                </div>
+                            </div>
                             <div id="data-content">
                                 <Record record={record} />
                             </div>

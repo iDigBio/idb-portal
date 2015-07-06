@@ -1,14 +1,17 @@
-#title span.title {
-  margin: 10px 0px;
+#title h1 span.title {
+  margin: 0px 0px;
   max-width: 1600px;
-  color: #666;
+  color: #333;
   cursor: pointer;
   font-weight: normal;
   padding-bottom: 5px;
   font-size: 30px;
 }
-#title span.title .title-addition {
+#title h1 span.title .title-addition {
   font-size: .65em;
   margin: 0px 15px;
-  color: #999;
+}
+#title h2 {
+  font-size: 12px;
+  margin: 10px 0px 20px 0px;
 }

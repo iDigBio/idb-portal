@@ -1,16 +1,19 @@
-#title span.title {
-  margin: 10px 0px;
+#title h1 span.title {
+  margin: 0px 0px;
   max-width: 1600px;
-  color: #666;
+  color: #333;
   cursor: pointer;
   font-weight: normal;
   padding-bottom: 5px;
   font-size: 30px;
 }
-#title span.title .title-addition {
+#title h1 span.title .title-addition {
   font-size: .65em;
   margin: 0px 15px;
-  color: #999;
+}
+#title h2 {
+  font-size: 12px;
+  margin: 10px 0px 20px 0px;
 }
 h3 {
   color: #333;
@@ -56,12 +59,17 @@ body {
   margin: 10px auto;
   padding: 10px;
 }
-#data-container #data-content {
+#data-container h3 {
+  font-size: 14px;
+}
+#data-container #data-content,
+#data-container #summary {
   width: 65%;
   float: left;
 }
 @media (max-width: 992px) {
-  #data-container #data-content {
+  #data-container #data-content,
+  #data-container #summary {
     width: 100%;
     float: none;
   }
@@ -74,19 +82,20 @@ body {
 }
 #data-container #data-content #record-container .tabs .tab {
   display: inline-block;
-  padding: 0px;
-  margin: 0px 0px;
+  padding: 0px 0px;
+  margin: 0px;
 }
 #data-container #data-content #record-container .tabs .tab a {
   position: relative;
   display: inline-block;
-  padding: 6px 6px 6px 6px;
+  padding: 6px 10px 6px 10px;
   color: #999;
   cursor: pointer;
-  letter-spacing: .01em;
+  letter-spacing: .035em;
   text-decoration: none;
   margin: 0px;
   font-weight: normal;
+  text-align: center;
   border-bottom: 4px solid transparent;
 }
 @media (max-width: 992px) {
@@ -116,24 +125,23 @@ body {
   border-top: 1px solid #cccccc;
   border-bottom: 1px solid #cccccc;
   margin: 0px 15px 5px 0px;
+  padding-top: 30px;
   min-height: 300px;
-  width: 99.5%;
-  background-color: #ececec;
-  padding: 4px;
+  width: 100%;
 }
-#data-container #data-content #record-container .record .record-table {
-  margin: 8px;
-  padding: 4px;
-  width: 99%;
+#data-container #data-content #record-container .record table {
+  margin-bottom: 30px;
 }
-#data-container #data-content #record-container .record .record-table .field-name {
+#data-container #data-content #record-container .record .table {
+  padding: 4px;
+  width: 100%;
+}
+#data-container #data-content #record-container .record .table .field-name {
   font-weight: normal;
   color: #555;
-  width: 300px;
 }
-#data-container #data-content #record-container .record .record-table .field-value,
-#data-container #data-content #record-container .record .record-table .field-value a {
-  display: inline-block;
+#data-container #data-content #record-container .record .table .field-value,
+#data-container #data-content #record-container .record .table .field-value a {
   word-wrap: break-all;
   word-break: break-word;
   overflow: hidden;
@@ -141,8 +149,8 @@ body {
   color: #555;
 }
 @media (max-width: 992px) {
-  #data-container #data-content #record-container .record .record-table .field-name,
-  #data-container #data-content #record-container .record .record-table .field-value {
+  #data-container #data-content #record-container .record .table .field-name,
+  #data-container #data-content #record-container .record .table .field-value {
     width: 50%;
   }
 }

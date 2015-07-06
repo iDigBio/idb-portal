@@ -48,8 +48,10 @@ body{
     //background-color:#f9f9f9;
     //border:1px solid #dedede;
     //border-radius:4px;
-
-    #data-content{
+    h3{
+        font-size:14px;
+    }
+    #data-content, #summary{
         width:65%;
         float:left;
         @media(max-width: @screenmed){
@@ -57,8 +59,14 @@ body{
             float:none;
         }
     }
+    #summary{
+        .arrow{
+            color:#ccc;
+        }
+    }
     #data-content{
         #record-container{
+
             .tabs{
                 margin:7px 0px -1px 0px;
                 padding:0px;
@@ -66,23 +74,28 @@ body{
                 list-style: none;
                 .tab{
                     display:inline-block;
-                    padding:0px;
-                    margin:0px 0px;
+                    padding:0px 0px;
+                    margin:0px;
+
                 }
                 .tab a{
                     position:relative;
                     display:inline-block;
                     //border-bottom:1px solid #ddd;
-                    padding:6px 6px 6px 6px;
+                    padding:6px 10px 6px 10px;
+
                     //background-color:#efefef;
                     color:#999;
                     
                     cursor:pointer;
                     //border-radius:4px 4px 0px 0px;
-                    letter-spacing: .01em;
+                    letter-spacing: .035em;
                     text-decoration: none;
                     margin:0px;
                     font-weight: normal;
+                    //width:100px;
+
+                    text-align: center;
                     @media(max-width:@screenmed){
                         padding:6px 4px 6px 4px;
                         font-size: .9em;
@@ -112,23 +125,30 @@ body{
                 border-top:@brd2;
                 border-bottom:@brd2;
                 margin:0px 15px 5px 0px;
+                padding-top:30px;
                 min-height: 300px;
-                width:99.5%;
+                width:100%;
                
-                background-color: @lightgrey;
+               // background-color: #fcfcfc;
                
-                padding:4px;
-                .record-table{
-                    margin:8px;
+                //padding:4px;
+
+                table{
+                    //border:1px solid #ddd;
+                    margin-bottom: 30px;
+                }
+                .table{
+
+                    //margin:8px;
                     padding:4px;
-                    width:99%;
+                    width:100%;
                     .field-name{
                         font-weight:normal;
                         color:#555;
-                        width:300px;
+                        //width:300px;
                     }
                     .field-value, .field-value a{
-                        display:inline-block;
+                        //display:inline-block;
                         word-wrap:break-all;
                         word-break:break-word;
                         overflow:hidden;

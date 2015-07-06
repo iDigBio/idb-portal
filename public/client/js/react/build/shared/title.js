@@ -28,12 +28,17 @@ module.exports = Title = React.createClass({displayName: "Title",
         info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
 
         return (
-            React.createElement("h1", {id: "title", className: "clearfix", onClick: this.click}, 
-                React.createElement("span", {className: "title"}, 
-                    React.createElement("em", null, title), 
-                    React.createElement("span", {className: "title-addition"}, 
-                        info.join(', ')
+            React.createElement("div", {id: "title"}, 
+                React.createElement("h1", {className: "clearfix", onClick: this.click}, 
+                    React.createElement("span", {className: "title"}, 
+                        React.createElement("em", null, title), 
+                        React.createElement("span", {className: "title-addition"}, 
+                            info.join(', ')
+                        )
                     )
+                ), 
+                React.createElement("h2", null, 
+                    "From:  ", React.createElement("a", {href: '/portal/recordsets/'+this.props.data.attribution.uuid}, this.props.data.attribution.name)
                 )
             )
         );       

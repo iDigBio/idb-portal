@@ -30,7 +30,7 @@ module.exports = function(){
     }
 
     this.updateLast = function(searchState){
-        this.history[0]=_.cloneDeep(searchstate);
+        this.history[0] = _.cloneDeep(searchstate);
         this.save();
     }
     
@@ -40,7 +40,7 @@ module.exports = function(){
     }
 
     this.isEmpty = function(){
-        if(this.history.length>0){
+        if(this.history.length > 0){
             return false;
         }else{
             return true;

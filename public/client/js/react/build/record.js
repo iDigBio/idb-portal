@@ -90,7 +90,6 @@ var Tabs = React.createClass({displayName: "Tabs",
         return (
             React.createElement("ul", {className: "tabs"}, 
                 React.createElement("li", {className: "tab active"}, React.createElement("a", null, "Data")), 
-                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Media")), 
                 React.createElement("li", {className: "tab"}, React.createElement("a", null, "Notifications")), 
                 React.createElement("li", {className: "tab"}, React.createElement("a", null, "Attribution")), 
                 React.createElement("li", {className: "tab"}, React.createElement("a", null, "Raw Data"))
@@ -192,7 +191,7 @@ var Map = React.createClass({displayName: "Map",
         if(_.has(this.props.data,'geopoint')){
             return (
                 React.createElement("div", {id: "map", className: "clearfix"}, 
-                    React.createElement("h4", {className: "title"}, "Georeference Data"), 
+                    
                     React.createElement("div", {id: "map-wrapper"}, 
                         React.createElement("div", {id: "map-box"}), 
                         React.createElement("div", {id: "map-geopoint"}, 
@@ -261,21 +260,63 @@ module.exports = Page = React.createClass({displayName: "Page",
             }
         });
        
-       var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'],function(item){
-            return index[item];
-       }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-       }).join(' > ');
+        function listTable(data,list){
+            var headers=[],values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    headers.push(React.createElement("td", {key: 'header-'+item}, fields.byTerm[item].name));
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(React.createElement("td", {key: 'value-'+item}, vals));
+                }
+            })
 
-       var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'],function(item){
+            return (
+                React.createElement("table", {className: "list-table"}, 
+                    React.createElement("tr", {className: "list-headers"}, 
+                        headers
+                    ), 
+                    React.createElement("tr", {className: "list-values"}, 
+                        values
+                    )
+                )
+            )
+        }
+
+        function namedList(data,list){
+            var values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(React.createElement("span", {className: "name"}, fields.byTerm[item].name, ": "));
+                    values.push(React.createElement("span", {className: "val"}, vals, "  "));
+                }
+            });
+            return (
+                React.createElement("span", {className: "name-list"}, 
+                    values
+                )
+            );
+        }
+        var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
-       }),undefined), function(item){
+        }),undefined), function(item){
             return _.map(_.words(item),function(i){
                 return _.capitalize(i);
             }).join(' ');
-       }).join('>');
+        }).join(' > ');
+
+        var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'], function(item){
+            return index[item];
+        }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+        }).join(' > ');
+
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
@@ -284,18 +325,21 @@ module.exports = Page = React.createClass({displayName: "Page",
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
                             React.createElement(Title, {data: this.props.record}), 
                             React.createElement("div", {id: "summary"}, 
-                                React.createElement("div", null, 
-                                    React.createElement("h3", null, "Locality"), 
-                                    React.createElement("p", null, 
-                                        locality
-                                    )
-                                ), 
-                                React.createElement("div", null, 
-                                    React.createElement("h3", null, "Higher Taxonomy"), 
-                                    React.createElement("p", null, 
-                                        highertaxon
+                                React.createElement("div", {className: "pull-left"}, 
+                                    React.createElement("div", null, 
+                                        React.createElement("h3", null, "Locality"), 
+                                        React.createElement("p", null, 
+                                            listTable(index, ['continent','country','stateprovince','county','city'])
+                                        )
+                                    ), 
+                                    React.createElement("div", null, 
+                                        React.createElement("h3", null, "Higher Taxonomy"), 
+                                        React.createElement("p", null, 
+                                            listTable(index, ['kingdom','phylum','class','order','family'])
+                                        )
                                     )
                                 )
+                                
                             ), 
                             React.createElement("div", {id: "data-content"}, 
                                 React.createElement(Record, {record: record})

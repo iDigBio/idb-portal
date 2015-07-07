@@ -60,8 +60,34 @@ body{
         }
     }
     #summary{
+        //background-color: #fafafa;
+        //padding:5px;
+        //border: 1px solid #ccc;
+        border-radius: 3px;
         .arrow{
             color:#ccc;
+        }
+        .list-table{
+            border-radius:3px;
+            border: 1px solid #ccc;
+            font-size:12px;
+            width: 100%;
+            td{
+                padding:1px 5px;
+                border:1px solid #ccc;
+            }
+            .list-headers{
+                background-color: @lightgrey;
+
+            }
+            .list-values{
+                background-color: white;
+            }
+        }
+        .name-list{
+            .name{
+                color:#999;
+            }
         }
     }
     #data-content{
@@ -259,16 +285,18 @@ body{
             }
         }
         #map{
-            width:100%;
-            padding:5px;
+            //width: 50%;
+            //height: 150px;
+            //padding:5px;
             margin: 10px 0px;
             display:none;
+            //float:right;
             .title{
                 margin-left:0px;
                 padding-left:0px;
             }
             #map-wrapper{
-                border-top:@brd;
+                //border-top:@brd;
                 #map-box{
                     height:200px;
                     margin:15px auto 5px auto;

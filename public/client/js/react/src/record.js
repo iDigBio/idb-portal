@@ -90,7 +90,6 @@ var Tabs = React.createClass({
         return (
             <ul className="tabs">
                 <li className="tab active"><a>Data</a></li>
-                <li className="tab"><a>Media</a></li>
                 <li className="tab"><a>Notifications</a></li>
                 <li className="tab"><a>Attribution</a></li>
                 <li className="tab"><a>Raw Data</a></li>
@@ -192,7 +191,7 @@ var Map = React.createClass({
         if(_.has(this.props.data,'geopoint')){
             return (
                 <div id="map" className="clearfix">
-                    <h4 className="title">Georeference Data</h4>
+                    
                     <div id="map-wrapper">
                         <div id="map-box"></div>
                         <div id="map-geopoint">
@@ -261,21 +260,63 @@ module.exports = Page = React.createClass({
             }
         });
        
-       var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'],function(item){
-            return index[item];
-       }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-       }).join(' > ');
+        function listTable(data,list){
+            var headers=[],values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    headers.push(<td key={'header-'+item}>{fields.byTerm[item].name}</td>);
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(<td key={'value-'+item}>{vals}</td>);
+                }
+            })
 
-       var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'],function(item){
+            return (
+                <table className="list-table">
+                    <tr className="list-headers">
+                        {headers}
+                    </tr>
+                    <tr className="list-values">
+                        {values}
+                    </tr>
+                </table>
+            )
+        }
+
+        function namedList(data,list){
+            var values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(<span className="name">{fields.byTerm[item].name}: </span>);
+                    values.push(<span className="val">{vals}&nbsp;&nbsp;</span>);
+                }
+            });
+            return (
+                <span className="name-list">
+                    {values}
+                </span>
+            );
+        }
+        var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
-       }),undefined), function(item){
+        }),undefined), function(item){
             return _.map(_.words(item),function(i){
                 return _.capitalize(i);
             }).join(' ');
-       }).join('>');
+        }).join(' > ');
+
+        var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'], function(item){
+            return index[item];
+        }),undefined), function(item){
+            return _.map(_.words(item),function(i){
+                return _.capitalize(i);
+            }).join(' ');
+        }).join(' > ');
+
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -284,18 +325,21 @@ module.exports = Page = React.createClass({
                         <div id="data-container" className="clearfix">
                             <Title data={this.props.record}/>
                             <div id="summary">
-                                <div>
-                                    <h3>Locality</h3>
-                                    <p>
-                                        {locality}
-                                    </p>
+                                <div className="pull-left">
+                                    <div>
+                                        <h3>Locality</h3>
+                                        <p>
+                                            {listTable(index, ['continent','country','stateprovince','county','city'])}
+                                        </p>
+                                    </div>
+                                    <div>
+                                        <h3>Higher Taxonomy</h3>
+                                        <p>
+                                            {listTable(index, ['kingdom','phylum','class','order','family'])}
+                                        </p>
+                                    </div>
                                 </div>
-                                <div >
-                                    <h3>Higher Taxonomy</h3>
-                                    <p>
-                                        {highertaxon}
-                                    </p>
-                                </div>
+                                
                             </div>
                             <div id="data-content">
                                 <Record record={record} />

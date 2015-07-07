@@ -44,7 +44,7 @@ $(document).ready(function(){
 		loadPage();
 		localStorage.removeItem('reloaded');
 	}catch(e){
-		if(typeof localStorage !== undefined){
+		if(typeof localStorage != 'undefined'){
 			console.log(e);
 			if(localStorage.getItem('reloaded') === null){
 				localStorage.clear();

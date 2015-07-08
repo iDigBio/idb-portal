@@ -25,7 +25,7 @@ module.exports = Title = React.createClass({displayName: "Title",
             title = React.createElement("em", null, "No Name");
         } 
         //build info ids,inst
-        info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
+        info = _.without([data['dwc:scientificNameAuthorship']],undefined); 
 
         return (
             React.createElement("div", {id: "title"}, 
@@ -38,7 +38,7 @@ module.exports = Title = React.createClass({displayName: "Title",
                     )
                 ), 
                 React.createElement("h2", null, 
-                    "From:  ", React.createElement("a", {href: '/portal/recordsets/'+this.props.data.attribution.uuid}, this.props.data.attribution.name)
+                    "From ", React.createElement("a", {href: '/portal/recordsets/'+this.props.data.attribution.uuid}, this.props.data.attribution.name)
                 )
             )
         );       

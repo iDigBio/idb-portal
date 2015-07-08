@@ -38,8 +38,8 @@ var Row = React.createClass({displayName: "Row",
         });
         return (
             React.createElement("tr", {className: "data-row"}, 
-                React.createElement("td", {className: "field-name", style: {width:'35%'}}, name), 
-                React.createElement("td", {className: "field-value", style: {width:'65%'}, dangerouslySetInnerHTML: {__html: str}})
+                React.createElement("td", {className: "field-name", style: {width:'50%'}}, name), 
+                React.createElement("td", {className: "field-value", style: {width:'50%'}, dangerouslySetInnerHTML: {__html: str}})
             )
         );   
     }
@@ -191,7 +191,7 @@ var Map = React.createClass({displayName: "Map",
         if(_.has(this.props.data,'geopoint')){
             return (
                 React.createElement("div", {id: "map", className: "clearfix"}, 
-                    
+                    React.createElement("h4", {className: "title"}, "Georeference"), 
                     React.createElement("div", {id: "map-wrapper"}, 
                         React.createElement("div", {id: "map-box"}), 
                         React.createElement("div", {id: "map-geopoint"}, 
@@ -211,23 +211,23 @@ var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
-module.exports = Page = React.createClass({displayName: "Page",
+module.exports = React.createClass({displayName: "exports",
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
-        var has = [],canonical={};
+        var has = [], canonical = {};
         var record = {};
 
         //build canonical dictionary
         //first adding indexTerms which can contain corrected/added data not in the raw data
         _.forOwn(index,function(v,k){
             if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
-                var dt=fields.byTerm[k].dataterm;
+                var dt = fields.byTerm[k].dataterm;
                 //use data dictionary term if it is exists because its not corrected data
                 //and contains the orginal text caseing.
                 if(_.has(data,dt)){
-                    canonical[dt]=data[dt];
+                    canonical[dt] = data[dt];
                 }else{
-                    canonical[dt]=v;
+                    canonical[dt] = v;
                 }   
             }
         })
@@ -237,11 +237,11 @@ module.exports = Page = React.createClass({displayName: "Page",
         _.each(dwc.order,function(val,key){
             _.each(dwc.order[key],function(fld){
                 if(_.has(canonical,fld)){
-                    if(_.has(record,key)===false){
-                        record[key]=[]
+                    if(_.has(record,key) === false){
+                        record[key] = [];
                     } 
-                    var datum={};
-                    datum[fld]=canonical[fld];
+                    var datum = {};
+                    datum[fld] = canonical[fld];
                     record[key].push(datum);
                     has.push(fld);
                 }
@@ -250,12 +250,12 @@ module.exports = Page = React.createClass({displayName: "Page",
         //add unidentified values to other section
         var dif = _.difference(Object.keys(canonical), has);
         _.each(dif,function(item){
-            if(item.indexOf('idigbio:')===-1){
+            if(item.indexOf('idigbio:') === -1){
                 if(_.isUndefined(record['other'])){
-                    record['other']=[];
+                    record['other'] = [];
                 }     
-                var datum={};
-                datum[item]=canonical[item];       
+                var datum = {};
+                datum[item] = canonical[item];       
                 record['other'].push(datum);
             }
         });
@@ -284,23 +284,62 @@ module.exports = Page = React.createClass({displayName: "Page",
             )
         }
 
-        function namedList(data,list){
+        function namedList(data,list,fld){
             var values=[];
             _.each(list, function(item){
                 if(_.has(data,item)){
                     var vals = _.map(_.words(data[item]),function(i){
                         return _.capitalize(i);
                     }).join(' ');
-                    values.push(React.createElement("span", {className: "name"}, fields.byTerm[item].name, ": "));
-                    values.push(React.createElement("span", {className: "val"}, vals, "  "));
+                    values.push(React.createElement("span", {key: 'named-'+item, className: "name"}, fld[item].name, ": ", React.createElement("span", {className: "val"}, vals)));
+                    //values.push();
                 }
             });
-            return (
-                React.createElement("span", {className: "name-list"}, 
-                    values
-                )
-            );
+            return values;
         }
+
+        function namedTableRows(data,list,fld){
+            var values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(React.createElement("tr", {key: 'named-'+item, className: "name"}, React.createElement("td", null, fld[item].name), React.createElement("td", {className: "val"}, vals)));
+                    //values.push();
+                }
+            });
+            return values;
+        }
+
+        function taxaBreadCrumbs(data){
+            var order = [], values = [];
+            
+            ['kingdom','phylum','class','order','family'].forEach(function(item){
+                if(_.has(data,item)){
+                    order.push(item);
+                    values.push(data[item]);
+                }
+            });
+
+            var output = [];
+            
+            order.forEach(function(item,index){
+                var search=[];
+                for(var i=0; i<=index; i++){
+                    search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+                }
+                output.push(
+                    React.createElement("a", {key: 'bread-'+item, href: '/portal/search?rq={'+search.join(',')+'}'}, _.capitalize(values[index]))
+                );
+                if((order.length-1)>index){
+                    output.push(React.createElement("span", {key: 'arrow'+index}, " > "))
+                }
+            });
+
+            return output;
+        }
+
         var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
         }),undefined), function(item){
@@ -317,35 +356,36 @@ module.exports = Page = React.createClass({displayName: "Page",
             }).join(' ');
         }).join(' > ');
 
+        var eventdate='';
+        if(index.eventdate){
+            eventdate = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Date Collected"), React.createElement("td", {className: "val"}, index.eventdate));
+        }
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col-lg-12"}, 
 
                         React.createElement("div", {id: "data-container", className: "clearfix"}, 
+                            React.createElement("span", {id: "taxa-crumbs"}, taxaBreadCrumbs(index)), 
                             React.createElement(Title, {data: this.props.record}), 
                             React.createElement("div", {id: "summary"}, 
-                                React.createElement("div", {className: "pull-left"}, 
-                                    React.createElement("div", null, 
-                                        React.createElement("h3", null, "Locality"), 
-                                        React.createElement("p", null, 
-                                            listTable(index, ['continent','country','stateprovince','county','city'])
-                                        )
-                                    ), 
-                                    React.createElement("div", null, 
-                                        React.createElement("h3", null, "Higher Taxonomy"), 
-                                        React.createElement("p", null, 
-                                            listTable(index, ['kingdom','phylum','class','order','family'])
-                                        )
+
+                                React.createElement("div", {className: "pull-left sec"}, 
+                                    React.createElement("table", null, 
+                                    namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)
+                                    )
+                                ), 
+                                React.createElement("div", {className: "pull-left sec collection"}, 
+                                    React.createElement("table", null, 
+                                    namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm), 
+                                    eventdate
                                     )
                                 )
-                                
                             ), 
                             React.createElement("div", {id: "data-content"}, 
                                 React.createElement(Record, {record: record})
                             ), 
                             React.createElement("div", {id: "data-meta", className: "clearfix"}, 
-                                React.createElement(Buttons, {data: index}), 
                                 React.createElement(Gallery, {data: index}), 
                                 React.createElement(Map, {data: index})
                             ), 

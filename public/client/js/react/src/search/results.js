@@ -402,7 +402,7 @@ var ResultsLabels = React.createClass({
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
-        var content = [];
+        var content = [], middle = [];
         var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
@@ -437,19 +437,28 @@ var ResultsLabels = React.createClass({
             }
         })
         if(l.length>0){
-            content.push(<span key="locality" className="locality">{l.join(', ')}</span>);
+            middle.push(
+                <span key="locality" className="locality">{l.join(', ')}</span>
+            );
         }
         if(_.has(data, 'geopoint')){
-            content.push(<span key="geopoint" className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
+            middle.push(<span key="geopoint" className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'].forEach(function(item,index){
             if(_.has(raw,item)){
                 c.push(raw[item])
             }
         })
         if(c.length>0){
-            content.push(<span key="collection" className="collection">{c.join(', ')}</span>)
+            middle.push(<span key="collection" className="collection">{c.join(', ')}</span>)
+        }
+        if(middle.length>0){
+            content.push(
+                <span className="middle">
+                    {middle}
+                </span>
+            )
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -488,8 +497,7 @@ var ResultsLabels = React.createClass({
                         src={"https://media.idigbio.org/mrlookup/"+data.mediarecords[0]+"?size=thumbnail"} /> 
                 </span>  
             )
-     
-         } 
+        } 
       
         return (
             <div key={'label-'+id}  className="pull-left result-item result-label" >

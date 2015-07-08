@@ -402,7 +402,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
-        var content = [];
+        var content = [], middle = [];
         var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
@@ -437,19 +437,28 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }
         })
         if(l.length>0){
-            content.push(React.createElement("span", {key: "locality", className: "locality"}, l.join(', ')));
+            middle.push(
+                React.createElement("span", {key: "locality", className: "locality"}, l.join(', '))
+            );
         }
         if(_.has(data, 'geopoint')){
-            content.push(React.createElement("span", {key: "geopoint", className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
+            middle.push(React.createElement("span", {key: "geopoint", className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'].forEach(function(item,index){
             if(_.has(raw,item)){
                 c.push(raw[item])
             }
         })
         if(c.length>0){
-            content.push(React.createElement("span", {key: "collection", className: "collection"}, c.join(', ')))
+            middle.push(React.createElement("span", {key: "collection", className: "collection"}, c.join(', ')))
+        }
+        if(middle.length>0){
+            content.push(
+                React.createElement("span", {className: "middle"}, 
+                    middle
+                )
+            )
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -488,8 +497,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
                         src: "https://media.idigbio.org/mrlookup/"+data.mediarecords[0]+"?size=thumbnail"})
                 )  
             )
-     
-         } 
+        } 
       
         return (
             React.createElement("div", {key: 'label-'+id, className: "pull-left result-item result-label"}, 

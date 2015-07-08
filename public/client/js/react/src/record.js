@@ -38,8 +38,8 @@ var Row = React.createClass({
         });
         return (
             <tr className="data-row">
-                <td className="field-name" style={{width:'35%'}}>{name}</td>
-                <td className="field-value" style={{width:'65%'}} dangerouslySetInnerHTML={{__html: str}}></td>
+                <td className="field-name" style={{width:'50%'}}>{name}</td>
+                <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
             </tr>
         );   
     }
@@ -191,7 +191,7 @@ var Map = React.createClass({
         if(_.has(this.props.data,'geopoint')){
             return (
                 <div id="map" className="clearfix">
-                    
+                    <h4 className="title">Georeference</h4>
                     <div id="map-wrapper">
                         <div id="map-box"></div>
                         <div id="map-geopoint">
@@ -211,23 +211,23 @@ var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
-module.exports = Page = React.createClass({
+module.exports = React.createClass({
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
-        var has = [],canonical={};
+        var has = [], canonical = {};
         var record = {};
 
         //build canonical dictionary
         //first adding indexTerms which can contain corrected/added data not in the raw data
         _.forOwn(index,function(v,k){
             if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
-                var dt=fields.byTerm[k].dataterm;
+                var dt = fields.byTerm[k].dataterm;
                 //use data dictionary term if it is exists because its not corrected data
                 //and contains the orginal text caseing.
                 if(_.has(data,dt)){
-                    canonical[dt]=data[dt];
+                    canonical[dt] = data[dt];
                 }else{
-                    canonical[dt]=v;
+                    canonical[dt] = v;
                 }   
             }
         })
@@ -237,11 +237,11 @@ module.exports = Page = React.createClass({
         _.each(dwc.order,function(val,key){
             _.each(dwc.order[key],function(fld){
                 if(_.has(canonical,fld)){
-                    if(_.has(record,key)===false){
-                        record[key]=[]
+                    if(_.has(record,key) === false){
+                        record[key] = [];
                     } 
-                    var datum={};
-                    datum[fld]=canonical[fld];
+                    var datum = {};
+                    datum[fld] = canonical[fld];
                     record[key].push(datum);
                     has.push(fld);
                 }
@@ -250,12 +250,12 @@ module.exports = Page = React.createClass({
         //add unidentified values to other section
         var dif = _.difference(Object.keys(canonical), has);
         _.each(dif,function(item){
-            if(item.indexOf('idigbio:')===-1){
+            if(item.indexOf('idigbio:') === -1){
                 if(_.isUndefined(record['other'])){
-                    record['other']=[];
+                    record['other'] = [];
                 }     
-                var datum={};
-                datum[item]=canonical[item];       
+                var datum = {};
+                datum[item] = canonical[item];       
                 record['other'].push(datum);
             }
         });
@@ -284,23 +284,62 @@ module.exports = Page = React.createClass({
             )
         }
 
-        function namedList(data,list){
+        function namedList(data,list,fld){
             var values=[];
             _.each(list, function(item){
                 if(_.has(data,item)){
                     var vals = _.map(_.words(data[item]),function(i){
                         return _.capitalize(i);
                     }).join(' ');
-                    values.push(<span className="name">{fields.byTerm[item].name}: </span>);
-                    values.push(<span className="val">{vals}&nbsp;&nbsp;</span>);
+                    values.push(<span key={'named-'+item} className="name">{fld[item].name}: <span className="val">{vals}</span></span>);
+                    //values.push();
                 }
             });
-            return (
-                <span className="name-list">
-                    {values}
-                </span>
-            );
+            return values;
         }
+
+        function namedTableRows(data,list,fld){
+            var values=[];
+            _.each(list, function(item){
+                if(_.has(data,item)){
+                    var vals = _.map(_.words(data[item]),function(i){
+                        return _.capitalize(i);
+                    }).join(' ');
+                    values.push(<tr key={'named-'+item} className="name"><td>{fld[item].name}</td><td className="val">{vals}</td></tr>);
+                    //values.push();
+                }
+            });
+            return values;
+        }
+
+        function taxaBreadCrumbs(data){
+            var order = [], values = [];
+            
+            ['kingdom','phylum','class','order','family'].forEach(function(item){
+                if(_.has(data,item)){
+                    order.push(item);
+                    values.push(data[item]);
+                }
+            });
+
+            var output = [];
+            
+            order.forEach(function(item,index){
+                var search=[];
+                for(var i=0; i<=index; i++){
+                    search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+                }
+                output.push(
+                    <a key={'bread-'+item} href={'/portal/search?rq={'+search.join(',')+'}'}>{_.capitalize(values[index])}</a>
+                );
+                if((order.length-1)>index){
+                    output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>)
+                }
+            });
+
+            return output;
+        }
+
         var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
         }),undefined), function(item){
@@ -317,35 +356,36 @@ module.exports = Page = React.createClass({
             }).join(' ');
         }).join(' > ');
 
+        var eventdate='';
+        if(index.eventdate){
+            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.eventdate}</td></tr>;
+        }
         return (
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-12">   
 
                         <div id="data-container" className="clearfix">
+                            <span id="taxa-crumbs">{taxaBreadCrumbs(index)}</span>
                             <Title data={this.props.record}/>
                             <div id="summary">
-                                <div className="pull-left">
-                                    <div>
-                                        <h3>Locality</h3>
-                                        <p>
-                                            {listTable(index, ['continent','country','stateprovince','county','city'])}
-                                        </p>
-                                    </div>
-                                    <div>
-                                        <h3>Higher Taxonomy</h3>
-                                        <p>
-                                            {listTable(index, ['kingdom','phylum','class','order','family'])}
-                                        </p>
-                                    </div>
+
+                                <div className="pull-left sec">
+                                    <table>
+                                    {namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
+                                    </table>
                                 </div>
-                                
+                                <div className="pull-left sec collection">
+                                    <table>
+                                    {namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
+                                    {eventdate}
+                                    </table>
+                                </div>
                             </div>
                             <div id="data-content">
                                 <Record record={record} />
                             </div>
                             <div id="data-meta" className="clearfix">
-                                <Buttons data={index} /> 
                                 <Gallery data={index} />
                                 <Map data={index} />
                             </div>

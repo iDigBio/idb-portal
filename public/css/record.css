@@ -5,7 +5,7 @@
   cursor: pointer;
   font-weight: normal;
   padding-bottom: 5px;
-  font-size: 30px;
+  font-size: 28px;
 }
 #title h1 span.title .title-addition {
   font-size: .65em;
@@ -62,6 +62,9 @@ body {
 #data-container h3 {
   font-size: 14px;
 }
+#data-container #taxa-crumbs {
+  font-size: 13px;
+}
 #data-container #data-content,
 #data-container #summary {
   width: 65%;
@@ -75,7 +78,17 @@ body {
   }
 }
 #data-container #summary {
+  margin-bottom: 40px;
   border-radius: 3px;
+}
+#data-container #summary .sec {
+  width: 49%;
+  margin-right: 1%;
+}
+#data-container #summary .sec span.name {
+  display: inline-block;
+  clear: both;
+  float: left;
 }
 #data-container #summary .arrow {
   color: #ccc;
@@ -84,10 +97,9 @@ body {
   border-radius: 3px;
   border: 1px solid #ccc;
   font-size: 12px;
-  width: 100%;
 }
 #data-container #summary .list-table td {
-  padding: 1px 5px;
+  padding: 0px 5px;
   border: 1px solid #ccc;
 }
 #data-container #summary .list-table .list-headers {
@@ -96,8 +108,24 @@ body {
 #data-container #summary .list-table .list-values {
   background-color: white;
 }
-#data-container #summary .name-list .name {
-  color: #999;
+#data-container #summary .sec {
+  font-size: 13px;
+}
+#data-container #summary .sec table td {
+  padding: 1px 0px;
+}
+#data-container #summary .sec .name {
+  color: #333;
+  text-align: left;
+  min-width: 80px;
+}
+#data-container #summary .sec .val {
+  color: #666;
+  text-align: left;
+  padding-left: 8px;
+}
+#data-container #data-content {
+  font-size: 13px;
 }
 #data-container #data-content #record-container .tabs {
   margin: 7px 0px -1px 0px;
@@ -154,6 +182,9 @@ body {
   min-height: 300px;
   width: 100%;
 }
+#data-container #data-content #record-container .record h4 {
+  font-size: 15px;
+}
 #data-container #data-content #record-container .record table {
   margin-bottom: 30px;
 }
@@ -180,6 +211,7 @@ body {
   }
 }
 #data-container #provider-wrapper {
+  font-size: 12px;
   margin-top: 20px;
   width: 65%;
   padding-right: 5px;
@@ -274,12 +306,16 @@ body {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 #data-container #data-meta #map {
+  padding: 5px;
   margin: 10px 0px;
   display: none;
 }
 #data-container #data-meta #map .title {
   margin-left: 0px;
   padding-left: 0px;
+}
+#data-container #data-meta #map #map-wrapper {
+  border-top: 1px solid #cccccc;
 }
 #data-container #data-meta #map #map-wrapper #map-box {
   height: 200px;

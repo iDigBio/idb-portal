@@ -25,7 +25,7 @@ module.exports = Title = React.createClass({
             title = <em>No Name</em>;
         } 
         //build info ids,inst
-        info = _.without([data['dwc:scientificNameAuthorship'],data['dwc:institutionCode'],index.eventdate,data['dwc:collectionCode'],data['dwc:catalogNumber']],undefined); 
+        info = _.without([data['dwc:scientificNameAuthorship']],undefined); 
 
         return (
             <div id="title">
@@ -38,7 +38,7 @@ module.exports = Title = React.createClass({
                     </span>
                 </h1>
                 <h2>
-                    From:  <a href={'/portal/recordsets/'+this.props.data.attribution.uuid}>{this.props.data.attribution.name}</a>
+                    From <a href={'/portal/recordsets/'+this.props.data.attribution.uuid}>{this.props.data.attribution.name}</a>
                 </h2>
             </div>
         );       

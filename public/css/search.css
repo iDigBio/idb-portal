@@ -541,18 +541,17 @@
   max-height: 40px;
   text-oveflow: ellipsis;
   overflow: hidden;
-  top: 40px;
-  max-width: 70%;
-}
-#results #result-labels .result-label .content span.geopoint {
-  bottom: 40px;
-}
-#results #result-labels .result-label .content span.collection {
-  bottom: 20px;
 }
 #results #result-labels .result-label .content span.highertaxa {
   font-style: italic;
   bottom: 2px;
+}
+#results #result-labels .result-label .content .middle {
+  max-width: 70%;
+  margin: 0px;
+}
+#results #result-labels .result-label .content .middle span {
+  position: relative;
 }
 #results #result-labels .result-label .image-wrapper {
   position: absolute;

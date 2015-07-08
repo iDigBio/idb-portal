@@ -160,7 +160,7 @@
         "group": "specimen",
         "dataterm": "dwc:institutionCode"
     },
-    "Collector": {
+    "Collected By": {
         "term": "collector",
         "type": "text",
         "group": "collectionevent",

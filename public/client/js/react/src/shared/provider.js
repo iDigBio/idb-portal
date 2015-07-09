@@ -105,7 +105,7 @@ module.exports = Provider = React.createClass({
 
         return (
             <div id="provider-wrapper" className="clearfix">
-                <h4 className="title">Data Provided By</h4>
+                <h4 className="title">Attribution</h4>
                 <div id="provider-info" className="clearfix">
                     {rows}
                     {con}

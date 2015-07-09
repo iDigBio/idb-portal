@@ -77,7 +77,7 @@ var Section = React.createClass({
         }
         return (
             <div id={this.props.name} className={cl} >
-                <h4>{dwc.names[this.props.name]}</h4>
+                <h5>{dwc.names[this.props.name]}</h5>
                 <table className="table table-striped table-condensed table-bordered">
                     {rows}
                 </table>
@@ -116,9 +116,9 @@ var Record = React.createClass({
         })
 
         return (
-            <div id="record-container">
-                <Tabs />
-                <div className="record">
+            <div id="record-wrapper">
+                <h4 className="title">Data</h4>
+                <div id="record" className="clearfix">
                     {record}
                 </div>
             </div>
@@ -207,11 +207,74 @@ var Map = React.createClass({
     }
 });
 
+var Raw = React.createClass({
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    render: function(){
+
+        return(
+            <div id="raw-wrapper">
+                <h4 className="title">Raw Data</h4>
+                <div id="raw">
+                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.data)}}>
+                    </p>  
+                </div>          
+            </div>
+        )
+    }
+});
+
 var Provider = require('./shared/provider');
-var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
 module.exports = React.createClass({
+    taxaBreadCrumbs: function(){
+        var order = [], values = [], self = this;
+        
+        ['kingdom','phylum','class','order','family'].forEach(function(item){
+            if(_.has(self.props.record.indexTerms,item)){
+                order.push(item);
+                values.push(self.props.record.indexTerms[item]);
+            }
+        });
+
+        var output = [];
+        
+        order.forEach(function(item,index){
+            var search=[];
+            for(var i = 0; i <= index; i++){
+                search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+            }
+            output.push(
+                <a key={'bread-'+item} href={'/portal/search?rq={'+search.join(',')+'}'}>{_.capitalize(values[index])}</a>
+            );
+            if((order.length-1) > index){
+                output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>)
+            }
+        });
+
+        return output;
+    },
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
         var has = [], canonical = {};
@@ -312,33 +375,6 @@ module.exports = React.createClass({
             return values;
         }
 
-        function taxaBreadCrumbs(data){
-            var order = [], values = [];
-            
-            ['kingdom','phylum','class','order','family'].forEach(function(item){
-                if(_.has(data,item)){
-                    order.push(item);
-                    values.push(data[item]);
-                }
-            });
-
-            var output = [];
-            
-            order.forEach(function(item,index){
-                var search=[];
-                for(var i=0; i<=index; i++){
-                    search.push('"'+order[i]+'":'+'"'+values[i]+'"');
-                }
-                output.push(
-                    <a key={'bread-'+item} href={'/portal/search?rq={'+search.join(',')+'}'}>{_.capitalize(values[index])}</a>
-                );
-                if((order.length-1)>index){
-                    output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>)
-                }
-            });
-
-            return output;
-        }
 
         var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
@@ -360,40 +396,52 @@ module.exports = React.createClass({
         if(index.eventdate){
             eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.eventdate}</td></tr>;
         }
+        var lat = '', lon = '';
+        if(index.geopoint){
+            lat = <tr className="name"><td>Latitude</td><td className="val">{index.geopoint.lat}</td></tr>;
+            lon = <tr className="name"><td>Longitude</td><td className="val">{index.geopoint.lon}</td></tr>;
+        }
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-12">   
-
-                        <div id="data-container" className="clearfix">
-                            <span id="taxa-crumbs">{taxaBreadCrumbs(index)}</span>
-                            <Title data={this.props.record}/>
-                            <div id="summary">
-
-                                <div className="pull-left sec">
-                                    <table>
-                                    {namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
-                                    </table>
-                                </div>
-                                <div className="pull-left sec collection">
-                                    <table>
-                                    {namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
-                                    {eventdate}
-                                    </table>
-                                </div>
+                    <div className="col-lg-2 col-md-2 col-sm-2">
+                        <ul id="side-nav">
+                            <li className="active">Summary</li>
+                            <li>Map</li>
+                            <li>Media</li>
+                            <li>Attribution</li>
+                            <li>All Data</li>
+                            <li>Raw Data</li>
+                        </ul>
+                    </div> 
+                    <div className="col-lg-7 col-md-8 col-sm-8">   
+                        <span id="taxa-crumbs">{this.taxaBreadCrumbs()}</span>
+                        <Title data={this.props.record}/>
+                        <div id="summary" className="clearfix section">
+                            <div className="pull-left sec">
+                                <table>
+                                {namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
+                                {lat}
+                                {lon}
+                                </table>
                             </div>
-                            <div id="data-content">
-                                <Record record={record} />
+                            <div className="pull-left sec collection">
+                                <table>
+                                {namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
+                                {eventdate}
+                                </table>
                             </div>
-                            <div id="data-meta" className="clearfix">
-                                <Gallery data={index} />
-                                <Map data={index} />
-                            </div>
-                            <Provider data={this.props.record.attribution} />
                         </div>
+                        <Map data={index} />
+                        <Gallery data={index} /> 
+                        <Provider data={this.props.record.attribution} />                       
+                        <Record record={record} />
+                        
+                        <Raw data={this.props.record} />
                     </div>
+                  
                 </div>
-                <Raw data={this.props.record} />
+                
             </div>
         )
     }

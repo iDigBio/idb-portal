@@ -12,6 +12,13 @@ React.render(
 ) 
 //$('.tabs .tab:first-child').trigger('click'); 
 //make map if geopoint
+
+$('#side-nav').affix({
+    offset: {
+        top: 180
+    }
+})
+
 if(_.has(record.indexTerms,'geopoint')){
     $('#map').css('display','block');
    

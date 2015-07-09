@@ -77,7 +77,7 @@ var Section = React.createClass({displayName: "Section",
         }
         return (
             React.createElement("div", {id: this.props.name, className: cl}, 
-                React.createElement("h4", null, dwc.names[this.props.name]), 
+                React.createElement("h5", null, dwc.names[this.props.name]), 
                 React.createElement("table", {className: "table table-striped table-condensed table-bordered"}, 
                     rows
                 )
@@ -116,9 +116,9 @@ var Record = React.createClass({displayName: "Record",
         })
 
         return (
-            React.createElement("div", {id: "record-container"}, 
-                React.createElement(Tabs, null), 
-                React.createElement("div", {className: "record"}, 
+            React.createElement("div", {id: "record-wrapper"}, 
+                React.createElement("h4", {className: "title"}, "Data"), 
+                React.createElement("div", {id: "record", className: "clearfix"}, 
                     record
                 )
             )
@@ -207,11 +207,74 @@ var Map = React.createClass({displayName: "Map",
     }
 });
 
+var Raw = React.createClass({displayName: "Raw",
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    render: function(){
+
+        return(
+            React.createElement("div", {id: "raw-wrapper"}, 
+                React.createElement("h4", {className: "title"}, "Raw Data"), 
+                React.createElement("div", {id: "raw"}, 
+                    React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.data)}}
+                    )
+                )
+            )
+        )
+    }
+});
+
 var Provider = require('./shared/provider');
-var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
 module.exports = React.createClass({displayName: "exports",
+    taxaBreadCrumbs: function(){
+        var order = [], values = [], self = this;
+        
+        ['kingdom','phylum','class','order','family'].forEach(function(item){
+            if(_.has(self.props.record.indexTerms,item)){
+                order.push(item);
+                values.push(self.props.record.indexTerms[item]);
+            }
+        });
+
+        var output = [];
+        
+        order.forEach(function(item,index){
+            var search=[];
+            for(var i = 0; i <= index; i++){
+                search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+            }
+            output.push(
+                React.createElement("a", {key: 'bread-'+item, href: '/portal/search?rq={'+search.join(',')+'}'}, _.capitalize(values[index]))
+            );
+            if((order.length-1) > index){
+                output.push(React.createElement("span", {key: 'arrow'+index}, " > "))
+            }
+        });
+
+        return output;
+    },
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
         var has = [], canonical = {};
@@ -312,33 +375,6 @@ module.exports = React.createClass({displayName: "exports",
             return values;
         }
 
-        function taxaBreadCrumbs(data){
-            var order = [], values = [];
-            
-            ['kingdom','phylum','class','order','family'].forEach(function(item){
-                if(_.has(data,item)){
-                    order.push(item);
-                    values.push(data[item]);
-                }
-            });
-
-            var output = [];
-            
-            order.forEach(function(item,index){
-                var search=[];
-                for(var i=0; i<=index; i++){
-                    search.push('"'+order[i]+'":'+'"'+values[i]+'"');
-                }
-                output.push(
-                    React.createElement("a", {key: 'bread-'+item, href: '/portal/search?rq={'+search.join(',')+'}'}, _.capitalize(values[index]))
-                );
-                if((order.length-1)>index){
-                    output.push(React.createElement("span", {key: 'arrow'+index}, " > "))
-                }
-            });
-
-            return output;
-        }
 
         var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
             return index[item];
@@ -360,40 +396,52 @@ module.exports = React.createClass({displayName: "exports",
         if(index.eventdate){
             eventdate = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Date Collected"), React.createElement("td", {className: "val"}, index.eventdate));
         }
+        var lat = '', lon = '';
+        if(index.geopoint){
+            lat = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Latitude"), React.createElement("td", {className: "val"}, index.geopoint.lat));
+            lon = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Longitude"), React.createElement("td", {className: "val"}, index.geopoint.lon));
+        }
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
-                    React.createElement("div", {className: "col-lg-12"}, 
-
-                        React.createElement("div", {id: "data-container", className: "clearfix"}, 
-                            React.createElement("span", {id: "taxa-crumbs"}, taxaBreadCrumbs(index)), 
-                            React.createElement(Title, {data: this.props.record}), 
-                            React.createElement("div", {id: "summary"}, 
-
-                                React.createElement("div", {className: "pull-left sec"}, 
-                                    React.createElement("table", null, 
-                                    namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)
-                                    )
-                                ), 
-                                React.createElement("div", {className: "pull-left sec collection"}, 
-                                    React.createElement("table", null, 
-                                    namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm), 
-                                    eventdate
-                                    )
+                    React.createElement("div", {className: "col-lg-2 col-md-2 col-sm-2"}, 
+                        React.createElement("ul", {id: "side-nav"}, 
+                            React.createElement("li", {className: "active"}, "Summary"), 
+                            React.createElement("li", null, "Map"), 
+                            React.createElement("li", null, "Media"), 
+                            React.createElement("li", null, "Attribution"), 
+                            React.createElement("li", null, "All Data"), 
+                            React.createElement("li", null, "Raw Data")
+                        )
+                    ), 
+                    React.createElement("div", {className: "col-lg-7 col-md-8 col-sm-8"}, 
+                        React.createElement("span", {id: "taxa-crumbs"}, this.taxaBreadCrumbs()), 
+                        React.createElement(Title, {data: this.props.record}), 
+                        React.createElement("div", {id: "summary", className: "clearfix section"}, 
+                            React.createElement("div", {className: "pull-left sec"}, 
+                                React.createElement("table", null, 
+                                namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm), 
+                                lat, 
+                                lon
                                 )
                             ), 
-                            React.createElement("div", {id: "data-content"}, 
-                                React.createElement(Record, {record: record})
-                            ), 
-                            React.createElement("div", {id: "data-meta", className: "clearfix"}, 
-                                React.createElement(Gallery, {data: index}), 
-                                React.createElement(Map, {data: index})
-                            ), 
-                            React.createElement(Provider, {data: this.props.record.attribution})
-                        )
+                            React.createElement("div", {className: "pull-left sec collection"}, 
+                                React.createElement("table", null, 
+                                namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm), 
+                                eventdate
+                                )
+                            )
+                        ), 
+                        React.createElement(Map, {data: index}), 
+                        React.createElement(Gallery, {data: index}), 
+                        React.createElement(Provider, {data: this.props.record.attribution}), 
+                        React.createElement(Record, {record: record}), 
+                        
+                        React.createElement(Raw, {data: this.props.record})
                     )
-                ), 
-                React.createElement(Raw, {data: this.props.record})
+                  
+                )
+                
             )
         )
     }

@@ -27,6 +27,7 @@ h4.title {
 }
 body {
   min-height: 800px;
+  position: relative;
 }
 /*.bold{
     font-weight:bold;
@@ -383,100 +384,128 @@ body {
 }
 */
 #side-nav {
+  position: absolute;
+  left: 0;
+  padding-right: 30px;
+}
+#side-nav #side-nav-list {
   list-style-type: none;
   margin-top: 120px;
-  width: 200px;
 }
-#side-nav li {
+#side-nav #side-nav-list li a {
   display: block;
-  font-size: 14px;
-  text-align: right;
-  border-right: 3px solid transparent;
-  padding-right: 16px;
+  font-size: 15px;
+  text-align: left;
+  border-left: 3px solid transparent;
+  padding-left: 26px;
   font-weight: normal;
   cursor: pointer;
   letter-spacing: .035em;
+  color: #333;
+  text-decoration: none;
 }
-#side-nav li.active {
-  border-right: 3px solid #6aaa51;
+#side-nav #side-nav-list li a.active {
+  border-left: 3px solid #6aaa51;
   font-weight: bold;
 }
-#side-nav.affix {
+#side-nav #side-nav-list li a:hover,
+#side-nav #side-nav-list li a:visited {
+  text-decoration: none;
+}
+#side-nav #side-nav-list.affix {
   margin-top: 0px;
 }
 #col-nav {
   background-color: #ececec;
   height: 100%;
 }
-#taxa-crumbs {
-  font-size: 13px;
-}
 #summary {
+  font-size: 13px;
+  display: block;
+  margin: 20px 0px;
+}
+#summary-info {
   margin-bottom: 40px;
   border-radius: 3px;
 }
-#summary .sec {
+#summary-info .sec {
   width: 49%;
   margin-right: 1%;
 }
-#summary .sec span.name {
+#summary-info .sec span.name {
   display: inline-block;
   clear: both;
   float: left;
 }
-#summary .arrow {
+#summary-info .arrow {
   color: #ccc;
 }
-#summary .list-table {
+#summary-info .list-table {
   border-radius: 3px;
   border: 1px solid #ccc;
   font-size: 12px;
 }
-#summary .list-table td {
+#summary-info .list-table td {
   padding: 0px 5px;
   border: 1px solid #ccc;
 }
-#summary .list-table .list-headers {
+#summary-info .list-table .list-headers {
   background-color: #ececec;
 }
-#summary .list-table .list-values {
+#summary-info .list-table .list-values {
   background-color: white;
 }
-#summary .sec {
+#summary-info .sec {
   font-size: 13px;
 }
-#summary .sec table td {
+#summary-info .sec table td {
   padding: 1px 0px;
 }
-#summary .sec .name {
+#summary-info .sec .name {
   color: #333;
   text-align: left;
   min-width: 80px;
 }
-#summary .sec .val {
+#summary-info .sec .val {
   color: #666;
   text-align: left;
   padding-left: 8px;
 }
-#record-wrapper {
+#data {
   margin-top: 30px;
 }
-#record-wrapper #record {
+#data #record {
   border-top: 1px solid #cccccc;
   font-size: 13px;
   padding-top: 20px;
 }
-#record-wrapper #record .field-name {
+#data #record .field-name {
   font-weight: normal;
   color: #555;
 }
-#record-wrapper #record .field-value,
-#record-wrapper #record .field-value a {
+#data #record .field-value,
+#data #record .field-value a {
   word-wrap: break-all;
   word-break: break-word;
   overflow: hidden;
   white-space: pre-line;
   color: #555;
+}
+#data ul {
+  font-size: 17px;
+  padding: 0px;
+  margin: 0px;
+}
+#data ul li {
+  cursor: pointer;
+  list-style-type: none;
+  display: inline-block;
+  margin-right: 20px;
+  color: #666;
+}
+#data ul li.active {
+  color: #333;
+  border-bottom: 3px solid #6aaa51;
 }
 #map {
   margin: 10px 0px;
@@ -485,9 +514,6 @@ body {
 #map .title {
   margin-left: 0px;
   padding-left: 0px;
-}
-#map #map-wrapper {
-  border-top: 1px solid #cccccc;
 }
 #map #map-wrapper #map-box {
   height: 250px;
@@ -501,17 +527,17 @@ body {
 #map #map-wrapper #map-geopoint span {
   margin: 0px 5px 0px 0px;
 }
-#gallery-wrapper {
+#media {
   margin-top: 30px;
   margin-bottom: 10px;
 }
-#gallery-wrapper #gallery {
+#media #gallery {
   width: 100%;
   margin: auto auto;
   border-top: 1px solid #cccccc;
   padding: 10px 0px;
 }
-#gallery-wrapper #gallery .gallery-image {
+#media #gallery .gallery-image {
   display: relative;
   max-height: 100px;
   margin: 5px;
@@ -527,7 +553,6 @@ body {
 }
 #provider-info .title {
   margin: 10px 0px;
-  font-weight: bold;
   color: #555;
 }
 #provider-info .logo {
@@ -558,17 +583,15 @@ body {
   padding-left: 0px;
   margin-right: 15px;
 }
-#raw-wrapper {
-  margin-top: 20px;
+#raw {
   font-size: 13px;
-}
-#raw-wrapper #raw {
   border-top: 1px solid #cccccc;
-  white-space: pre;
+}
+#raw #raw-body {
   overflow: auto;
   padding-top: 20px;
 }
-#raw-wrapper #raw .string {
+#raw #raw-body .string {
   word-wrap: break-all;
   word-break: break-word;
   overflow: hidden;

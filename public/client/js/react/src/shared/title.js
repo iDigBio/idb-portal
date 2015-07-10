@@ -29,7 +29,7 @@ module.exports = Title = React.createClass({
 
         return (
             <div id="title">
-                <h1  className="clearfix" onClick={this.click}>
+                <h1 className="clearfix" onClick={this.click}>
                     <span className="title">
                         <em>{title}</em>
                         <span className="title-addition">

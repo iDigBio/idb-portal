@@ -98,6 +98,36 @@ var Tabs = React.createClass({displayName: "Tabs",
     }
 });
 var Record = React.createClass({displayName: "Record",
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    getInitialState: function(){
+        return {active: "record"};
+    },
+    tabClick: function(e){
+        debugger
+        e.preventDefault();
+        this.setState({active: e.target.attributes['data-tab'].value});
+    },
     render: function(){
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
@@ -116,10 +146,18 @@ var Record = React.createClass({displayName: "Record",
         })
 
         return (
-            React.createElement("div", {id: "record-wrapper"}, 
-                React.createElement("h4", {className: "title"}, "Data"), 
-                React.createElement("div", {id: "record", className: "clearfix"}, 
+            React.createElement("div", {id: "data", className: "scrollspy section"}, 
+                
+                React.createElement("ul", {onClick: this.tabClick}, 
+                    React.createElement("li", {className: this.state.active == 'record' ? 'active' : '', "data-tab": "record"}, "Data"), 
+                    React.createElement("li", {className: this.state.active == 'raw' ? 'active' : '', "data-tab": "raw"}, "Raw")
+                ), 
+                React.createElement("div", {id: "record", className: "clearfix", style: {display: (this.state.active == 'record' ? 'block' : 'none' )}}, 
                     record
+                ), 
+                React.createElement("div", {id: "raw", style: {display: (this.state.active == 'raw' ? 'block' : 'none' )}}, 
+                    React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.raw)}}
+                    )
                 )
             )
         );
@@ -148,7 +186,7 @@ var Gallery = React.createClass({displayName: "Gallery",
             })
         
             return (
-                React.createElement("div", {id: "gallery-wrapper"}, 
+                React.createElement("div", {id: "media", className: "scrollspy section"}, 
                     React.createElement("h4", {className: "title"}, "Media"), 
                     React.createElement("div", {id: "gallery"}, 
                         imgs
@@ -190,14 +228,10 @@ var Map = React.createClass({displayName: "Map",
     render: function(){
         if(_.has(this.props.data,'geopoint')){
             return (
-                React.createElement("div", {id: "map", className: "clearfix"}, 
-                    React.createElement("h4", {className: "title"}, "Georeference"), 
+                React.createElement("div", {id: "map", className: "clearfix scrollspy section"}, 
+                    
                     React.createElement("div", {id: "map-wrapper"}, 
-                        React.createElement("div", {id: "map-box"}), 
-                        React.createElement("div", {id: "map-geopoint"}, 
-                            React.createElement("span", null, "Lat: ", this.props.data.geopoint.lat), 
-                            React.createElement("span", null, "Lon: ", this.props.data.geopoint.lon)
-                        )
+                        React.createElement("div", {id: "map-box"})
                     )
                 )
             )
@@ -233,10 +267,10 @@ var Raw = React.createClass({displayName: "Raw",
     render: function(){
 
         return(
-            React.createElement("div", {id: "raw-wrapper"}, 
+            React.createElement("div", {id: "raw", className: "scrollspy"}, 
                 React.createElement("h4", {className: "title"}, "Raw Data"), 
-                React.createElement("div", {id: "raw"}, 
-                    React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.data)}}
+                React.createElement("div", {id: "raw-wrapper"}, 
+                    React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.raw)}}
                     )
                 )
             )
@@ -248,6 +282,30 @@ var Provider = require('./shared/provider');
 var Title = require('./shared/title');
 
 module.exports = React.createClass({displayName: "exports",
+    navList: function(){
+        var media, map;
+        if(this.props.record.indexTerms.geopoint){
+            map = React.createElement("li", null, React.createElement("a", {href: "#map"}, "Map"));
+        } else {
+            map = null;
+        }
+
+        if(this.props.record.indexTerms.hasImage){
+            media = React.createElement("li", null, React.createElement("a", {href: "#media"}, "Media"));
+        } else {
+            media = null;
+        }
+
+        return(
+            React.createElement("ul", {id: "side-nav-list"}, 
+                React.createElement("li", null, React.createElement("a", {href: "#summary"}, "Summary")), 
+                map, 
+                media, 
+                React.createElement("li", null, React.createElement("a", {href: "#attribution"}, "Attribution")), 
+                React.createElement("li", null, React.createElement("a", {href: "#data"}, "Data"))
+            )            
+        )
+    },
     taxaBreadCrumbs: function(){
         var order = [], values = [], self = this;
         
@@ -269,7 +327,7 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("a", {key: 'bread-'+item, href: '/portal/search?rq={'+search.join(',')+'}'}, _.capitalize(values[index]))
             );
             if((order.length-1) > index){
-                output.push(React.createElement("span", {key: 'arrow'+index}, " > "))
+                output.push(React.createElement("span", {key: 'arrow'+index}, " > "));
             }
         });
 
@@ -404,20 +462,10 @@ module.exports = React.createClass({displayName: "exports",
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
-                    React.createElement("div", {className: "col-lg-2 col-md-2 col-sm-2"}, 
-                        React.createElement("ul", {id: "side-nav"}, 
-                            React.createElement("li", {className: "active"}, "Summary"), 
-                            React.createElement("li", null, "Map"), 
-                            React.createElement("li", null, "Media"), 
-                            React.createElement("li", null, "Attribution"), 
-                            React.createElement("li", null, "All Data"), 
-                            React.createElement("li", null, "Raw Data")
-                        )
-                    ), 
-                    React.createElement("div", {className: "col-lg-7 col-md-8 col-sm-8"}, 
-                        React.createElement("span", {id: "taxa-crumbs"}, this.taxaBreadCrumbs()), 
+                    React.createElement("div", {id: "content", className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-8"}, 
+                        React.createElement("div", {id: "summary", className: "section scrollspy"}, this.taxaBreadCrumbs()), 
                         React.createElement(Title, {data: this.props.record}), 
-                        React.createElement("div", {id: "summary", className: "clearfix section"}, 
+                        React.createElement("div", {id: "summary-info", className: "clearfix"}, 
                             React.createElement("div", {className: "pull-left sec"}, 
                                 React.createElement("table", null, 
                                 namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm), 
@@ -435,11 +483,15 @@ module.exports = React.createClass({displayName: "exports",
                         React.createElement(Map, {data: index}), 
                         React.createElement(Gallery, {data: index}), 
                         React.createElement(Provider, {data: this.props.record.attribution}), 
-                        React.createElement(Record, {record: record}), 
+                        React.createElement(Record, {record: record, raw: this.props.record})
                         
-                        React.createElement(Raw, {data: this.props.record})
+                       
+                    ), 
+                    React.createElement("div", {className: "col-lg-2 col-md-2 col-sm-2"}, 
+                        React.createElement("div", {id: "side-nav"}, 
+                            this.navList()
+                        )
                     )
-                  
                 )
                 
             )

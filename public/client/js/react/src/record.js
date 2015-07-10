@@ -98,6 +98,36 @@ var Tabs = React.createClass({
     }
 });
 var Record = React.createClass({
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    getInitialState: function(){
+        return {active: "record"};
+    },
+    tabClick: function(e){
+        debugger
+        e.preventDefault();
+        this.setState({active: e.target.attributes['data-tab'].value});
+    },
     render: function(){
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
@@ -116,11 +146,19 @@ var Record = React.createClass({
         })
 
         return (
-            <div id="record-wrapper">
-                <h4 className="title">Data</h4>
-                <div id="record" className="clearfix">
+            <div id="data" className="scrollspy section">
+                
+                <ul onClick={this.tabClick}>
+                    <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
+                    <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+                </ul>
+                <div id="record" className="clearfix" style={{display: (this.state.active == 'record' ? 'block' : 'none' )}}>
                     {record}
                 </div>
+                <div id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>
+                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
+                    </p>  
+                </div>  
             </div>
         );
     }
@@ -148,7 +186,7 @@ var Gallery = React.createClass({
             })
         
             return (
-                <div id="gallery-wrapper">       
+                <div id="media" className="scrollspy section">       
                     <h4 className="title">Media</h4>
                     <div id="gallery">
                         {imgs}
@@ -190,14 +228,10 @@ var Map = React.createClass({
     render: function(){
         if(_.has(this.props.data,'geopoint')){
             return (
-                <div id="map" className="clearfix">
-                    <h4 className="title">Georeference</h4>
+                <div id="map" className="clearfix scrollspy section">
+                    
                     <div id="map-wrapper">
                         <div id="map-box"></div>
-                        <div id="map-geopoint">
-                            <span>Lat: {this.props.data.geopoint.lat}</span>
-                            <span>Lon: {this.props.data.geopoint.lon}</span>
-                        </div>
                     </div>
                 </div>
             )
@@ -233,10 +267,10 @@ var Raw = React.createClass({
     render: function(){
 
         return(
-            <div id="raw-wrapper">
+            <div id="raw" className="scrollspy">
                 <h4 className="title">Raw Data</h4>
-                <div id="raw">
-                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.data)}}>
+                <div id="raw-wrapper">
+                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
                     </p>  
                 </div>          
             </div>
@@ -248,6 +282,30 @@ var Provider = require('./shared/provider');
 var Title = require('./shared/title');
 
 module.exports = React.createClass({
+    navList: function(){
+        var media, map;
+        if(this.props.record.indexTerms.geopoint){
+            map = <li><a href="#map">Map</a></li>;
+        } else {
+            map = null;
+        }
+
+        if(this.props.record.indexTerms.hasImage){
+            media = <li><a href="#media">Media</a></li>;
+        } else {
+            media = null;
+        }
+
+        return(
+            <ul id="side-nav-list">
+                <li><a href="#summary">Summary</a></li>
+                {map}
+                {media}
+                <li><a href="#attribution">Attribution</a></li>
+                <li><a href="#data">Data</a></li>
+            </ul>            
+        )
+    },
     taxaBreadCrumbs: function(){
         var order = [], values = [], self = this;
         
@@ -269,7 +327,7 @@ module.exports = React.createClass({
                 <a key={'bread-'+item} href={'/portal/search?rq={'+search.join(',')+'}'}>{_.capitalize(values[index])}</a>
             );
             if((order.length-1) > index){
-                output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>)
+                output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>);
             }
         });
 
@@ -404,20 +462,10 @@ module.exports = React.createClass({
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-2 col-md-2 col-sm-2">
-                        <ul id="side-nav">
-                            <li className="active">Summary</li>
-                            <li>Map</li>
-                            <li>Media</li>
-                            <li>Attribution</li>
-                            <li>All Data</li>
-                            <li>Raw Data</li>
-                        </ul>
-                    </div> 
-                    <div className="col-lg-7 col-md-8 col-sm-8">   
-                        <span id="taxa-crumbs">{this.taxaBreadCrumbs()}</span>
+                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-8">   
+                        <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
                         <Title data={this.props.record}/>
-                        <div id="summary" className="clearfix section">
+                        <div id="summary-info" className="clearfix">
                             <div className="pull-left sec">
                                 <table>
                                 {namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
@@ -435,11 +483,15 @@ module.exports = React.createClass({
                         <Map data={index} />
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
-                        <Record record={record} />
+                        <Record record={record} raw={this.props.record}/>
                         
-                        <Raw data={this.props.record} />
+                       
                     </div>
-                  
+                    <div className="col-lg-2 col-md-2 col-sm-2">
+                        <div id="side-nav">
+                            {this.navList()}
+                        </div>
+                    </div>                   
                 </div>
                 
             </div>

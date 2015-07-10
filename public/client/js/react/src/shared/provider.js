@@ -104,7 +104,7 @@ module.exports = Provider = React.createClass({
         }
 
         return (
-            <div id="provider-wrapper" className="clearfix">
+            <div id="attribution" className="clearfix section scrollspy">
                 <h4 className="title">Attribution</h4>
                 <div id="provider-info" className="clearfix">
                     {rows}

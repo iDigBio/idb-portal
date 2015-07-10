@@ -13,11 +13,17 @@ React.render(
 //$('.tabs .tab:first-child').trigger('click'); 
 //make map if geopoint
 
-$('#side-nav').affix({
+$('#side-nav-list').affix({
     offset: {
-        top: 180
+        top: function(){
+            return $('#summary').offset().top - $(window).scrollTop();
+        }
     }
 })
+
+$('.scrollspy').scrollSpy({
+    offsetTop: -155
+});
 
 if(_.has(record.indexTerms,'geopoint')){
     $('#map').css('display','block');

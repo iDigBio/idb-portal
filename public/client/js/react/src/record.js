@@ -283,18 +283,9 @@ var Title = require('./shared/title');
 
 module.exports = React.createClass({
     navList: function(){
-        var media, map;
-        if(this.props.record.indexTerms.geopoint){
-            map = <li><a href="#map">Map</a></li>;
-        } else {
-            map = null;
-        }
 
-        if(this.props.record.indexTerms.hasImage){
-            media = <li><a href="#media">Media</a></li>;
-        } else {
-            media = null;
-        }
+        var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
+        var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
 
         return(
             <ul id="side-nav-list">
@@ -332,6 +323,19 @@ module.exports = React.createClass({
         });
 
         return output;
+    },
+    namedTableRows: function(data, list, dic){
+        var values=[];
+        _.each(list, function(item){
+            if(_.has(data,item)){
+                var vals = _.map(_.words(data[item]),function(i){
+                    return _.capitalize(i);
+                }).join(' ');
+                values.push(<tr key={'named-'+item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
+                //values.push();
+            }
+        });
+        return values;
     },
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
@@ -380,81 +384,12 @@ module.exports = React.createClass({
                 record['other'].push(datum);
             }
         });
-       
-        function listTable(data,list){
-            var headers=[],values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    headers.push(<td key={'header-'+item}>{fields.byTerm[item].name}</td>);
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(<td key={'value-'+item}>{vals}</td>);
-                }
-            })
 
-            return (
-                <table className="list-table">
-                    <tr className="list-headers">
-                        {headers}
-                    </tr>
-                    <tr className="list-values">
-                        {values}
-                    </tr>
-                </table>
-            )
-        }
-
-        function namedList(data,list,fld){
-            var values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(<span key={'named-'+item} className="name">{fld[item].name}: <span className="val">{vals}</span></span>);
-                    //values.push();
-                }
-            });
-            return values;
-        }
-
-        function namedTableRows(data,list,fld){
-            var values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(<tr key={'named-'+item} className="name"><td>{fld[item].name}</td><td className="val">{vals}</td></tr>);
-                    //values.push();
-                }
-            });
-            return values;
-        }
-
-
-        var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
-            return index[item];
-        }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-        }).join(' > ');
-
-        var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'], function(item){
-            return index[item];
-        }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-        }).join(' > ');
-
-        var eventdate='';
+        var eventdate=null;
         if(index.eventdate){
             eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.eventdate}</td></tr>;
         }
-        var lat = '', lon = '';
+        var lat = null, lon = null;
         if(index.geopoint){
             lat = <tr className="name"><td>Latitude</td><td className="val">{index.geopoint.lat}</td></tr>;
             lon = <tr className="name"><td>Longitude</td><td className="val">{index.geopoint.lon}</td></tr>;
@@ -468,14 +403,14 @@ module.exports = React.createClass({
                         <div id="summary-info" className="clearfix">
                             <div className="pull-left sec">
                                 <table>
-                                {namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
+                                {this.namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
                                 {lat}
                                 {lon}
                                 </table>
                             </div>
                             <div className="pull-left sec collection">
                                 <table>
-                                {namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
+                                {this.namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
                                 {eventdate}
                                 </table>
                             </div>
@@ -484,8 +419,6 @@ module.exports = React.createClass({
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
                         <Record record={record} raw={this.props.record}/>
-                        
-                       
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">
                         <div id="side-nav">

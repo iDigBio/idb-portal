@@ -283,18 +283,9 @@ var Title = require('./shared/title');
 
 module.exports = React.createClass({displayName: "exports",
     navList: function(){
-        var media, map;
-        if(this.props.record.indexTerms.geopoint){
-            map = React.createElement("li", null, React.createElement("a", {href: "#map"}, "Map"));
-        } else {
-            map = null;
-        }
 
-        if(this.props.record.indexTerms.hasImage){
-            media = React.createElement("li", null, React.createElement("a", {href: "#media"}, "Media"));
-        } else {
-            media = null;
-        }
+        var map = this.props.record.indexTerms.geopoint ?  React.createElement("li", null, React.createElement("a", {href: "#map"}, "Map")) : null;
+        var media = this.props.record.indexTerms.hasImage ? React.createElement("li", null, React.createElement("a", {href: "#media"}, "Media")) : null;
 
         return(
             React.createElement("ul", {id: "side-nav-list"}, 
@@ -332,6 +323,19 @@ module.exports = React.createClass({displayName: "exports",
         });
 
         return output;
+    },
+    namedTableRows: function(data, list, dic){
+        var values=[];
+        _.each(list, function(item){
+            if(_.has(data,item)){
+                var vals = _.map(_.words(data[item]),function(i){
+                    return _.capitalize(i);
+                }).join(' ');
+                values.push(React.createElement("tr", {key: 'named-'+item, className: "name"}, React.createElement("td", null, dic[item].name), React.createElement("td", {className: "val"}, vals)));
+                //values.push();
+            }
+        });
+        return values;
     },
     render: function(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
@@ -380,81 +384,12 @@ module.exports = React.createClass({displayName: "exports",
                 record['other'].push(datum);
             }
         });
-       
-        function listTable(data,list){
-            var headers=[],values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    headers.push(React.createElement("td", {key: 'header-'+item}, fields.byTerm[item].name));
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(React.createElement("td", {key: 'value-'+item}, vals));
-                }
-            })
 
-            return (
-                React.createElement("table", {className: "list-table"}, 
-                    React.createElement("tr", {className: "list-headers"}, 
-                        headers
-                    ), 
-                    React.createElement("tr", {className: "list-values"}, 
-                        values
-                    )
-                )
-            )
-        }
-
-        function namedList(data,list,fld){
-            var values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(React.createElement("span", {key: 'named-'+item, className: "name"}, fld[item].name, ": ", React.createElement("span", {className: "val"}, vals)));
-                    //values.push();
-                }
-            });
-            return values;
-        }
-
-        function namedTableRows(data,list,fld){
-            var values=[];
-            _.each(list, function(item){
-                if(_.has(data,item)){
-                    var vals = _.map(_.words(data[item]),function(i){
-                        return _.capitalize(i);
-                    }).join(' ');
-                    values.push(React.createElement("tr", {key: 'named-'+item, className: "name"}, React.createElement("td", null, fld[item].name), React.createElement("td", {className: "val"}, vals)));
-                    //values.push();
-                }
-            });
-            return values;
-        }
-
-
-        var locality =  _.map(_.without(_.map(['continent','country','stateprovince','county','city'], function(item){
-            return index[item];
-        }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-        }).join(' > ');
-
-        var highertaxon = _.map(_.without(_.map(['kingdom','phylum','class','order','family'], function(item){
-            return index[item];
-        }),undefined), function(item){
-            return _.map(_.words(item),function(i){
-                return _.capitalize(i);
-            }).join(' ');
-        }).join(' > ');
-
-        var eventdate='';
+        var eventdate=null;
         if(index.eventdate){
             eventdate = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Date Collected"), React.createElement("td", {className: "val"}, index.eventdate));
         }
-        var lat = '', lon = '';
+        var lat = null, lon = null;
         if(index.geopoint){
             lat = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Latitude"), React.createElement("td", {className: "val"}, index.geopoint.lat));
             lon = React.createElement("tr", {className: "name"}, React.createElement("td", null, "Longitude"), React.createElement("td", {className: "val"}, index.geopoint.lon));
@@ -468,14 +403,14 @@ module.exports = React.createClass({displayName: "exports",
                         React.createElement("div", {id: "summary-info", className: "clearfix"}, 
                             React.createElement("div", {className: "pull-left sec"}, 
                                 React.createElement("table", null, 
-                                namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm), 
+                                this.namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm), 
                                 lat, 
                                 lon
                                 )
                             ), 
                             React.createElement("div", {className: "pull-left sec collection"}, 
                                 React.createElement("table", null, 
-                                namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm), 
+                                this.namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm), 
                                 eventdate
                                 )
                             )
@@ -484,8 +419,6 @@ module.exports = React.createClass({displayName: "exports",
                         React.createElement(Gallery, {data: index}), 
                         React.createElement(Provider, {data: this.props.record.attribution}), 
                         React.createElement(Record, {record: record, raw: this.props.record})
-                        
-                       
                     ), 
                     React.createElement("div", {className: "col-lg-2 col-md-2 col-sm-2"}, 
                         React.createElement("div", {id: "side-nav"}, 

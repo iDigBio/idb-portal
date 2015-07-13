@@ -124,7 +124,6 @@ var Record = React.createClass({displayName: "Record",
         return {active: "record"};
     },
     tabClick: function(e){
-        debugger
         e.preventDefault();
         this.setState({active: e.target.attributes['data-tab'].value});
     },
@@ -310,12 +309,17 @@ module.exports = React.createClass({displayName: "exports",
         var output = [];
         
         order.forEach(function(item,index){
-            var search=[];
+            var search = [], title = [];
             for(var i = 0; i <= index; i++){
                 search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+                title.push(order[i]+': '+values[i]);
             }
             output.push(
-                React.createElement("a", {key: 'bread-'+item, href: '/portal/search?rq={'+search.join(',')+'}'}, _.capitalize(values[index]))
+                React.createElement("a", {
+                    key: 'bread-'+item, 
+                    href: '/portal/search?rq={'+search.join(',')+'}', 
+                    title: 'SEARCH '+title.join(', ')
+                }, _.capitalize(values[index]))
             );
             if((order.length-1) > index){
                 output.push(React.createElement("span", {key: 'arrow'+index}, " > "));
@@ -397,7 +401,7 @@ module.exports = React.createClass({displayName: "exports",
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
-                    React.createElement("div", {id: "content", className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-8"}, 
+                    React.createElement("div", {id: "content", className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-10"}, 
                         React.createElement("div", {id: "summary", className: "section scrollspy"}, this.taxaBreadCrumbs()), 
                         React.createElement(Title, {data: this.props.record}), 
                         React.createElement("div", {id: "summary-info", className: "clearfix"}, 

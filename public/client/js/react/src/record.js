@@ -124,7 +124,6 @@ var Record = React.createClass({
         return {active: "record"};
     },
     tabClick: function(e){
-        debugger
         e.preventDefault();
         this.setState({active: e.target.attributes['data-tab'].value});
     },
@@ -310,12 +309,17 @@ module.exports = React.createClass({
         var output = [];
         
         order.forEach(function(item,index){
-            var search=[];
+            var search = [], title = [];
             for(var i = 0; i <= index; i++){
                 search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+                title.push(order[i]+': '+values[i]);
             }
             output.push(
-                <a key={'bread-'+item} href={'/portal/search?rq={'+search.join(',')+'}'}>{_.capitalize(values[index])}</a>
+                <a 
+                    key={'bread-'+item} 
+                    href={'/portal/search?rq={'+search.join(',')+'}'}
+                    title={'SEARCH '+title.join(', ')}
+                >{_.capitalize(values[index])}</a>
             );
             if((order.length-1) > index){
                 output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>);
@@ -397,7 +401,7 @@ module.exports = React.createClass({
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-8">   
+                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10">   
                         <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
                         <Title data={this.props.record}/>
                         <div id="summary-info" className="clearfix">

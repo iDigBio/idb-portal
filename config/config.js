@@ -83,16 +83,6 @@ var config = {
 		logout: "/logout",
 		registerOrg: "https://www.idigbio.org/login/accounts/new",
 		api: "https://api.idigbio.org/v1"
-	},
-	searchconfig: {
-		records: {
-			index: "record",
-			base_fields: ['dwc_scientificname_k', 'dwc_country_t', 'dwc_recordedby_t']
-		},
-		mediarecords: {
-			index: "mediarecord",
-			base_fields: ['dcterms_title_t', 'ac_tag_t', 'xmprights_owner_t']
-		},
 	}
 };
 
@@ -105,11 +95,6 @@ if (process.env.NODE_ENV == "beta") {
 	_.merge(config, {
 		'port': 19199,
 		'hostname': 'beta-portal.idigbio.org',
-		searchServer: {
-			host: 'search.idigbio.org',//'beta-search.idigbio.org',
-			port: '80',
-			index: 'idigbio'
-		},
 		'id-server': {
 			host: 'beta-ids.idigbio.org',
 			path: '/'
@@ -152,11 +137,6 @@ if (process.env.NODE_ENV == "beta") {
 	_.merge(config, {
 		'port': 19199,
 		'hostname': 'portal.idigbio.org',
-		searchServer: {
-			host: 'search.idigbio.org',
-			port: '443',
-			index: 'idigbio'
-		},
 		'id-server': {
 			host: 'ids.idigbio.org',
 			path: '/'
@@ -196,11 +176,6 @@ if (process.env.NODE_ENV == "beta") {
 	_.merge(config, {
 		'port': 3000,
 		'hostname': 'localhost',
-		searchServer: {
-			host: 'localhost',
-			port: '9200',
-			index: 'idigbio'
-		},
 		'id-server': {
 			host: 'localhost',
 			port: 31338,
@@ -234,11 +209,6 @@ if (process.env.NODE_ENV == "beta") {
 	_.merge(config, {
 		'port': 3000,
 		'hostname': 'idb-api-dev.acis.ufl.edu',
-		searchServer: {
-			host: 'idb-search-dev.acis.ufl.edu',
-			port: '9200',
-			index: 'idigbio'
-		},
 		'id-server': {
 			host: 'idb-api-dev.acis.ufl.edu',
 			port: 9198,

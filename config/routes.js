@@ -10,7 +10,8 @@ module.exports = function(app, config) {
     var publishers = require('../app/controllers/publishers')(app, config);
 
     app.all('*', function(req, res, next) {
-        res.expose(config.searchServer, 'searchServer');
+        //res.expose(config.searchServer, 'searchServer');
+        res.expose(req.headers, 'headers');
         next();
     });
     app.get('/eol_api/*', function(req,res){

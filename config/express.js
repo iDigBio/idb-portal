@@ -68,12 +68,8 @@ module.exports = function(app, config) {
                 req.user = {};
             }
             //is user on portal.idigbio.org or www.idigbio.org/portal ?
-            if(_.has(req.headers,'x-forwarded-host') && req.headers['x-forwarded-host'] == 'www.idigbio.org'){
-                req.user.refurl = '/portal'+req.originalUrl;
-            }else{
-                req.user.refurl = req.originalUrl;
-            }
             
+            req.user.refurl = req.originalUrl;
             req.user.host = req.headers.host;
             req.user.protocol = req.protocol;
             next();

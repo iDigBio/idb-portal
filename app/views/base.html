@@ -48,7 +48,7 @@
            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
               {% if !user.is_authenticated -%} 
               <li style="border:none;">
-               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to={{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
+               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
                 <span style="color:white;font-size:.8em;">|</span>
                 <a href="https://www.idigbio.org/login/accounts/new" style="color:white;font-size:.8em;">Sign Up</a>
               </li>

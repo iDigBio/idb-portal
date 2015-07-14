@@ -57,20 +57,23 @@ module.exports = function(app, config) {
                     req.user = {
                         is_authenticated: true,
                         login: req.session.login,
-                        refurl: req.originalUrl,
                         random: randString()
                     }
                 }else{
                     req.user = {
-                        refurl: req.originalUrl,
                         random: randString()
                     }                     
                 } 
             }else{
-                req.user = {
-                    refurl: req.originalUrl
-                }                
+                req.user = {};
             }
+            //is user on portal.idigbio.org or www.idigbio.org/portal ?
+            if(req.headers.host.indexOf('portal') === 0){
+                req.user.refurl = req.originalUrl;
+            }else{
+                req.user.refurl = '/portal'+req.originalUrl;
+            }
+            
             req.user.host = req.headers.host;
             req.user.protocol = req.protocol;
             next();

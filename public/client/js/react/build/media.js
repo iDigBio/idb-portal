@@ -18,11 +18,11 @@ var Media = React.createClass({displayName: "Media",
         }
 
         return (
-            React.createElement("div", {key: this.props.keyid, id: "media-wrapper", className: "scrollspy section"}, 
+            React.createElement("div", {key: this.props.keyid, id: "media-wrapper", className: "scrollspy section clearfix"}, 
                 React.createElement("a", {className: "clearfix", target: '_'+this.props.keyid, href: link, title: "click to open original media file"}, 
                     React.createElement("img", {className: "media", src: 'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview', onError: this.error})
                 ), 
-                React.createElement("a", {className: "pull-right", href: link, download: this.props.keyid, target: '_'+this.props.keyid, className: "hidden-print"}, 
+                React.createElement("a", {className: "media-link hidden-print", href: link, download: this.props.keyid, target: '_'+this.props.keyid}, 
                     "Download Media File"
                 )
             )
@@ -153,7 +153,7 @@ var Group = React.createClass({displayName: "Group",
                 )
             )
         }else{
-            return React.createElement("span", null)
+            return null;
         }
     }
 });
@@ -205,11 +205,12 @@ module.exports = React.createClass({displayName: "exports",
 
         return(
             React.createElement("ul", {id: "side-nav-list"}, 
+                React.createElement("li", {className: "title"}, "Contents"), 
                 React.createElement("li", null, React.createElement("a", {href: "#media-wrapper"}, "Media")), 
                 media, 
                 React.createElement("li", null, React.createElement("a", {href: "#attribution"}, "Attribution")), 
-                React.createElement("li", null, React.createElement("a", {href: "#data-table"}, "Meta Data"))
-            )            
+                React.createElement("li", null, React.createElement("a", {href: "#data-table"}, "Data"))
+            )  
         )
     },
     render: function(){
@@ -221,7 +222,7 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-10", id: "container"}, 
                         this.taxaBreadCrumbs(), 
-                        React.createElement(Title, {data: this.props.record}), 
+                        React.createElement(Title, {data: this.props.record, includeLink: true}), 
                         React.createElement(Media, {key: source.uuid+'_media', keyid: source.uuid, data: source.data}), 
                         React.createElement(Group, {record: this.props.record, keyid: source.uuid}), 
                         React.createElement(Provider, {data: this.props.mediarecord.attribution}), 

@@ -1,5 +1,9 @@
 @import 'variables.less';
 @import 'title.less';
+@import 'sidenav.less';
+@import 'provider.less';
+@import 'raw.less';
+
 h3{
     color:#333;
     font-size:1.63em;
@@ -22,58 +26,12 @@ body{
 #content{
     //box-shadow: 0px 0px 3px #666;
 }
-#side-nav{
-    
-    position:absolute;
-    left: 0;
 
-    //margin-left:5%;
-    padding-right:30px;
-    
-    #side-nav-list{
-        
-        list-style-type: none;
-        margin-top:120px;
-        //width:200px;
-        //margin-right:50px;
-        li{
-            a{
-                display: block;
-                font-size:15px;
-                text-align: left;
-                border-left: 3px solid transparent;
-                padding-left:26px;
-                font-weight: normal;
-                cursor: pointer;
-                letter-spacing: .035em;
-                color:#333;
-                text-decoration: none;
-            }
-            a.active{
-                border-left: 3px solid @idbgreen;
-                font-weight: bold;
-                
-            }
-            a:hover, a:visited{
-                text-decoration: none;
-            }
-        }
-
-        &.affix{
-            //top:300px;
-            //right: 0;
-            
-            margin-top:0px;
-            //width:150px;
-            //left:0;
-            //margin-left:7%;
-        }
-    }
-}
 #col-nav{
     background-color:@lightgrey;
     height:100%;
 }
+
 #summary{
     font-size:13px;
     display:block;
@@ -221,61 +179,4 @@ body{
             max-width:90%;
         }
     }        
-}
-
-#provider-info{
-    font-size: 13px;
-    .title{
-        margin:10px 0px;
-       
-        color:#555;
-    }
-    .logo{
-        max-height:45px;
-        margin:5px 5px 0px 0px;
-        border:1px solid #ccc;
-        padding:4px;
-        float:left;
-    }
-    .justify{
-        text-align:justify;
-        line-height: 1.3em;
-    }
-    border-top:@brd;
-    padding:5px 0px;
-    #contacts{
-        margin-top:15px;
-        .title{
-           margin-bottom:10px; 
-        }
-        
-        .contact, .contact li{
-            text-decoration: none;
-            list-style: none;
-            width:170px;
-            word-break:break-word;
-        }
-        .contact{
-            padding-left:0px;
-            margin-right:15px;
-        }
-    }            
-}
-
-#raw{
-    //margin-top:20px;
-    font-size: 13px;
-    border-top:@brd;
-    #raw-body{
-        //border-top:@brd;
-        //white-space:pre;
-        overflow:auto;
-        padding-top:20px;
-        .string{
-            word-wrap:break-all;
-            word-break:break-word;
-            overflow:hidden;
-            white-space: pre-line;
-        }
-    }
 }

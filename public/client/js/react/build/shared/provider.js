@@ -54,39 +54,63 @@ module.exports = Provider = React.createClass({displayName: "Provider",
             var email = self.check(contact.email);
             var phone =  self.check(contact.phone);
             var role =  self.check(contact.role);
+            /*return (
+                <ul key={name+email+role}className="pull-left contact">
+                    <li>{name}</li>
+                    <li>{role}</li>
+                    <li><a href={'mailto: '+email}>{email}</a></li>
+                    <li>{phone}</li>
+                </ul>
+            );*/
             return (
-                React.createElement("ul", {key: name+email+role, className: "pull-left contact"}, 
-                    React.createElement("li", null, name), 
-                    React.createElement("li", null, role), 
-                    React.createElement("li", null, React.createElement("a", {href: 'mailto: '+email}, email)), 
-                    React.createElement("li", null, phone)
+                React.createElement("table", {className: "contact", key: name+email+role}, 
+                    React.createElement("tr", null, React.createElement("td", {className: "name"}, "Name"), React.createElement("td", null, name)), 
+                    React.createElement("tr", null, React.createElement("td", {className: "name"}, "Role"), React.createElement("td", null, role)), 
+                    React.createElement("tr", null, React.createElement("td", {className: "name"}, "Email"), React.createElement("td", null, React.createElement("a", {href: 'mailto: '+email}, email))), 
+                    React.createElement("tr", null, React.createElement("td", {className: "name"}, "Phone"), React.createElement("td", null, phone))
                 )
             );
         }     
         //console.log(this.props.data)
         var data = this.props.data;
+        var title = null, description = null, link = null, desc = null, logo = null;
+        
         if(_.has(data,'name')){
-            rows.push(
+            title = (
                 React.createElement("div", {key: "title", className: "title"}, 
-                    React.createElement("a", {href: "/portal/recordsets/"+data.uuid}, data.name))
-            )
+                    React.createElement("a", {href: "/portal/recordsets/"+data.uuid}, data.name)
+                )
+            );
         }
+        
+        if(_.has(data,'description')){
+            desc = (
+                React.createElement("span", {
+                    className: "justify", 
+                    dangerouslySetInnerHTML: {__html: _.unescape(data.description)}}
+                )
+            );
+        }
+
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){
-            rows.push(React.createElement("img", {key: "logo", className: "logo", src: data.logo, onError: this.noLogo}))
+            logo = (React.createElement("img", {key: "logo", className: "logo", src: data.logo, onError: this.noLogo}))
         }
+        
+        description = (
+            React.createElement("p", {id: "description", className: "clearfix"}, 
+                logo, 
+                desc
+            )
+        );
+
         if(_.has(data,'url')){
-            rows.push(
+            link = (
                 React.createElement("a", {key: "link", href: data.url}, 
                     data.url
                 )
             )
         }
-        if(_.has(data,'description')){
-            var desc = _.unescape(data.description);
-            rows.push(
-                React.createElement("div", {key: "description", className: "justify", dangerouslySetInnerHTML: {__html: desc}})
-            )
-        }
+
 
         var con;
         if(_.has(data,'contacts')){
@@ -94,20 +118,22 @@ module.exports = Provider = React.createClass({displayName: "Provider",
                 contacts.push(makeContact(item));
             })
             con = (
-                React.createElement("div", {key: "contacts", id: "contacts"}, 
-                    React.createElement("div", {className: "title"}, "Contacts"), 
+                React.createElement("div", {key: "contacts", id: "contacts", className: "clearfix"}, 
+                    React.createElement("h5", {className: "title"}, "Contacts"), 
                     contacts
                 )
             );
         }else{
-            con = React.createElement("span", null);
+            con = null;
         }
 
         return (
             React.createElement("div", {id: "attribution", className: "clearfix section scrollspy"}, 
                 React.createElement("h4", {className: "title"}, "Provided By"), 
                 React.createElement("div", {id: "provider-info", className: "clearfix"}, 
-                    rows, 
+                    title, 
+                    link, 
+                    description, 
                     con
                 )
             )

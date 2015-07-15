@@ -9,7 +9,10 @@
 }
 #title h1 span.title .title-addition {
   font-size: .65em;
-  margin: 0px 15px;
+  margin: 0px 8px 0px 15px;
+}
+#title h1 span.title-link {
+  font-size: .45em;
 }
 #title h2 {
   font-size: 12px;

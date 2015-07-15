@@ -1,0 +1,29 @@
+@import 'variables.less';
+
+#raw{
+    //margin-top:20px;
+    font-size: 13px;
+    border-top:@brd;
+    #raw-body{
+        //border-top:@brd;
+        //white-space:pre;
+        overflow:auto;
+        padding-top:20px;
+        .key{
+            font-weight: bolder;
+        }
+        .boolean{
+            color: #333;
+        }
+        .number{
+            color: #555;
+        }
+        .string{
+            color: darken(@idbgreen, 15%);
+            word-wrap:break-all;
+            word-break:break-word;
+            overflow:hidden;
+            white-space: pre-line;
+        }
+    }
+}

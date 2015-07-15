@@ -26,7 +26,15 @@ module.exports = Title = React.createClass({displayName: "Title",
         } 
         //build info ids,inst
         info = _.without([data['dwc:scientificNameAuthorship']],undefined); 
-
+        
+        var link = null;
+        
+        if(this.props.includeLink){
+            link = (React.createElement("span", {className: "title-link"}, 
+                React.createElement("a", {href: "/portal/records/"+this.props.data.uuid}, "view specimen record")
+            ))
+        }
+        
         return (
             React.createElement("div", {id: "title"}, 
                 React.createElement("h1", {className: "clearfix", onClick: this.click}, 
@@ -34,7 +42,8 @@ module.exports = Title = React.createClass({displayName: "Title",
                         React.createElement("em", null, title), 
                         React.createElement("span", {className: "title-addition"}, 
                             info.join(', ')
-                        )
+                        ), 
+                        link
                     )
                 ), 
                 React.createElement("h2", null, 

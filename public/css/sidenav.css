@@ -1,0 +1,37 @@
+#side-nav {
+  position: absolute;
+  left: 0;
+  padding-right: 30px;
+}
+#side-nav #side-nav-list {
+  list-style-type: none;
+  margin-top: 120px;
+}
+#side-nav #side-nav-list li.title {
+  color: #111;
+  font-size: 17px;
+  border-bottom: 1px solid #cccccc;
+  padding: 0px;
+  margin-bottom: 8px;
+}
+#side-nav #side-nav-list li a {
+  display: block;
+  font-size: 15px;
+  text-align: left;
+  border-left: 3px solid transparent;
+  font-weight: normal;
+  cursor: pointer;
+  letter-spacing: .035em;
+  color: #333;
+  text-decoration: none;
+}
+#side-nav #side-nav-list li a:hover,
+#side-nav #side-nav-list li a:visited {
+  text-decoration: none;
+}
+#side-nav #side-nav-list li a:hover {
+  color: #777;
+}
+#side-nav #side-nav-list.affix {
+  margin-top: 0px;
+}

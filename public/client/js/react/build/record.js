@@ -288,6 +288,7 @@ module.exports = React.createClass({displayName: "exports",
 
         return(
             React.createElement("ul", {id: "side-nav-list"}, 
+                React.createElement("li", {className: "title"}, "Contents"), 
                 React.createElement("li", null, React.createElement("a", {href: "#summary"}, "Summary")), 
                 map, 
                 media, 

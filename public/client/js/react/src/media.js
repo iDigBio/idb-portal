@@ -18,11 +18,11 @@ var Media = React.createClass({
         }
 
         return (
-            <div key={this.props.keyid} id="media-wrapper" className="scrollspy section" >
+            <div key={this.props.keyid} id="media-wrapper" className="scrollspy section clearfix" >
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
                     <img className="media" src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
-                <a className="pull-right" href={link} download={this.props.keyid} target={'_'+this.props.keyid} className="hidden-print">
+                <a className="media-link hidden-print" href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
                     Download Media File
                 </a>
             </div>
@@ -153,7 +153,7 @@ var Group = React.createClass({
                 </div>
             )
         }else{
-            return <span/>
+            return null;
         }
     }
 });
@@ -205,11 +205,12 @@ module.exports = React.createClass({
 
         return(
             <ul id="side-nav-list">
+                <li className="title">Contents</li>
                 <li><a href="#media-wrapper">Media</a></li>
                 {media}
                 <li><a href="#attribution">Attribution</a></li>
-                <li><a href="#data-table">Meta Data</a></li>
-            </ul>            
+                <li><a href="#data-table">Data</a></li>
+            </ul>  
         )
     },
     render: function(){
@@ -221,7 +222,7 @@ module.exports = React.createClass({
                 <div className="row">
                     <div className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10" id="container">
                         {this.taxaBreadCrumbs()}  
-                        <Title data={this.props.record}/>
+                        <Title data={this.props.record} includeLink={true} />
                         <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
                         <Group record={this.props.record} keyid={source.uuid}/>
                         <Provider data={this.props.mediarecord.attribution} />

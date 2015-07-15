@@ -26,7 +26,15 @@ module.exports = Title = React.createClass({
         } 
         //build info ids,inst
         info = _.without([data['dwc:scientificNameAuthorship']],undefined); 
-
+        
+        var link = null;
+        
+        if(this.props.includeLink){
+            link = (<span className="title-link">
+                <a href={"/portal/records/"+this.props.data.uuid}>view specimen record</a>
+            </span>)
+        }
+        
         return (
             <div id="title">
                 <h1 className="clearfix" onClick={this.click}>
@@ -35,6 +43,7 @@ module.exports = Title = React.createClass({
                         <span className="title-addition">
                             {info.join(', ')}
                         </span>
+                        {link}
                     </span>
                 </h1>
                 <h2>

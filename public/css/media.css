@@ -9,40 +9,14 @@
 }
 #title h1 span.title .title-addition {
   font-size: .65em;
-  margin: 0px 15px;
+  margin: 0px 8px 0px 15px;
+}
+#title h1 span.title-link {
+  font-size: .45em;
 }
 #title h2 {
   font-size: 12px;
   margin: 10px 0px 20px 0px;
-}
-body {
-  font-size: 13px;
-}
-h3 {
-  color: #333;
-  font-size: 1.63em;
-}
-.justify {
-  text-align: justify;
-}
-.button {
-  margin: 5px;
-  display: inline-block;
-}
-.contact,
-.contact li {
-  text-decoration: none;
-  list-style: none;
-  word-break: break-word;
-}
-.section {
-  margin-bottom: 20px;
-}
-#contacts {
-  margin-top: 15px;
-}
-#container {
-  margin-top: 20px;
 }
 #side-nav {
   position: absolute;
@@ -53,42 +27,122 @@ h3 {
   list-style-type: none;
   margin-top: 120px;
 }
+#side-nav #side-nav-list li.title {
+  color: #111;
+  font-size: 17px;
+  border-bottom: 1px solid #cccccc;
+  padding: 0px;
+  margin-bottom: 8px;
+}
 #side-nav #side-nav-list li a {
   display: block;
   font-size: 15px;
   text-align: left;
   border-left: 3px solid transparent;
-  padding-left: 26px;
   font-weight: normal;
   cursor: pointer;
   letter-spacing: .035em;
   color: #333;
   text-decoration: none;
 }
-#side-nav #side-nav-list li a.active {
-  border-left: 3px solid #6aaa51;
-  font-weight: bold;
-}
 #side-nav #side-nav-list li a:hover,
 #side-nav #side-nav-list li a:visited {
   text-decoration: none;
 }
+#side-nav #side-nav-list li a:hover {
+  color: #777;
+}
 #side-nav #side-nav-list.affix {
   margin-top: 0px;
 }
-#data-content {
+#attribution {
   width: 100%;
-  float: left;
-  background-color: #ececec;
-  margin: 10px 0px;
-  border-top: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
 }
-@media (max-width: 992px) {
-  #data-content {
-    width: 100%;
-    float: none;
-  }
+#attribution h4.title {
+  font-size: 1.3em;
+}
+#attribution #provider-info {
+  font-size: 13px;
+  border-top: 1px solid #cccccc;
+  padding: 5px 0px;
+}
+#attribution #provider-info .title {
+  margin: 10px 0px;
+  color: #555;
+}
+#attribution #provider-info .logo {
+  max-height: 100px;
+  max-width: 200px;
+  margin: 5px 10px 0px 0px;
+  border: 1px solid #ccc;
+  padding: 4px;
+  float: left;
+}
+#attribution #provider-info .justify {
+  text-align: justify;
+  line-height: 1.3em;
+}
+#attribution #provider-info #description {
+  display: block;
+  text-align: justify;
+}
+#attribution #provider-info #contacts {
+  margin-top: 15px;
+  width: 100%;
+}
+#attribution #provider-info #contacts .title {
+  margin-bottom: 10px;
+}
+#attribution #provider-info #contacts .contact,
+#attribution #provider-info #contacts .contact li {
+  text-decoration: none;
+  list-style: none;
+}
+#attribution #provider-info #contacts .contact {
+  width: 27%;
+  padding-left: 0px;
+  margin-right: 15px;
+  float: left;
+}
+#attribution #provider-info #contacts .contact .name {
+  color: #333;
+}
+#raw {
+  font-size: 13px;
+  border-top: 1px solid #cccccc;
+}
+#raw #raw-body {
+  overflow: auto;
+  padding-top: 20px;
+}
+#raw #raw-body .key {
+  font-weight: bolder;
+}
+#raw #raw-body .boolean {
+  color: #333;
+}
+#raw #raw-body .number {
+  color: #555;
+}
+#raw #raw-body .string {
+  color: #4a7638;
+  word-wrap: break-all;
+  word-break: break-word;
+  overflow: hidden;
+  white-space: pre-line;
+}
+body {
+  font-size: 13px;
+}
+h3 {
+  color: #333;
+  font-size: 1.63em;
+}
+.section {
+  margin-bottom: 20px;
+}
+#container {
+  margin-top: 20px;
 }
 #data-table {
   display: inline-block;
@@ -157,47 +211,6 @@ h3 {
   padding: 4px;
   max-width: 90%;
 }
-#attribution {
-  width: 100%;
-  float: left;
-}
-@media (max-width: 992px) {
-  #attribution {
-    width: 100%;
-    float: none;
-  }
-}
-#attribution #provider-info {
-  border-top: 1px solid #cccccc;
-}
-#attribution #provider-info .title {
-  margin: 10px 0px;
-}
-#attribution #provider-info .contact {
-  padding-left: 0px;
-}
-#data-content {
-  text-align: center;
-}
-.logo {
-  max-width: 50px;
-  margin: 5px 5px 0px 0px;
-  border: 1px solid #ccc;
-  padding: 4px;
-  float: left;
-}
-.title {
-  color: #555;
-  font-weight: normal;
-  margin: 4px 0px;
-}
-h1.title {
-  font-size: 1.65em;
-}
-h4.title {
-  margin: 5px;
-  font-size: 1.3em;
-}
 #bread-crumbs {
   display: block;
 }
@@ -207,6 +220,7 @@ h4.title {
   margin: 20px auto;
   position: relative;
   background-color: #ececec;
+  box-shadow: 0px 0px 6px #999;
 }
 #media-wrapper img {
   border: 1px solid #ccc;
@@ -221,17 +235,7 @@ h4.title {
   display: block;
   margin: 5px;
 }
-#raw {
-  font-size: 13px;
-  border-top: 1px solid #cccccc;
-}
-#raw #raw-body {
-  overflow: auto;
-  padding-top: 20px;
-}
-#raw #raw-body .string {
-  word-wrap: break-all;
-  word-break: break-word;
-  overflow: hidden;
-  white-space: pre-line;
+#media-wrapper a.media-link {
+  display: inline-block;
+  float: right;
 }

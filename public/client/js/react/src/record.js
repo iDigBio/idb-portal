@@ -288,6 +288,7 @@ module.exports = React.createClass({
 
         return(
             <ul id="side-nav-list">
+                <li className="title">Contents</li>
                 <li><a href="#summary">Summary</a></li>
                 {map}
                 {media}

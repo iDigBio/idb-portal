@@ -22,7 +22,7 @@ $('#side-nav-list').affix({
 })
 
 $('.scrollspy').scrollSpy({
-    offsetTop: -155
+    offsetTop: -205
 });
 
 if(_.has(record.indexTerms,'geopoint')){

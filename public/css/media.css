@@ -198,6 +198,9 @@ h4.title {
   margin: 5px;
   font-size: 1.3em;
 }
+#bread-crumbs {
+  display: block;
+}
 #media-wrapper {
   display: block;
   width: 100%;

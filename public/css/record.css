@@ -104,6 +104,9 @@
   margin-right: 15px;
   float: left;
 }
+#attribution #provider-info #contacts .contact td {
+  vertical-align: top;
+}
 #attribution #provider-info #contacts .contact .name {
   color: #333;
 }
@@ -195,6 +198,7 @@ body {
 }
 #summary-info .sec table td {
   padding: 1px 0px;
+  vertical-align: top;
 }
 #summary-info .sec .name {
   color: #333;

@@ -104,6 +104,9 @@
   margin-right: 15px;
   float: left;
 }
+#attribution #provider-info #contacts .contact td {
+  vertical-align: top;
+}
 #attribution #provider-info #contacts .contact .name {
   color: #333;
 }
@@ -222,8 +225,6 @@ h3 {
   width: 100%;
   margin: 20px auto;
   position: relative;
-  background-color: #ececec;
-  box-shadow: 0px 0px 6px #999;
 }
 #media-wrapper img {
   border: 1px solid #ccc;

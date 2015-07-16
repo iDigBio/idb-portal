@@ -47,6 +47,9 @@
   margin-right: 15px;
   float: left;
 }
+#attribution #provider-info #contacts .contact td {
+  vertical-align: top;
+}
 #attribution #provider-info #contacts .contact .name {
   color: #333;
 }

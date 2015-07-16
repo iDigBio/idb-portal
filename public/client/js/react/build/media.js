@@ -198,8 +198,9 @@ module.exports = React.createClass({displayName: "exports",
     navList: function(){
 
         var media = null;
+        //var med = this.props.indexTerms.mediarecords
         
-        if( this.props.record.indexTerms.mediarecords.length > 1){
+        if( _.has(this.props.record,'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
             media = React.createElement("li", null, React.createElement("a", {href: "#other-images"}, "Other Media"))
         }
 
@@ -222,7 +223,7 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("div", {className: "row"}, 
                     React.createElement("div", {className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-10", id: "container"}, 
                         this.taxaBreadCrumbs(), 
-                        React.createElement(Title, {data: this.props.record, includeLink: true}), 
+                        React.createElement(Title, {data: this.props.record, attribution: this.props.mediarecord.attribution, includeLink: true}), 
                         React.createElement(Media, {key: source.uuid+'_media', keyid: source.uuid, data: source.data}), 
                         React.createElement(Group, {record: this.props.record, keyid: source.uuid}), 
                         React.createElement(Provider, {data: this.props.mediarecord.attribution}), 

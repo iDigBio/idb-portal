@@ -336,7 +336,7 @@ module.exports = React.createClass({
                 <div className="row">
                     <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10">   
                         <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
-                        <Title data={this.props.record}/>
+                        <Title data={this.props.record}  attribution={this.props.record.attribution}/>
                         <div id="summary-info" className="clearfix">
                             <div className="pull-left sec">
                                 <table>

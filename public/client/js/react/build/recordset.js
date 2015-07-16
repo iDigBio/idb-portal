@@ -42,7 +42,7 @@ var Fieldrow = React.createClass({displayName: "Fieldrow",
         var sty2 = {'width': '170px'};
         return (
             React.createElement("tr", null, 
-                React.createElement("td", null, React.createElement("b", null, this.props.name)), 
+                React.createElement("td", null, React.createElement("b", null, React.createElement("a", {href: '/portal/search?rq={"flags":"'+this.props.name+'","recordset":"'+this.props.uuid+'"}'}, this.props.name))), 
                 React.createElement("td", {style: sty2, className: "value-column record-count"}, this.checkVal(this.props.total)), 
                 React.createElement("td", {className: "value-column"}, 
                     React.createElement("div", {className: "perc-box"}, 
@@ -64,14 +64,14 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
         var self = this;
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
-            return React.createElement(Fieldrow, {key: flag, name: flag, total: self.props.flags[flag].itemCount, value: perc})
+            return React.createElement(Fieldrow, {key: flag, name: flag, total: self.props.flags[flag].itemCount, value: perc, uuid: self.props.uuid})
         })
         var sty = {'textAlign': 'center'};
         return (
             React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "clearfix"}, 
                
                 React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction performed. The last two columns represent the number and percentage of" + ' ' + 
-                 "records that were corrected."), 
+                 "records that were corrected. A complete list of the data quality flags and their descriptions can be found ", React.createElement("a", {alt: "flag descriptions", href: "https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags"}, "here"), "."), 
                 React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.createElement("thead", null, 
                         React.createElement("tr", null, 
@@ -143,7 +143,7 @@ var StatsTables = React.createClass({displayName: "StatsTables",
                     React.createElement("li", {className: this.state.active == 'flags' ?  'active': '', id: "corrected-tab", onClick: this.click, "data-active": "flags"}, "Data Corrected"), 
                     React.createElement("li", {className: this.state.active == 'use' ?  'active': '', id: "use-tab", onClick: this.click, "data-active": "use"}, "Data Use")
                 ), 
-                React.createElement(FieldsTable, {active: this.state.active=='flags', flags: this.props.flags, stotal: this.props.stotal}), 
+                React.createElement(FieldsTable, {active: this.state.active=='flags', flags: this.props.flags, stotal: this.props.stotal, uuid: this.props.uuid}), 
                 React.createElement(UseTable, {active: this.state.active=='use', use: this.props.use, uuid: this.props.uuid})
             )
         )

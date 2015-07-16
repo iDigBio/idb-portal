@@ -42,7 +42,7 @@ var Fieldrow = React.createClass({
         var sty2 = {'width': '170px'};
         return (
             <tr>
-                <td><b>{this.props.name}</b></td>
+                <td><b><a href={'/portal/search?rq={"flags":"'+this.props.name+'","recordset":"'+this.props.uuid+'"}'}>{this.props.name}</a></b></td>
                 <td style={sty2} className="value-column record-count">{this.checkVal(this.props.total)}</td>
                 <td className="value-column">
                     <div className="perc-box">
@@ -64,14 +64,14 @@ var FieldsTable = React.createClass({
         var self = this;
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
-            return <Fieldrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc}/>
+            return <Fieldrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc} uuid={self.props.uuid} />
         })
         var sty = {'textAlign': 'center'};
         return (
             <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="clearfix" >
                
                 <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction performed. The last two columns represent the number and percentage of 
-                 records that were corrected.</div>
+                 records that were corrected. A complete list of the data quality flags and their descriptions can be found <a alt="flag descriptions" href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>.</div>
                 <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                     <thead>
                         <tr>
@@ -143,8 +143,8 @@ var StatsTables = React.createClass({
                     <li className={this.state.active == 'flags' ?  'active': ''} id="corrected-tab" onClick={this.click} data-active="flags">Data Corrected</li>
                     <li className={this.state.active == 'use' ?  'active': ''} id="use-tab" onClick={this.click} data-active="use">Data Use</li>
                 </ul>
-                <FieldsTable active={this.state.active=='flags'} flags={this.props.flags} stotal={this.props.stotal}/>
-                <UseTable active={this.state.active=='use'} use={this.props.use} uuid={this.props.uuid}/>
+                <FieldsTable active={this.state.active=='flags'} flags={this.props.flags} stotal={this.props.stotal} uuid={this.props.uuid} />
+                <UseTable active={this.state.active=='use'} use={this.props.use} uuid={this.props.uuid} />
             </div>
         )
     }

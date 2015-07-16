@@ -4,29 +4,6 @@ var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
 
-var Tab = React.createClass({displayName: "Tab",
-    showSection: function(event){
-        event.preventDefault();
-        $('li.tab').removeClass('active');
-        $(event.currentTarget).addClass('active');
-        $('.section').addClass('visible-print-block');
-        $('#'+$(event.currentTarget).attr('data-tab')).removeClass('visible-print-block');
-    },
-    render: function(){
-        var cl = "tab";
-        if(this.props.active){
-            cl="tab active";
-        }
-        return (
-            React.createElement("li", {className: cl, "data-tab": this.props.name, onClick: this.showSection}, 
-                React.createElement("a", {href: '#'+this.props.name}, 
-                    dwc.names[this.props.name]
-                )
-            )
-        );
-    }
-});
-
 var Row = React.createClass({displayName: "Row",
     render: function(){
         var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
@@ -85,18 +62,25 @@ var Section = React.createClass({displayName: "Section",
         );
     }
 });
-var Tabs = React.createClass({displayName: "Tabs",
+
+var Flags = React.createClass({displayName: "Flags",
     render: function(){
+        var rows = _.map(this.props.flags, function(flag){
+            return (
+                React.createElement("tr", null, React.createElement("td", null, flag))
+            )
+        })
+
         return (
-            React.createElement("ul", {className: "tabs"}, 
-                React.createElement("li", {className: "tab active"}, React.createElement("a", null, "Data")), 
-                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Notifications")), 
-                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Attribution")), 
-                React.createElement("li", {className: "tab"}, React.createElement("a", null, "Raw Data"))
+            React.createElement("div", {id: "flags", style: {display: (this.props.active ? 'block' : 'none' )}}, 
+                React.createElement("table", {className: "table table-striped table-bordered table-condensed"}, 
+                    rows
+                )
             )
         )
     }
 });
+
 var Record = React.createClass({displayName: "Record",
     formatJSON: function(json){
         if (typeof json != 'string') {
@@ -130,8 +114,9 @@ var Record = React.createClass({displayName: "Record",
     render: function(){
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
-        var record =[],tabs=[],self=this;
+        var record = [], tabs = [], self = this, flags = null, flagsTab = null;
         var cnt = 0;
+        
         sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
                 var active=true;
@@ -142,18 +127,25 @@ var Record = React.createClass({displayName: "Record",
                 record.push(React.createElement(Section, {key: 'sec-'+sec, key: 'sec-'+sec, name: sec, data: self.props.record[sec], active: active}));
                 cnt++;
             } 
-        })
+        });
+
+        if(this.props.raw.indexTerms.flags){
+            flags = React.createElement(Flags, {flags: this.props.raw.indexTerms.flags, active: this.state.active == 'flags'});
+            flagsTab = React.createElement("li", {className: this.state.active == 'flags' ? 'active' : '', "data-tab": "flags"}, "Flags");
+        }
 
         return (
             React.createElement("div", {id: "data", className: "scrollspy section"}, 
                 
                 React.createElement("ul", {onClick: this.tabClick}, 
                     React.createElement("li", {className: this.state.active == 'record' ? 'active' : '', "data-tab": "record"}, "Data"), 
+                    flagsTab, 
                     React.createElement("li", {className: this.state.active == 'raw' ? 'active' : '', "data-tab": "raw"}, "Raw")
                 ), 
                 React.createElement("div", {id: "record", className: "clearfix", style: {display: (this.state.active == 'record' ? 'block' : 'none' )}}, 
                     record
                 ), 
+                flags, 
                 React.createElement("div", {id: "raw", style: {display: (this.state.active == 'raw' ? 'block' : 'none' )}}, 
                     React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.raw)}}
                     )
@@ -179,7 +171,9 @@ var Img = React.createClass({displayName: "Img",
 var Gallery = React.createClass({displayName: "Gallery",
     render: function(){
         if(_.has(this.props.data,'mediarecords')){
+            
             var imgs = [];
+
             _.each(this.props.data.mediarecords,function(item){
                 imgs.push(React.createElement(Img, {key: item, keyid: item}));
             })
@@ -198,31 +192,6 @@ var Gallery = React.createClass({displayName: "Gallery",
     }
 });
 
-var Buttons = React.createClass({displayName: "Buttons",
-    print: function(){
-        window.print()
-    },
-    render: function(){
-
-        return (
-            React.createElement("div", {id: "actions", className: "clearfix hidden-print"}, 
-                
-                React.createElement("div", {id: "action-buttons"}, 
-                    React.createElement("a", {href: "/portal/recordsets/"+this.props.data.recordset}, 
-                        React.createElement("button", {className: "btn"}, "Go To Recordset")
-                    ), 
-                    React.createElement("button", {"data-target": "#raw", "data-toggle": "modal", className: "btn"}, 
-                        "View Raw Data"
-                    ), 
-                    React.createElement("button", {className: "btn", title: "print this page", onClick: this.print}, 
-                        "Print"
-                    )
-                )
-            )
-        )
-    }
-});
-
 var Map = React.createClass({displayName: "Map",
     render: function(){
         if(_.has(this.props.data,'geopoint')){
@@ -237,43 +206,6 @@ var Map = React.createClass({displayName: "Map",
         }else{
             return React.createElement("span", null)
         }
-    }
-});
-
-var Raw = React.createClass({displayName: "Raw",
-    formatJSON: function(json){
-        if (typeof json != 'string') {
-             json = JSON.stringify(json, undefined, 2);
-        }
-        
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            var cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
-            }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
-    },
-    render: function(){
-
-        return(
-            React.createElement("div", {id: "raw", className: "scrollspy"}, 
-                React.createElement("h4", {className: "title"}, "Raw Data"), 
-                React.createElement("div", {id: "raw-wrapper"}, 
-                    React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.raw)}}
-                    )
-                )
-            )
-        )
     }
 });
 

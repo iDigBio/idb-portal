@@ -4,29 +4,6 @@ var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
 
-var Tab = React.createClass({
-    showSection: function(event){
-        event.preventDefault();
-        $('li.tab').removeClass('active');
-        $(event.currentTarget).addClass('active');
-        $('.section').addClass('visible-print-block');
-        $('#'+$(event.currentTarget).attr('data-tab')).removeClass('visible-print-block');
-    },
-    render: function(){
-        var cl = "tab";
-        if(this.props.active){
-            cl="tab active";
-        }
-        return (
-            <li className={cl} data-tab={this.props.name} onClick={this.showSection}>
-                <a href={'#'+this.props.name}>
-                    {dwc.names[this.props.name]}
-                </a>
-            </li>
-        );
-    }
-});
-
 var Row = React.createClass({
     render: function(){
         var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
@@ -85,18 +62,25 @@ var Section = React.createClass({
         );
     }
 });
-var Tabs = React.createClass({
+
+var Flags = React.createClass({
     render: function(){
+        var rows = _.map(this.props.flags, function(flag){
+            return (
+                <tr><td>{flag}</td></tr>
+            )
+        })
+
         return (
-            <ul className="tabs">
-                <li className="tab active"><a>Data</a></li>
-                <li className="tab"><a>Notifications</a></li>
-                <li className="tab"><a>Attribution</a></li>
-                <li className="tab"><a>Raw Data</a></li>
-            </ul>
+            <div id="flags" style={{display: (this.props.active ? 'block' : 'none' )}}>
+                <table className="table table-striped table-bordered table-condensed">
+                    {rows}
+                </table>
+            </div>
         )
     }
 });
+
 var Record = React.createClass({
     formatJSON: function(json){
         if (typeof json != 'string') {
@@ -130,8 +114,9 @@ var Record = React.createClass({
     render: function(){
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
-        var record =[],tabs=[],self=this;
+        var record = [], tabs = [], self = this, flags = null, flagsTab = null;
         var cnt = 0;
+        
         sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
                 var active=true;
@@ -142,18 +127,25 @@ var Record = React.createClass({
                 record.push(<Section key={'sec-'+sec} key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
                 cnt++;
             } 
-        })
+        });
+
+        if(this.props.raw.indexTerms.flags){
+            flags = <Flags flags={this.props.raw.indexTerms.flags} active={this.state.active == 'flags'} />;
+            flagsTab = <li className={this.state.active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li>;
+        }
 
         return (
             <div id="data" className="scrollspy section">
                 
                 <ul onClick={this.tabClick}>
                     <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
+                    {flagsTab}
                     <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
                 </ul>
                 <div id="record" className="clearfix" style={{display: (this.state.active == 'record' ? 'block' : 'none' )}}>
                     {record}
                 </div>
+                {flags}
                 <div id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>
                     <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
                     </p>  
@@ -179,7 +171,9 @@ var Img = React.createClass({
 var Gallery = React.createClass({
     render: function(){
         if(_.has(this.props.data,'mediarecords')){
+            
             var imgs = [];
+
             _.each(this.props.data.mediarecords,function(item){
                 imgs.push(<Img key={item} keyid={item} />);
             })
@@ -198,31 +192,6 @@ var Gallery = React.createClass({
     }
 });
 
-var Buttons = React.createClass({
-    print: function(){
-        window.print()
-    },
-    render: function(){
-
-        return (
-            <div id="actions" className="clearfix hidden-print">
-                
-                <div id="action-buttons">
-                    <a href={"/portal/recordsets/"+this.props.data.recordset}>
-                        <button className="btn">Go To Recordset</button>
-                    </a>
-                    <button data-target="#raw" data-toggle="modal" className="btn">
-                        View Raw Data
-                    </button>
-                    <button className="btn" title="print this page" onClick={this.print}>
-                        Print
-                    </button>
-                </div>
-            </div>
-        )
-    }
-});
-
 var Map = React.createClass({
     render: function(){
         if(_.has(this.props.data,'geopoint')){
@@ -237,43 +206,6 @@ var Map = React.createClass({
         }else{
             return <span/>
         }
-    }
-});
-
-var Raw = React.createClass({
-    formatJSON: function(json){
-        if (typeof json != 'string') {
-             json = JSON.stringify(json, undefined, 2);
-        }
-        
-        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
-            var cls = 'number';
-            if (/^"/.test(match)) {
-                if (/:$/.test(match)) {
-                    cls = 'key';
-                } else {
-                    cls = 'string';
-                }
-            } else if (/true|false/.test(match)) {
-                cls = 'boolean';
-            } else if (/null/.test(match)) {
-                cls = 'null';
-            }
-            return '<span class="' + cls + '">' + match + '</span>';
-        });
-    },
-    render: function(){
-
-        return(
-            <div id="raw" className="scrollspy">
-                <h4 className="title">Raw Data</h4>
-                <div id="raw-wrapper">
-                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
-                    </p>  
-                </div>          
-            </div>
-        )
     }
 });
 

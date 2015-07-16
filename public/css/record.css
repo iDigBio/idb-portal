@@ -204,17 +204,21 @@ body {
 #data {
   margin-top: 30px;
 }
-#data #record {
+#data #record,
+#data #flags {
   border-top: 1px solid #cccccc;
   font-size: 13px;
   padding-top: 20px;
 }
-#data #record .field-name {
+#data #record .field-name,
+#data #flags .field-name {
   font-weight: normal;
   color: #555;
 }
 #data #record .field-value,
-#data #record .field-value a {
+#data #flags .field-value,
+#data #record .field-value a,
+#data #flags .field-value a {
   word-wrap: break-all;
   word-break: break-word;
   overflow: hidden;

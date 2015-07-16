@@ -144,6 +144,11 @@ h4.title {
 body {
   min-height: 800px;
   position: relative;
+  background-color: #eee;
+}
+#content {
+  background-color: #fefefe;
+  box-shadow: 1px 1px 2px #ccc;
 }
 #col-nav {
   background-color: #ececec;

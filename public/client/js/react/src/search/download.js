@@ -265,7 +265,7 @@ var Downloader = React.createClass({
         } else {
             //this.setState('disabled', true);
             var req = function(){
-                $.post("//csv.idigbio.org", {query: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                $.post("//beta-api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
                     self.addDownload(data,self.props.search);
                 }).fail(req);                   
             }

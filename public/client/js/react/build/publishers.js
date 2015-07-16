@@ -62,18 +62,23 @@ var Publishers = React.createClass({displayName: "Publishers",
         }
       });
     
-      return (
-        React.createElement("tr", {key: key}, 
-          React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, val.name)), 
-          React.createElement("td", {className: "valcol"}, formatNum(dr)), 
-          React.createElement("td", {className: "valcol"}, formatNum(ar)), 
-          React.createElement("td", {className: "valcol"}, formatNum(ir)), 
-          React.createElement("td", {className: "valcol"}, formatNum(dm)), 
-          React.createElement("td", {className: "valcol"}, formatNum(am)), 
-          React.createElement("td", {className: "valcol"}, formatNum(im))
-        )
-      );
+      if(_.without([ar,am,dr,dm,ir,im],0).length === 0){
+        return null;
+      }else{
+        return (
+          React.createElement("tr", {key: key}, 
+            React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, val.name)), 
+            React.createElement("td", {className: "valcol"}, formatNum(dr)), 
+            React.createElement("td", {className: "valcol"}, formatNum(ar)), 
+            React.createElement("td", {className: "valcol"}, formatNum(ir)), 
+            React.createElement("td", {className: "valcol"}, formatNum(dm)), 
+            React.createElement("td", {className: "valcol"}, formatNum(am)), 
+            React.createElement("td", {className: "valcol"}, formatNum(im))
+          )
+        );        
+      }
     });
+  
     return (
       React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue"}, 
         React.createElement("thead", null, 
@@ -89,7 +94,7 @@ var Publishers = React.createClass({displayName: "Publishers",
           )
         ), 
         React.createElement("tbody", null, 
-          prows
+          _.without(prows,null)
         )
       )
     )
@@ -99,20 +104,22 @@ var Publishers = React.createClass({displayName: "Publishers",
 var Recordsets = React.createClass({displayName: "Recordsets",
   render: function(){
     var rows = _.map(this.props.recordsets,function(name,uuid){
-      if(_.isUndefined(rsets[uuid])){
-        rsets[uuid]=defsets();
-      }
-      return (
-        React.createElement("tr", null, 
-          React.createElement("td", null, React.createElement("a", {href: '/portal/recordsets/'+uuid, target: "_new"}, name)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestrecords)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apirecords)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexrecords)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestmedia)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apimedia)), 
-          React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexmedia))
+      if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
+        //rsets[uuid]=defsets();
+        return null;
+      }else{
+        return (
+          React.createElement("tr", null, 
+            React.createElement("td", null, React.createElement("a", {href: '/portal/recordsets/'+uuid, target: "_new"}, name)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestrecords)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apirecords)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexrecords)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestmedia)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apimedia)), 
+            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexmedia))
+          )
         )
-      )
+      }
     });
 
     return (
@@ -124,7 +131,7 @@ var Recordsets = React.createClass({displayName: "Recordsets",
             React.createElement("tr", null, React.createElement("th", null, "Dataset Name"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"))
           ), 
           React.createElement("tbody", null, 
-            rows
+            _.without(rows,null)
           )
         )
       )
@@ -170,17 +177,15 @@ async.parallel([
     idbapi.publishers({"fields":["data.name","data.base_url"],"limit":1000},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.uuid])){
-            pubs[item.uuid]=defpub();
+            pubs[item.uuid] = defpub();
         }
 
         if(_.isEmpty(item.data.name)){
-          pubs[item.uuid].name=item.data.base_url;
+          pubs[item.uuid].name = item.data.base_url;
         }else{
-          pubs[item.uuid].name=item.data.name;
+          pubs[item.uuid].name = item.data.name;
         }
-        
       })
-     
       callback();
     });
   },

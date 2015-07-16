@@ -351,4 +351,7 @@
         "group": "paleocontext",
         "dataterm": "dwc:lithostratigraphicTerms"
     }
+    "Data Flags": {
+        "type" "text"
+    }
 }

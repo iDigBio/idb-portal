@@ -165,7 +165,7 @@ var Downloader = React.createClass({
                     self.removeDownload(item);
                     callback();
                 }else if(item.complete === false){
-                    var surl = '//'+ url('hostname',item.status_url) + url('path',item.status_url);
+                    var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
                     
                     var statusFunc = function() {
                         $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
@@ -266,10 +266,21 @@ var Downloader = React.createClass({
             //this.setState('disabled', true);
             var req = function(){
                 setTimeout(function(){
-                    $.post("//beta-api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    /*$.ajax({
+                        type: "POST",
+                        url: "https://beta-api.idigbio.org/v2/download",
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: JSON.stringify({rq: q, email: email}),
+                        success: function(data, textStatus, jqXHR) {
+                            self.addDownload(data,self.props.search);
+                        }
+                    }).fail(req);
+                    */
+                    $.post("https://beta-api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
                         self.addDownload(data,self.props.search);
-                    }).fail(req);        
-                },1000);           
+                    }).fail(req);
+                }, 1000);           
             }
             req();
         }        

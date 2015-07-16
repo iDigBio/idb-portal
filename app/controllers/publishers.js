@@ -38,22 +38,6 @@ module.exports = function(app, config) {
             });
         },
         recordset: function(req,res){
-            var recordquery = function(){
-                return {
-                    "query": {
-                        "filtered":{
-                            "filter":{
-                                "and":[
-                                   {"term": {"recordset": req.params.id}}
-                                ] 
-                            }
-                        }
-                    },
-                    "from": 0,
-                    "size": 0,
-                    "aggs": {}  
-                }
-            };
             var flags;
             var stotal=0,mtotal=0;
             var rset={},rbody={},use;
@@ -85,7 +69,7 @@ module.exports = function(app, config) {
                             });
                         },
                         function(cback){
-                            request.post({"url": config.api+'summary/count/media/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(err, resp, body){
+                            request.post({"url": config.api+'summary/count/media/', "json": true, "body": {mq: {recordset: req.params.id}}}, function(err, resp, body){
                                 mtotal = body.itemCount;
                                 cback(null,'three')                            
                             });

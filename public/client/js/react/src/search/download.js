@@ -155,9 +155,7 @@ var Downloader = React.createClass({
         var self=this;
 
         this.checkDownloadStatus = function(){
-            var downloads = _.map(self.state.downloads,function(item){
-                return item.query_hash;
-            });
+
             var update = self.state.downloads, pendings=false;
             async.each(self.state.downloads,function(item,callback){
               
@@ -197,28 +195,34 @@ var Downloader = React.createClass({
     componentWillReceiveProps: function(nextProps){
         this.setDownloadTime(nextProps.search);
     },
+    getId: function(status_url){
+        var item = status_url.split('/');
+        return item[item.length-1];
+    },
+    getDownloadIds: function(){
+        var self = this;
+        return _.map(this.state.downloads,function(item){
+            return self.getId(item.status_url);
+        });
+    },
     addDownload: function(obj,search){
         var downloads = this.state.downloads;
-        var ids = _.map(downloads, function(item){
-            return item.query_hash;
-        })
-        if(ids.indexOf(obj.query_hash)===-1){
+        var ids = this.getDownloadIds();
+        if(ids.indexOf(this.getId(obj.status_url))===-1){
             obj.sentence = Downloads.queryToSentence(search);
             downloads.unshift(obj);
             this.setState({downloads: downloads});
             if(localStorage){
-                localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
+                localStorage.setItem('downloads', JSON.stringify({downloads: downloads}));
             }
             this.checkDownloadStatus();            
         }
     },
     updateDownload: function(obj){
         var downloads = this.state.downloads;
-        var update = _.map(downloads, function(item){
-            return item.query_hash;
-        })
+        var ids = this.getDownloadIds();
         //obj.sentence = downloads[update.indexOf(obj.query_hash)]
-        _.merge(downloads[update.indexOf(obj.query_hash)],obj)
+        _.merge(downloads[ids.indexOf(this.getId(obj.status_url))],obj);
         this.setState({downloads: downloads});
         if(localStorage){
             localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
@@ -227,10 +231,8 @@ var Downloader = React.createClass({
     },
     removeDownload: function(obj){
         var downloads = this.state.downloads;
-        var ids = _.map(downloads, function(item){
-            return item.query_hash;
-        })
-        downloads.splice(ids.indexOf(obj.query_hash),1);
+        var ids = this.getDownloadIds()
+        downloads.splice(ids.indexOf(this.getId(obj.status_url)),1);
         this.setState({downloads: downloads});
         if(localStorage){
             localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));

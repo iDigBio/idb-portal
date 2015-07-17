@@ -168,7 +168,7 @@ module.exports = {
     order: order,
     orderByType: dataOrder,
     typeOrder: type_order, 
-    searchGroups: ['taxonomy','specimen','collectionevent','locality','paleocontext'],
+    searchGroups: ['taxonomy','specimen','collectionevent','locality','paleocontext','other'],
     groupNames: {"taxonomy":"Taxonomy","specimen":"Specimen","collectionevent":"Collection Event","locality":"Locality", "paleocontext": "Paleo Context","other":"Other","media":"Media","person":"Person"},
     byDataTerm: dataterms,
     defaults: defaultFields,

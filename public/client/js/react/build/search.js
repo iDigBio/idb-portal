@@ -62,7 +62,7 @@ var Main = module.exports =  React.createClass({displayName: "exports",
             _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
                 search.filters.push(Filters.newFilterProps(filter));
             });
-            window.history.pushState({},'search',url('path'));
+            window.history.replaceState({},'search',url('path'));
         }else if(searchHistory.history.length > 0){
             search.filters = _.map(searchHistory.history[0].filters, function(filter){
                 return Filters.newFilterProps(filter.name);

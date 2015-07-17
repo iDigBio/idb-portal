@@ -160,7 +160,7 @@
         "group": "specimen",
         "dataterm": "dwc:institutionCode"
     },
-    "Collector": {
+    "Collected By": {
         "term": "collector",
         "type": "text",
         "group": "collectionevent",
@@ -350,5 +350,10 @@
         "type": "text",
         "group": "paleocontext",
         "dataterm": "dwc:lithostratigraphicTerms"
+    },
+    "Data Flags": {
+        "term": "flags",
+        "type": "text",
+        "group": "other"
     }
 }

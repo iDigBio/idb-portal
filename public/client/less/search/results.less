@@ -6,6 +6,7 @@
     //border-top:1px solid #fefefe;
     //background-color: @idblightgreen;
     padding-top:8px;
+
     h4{
         
         margin:0px;
@@ -24,12 +25,12 @@
             text-transform: capitalize;
         }
         li{
-            width: 96px;
+            min-width: 86px;
             text-transform: capitalize;
             display:inline-block;
             margin:0px 0px 0px 0px;
-            font-size:1.2em;
-            letter-spacing:.08em;
+            font-size:1.1em;
+            letter-spacing:.07em;
             font-weight:normal;
             text-align: center;
             //border: @brd;
@@ -284,18 +285,25 @@
                         max-height:40px;
                         text-oveflow: ellipsis;
                         overflow:hidden;
-                        top:40px;
-                        max-width:70%;
+                        //top:30px;
+                        //max-width:70%;
                     }
                     &.geopoint{
-                        bottom:40px;
+                        //bottom:40px;
                     }
                     &.collection{
-                        bottom:20px;
+                        //bottom:20px;
                     }
                     &.highertaxa{
                         font-style:italic;
                         bottom:2px;
+                    }
+                }
+                .middle{
+                    max-width:70%;
+                    margin:0px;
+                    span{
+                        position:relative;
                     }
                 }
             }
@@ -377,7 +385,7 @@
         }
         
         .image{
-
+            //display:inline-block;
             height:230px;
             width:15.50%;
             background-color:@lightgrey;
@@ -453,6 +461,29 @@
             }
         }
     }
+
+    #provider-results{
+        
+        th{
+            &#rset{
+                width:20%;
+            }
+            &#rcount{
+                width:10%
+            }
+            &#rdesc{
+                width:70%;
+            }  
+        }
+        td{ 
+            overflow: hidden;
+            line-height: 1.3em;
+            &.desc{
+                text-align: justify;
+            }
+        }
+    }
+
     .panel{
         margin:0px auto;
         padding:0px 0px;

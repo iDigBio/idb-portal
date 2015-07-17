@@ -29,7 +29,10 @@ var sortFunc = function(a,b){
     return 0;
 };
 
+
+//record pie chart
 var record = {"rq":{"kingdom":{"type":"exists"}},"top_fields": ["kingdom"]};
+
 idbapi.summary('top/records/',record,function(response){
 
     var king=[],other=['other'],colorOrder=[];
@@ -73,6 +76,7 @@ idbapi.summary('top/records/',record,function(response){
     })
 })
 
+//media pie chart
 var media = {"rq":{"kingdom":{"type":"exists"},"hasImage":true},"top_fields": ["kingdom"]};
 
 idbapi.summary('top/records/',media,function(response){
@@ -115,13 +119,15 @@ idbapi.summary('top/records/',media,function(response){
 function formatNum(num){
     return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
+//record counts
 idbapi.summary('count/records/',function(resp){
     $('#recordcount').html(formatNum(resp.itemCount));
 });
 idbapi.summary('count/media/',function(resp){
     $('#mediacount').html(formatNum(resp.itemCount));
 })
-idbapi.summary('count/recordset/',function(resp){
+idbapi.summary('count/recordset/?rsq={"data.ingest": true}',function(resp){
     $('#recordsets-total').html(formatNum(resp.itemCount));
 });
 

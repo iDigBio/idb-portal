@@ -18,11 +18,11 @@ var Media = React.createClass({
         }
 
         return (
-            <div key={this.props.keyid} id="media-wrapper" className="clearfix">
+            <div key={this.props.keyid} id="media-wrapper" className="scrollspy section clearfix" >
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
                     <img className="media" src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
-                <a href={link} download={this.props.keyid} target={'_'+this.props.keyid} className="hidden-print">
+                <a className="media-link hidden-print" href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
                     Download Media File
                 </a>
             </div>
@@ -30,67 +30,52 @@ var Media = React.createClass({
     }
 });
 
-var Buttons = React.createClass({
-    print: function(e){
-        e.preventDefault();
-        window.print();
-    },
-    render: function(){
-        var el=[];
-        if(_.has(this.props.data,'records')){
-            var link = '/portal/records/'+this.props.data.records[0];
-            el.push(
-                <a className="btn button" href={link} key={link} keyid={link}>
-                    Go To Record
-                </a>
-            )
-        }else{
-            el.push(
-                <span className="no-assoc">Media is not associated with any record</span>
-            )
-        }
-        var rlink = '/portal/recordsets/'+this.props.data.recordset;
-
-        el.push(
-            <a className="btn button" href={rlink} key={rlink} keyid={rlink}>
-                Go To Recordset
-            </a>
-        );
-
-        el.push(
-            <a href="#raw" data-toggle="modal" data-target="#raw" className="btn button" key={'raw-data'}>
-                View Raw Data
-            </a>            
-        );
-        
-        return (
-            <div id="action-buttons" key={'buttons'}>
-                {el}
-                <button className="btn button" title="print this page" onClick={this.print}>
-                    Print
-                </button>
-            </div>
-        );
-    }
-});
-
 var Table = React.createClass({
+    getInitialState: function(){
+        return {active: 'record'};
+    },
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    tabClick: function(e){
+        e.preventDefault();
+        this.setState({active: e.target.attributes['data-tab'].value});
+    },
     render: function(){
         var order=[],rows=[],self=this;
 
         //make ordered name keys
         _.each(dwc.order.media,function(val){
-            if(_.has(self.props.record, val)){
+            if(_.has(self.props.record.data, val)){
                 order.push(val);
             }
         });
         //add unknown keys to end of list
-        var dif = _.difference(Object.keys(this.props.record),order);
+        var dif = _.difference(Object.keys(this.props.record.data),order);
         var merged = order.concat(dif), count=0;
         var regex = /(\bhttps?:\/\/(\S|\w)+)/;
         _.each(order,function(key){
             var name = _.isUndefined(dwc.names[key]) ? key: dwc.names[key];
-            var val = self.props.record[key];
+            var val = self.props.record.data[key];
             if(_.isString(val)){
                 var str;
                 if(val.indexOf('<a')===0){
@@ -119,14 +104,24 @@ var Table = React.createClass({
                     </tr>
                 );                 
             }
-            count++
+            count++;
         });
 
         return (
-            <div id="meta-table">
-                <table>
+            <div id="data-table" className="scrollspy">
+                <ul onClick={this.tabClick}>
+                    <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
+                    <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+                </ul>
+                <section id="record" className="clearfix" style={{display: (this.state.active == 'record' ? 'block' : 'none' )}}>
+                    <table className="table table-striped table-condensed table-bordered">
                     {rows}
-                </table>
+                    </table>
+                </section>
+                <section id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>
+                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.record)}}>
+                    </p>  
+                </section>  
             </div>
         );
     }
@@ -150,7 +145,7 @@ var Group = React.createClass({
                 }
             }
             return (
-                <div id="other-images" className="clearfix">
+                <div id="other-images" className="clearfix scrollspy section">
                     <h4 className="title">Other Media</h4>
                     <div id="images-wrapper">
                         {imgs}
@@ -158,7 +153,7 @@ var Group = React.createClass({
                 </div>
             )
         }else{
-            return <span/>
+            return null;
         }
     }
 });
@@ -168,6 +163,57 @@ var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
 module.exports = React.createClass({
+    taxaBreadCrumbs: function(){
+        var order = [], values = [], self = this;
+        
+        ['kingdom','phylum','class','order','family'].forEach(function(item){
+            if(_.has(self.props.record.indexTerms,item)){
+                order.push(item);
+                values.push(self.props.record.indexTerms[item]);
+            }
+        });
+
+        var output = [];
+        
+        order.forEach(function(item,index){
+            var search = [], title = [];
+            for(var i = 0; i <= index; i++){
+                search.push('"'+order[i]+'":'+'"'+values[i]+'"');
+                title.push(order[i]+': '+values[i]);
+            }
+            output.push(
+                <a 
+                    key={'bread-'+item} 
+                    href={'/portal/search?rq={'+search.join(',')+'}&view=images'}
+                    title={'SEARCH IMAGES '+title.join(', ')}
+                >{_.capitalize(values[index])}</a>
+            );
+            if((order.length-1) > index){
+                output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>);
+            }
+        });
+
+        return output;
+    },
+    navList: function(){
+
+        var media = null;
+        //var med = this.props.indexTerms.mediarecords
+        
+        if( _.has(this.props.record,'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
+            media = <li><a href="#other-images">Other Media</a></li>
+        }
+
+        return(
+            <ul id="side-nav-list">
+                <li className="title">Contents</li>
+                <li><a href="#media-wrapper">Media</a></li>
+                {media}
+                <li><a href="#attribution">Attribution</a></li>
+                <li><a href="#data-table">Data</a></li>
+            </ul>  
+        )
+    },
     render: function(){
         var source = this.props.mediarecord;
         var info=[];
@@ -175,27 +221,21 @@ module.exports = React.createClass({
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-12" id="container">   
-                        <div id="data-container" className="clearfix">
-                            <Title data={this.props.record}/>
-                            <div id="data-content">
-                                <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
-                            </div>
-                            <div id="data-meta" className="clearfix">
-                                <div id="actions" className="hidden-print"> 
-                                    <Buttons data={source.indexTerms} />
-                                </div>
-                                <div id="data-table" className="clearfix">
-                                    <h4 className="title">Media Metadata</h4>
-                                    <Table record={source.data} />
-                                </div>
-                            </div>
-                            <Group record={this.props.record} keyid={source.uuid}/>
-                            <Provider data={this.props.mediarecord.attribution} />
-                        </div>
+                    <div className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10" id="container">
+                        <h1 id="banner">Media Record</h1> 
+                        <span id="summary">{this.taxaBreadCrumbs()}</span>  
+                        <Title data={this.props.record} attribution={this.props.mediarecord.attribution} includeLink={true} />
+                        <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
+                        <Group record={this.props.record} keyid={source.uuid}/>
+                        <Provider data={this.props.mediarecord.attribution} />
+                        <Table record={source} />
                     </div>
+                    <div className="col-lg-2 col-md-2 col-sm-2">
+                        <div id="side-nav">
+                            {this.navList()}
+                        </div>
+                    </div> 
                 </div>
-                <Raw data={source} />
             </div>
         )
     }

@@ -62,18 +62,23 @@ var Publishers = React.createClass({
         }
       });
     
-      return (
-        <tr key={key}>
-          <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
-          <td className="valcol">{formatNum(dr)}</td>
-          <td className="valcol">{formatNum(ar)}</td>
-          <td className="valcol">{formatNum(ir)}</td>
-          <td className="valcol">{formatNum(dm)}</td>
-          <td className="valcol">{formatNum(am)}</td>
-          <td className="valcol">{formatNum(im)}</td>
-        </tr>
-      );
+      if(_.without([ar,am,dr,dm,ir,im],0).length === 0){
+        return null;
+      }else{
+        return (
+          <tr key={key}>
+            <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
+            <td className="valcol">{formatNum(dr)}</td>
+            <td className="valcol">{formatNum(ar)}</td>
+            <td className="valcol">{formatNum(ir)}</td>
+            <td className="valcol">{formatNum(dm)}</td>
+            <td className="valcol">{formatNum(am)}</td>
+            <td className="valcol">{formatNum(im)}</td>
+          </tr>
+        );        
+      }
     });
+  
     return (
       <table className="table table-bordered datatable table-condensed tablesorter-blue">
         <thead>
@@ -89,7 +94,7 @@ var Publishers = React.createClass({
           </tr>
         </thead>
         <tbody>
-          {prows}
+          {_.without(prows,null)}
         </tbody>
       </table>
     )
@@ -99,20 +104,22 @@ var Publishers = React.createClass({
 var Recordsets = React.createClass({
   render: function(){
     var rows = _.map(this.props.recordsets,function(name,uuid){
-      if(_.isUndefined(rsets[uuid])){
-        rsets[uuid]=defsets();
+      if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
+        //rsets[uuid]=defsets();
+        return null;
+      }else{
+        return (
+          <tr>
+            <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
+            <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
+            <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
+            <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
+            <td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>
+            <td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>
+            <td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>
+          </tr>
+        )
       }
-      return (
-        <tr>
-          <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
-          <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
-          <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
-          <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
-          <td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>
-          <td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>
-          <td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>
-        </tr>
-      )
     });
 
     return (
@@ -121,10 +128,10 @@ var Recordsets = React.createClass({
         <table className="table table-bordered datatable table-condensed tablesorter-blue">
           <thead>
             <tr><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
-            <tr><th>Dataset Name</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
+            <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
           </thead>
           <tbody>
-            {rows}
+            {_.without(rows,null)}
           </tbody>
         </table>
       </div>
@@ -170,17 +177,15 @@ async.parallel([
     idbapi.publishers({"fields":["data.name","data.base_url"],"limit":1000},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.uuid])){
-            pubs[item.uuid]=defpub();
+            pubs[item.uuid] = defpub();
         }
 
         if(_.isEmpty(item.data.name)){
-          pubs[item.uuid].name=item.data.base_url;
+          pubs[item.uuid].name = item.data.base_url;
         }else{
-          pubs[item.uuid].name=item.data.name;
+          pubs[item.uuid].name = item.data.name;
         }
-        
       })
-     
       callback();
     });
   },

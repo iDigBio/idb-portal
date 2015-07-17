@@ -57,10 +57,11 @@ module.exports = Collection = React.createClass({
             title+=' - '+this.props.data.collection;
         }
         return (
-            <div className="col-lg-10 col-lg-offset-1">
-                <h3>Collection: {title}</h3>
+            <div id="collection" className="col-lg-7 col-lg-offset-2">
+                <h1>Collection</h1>
+                <h2>{title}</h2>
                 <a className="pull-right" href={this.props.data.update_url} target="_new">Update/Add Information</a>
-                <table className="table table-bordered table-condensed">
+                <table className="table table-bordered table-condensed table-striped">
                     {rows}
                 </table>
             </div>

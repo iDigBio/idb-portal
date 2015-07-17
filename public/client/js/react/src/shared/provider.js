@@ -54,60 +54,85 @@ module.exports = Provider = React.createClass({
             var email = self.check(contact.email);
             var phone =  self.check(contact.phone);
             var role =  self.check(contact.role);
-            return (
+            /*return (
                 <ul key={name+email+role}className="pull-left contact">
                     <li>{name}</li>
                     <li>{role}</li>
                     <li><a href={'mailto: '+email}>{email}</a></li>
                     <li>{phone}</li>
                 </ul>
+            );*/
+            return (
+                <table className="contact" key={name+email+role}>
+                    <tr><td className="name">Name</td><td>{name}</td></tr>
+                    <tr><td className="name">Role</td><td>{role}</td></tr>
+                    <tr><td className="name">Email</td><td><a href={'mailto: '+email}>{email}</a></td></tr>
+                    <tr><td className="name">Phone</td><td>{phone}</td></tr>
+                </table>
             );
         }     
         //console.log(this.props.data)
         var data = this.props.data;
+        var title = null, description = null, link = null, desc = null, logo = null;
+        
         if(_.has(data,'name')){
-            rows.push(
+            title = (
                 <div key="title" className="title">
-                    <a href={"/portal/recordsets/"+data.uuid}>{data.name}</a></div>
-            )
+                    <a href={"/portal/recordsets/"+data.uuid}>{data.name}</a>
+                </div>
+            );
         }
+        
+        if(_.has(data,'description')){
+            desc = (
+                <span 
+                    className="justify" 
+                    dangerouslySetInnerHTML={{__html: _.unescape(data.description)}}>
+                </span>
+            );
+        }
+
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){
-            rows.push(<img key="logo" className="logo" src={data.logo} onError={this.noLogo} />)
+            logo = (<img key="logo" className="logo" src={data.logo} onError={this.noLogo} />)
         }
+        
+        description = (
+            <p id="description" className="clearfix">
+                {logo}
+                {desc}
+            </p>
+        );
+
         if(_.has(data,'url')){
-            rows.push(
+            link = (
                 <a key="link" href={data.url}>
                     {data.url}
                 </a>
             )
         }
-        if(_.has(data,'description')){
-            var desc = _.unescape(data.description);
-            rows.push(
-                <div key="description" className="justify" dangerouslySetInnerHTML={{__html: desc}}></div>
-            )
-        }
 
-        var con;
-        if(_.has(data,'contacts')){
+
+        var con = null;
+
+        if(_.has(data,'contacts') && data.contacts.length > 0){
             _.each(data.contacts,function(item){
                 contacts.push(makeContact(item));
             })
             con = (
-                <div key="contacts" id="contacts">
-                    <div className="title">Contacts</div>
+                <div key="contacts" id="contacts" className="clearfix">
+                    <h5 className="title">Contacts</h5>
                     {contacts}
                 </div>
             );
-        }else{
-            con = <span />;
         }
 
         return (
-            <div id="provider-wrapper" className="clearfix">
-                <h4 className="title">Data Provided By</h4>
+            <div id="attribution" className="clearfix section scrollspy">
+                <h4 className="title">From Recordset</h4>
                 <div id="provider-info" className="clearfix">
-                    {rows}
+                    {title}
+                    {link}
+                    {description}
                     {con}
                 </div>
             </div>

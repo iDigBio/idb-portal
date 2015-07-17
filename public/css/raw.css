@@ -1,0 +1,24 @@
+#raw {
+  font-size: 13px;
+  border-top: 1px solid #cccccc;
+}
+#raw #raw-body {
+  overflow: auto;
+  padding-top: 20px;
+}
+#raw #raw-body .key {
+  font-weight: bolder;
+}
+#raw #raw-body .boolean {
+  color: #333;
+}
+#raw #raw-body .number {
+  color: #555;
+}
+#raw #raw-body .string {
+  color: #4a7638;
+  word-wrap: break-all;
+  word-break: break-word;
+  overflow: hidden;
+  white-space: pre-line;
+}

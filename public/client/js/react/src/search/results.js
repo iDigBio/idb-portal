@@ -12,7 +12,7 @@ var Results = module.exports =  React.createClass({
     getInitialState: function(){
         //this.getResults();
 
-        return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
+        return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
 
@@ -32,7 +32,7 @@ var Results = module.exports =  React.createClass({
          
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
-            //constant passing of props forces many unncessary request. This cheap method checks
+            //constant passing of props forces many unncessary requests. This cheap method checks
             //see if there truely is a new query to run
 
             if(JSON.stringify(query) !== self.lastQueryStringed){
@@ -54,7 +54,7 @@ var Results = module.exports =  React.createClass({
                         if(response.itemCount > (searchState.from+searchState.size)){
                             more=true;
                         }
-                        self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
+                        self.setState({results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
                             self.forceUpdate();
                         });
                     }
@@ -125,8 +125,11 @@ var Results = module.exports =  React.createClass({
             case 'images':
                 results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
                 break;
+            case 'recordsets':
+                results = <Providers attribution={this.state.attribution} />;
+                break;
         }
-        ['list','labels','images'].forEach(function(item){
+        ['list','labels','images','recordsets'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
@@ -402,7 +405,7 @@ var ResultsLabels = React.createClass({
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
-        var content = [];
+        var content = [], middle = [];
         var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
@@ -437,19 +440,28 @@ var ResultsLabels = React.createClass({
             }
         })
         if(l.length>0){
-            content.push(<span key="locality" className="locality">{l.join(', ')}</span>);
+            middle.push(
+                <span key="locality" className="locality">{l.join(', ')}</span>
+            );
         }
         if(_.has(data, 'geopoint')){
-            content.push(<span key="geopoint" className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
+            middle.push(<span key="geopoint" className="geopoint" dangerouslySetInnerHTML={{__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}></span>);
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'].forEach(function(item,index){
             if(_.has(raw,item)){
                 c.push(raw[item])
             }
         })
         if(c.length>0){
-            content.push(<span key="collection" className="collection">{c.join(', ')}</span>)
+            middle.push(<span key="collection" className="collection">{c.join(', ')}</span>)
+        }
+        if(middle.length>0){
+            content.push(
+                <span className="middle">
+                    {middle}
+                </span>
+            )
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -488,8 +500,7 @@ var ResultsLabels = React.createClass({
                         src={"https://media.idigbio.org/mrlookup/"+data.mediarecords[0]+"?size=thumbnail"} /> 
                 </span>  
             )
-     
-         } 
+        } 
       
         return (
             <div key={'label-'+id}  className="pull-left result-item result-label" >
@@ -650,3 +661,31 @@ var ResultsImages = React.createClass({
         )
     }
 });
+
+var Providers = React.createClass({
+    render: function(){
+
+        var list = _.map(this.props.attribution, function(item){
+            return (
+                <tr>
+                    <td><a href={"/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
+                    <td>{helpers.formatNum(item.itemCount)}</td>
+                    <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>
+                </tr>
+            );
+        });
+
+        return (
+            <div id="provider-results" className="panel">
+                <table className="table table-condensed table-striped">
+                    <thead>
+                        <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
+                    </thead>
+                    <tbody>
+                        {list}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+})

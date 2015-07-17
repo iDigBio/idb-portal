@@ -12,7 +12,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
     getInitialState: function(){
         //this.getResults();
 
-        return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
+        return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
 
@@ -32,7 +32,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
          
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
-            //constant passing of props forces many unncessary request. This cheap method checks
+            //constant passing of props forces many unncessary requests. This cheap method checks
             //see if there truely is a new query to run
 
             if(JSON.stringify(query) !== self.lastQueryStringed){
@@ -54,7 +54,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
                         if(response.itemCount > (searchState.from+searchState.size)){
                             more=true;
                         }
-                        self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
+                        self.setState({results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
                             self.forceUpdate();
                         });
                     }
@@ -125,8 +125,11 @@ var Results = module.exports =  React.createClass({displayName: "exports",
             case 'images':
                 results = React.createElement(ResultsImages, {search: this.state.search, results: this.state.results, loading: this.state.loading});
                 break;
+            case 'recordsets':
+                results = React.createElement(Providers, {attribution: this.state.attribution});
+                break;
         }
-        ['list','labels','images'].forEach(function(item){
+        ['list','labels','images','recordsets'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 React.createElement("li", {key: 'tab-'+item, onClick: self.viewChange, "data-value": item, className: cl}, helpers.firstToUpper(item))
@@ -402,7 +405,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
     makeLabel: function(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
-        var content = [];
+        var content = [], middle = [];
         var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
@@ -437,19 +440,28 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
             }
         })
         if(l.length>0){
-            content.push(React.createElement("span", {key: "locality", className: "locality"}, l.join(', ')));
+            middle.push(
+                React.createElement("span", {key: "locality", className: "locality"}, l.join(', '))
+            );
         }
         if(_.has(data, 'geopoint')){
-            content.push(React.createElement("span", {key: "geopoint", className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
+            middle.push(React.createElement("span", {key: "geopoint", className: "geopoint", dangerouslySetInnerHTML: {__html: '<b>Lat:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lat)+ '&nbsp;&nbsp; <b>Lon:</b> '+ helpers.convertDecimalDegrees(data.geopoint.lon)}}));
         }
         var c=[],tits=['Institution','Collection','Catalog Number'];
-        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber'].forEach(function(item,index){
+        ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'].forEach(function(item,index){
             if(_.has(raw,item)){
                 c.push(raw[item])
             }
         })
         if(c.length>0){
-            content.push(React.createElement("span", {key: "collection", className: "collection"}, c.join(', ')))
+            middle.push(React.createElement("span", {key: "collection", className: "collection"}, c.join(', ')))
+        }
+        if(middle.length>0){
+            content.push(
+                React.createElement("span", {className: "middle"}, 
+                    middle
+                )
+            )
         }
         var taxa=[];
         ['kingdom','phylum','class','order'].forEach(function(item){
@@ -488,8 +500,7 @@ var ResultsLabels = React.createClass({displayName: "ResultsLabels",
                         src: "https://media.idigbio.org/mrlookup/"+data.mediarecords[0]+"?size=thumbnail"})
                 )  
             )
-     
-         } 
+        } 
       
         return (
             React.createElement("div", {key: 'label-'+id, className: "pull-left result-item result-label"}, 
@@ -650,3 +661,31 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         )
     }
 });
+
+var Providers = React.createClass({displayName: "Providers",
+    render: function(){
+
+        var list = _.map(this.props.attribution, function(item){
+            return (
+                React.createElement("tr", null, 
+                    React.createElement("td", null, React.createElement("a", {href: "/recordsets/"+item.uuid, target: '_'+item.uuid}, item.name)), 
+                    React.createElement("td", null, helpers.formatNum(item.itemCount)), 
+                    React.createElement("td", {className: "desc", dangerouslySetInnerHTML: {__html: item.description}})
+                )
+            );
+        });
+
+        return (
+            React.createElement("div", {id: "provider-results", className: "panel"}, 
+                React.createElement("table", {className: "table table-condensed table-striped"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, React.createElement("th", {id: "rset"}, "Recordset"), React.createElement("th", {id: "rcount"}, "Records in results"), React.createElement("th", {id: "rdesc"}, "Description"))
+                    ), 
+                    React.createElement("tbody", null, 
+                        list
+                    )
+                )
+            )
+        )
+    }
+})

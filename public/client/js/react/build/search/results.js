@@ -12,7 +12,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
     getInitialState: function(){
         //this.getResults();
 
-        return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
+        return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
 
@@ -54,7 +54,7 @@ var Results = module.exports =  React.createClass({displayName: "exports",
                         if(response.itemCount > (searchState.from+searchState.size)){
                             more=true;
                         }
-                        self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
+                        self.setState({results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
                             self.forceUpdate();
                         });
                     }
@@ -125,8 +125,12 @@ var Results = module.exports =  React.createClass({displayName: "exports",
             case 'images':
                 results = React.createElement(ResultsImages, {search: this.state.search, results: this.state.results, loading: this.state.loading});
                 break;
+            case 'providers':
+            debugger
+                results = React.createElement(Providers, {attribution: this.state.attribution});
+                break;
         }
-        ['list','labels','images'].forEach(function(item){
+        ['list','labels','images','providers'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 React.createElement("li", {key: 'tab-'+item, onClick: self.viewChange, "data-value": item, className: cl}, helpers.firstToUpper(item))
@@ -658,3 +662,33 @@ var ResultsImages = React.createClass({displayName: "ResultsImages",
         )
     }
 });
+
+var Providers = React.createClass({displayName: "Providers",
+    render: function(){
+        debugger
+        var list = _.map(this.props.attribution, function(item){
+
+            return (
+                React.createElement("tr", null, 
+                    React.createElement("td", null, React.createElement("a", {href: "/recordsets/"+item.uuid, target: '_'+item.uuid}, item.name)), 
+                    React.createElement("td", null, item.itemCount), 
+                    React.createElement("td", null, item.description)
+                    
+                )
+            );
+        });
+
+        return (
+            React.createElement("div", {id: "provider-results", className: "panel"}, 
+                React.createElement("table", {className: "table table-condensed table-striped"}, 
+                    React.createElement("thead", null, 
+                        React.createElement("tr", null, React.createElement("th", null, "Recordset"), React.createElement("th", null, "Records in results"), React.createElement("th", null, "Description"))
+                    ), 
+                    React.createElement("tbody", null, 
+                        list
+                    )
+                )
+            )
+        )
+    }
+})

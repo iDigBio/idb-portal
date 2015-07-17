@@ -2,7 +2,6 @@
   margin: 0px 0px;
   max-width: 1600px;
   color: #333;
-  text-shadow: 1px 1px 1px #ddd;
   cursor: pointer;
   font-weight: normal;
   padding-bottom: 5px;
@@ -14,6 +13,7 @@
 }
 #title h1 span.title-link {
   font-size: .45em;
+  text-shadow: none;
 }
 #title h2 {
   font-size: 12px;
@@ -60,9 +60,6 @@
   width: 100%;
   margin-top: 40px;
 }
-#attribution h4.title {
-  font-size: 1.3em;
-}
 #attribution #provider-info {
   font-size: 13px;
   border-top: 1px solid #cccccc;
@@ -70,7 +67,6 @@
 }
 #attribution #provider-info .title {
   margin: 10px 0px;
-  color: #555;
 }
 #attribution #provider-info .logo {
   max-height: 100px;
@@ -148,9 +144,18 @@ h3 {
   margin-bottom: 20px;
 }
 #container {
-  padding-top: 20px;
   background-color: #fefefe;
   box-shadow: 1px 1px 2px #ccc;
+}
+h1#banner {
+  color: #999;
+  margin-left: 0px;
+  font-size: 2em;
+}
+#summary {
+  font-size: 13px;
+  display: block;
+  margin: 20px 0px;
 }
 #data-table {
   display: inline-block;
@@ -227,6 +232,8 @@ h3 {
   width: 100%;
   margin: 20px auto;
   position: relative;
+  background-color: #F6F5DF;
+  text-align: center;
 }
 #media-wrapper img {
   border: 1px solid #ccc;
@@ -240,8 +247,4 @@ h3 {
 #media-wrapper a {
   display: block;
   margin: 5px;
-}
-#media-wrapper a.media-link {
-  display: inline-block;
-  float: right;
 }

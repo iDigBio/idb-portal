@@ -112,8 +112,9 @@ module.exports = Provider = React.createClass({displayName: "Provider",
         }
 
 
-        var con;
-        if(_.has(data,'contacts')){
+        var con = null;
+        
+        if(_.has(data,'contacts') && data.contacts.length > 0){
             _.each(data.contacts,function(item){
                 contacts.push(makeContact(item));
             })
@@ -123,8 +124,6 @@ module.exports = Provider = React.createClass({displayName: "Provider",
                     contacts
                 )
             );
-        }else{
-            con = null;
         }
 
         return (

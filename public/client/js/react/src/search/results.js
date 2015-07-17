@@ -12,7 +12,7 @@ var Results = module.exports =  React.createClass({
     getInitialState: function(){
         //this.getResults();
 
-        return {results: [], total: 0, search: this.props.search, hasMore: false, loading: true};
+        return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
     },
     shouldComponentUpdate: function(nextProps, nextState){
 
@@ -54,7 +54,7 @@ var Results = module.exports =  React.createClass({
                         if(response.itemCount > (searchState.from+searchState.size)){
                             more=true;
                         }
-                        self.setState({results: res, total: response.itemCount, hasMore: more, loading: false},function(){
+                        self.setState({results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
                             self.forceUpdate();
                         });
                     }
@@ -125,8 +125,12 @@ var Results = module.exports =  React.createClass({
             case 'images':
                 results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
                 break;
+            case 'providers':
+            debugger
+                results = <Providers attribution={this.state.attribution} />;
+                break;
         }
-        ['list','labels','images'].forEach(function(item){
+        ['list','labels','images','providers'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
@@ -658,3 +662,33 @@ var ResultsImages = React.createClass({
         )
     }
 });
+
+var Providers = React.createClass({
+    render: function(){
+        debugger
+        var list = _.map(this.props.attribution, function(item){
+
+            return (
+                <tr>
+                    <td><a href={"/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
+                    <td>{item.itemCount}</td>
+                    <td>{item.description}</td>
+                    
+                </tr>
+            );
+        });
+
+        return (
+            <div id="provider-results" className="panel">
+                <table className="table table-condensed table-striped">
+                    <thead>
+                        <tr><th>Recordset</th><th>Records in results</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        {list}
+                    </tbody>
+                </table>
+            </div>
+        )
+    }
+})

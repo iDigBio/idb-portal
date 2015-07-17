@@ -298,7 +298,7 @@
   text-transform: capitalize;
 }
 #results #results-menu li {
-  width: 96px;
+  width: 106px;
   text-transform: capitalize;
   display: inline-block;
   margin: 0px 0px 0px 0px;
@@ -707,6 +707,9 @@
 }
 #results #results-images .no-images h4 {
   font-weight: bold;
+}
+#results #provider-results th {
+  min-width: 300px;
 }
 #results .panel {
   margin: 0px auto;

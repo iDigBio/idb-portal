@@ -2,7 +2,6 @@
   margin: 0px 0px;
   max-width: 1600px;
   color: #333;
-  text-shadow: 1px 1px 1px #ddd;
   cursor: pointer;
   font-weight: normal;
   padding-bottom: 5px;
@@ -14,6 +13,7 @@
 }
 #title h1 span.title-link {
   font-size: .45em;
+  text-shadow: none;
 }
 #title h2 {
   font-size: 12px;
@@ -60,9 +60,6 @@
   width: 100%;
   margin-top: 40px;
 }
-#attribution h4.title {
-  font-size: 1.3em;
-}
 #attribution #provider-info {
   font-size: 13px;
   border-top: 1px solid #cccccc;
@@ -70,7 +67,6 @@
 }
 #attribution #provider-info .title {
   margin: 10px 0px;
-  color: #555;
 }
 #attribution #provider-info .logo {
   max-height: 100px;
@@ -154,10 +150,16 @@ body {
 #content {
   background-color: #fefefe;
   box-shadow: 1px 1px 2px #ccc;
+  text-shadow: 1px 1px 1px white;
 }
 #col-nav {
   background-color: #ececec;
   height: 100%;
+}
+h1#banner {
+  color: #999;
+  margin-left: 0px;
+  font-size: 2em;
 }
 #summary {
   font-size: 13px;

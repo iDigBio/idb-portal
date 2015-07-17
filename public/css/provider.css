@@ -2,9 +2,6 @@
   width: 100%;
   margin-top: 40px;
 }
-#attribution h4.title {
-  font-size: 1.3em;
-}
 #attribution #provider-info {
   font-size: 13px;
   border-top: 1px solid #cccccc;
@@ -12,7 +9,6 @@
 }
 #attribution #provider-info .title {
   margin: 10px 0px;
-  color: #555;
 }
 #attribution #provider-info .logo {
   max-height: 100px;

@@ -668,7 +668,7 @@ var Providers = React.createClass({
         var list = _.map(this.props.attribution, function(item){
             return (
                 <tr>
-                    <td><a href={"/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
+                    <td><a href={"/portal/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
                     <td>{helpers.formatNum(item.itemCount)}</td>
                     <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>
                 </tr>

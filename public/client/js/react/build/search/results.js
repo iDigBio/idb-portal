@@ -668,7 +668,7 @@ var Providers = React.createClass({displayName: "Providers",
         var list = _.map(this.props.attribution, function(item){
             return (
                 React.createElement("tr", null, 
-                    React.createElement("td", null, React.createElement("a", {href: "/recordsets/"+item.uuid, target: '_'+item.uuid}, item.name)), 
+                    React.createElement("td", null, React.createElement("a", {href: "/portal/recordsets/"+item.uuid, target: '_'+item.uuid}, item.name)), 
                     React.createElement("td", null, helpers.formatNum(item.itemCount)), 
                     React.createElement("td", {className: "desc", dangerouslySetInnerHTML: {__html: item.description}})
                 )

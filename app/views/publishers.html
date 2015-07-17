@@ -12,32 +12,15 @@
 
 {% block content %}
 
-<div style="margin:20px;max-width:1300px;margin:auto;padding:20px;" class="">
-<h3>iDigBio Data Publishers</h3>
-<p>This page shows all iDigBio data contributors. If you are interested in providing data, consult the <a href="//www.idigbio.org/wiki/index.php/Data_Ingestion_Guidance">data ingestion guide</a> for more information.</p>
-    <div id="main">
+<div class="container-fluid">
+    <div class="row" >
+        <div class="col-lg-7 col-lg-offset-2" id="publishers-wrapper">
+            <h1>Data Publishers</h1>
+            <p>This page shows all iDigBio data contributors. If you are interested in providing data, consult the <a href="//www.idigbio.org/wiki/index.php/Data_Ingestion_Guidance">data ingestion guide</a> for more information.</p>
+                <div id="main">
+                </div>
+        </div>
     </div>
 </div>
 {% endblock %} 
 
-{% block scriptblock %}
-
-<script>
-
-function toggle(me,ele){
-    var show = '<i class="icon-chevron-down"></i> Show Recordsets';
-    var hide = '<i class="icon-chevron-up"></i> Hide Recordsets';    
-    $("#" + ele).toggle();
-    if (me.innerHTML == show){
-        me.innerHTML = hide;
-    } else {
-        me.innerHTML = show;
-    }
-}
-
-function expandAll(){
-  $("table").show()
-}
-</script>
-
-{% endblock %}

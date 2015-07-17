@@ -32,7 +32,7 @@ var Results = module.exports =  React.createClass({
          
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
-            //constant passing of props forces many unncessary request. This cheap method checks
+            //constant passing of props forces many unncessary requests. This cheap method checks
             //see if there truely is a new query to run
 
             if(JSON.stringify(query) !== self.lastQueryStringed){
@@ -125,12 +125,11 @@ var Results = module.exports =  React.createClass({
             case 'images':
                 results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
                 break;
-            case 'providers':
-            debugger
+            case 'recordsets':
                 results = <Providers attribution={this.state.attribution} />;
                 break;
         }
-        ['list','labels','images','providers'].forEach(function(item){
+        ['list','labels','images','recordsets'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
@@ -665,15 +664,13 @@ var ResultsImages = React.createClass({
 
 var Providers = React.createClass({
     render: function(){
-        debugger
-        var list = _.map(this.props.attribution, function(item){
 
+        var list = _.map(this.props.attribution, function(item){
             return (
                 <tr>
                     <td><a href={"/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
-                    <td>{item.itemCount}</td>
-                    <td>{item.description}</td>
-                    
+                    <td>{helpers.formatNum(item.itemCount)}</td>
+                    <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>
                 </tr>
             );
         });
@@ -682,7 +679,7 @@ var Providers = React.createClass({
             <div id="provider-results" className="panel">
                 <table className="table table-condensed table-striped">
                     <thead>
-                        <tr><th>Recordset</th><th>Records in results</th><th>Description</th></tr>
+                        <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
                     </thead>
                     <tbody>
                         {list}

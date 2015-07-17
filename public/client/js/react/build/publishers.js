@@ -128,7 +128,7 @@ var Recordsets = React.createClass({displayName: "Recordsets",
         React.createElement("table", {className: "table table-bordered datatable table-condensed tablesorter-blue"}, 
           React.createElement("thead", null, 
             React.createElement("tr", null, React.createElement("th", null), React.createElement("th", {colSpan: "3"}, "Records"), React.createElement("th", {colSpan: "3"}, "Media")), 
-            React.createElement("tr", null, React.createElement("th", null, "Dataset Name"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"))
+            React.createElement("tr", null, React.createElement("th", null, "Recordset"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"), React.createElement("th", null, "Digest"), React.createElement("th", null, "API"), React.createElement("th", null, "Index"))
           ), 
           React.createElement("tbody", null, 
             _.without(rows,null)

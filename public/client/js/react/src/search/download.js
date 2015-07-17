@@ -277,7 +277,7 @@ var Downloader = React.createClass({
                         }
                     }).fail(req);
                     */
-                    $.post("https://beta-api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    $.post("https://api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
                         self.addDownload(data,self.props.search);
                     }).fail(req);
                 }, 1000);           

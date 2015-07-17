@@ -6,6 +6,7 @@
     //border-top:1px solid #fefefe;
     //background-color: @idblightgreen;
     padding-top:8px;
+
     h4{
         
         margin:0px;
@@ -24,12 +25,12 @@
             text-transform: capitalize;
         }
         li{
-            width: 106px;
+            min-width: 86px;
             text-transform: capitalize;
             display:inline-block;
             margin:0px 0px 0px 0px;
-            font-size:1.2em;
-            letter-spacing:.08em;
+            font-size:1.1em;
+            letter-spacing:.07em;
             font-weight:normal;
             text-align: center;
             //border: @brd;
@@ -462,8 +463,24 @@
     }
 
     #provider-results{
+        
         th{
-            min-width: 300px;
+            &#rset{
+                width:20%;
+            }
+            &#rcount{
+                width:10%
+            }
+            &#rdesc{
+                width:70%;
+            }  
+        }
+        td{ 
+            overflow: hidden;
+            line-height: 1.3em;
+            &.desc{
+                text-align: justify;
+            }
         }
     }
 

@@ -128,7 +128,7 @@ var Recordsets = React.createClass({
         <table className="table table-bordered datatable table-condensed tablesorter-blue">
           <thead>
             <tr><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
-            <tr><th>Dataset Name</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
+            <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
           </thead>
           <tbody>
             {_.without(rows,null)}

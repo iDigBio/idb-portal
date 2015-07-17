@@ -113,7 +113,7 @@ module.exports = Provider = React.createClass({displayName: "Provider",
 
 
         var con = null;
-        
+
         if(_.has(data,'contacts') && data.contacts.length > 0){
             _.each(data.contacts,function(item){
                 contacts.push(makeContact(item));
@@ -128,7 +128,7 @@ module.exports = Provider = React.createClass({displayName: "Provider",
 
         return (
             React.createElement("div", {id: "attribution", className: "clearfix section scrollspy"}, 
-                React.createElement("h4", {className: "title"}, "Provided By"), 
+                React.createElement("h4", {className: "title"}, "From Recordset"), 
                 React.createElement("div", {id: "provider-info", className: "clearfix"}, 
                     title, 
                     link, 

@@ -13,32 +13,12 @@
 <div id="static-menu" style="display:hidden;position:fixed;top:0px;left:0px;margin:0px;padding:0px;"></div>
 <div class="container-fluid">
   <div class="row">
-    <div class="col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2" >
-     
-        <h2 style="text-align:center;line-height:1.3em;margin-top:20px;">iDigBio Specimen Portal Tutorial<br><span style="font-size:0.7em;">(version 6.0, released June 2015)</span></h2>
-     
-    </div>
-  </div>
-
-  <div class="row">
-      
-      <div id="tutorial-nav" class="col-lg-2 col-lg-offset-2 col-md-2 col-md-offset-2" style="text-align:left;">
-          <h4>Contents</h4>
-          <ul class="nav nav-list" style="margin-top:0px;background-color:white;">
-              <li class="divider" style="margin:0px;"></li>
-              <li><a href="#" onclick="scrollToId('introduction');return false;">Introduction</a></li>
-              <li><a href="#" onclick="scrollToId('requirements');return false;">Requirements</a></li>
-              <li><a href="#" onclick="scrollToId('navigating');return false;">Portal Navigation</a></li>
-              <li><a href="#" onclick="scrollToId('searching');return false;">Understanding and Performing Searches</a></li>
-              <li><a href="#" onclick="scrollToId('viewing');return false;">Viewing Search Results</a></li>
-              <li><a href="#" onclick="scrollToId('map');return false;">Mapped Search Results</a></li>
-          </ul>
-      </div>
     
-      <div class="col-lg-6 col-md-6" style="text-align:justify;margin-top:16px;">
+      <div id="content" class="col-lg-7 col-lg-offset-2 col-md-6" style="text-align:justify;margin-top:16px;">
+          <h2 style="text-align:center;line-height:1.3em;margin-top:20px;">iDigBio Specimen Portal Tutorial<br><span style="font-size:0.7em;">(version 6.0, released June 2015)</span></h2>
          <div style="margin:10px;">
-        		<div style="background-color: #E5E5E5;border-bottom: 1px solid #FFFFFF;height: 1px;margin: 9px 1px;width:100%;"></div>
-            	<h3 id="introduction">Introduction</h3>
+        		<div id="introduction" style="background-color: #E5E5E5;border-bottom: 1px solid #FFFFFF;height: 1px;margin: 9px 1px;width:100%;" class="scrollspy"></div>
+            	<h3 >Introduction</h3>
             	<p><u>The iDigBio specimen portal</u> (<em>https://www.idigbio.org/portal</em>) provides access to millions of records about neontological and paleontological specimens curated at museums and other institutions in the US. Records might include information about the specimen, when, where and by whom it was collected, the institution providing the data, and media related to the specimen (currently only images of the specimen or the specimen label are available). The main intent of this tutorial is to familiarize the user with the search capabilities of this portal.</p>
               <h3 id="requirements" style="margin-top:30px;">Requirements</h3>
               <p>
@@ -48,7 +28,7 @@
                 <b>Safari</b><br>
                 <b>Internet Explorer</b> 10,11<br>
               </p>
-            	<h3 id="navigating" style="margin-top:30px;">Portal Navigation</h3>
+            	<h3 id="navigating" class="scrollspy" style="margin-top:30px;">Portal Navigation</h3>
             	<p>The main features of the portal can be accessed through the <b>Green Menu Bar</b> <em>(Fig. 1)</em> near the top of the page.  The menu choices include links to the <em><b>iDigBio Home</b></em>, the <em><b>Portal Home</b></em> page, the <em><b>Search Records</b></em> page, <em><b>Tutorial</b></em> (this page), and <em><b>Feedback</b></em>, which are detailed next.</p>
               <div class="clearfix">
                 <figure id="fig1" >
@@ -79,7 +59,7 @@
                   <figcaption>Fig. 2</figcaption>
                   <img src="/portal/img/tutorial/search-page.png">
               </figure>
-        		<h4 id="searching" style="margin-top:30px;">Understanding and Performing Searches</h4>
+        		<h4 id="searching" class="scrollspy" style="margin-top:30px;">Understanding and Performing Searches</h4>
 
         		<p>The search form section of the <em><b>Search Records</b></em> page <em>(Fig. 3)</em> provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have image</b> restricts mapped and record results to those specimens that have related images. Checking the <b>Must have map point</b> restricts the record results section to show only records that contain geopoint data (mapping results can contain only records with geopoint data).</p>
             <div class="clearfix">      		
@@ -131,7 +111,7 @@
             <p>A Darwin Core Archive is a zip file that includes one or more text CSV (comma separated value) files, each with a .txt extension and a descriptor (meta.xml) that contains metadata about the data set that you downloaded (e.g., who provided the data and the format).  A data download that has images or other media associated with it will have two CSV files, one for specimen data and the other describing the media.  The CSV file can be opened by any text editor or can be imported into a database or spreadsheet.  A modestly sized download (100,000 records) can be readily opened in software like MS Excel.  The easiest way to open a CSV file with Excel is to change the .txt extension to .csv before you open the file.  
             </p>
 
-        		<h3 id="viewing" style="margin-top:30px;">Viewing Results</h3>
+        		<h3 id="viewing" class="scrollspy" style="margin-top:30px;">Viewing Results</h3>
 
         		<p>Results data are displayed below the search form and mapped results sections. This section displays the total number of results matching your search criteria and gives you three options for displaying the results: <b>List</b> view, <b>Label</b> view or the <b>Images</b> gallery. The <b>List</b> view allows you to display any number of columns of DwC data that are searchable in iDigBio. The right side of the <b>List</b> view headers provides a configuration button that allows you to select which columns are viewable in the list. The <b>Label</b> view displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record.</p> 
 
@@ -152,7 +132,7 @@
               </figure>
             </div>
 
-            <h4 id="map" style="margin-top:30px;">Mapped Results</h4>
+            <h4 id="map" class="scrollspy" style="margin-top:30px;">Mapped Results</h4>
             <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the map view. The map displays results in two styles depending on the number of mapped results. When the results contain more than 100,000 points they will be displayed as a geohashed heat map <em>(Fig. 9)</em>. When the results are a 100,000 or less, the results are displayed as individual color coded points <em>(Fig. 10)</em>. Color coded points are displayed as such to disguish between different taxa. The map legend in the lower left corner displays the color to taxa labeling of the top 10 taxa in the results (all other taxa are displayed with a brown colored point by default). Both the heat map and point displays allow you to click on them to display the results in a pop-up box in the location you clicked. In the case of the heat map, the results will be all records within the boundary of the geohash (heat) box where you click. In the case of clicking a point the results displayed will be all those that fall within a radius of the point where you clicked (the radius length varies depending on the zoom level of the map).  The results pop-up box also provides a <i>Set Map Bounds</i> button. This feature allows you to set the <em>Mapping</em> tab parameters to the same parameters as the box or point that you clicked on.</p>
 
             <p>The map provides several controls for further interaction. The top left corner provides two sets of controls. The camera button <img src="/portal/img/tutorial/camera-button.png" /> allows you to create a PNG image of the map as displayed the moment you click the button. This feature can take several seconds to generate the image. The buttons below the camera button provide boundary drawing capabilities. Click the rectangle <img src="/portal/img/tutorial/rectangle-button.png" /> or circle button <img src="/portal/img/tutorial/circle-button.png" /> to draw a rectangular or circular boundary around a geographic area to further limit your results to records with geopoints inside the boundry. The button in the top right corner is a toggle between regular and a full screen mode. Below the full screen button are the zoom-in and zoom-out buttons. The map zoom can also be changed with a mouse scroll wheel when the mouse pointer is over the map. You can also draw a boundary to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary.</p>
@@ -171,7 +151,18 @@
 
         </div>
       </div>
-
+      <div class="col-lg-2 col-md-2">
+            <div id="side-nav">
+                <ul id="side-nav-list" >
+                    <li class="title">Contents</li>
+                    <li><a href="#introduction">Introduction</a></li>
+                    <li><a href="#navigating">Navigation</a></li>
+                    <li><a href="#searching">Performing Searches</a></li>
+                    <li><a href="#viewing">Viewing Search Results</a></li>
+                    <li><a href="#map">Mapped Search Results</a></li>
+                </ul>
+            </div>
+      </div>
   </div>
 </div>
 

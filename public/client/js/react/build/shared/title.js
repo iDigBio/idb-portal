@@ -19,7 +19,7 @@ module.exports = Title = React.createClass({displayName: "Title",
             }else if(_.has(index, 'genus')){
                 title = _.capitalize(index['genus']);
                 if(_.has(index, 'specificepithet')){
-                    title += index['specificepithet'];
+                    title += " " + index['specificepithet'];
                 }
             }
             if(_.isEmpty(title)){

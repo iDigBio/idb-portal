@@ -78,15 +78,41 @@ var Publishers = React.createClass({displayName: "Publishers",
       if(_.without([ar,am,dr,dm,ir,im],0).length === 0){
         return null;
       }else{
+        var qp = getQueryParams(window.location.search);
+        var rec_cols, media_cols;
+        if (qp.merged && dr == ar && ar == ir) {
+          rec_cols = (
+            React.createElement("td", {className: "valcol", colSpan: "3"}, formatNum(dr))
+          )
+        } else {
+          rec_cols = (
+            React.createElement("span", null, 
+              React.createElement("td", {className: "valcol"}, formatNum(dr)), 
+              React.createElement("td", {className: "valcol"}, formatNum(ar)), 
+              React.createElement("td", {className: "valcol"}, formatNum(ir))
+            )
+          )
+        }
+
+        if (qp.merged && dm == am && am == im) {
+          media_cols = (
+            React.createElement("td", {className: "valcol", colSpan: "3"}, formatNum(dm))
+          )
+        } else {
+          media_cols = (
+            React.createElement("span", null, 
+              React.createElement("td", {className: "valcol"}, formatNum(dm)), 
+              React.createElement("td", {className: "valcol"}, formatNum(am)), 
+              React.createElement("td", {className: "valcol"}, formatNum(im))
+            )
+          )
+        }
+
         return (
           React.createElement("tr", {key: key}, 
             React.createElement("td", null, React.createElement("a", {href: "#", onClick: self.clickScroll, "data-id": key}, val.name)), 
-            React.createElement("td", {className: "valcol"}, formatNum(dr)), 
-            React.createElement("td", {className: "valcol"}, formatNum(ar)), 
-            React.createElement("td", {className: "valcol"}, formatNum(ir)), 
-            React.createElement("td", {className: "valcol"}, formatNum(dm)), 
-            React.createElement("td", {className: "valcol"}, formatNum(am)), 
-            React.createElement("td", {className: "valcol"}, formatNum(im))
+            rec_cols, 
+            media_cols
           )
         );        
       }

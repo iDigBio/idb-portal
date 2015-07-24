@@ -78,15 +78,41 @@ var Publishers = React.createClass({
       if(_.without([ar,am,dr,dm,ir,im],0).length === 0){
         return null;
       }else{
+        var qp = getQueryParams(window.location.search);
+        var rec_cols, media_cols;
+        if (qp.merged && dr == ar && ar == ir) {
+          rec_cols = (
+            <td className="valcol" colSpan="3">{formatNum(dr)}</td>
+          )
+        } else {
+          rec_cols = (
+            <span>
+              <td className="valcol">{formatNum(dr)}</td>
+              <td className="valcol">{formatNum(ar)}</td>
+              <td className="valcol">{formatNum(ir)}</td>
+            </span>
+          )
+        }
+
+        if (qp.merged && dm == am && am == im) {
+          media_cols = (
+            <td className="valcol" colSpan="3">{formatNum(dm)}</td>
+          )
+        } else {
+          media_cols = (
+            <span>
+              <td className="valcol">{formatNum(dm)}</td>
+              <td className="valcol">{formatNum(am)}</td>
+              <td className="valcol">{formatNum(im)}</td>
+            </span>
+          )
+        }
+
         return (
           <tr key={key}>
             <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
-            <td className="valcol">{formatNum(dr)}</td>
-            <td className="valcol">{formatNum(ar)}</td>
-            <td className="valcol">{formatNum(ir)}</td>
-            <td className="valcol">{formatNum(dm)}</td>
-            <td className="valcol">{formatNum(am)}</td>
-            <td className="valcol">{formatNum(im)}</td>
+            {rec_cols}
+            {media_cols}
           </tr>
         );        
       }

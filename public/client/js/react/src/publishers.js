@@ -8,6 +8,19 @@ function formatNum (num){
 function toTitleCase(str){
   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+function getQueryParams(qs) {
+    qs = qs.split('+').join(' ');
+
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+}
 var StatsTable = React.createClass({
   render: function(){        
       return (
@@ -108,15 +121,41 @@ var Recordsets = React.createClass({
         //rsets[uuid]=defsets();
         return null;
       }else{
+        var qp = getQueryParams(window.location.search);
+        var rec_cols, media_cols;
+        if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
+          rec_cols = (
+            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>
+          )
+        } else {
+          rec_cols = (
+            <span>
+              <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
+              <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
+              <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
+            </span>
+          )
+        }
+
+        if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
+          media_cols = (
+            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestmedia)}</td>
+          )
+        } else {
+          media_cols = (
+            <span>
+              <td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>
+              <td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>
+              <td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>
+            </span>
+          )
+        }
+
         return (
           <tr>
             <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
-            <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
-            <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
-            <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
-            <td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>
-            <td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>
-            <td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>
+            {rec_cols}
+            {media_cols}
           </tr>
         )
       }

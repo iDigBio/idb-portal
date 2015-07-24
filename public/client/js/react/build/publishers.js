@@ -8,6 +8,19 @@ function formatNum (num){
 function toTitleCase(str){
   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
 }
+function getQueryParams(qs) {
+    qs = qs.split('+').join(' ');
+
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+
+    return params;
+}
 var StatsTable = React.createClass({displayName: "StatsTable",
   render: function(){        
       return (
@@ -108,15 +121,41 @@ var Recordsets = React.createClass({displayName: "Recordsets",
         //rsets[uuid]=defsets();
         return null;
       }else{
+        var qp = getQueryParams(window.location.search);
+        var rec_cols, media_cols;
+        if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
+          rec_cols = (
+            React.createElement("td", {className: "valcol", colSpan: "3"}, formatNum(rsets[uuid].digestrecords))
+          )
+        } else {
+          rec_cols = (
+            React.createElement("span", null, 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestrecords)), 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apirecords)), 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexrecords))
+            )
+          )
+        }
+
+        if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
+          media_cols = (
+            React.createElement("td", {className: "valcol", colSpan: "3"}, formatNum(rsets[uuid].digestmedia))
+          )
+        } else {
+          media_cols = (
+            React.createElement("span", null, 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestmedia)), 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apimedia)), 
+              React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexmedia))
+            )
+          )
+        }
+
         return (
           React.createElement("tr", null, 
             React.createElement("td", null, React.createElement("a", {href: '/portal/recordsets/'+uuid, target: "_new"}, name)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestrecords)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apirecords)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexrecords)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].digestmedia)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].apimedia)), 
-            React.createElement("td", {className: "valcol"}, formatNum(rsets[uuid].indexmedia))
+            rec_cols, 
+            media_cols
           )
         )
       }

@@ -315,7 +315,7 @@ module.exports = IDBMap =  function(elid, options){
                 )
                 
                 var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//www.idigbio.org/portal/records/'+item.uuid+'">View Record</a></b>'];
-                _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','datecollected'],function(term){
+                _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','collectioncode','catalognumber','datecollected'],function(term){
                     if(_.has(dwc,fields.byTerm[term].dataterm)){
                         inf.push(
                             '<span><b>'+fields.byTerm[term].name+':</b>'+' '+dwc[fields.byTerm[term].dataterm]+'</span>'
@@ -341,6 +341,7 @@ module.exports = IDBMap =  function(elid, options){
             '<table class="map-items">'+items.join('')+'</table></div>';
             return table;
         }
+
         var getPoints = function(offset,callback){
 
             $.getJSON(mapapi + self.map.mapCode + "/points?lat=" + lat + "&lon=" + lon + "&zoom=" + self.map.getZoom()+"&offset="+offset, function(data){
@@ -411,6 +412,7 @@ module.exports = IDBMap =  function(elid, options){
     var circle = L.circle([0,0],5,{color: 'red',fill: 'red',opacity: 1, weight: 5});
     var rectangle = L.rectangle([[0,0],[0,0]], {color: "blue", weight: 1});
     var hover;
+
     var mapHover = function(e){
         if(_.has(e,'data') && _.has(e.data,'lat')){ 
             //provide offset degree additive for fake world coords.
@@ -424,6 +426,7 @@ module.exports = IDBMap =  function(elid, options){
             hover=rectangle;
         }
     }
+
     var mapHoverout = function(e){
         if(typeof hover != undefined){
             self.map.removeLayer(hover);
@@ -433,18 +436,22 @@ module.exports = IDBMap =  function(elid, options){
     * iDBLayer and UTF8Grid interactions control and rendering with events
     ****/
     var idblayer,utf8grid;
+    
     var idbloading = function(){
         self.map.fire('dataloading');
     }
+
     var idbload = function(){
         self.map.fire('dataload');
     }
+
     var makeIdblayer = function(tilePath){
         idblayer = L.tileLayer(tilePath,{minZoom: 0});
         idblayer.on('loading',idbloading);
         idblayer.on('load',idbload)
         return idblayer;
     }
+
     var removeIdblayer = function(){
         if(typeof idblayer == 'object'){
             idblayer.off('loading',idbloading);
@@ -452,6 +459,7 @@ module.exports = IDBMap =  function(elid, options){
         }
         return idblayer;
     }
+
     var makeUtflayer = function(path){
         utf8grid = L.utfGrid(path,{
             useJsonP: false
@@ -462,6 +470,7 @@ module.exports = IDBMap =  function(elid, options){
         utf8grid.on('mouseout', mapHoverout);
         return utf8grid;
     }
+
     var removeUtflayer = function(){
         if(typeof utf8grid == 'object'){
             utf8grid.off('click',mapClick);
@@ -563,6 +572,7 @@ module.exports = IDBMap =  function(elid, options){
         minZoom: 0,
         reuseTiles: true
     });
+
     var mapDefaults = {
         center: [0,0],
         zoom: 2,
@@ -572,6 +582,7 @@ module.exports = IDBMap =  function(elid, options){
         zoomControl: false,
         worldCopyJump: true
     };
+
     this.map = L.map(elid,mapDefaults);
 
     if(options.maximizeControl){
@@ -579,6 +590,7 @@ module.exports = IDBMap =  function(elid, options){
         //add mapper modal for maximize view
         $('body').append('<div id="mapper-modal"></div>');        
     }
+
     if(options.fullScreenControl){
         L.control.fullscreen({
             position: 'topright'
@@ -590,19 +602,23 @@ module.exports = IDBMap =  function(elid, options){
             $('#'+elid).removeAttr('style');
         })
     }
+
     if(options.zoomControl){
         this.map.addControl(L.control.zoom({
             position: 'topright'
         }));
     }
+
     if(options.imageButton){
         this.map.addControl(new ImageButton());
     }
+
     if(options.scale){
         this.map.addControl(new L.control.scale({
             position:'bottomright'
         }));        
     }
+
     if(options.drawControl){
         var drew=false;//for detecting draw control cancel clicks;
         var drawControl = new L.Control.Draw({
@@ -661,6 +677,7 @@ module.exports = IDBMap =  function(elid, options){
             internalQuery(query);
         });
     }
+
     if(options.loadingControl){
         var loading = L.Control.loading({
             separate: true

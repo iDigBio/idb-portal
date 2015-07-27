@@ -302,24 +302,24 @@ module.exports = IDBMap =  function(elid, options){
             }
         }
         
-        var setClick=_.noop;
+        var setClick = _.noop;
 
         var makeContent = function(data,offset){
-            var items=[],nextstyle='',prevstyle='';
+            var items = [], nextstyle = '', prevstyle = '';
             data.items.forEach(function(item,ind){
                 var index = item.indexTerms;
-                var dwc=item.data;
+                var dwc = item.data;
                 var n = helpers.filter([dwc['dwc:genus'],dwc['dwc:specificEpithet']]).join(' ');
                 var title = helpers.filterFirst(
                     [dwc['dwc:scientificName'],n,'No Name']
                 )
                 
-                var inf=['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//www.idigbio.org/portal/records/'+item.uuid+'">View Record</a></b>'];
+                var inf = ['<b><span class="record-count">'+helpers.formatNum(ind+offset+1)+'</span><a class="record-link" target="'+item.uuid+'" href="//www.idigbio.org/portal/records/'+item.uuid+'">View Record</a></b>'];
                 _.each(['genus','specificepithet','scientificname','country','stateprovince','lat','lon','institutioncode','collectioncode','catalognumber','datecollected'],function(term){
                     if(_.has(dwc,fields.byTerm[term].dataterm)){
                         inf.push(
-                            '<span><b>'+fields.byTerm[term].name+':</b>'+' '+dwc[fields.byTerm[term].dataterm]+'</span>'
-                        )
+                            '<span><b>' + fields.byTerm[term].name + ':</b>' + ' ' + dwc[fields.byTerm[term].dataterm] + '</span>'
+                        );
                     }
                 });
                 var row = '<tr class="map-popup-item"><td><div class="cont clearfix">'
@@ -327,10 +327,10 @@ module.exports = IDBMap =  function(elid, options){
                 row+=inf.join('<br/>')+'</div></td></tr>';
                 items.push(row);
             });
-            if(data.itemCount <= offset+data.items.length){
+            if(data.itemCount <= offset + data.items.length){
                 nextstyle='disable';
             }
-            if(offset==0){
+            if(offset == 0){
                 prevstyle='disable';
             }
             var table='<div class="map-item-count clearfix"><span class="map-count-title">'+helpers.formatNum(data.itemCount)+' Record'+(data.itemCount>1?'s</span>':'</span>')+'<span class="map-title-outlink"><a href="#" class="set-bounds-link">Set Map Bounds</a></span></div>'+
@@ -353,9 +353,9 @@ module.exports = IDBMap =  function(elid, options){
                         var off=offset+100;
                         if(last){
                             if(data.itemCount % 100 === 0){
-                                off=data.itemCount-100;
+                                off = data.itemCount-100;
                             }else{
-                                off=Math.floor(data.itemCount / 100)*100;
+                                off = Math.floor(data.itemCount / 100)*100;
                             }        
                         }
                         getPoints(off,function(d){
@@ -372,9 +372,9 @@ module.exports = IDBMap =  function(elid, options){
 
                 if(offset>=100){
                     prevPoints = function(first){
-                        var off=offset-100;
+                        var off = offset-100;
                         if(first){
-                            off=0;
+                            off = 0;
                         }
                         getPoints(off,function(d){
                             $('.nav-left, .nav-right').off('click',navClick);
@@ -385,7 +385,7 @@ module.exports = IDBMap =  function(elid, options){
                         });
                     }
                 }else{
-                    prevPoints=false;
+                    prevPoints = false;
                 }
                 callback(data);
             });

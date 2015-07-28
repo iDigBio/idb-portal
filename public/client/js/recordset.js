@@ -19,3 +19,15 @@ var React = require('react');
 React.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} uuid={uuid}/>, document.getElementById('main'));
 var rs = $('#recordsetID').val();
 $('#table-fields, #table-use').tablesorter();
+
+$('#side-nav-list').affix({
+    offset: {
+        top: function(){
+            return $('#content').offset().top - $(window).scrollTop();
+        }
+    }
+})
+
+$('.scrollspy').scrollSpy({
+    offsetTop: -205
+});

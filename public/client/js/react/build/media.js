@@ -210,7 +210,7 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("li", null, React.createElement("a", {href: "#media-wrapper"}, "Media")), 
                 media, 
                 React.createElement("li", null, React.createElement("a", {href: "#attribution"}, "Attribution")), 
-                React.createElement("li", null, React.createElement("a", {href: "#data-table"}, "Data"))
+                React.createElement("li", null, React.createElement("a", {href: "#data-table"}, "All Data"))
             )  
         )
     },

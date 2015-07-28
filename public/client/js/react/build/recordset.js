@@ -68,7 +68,7 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
         })
         var sty = {'textAlign': 'center'};
         return (
-            React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "clearfix"}, 
+            React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "stat-table clearfix"}, 
                
                 React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction performed. The last two columns represent the number and percentage of" + ' ' + 
                  "records that were corrected. A complete list of the data quality flags and their descriptions can be found ", React.createElement("a", {alt: "flag descriptions", href: "https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags"}, "here"), "."), 
@@ -128,6 +128,39 @@ var UseTable = React.createClass({displayName: "UseTable",
     }
 });
 
+var RawView = React.createClass({displayName: "RawView",
+    formatJSON: function(json){
+        if (typeof json != 'string') {
+             json = JSON.stringify(json, undefined, 2);
+        }
+        json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
+            var cls = 'number';
+            if (/^"/.test(match)) {
+                if (/:$/.test(match)) {
+                    cls = 'key';
+                } else {
+                    cls = 'string';
+                }
+            } else if (/true|false/.test(match)) {
+                cls = 'boolean';
+            } else if (/null/.test(match)) {
+                cls = 'null';
+            }
+            return '<span class="' + cls + '">' + match + '</span>';
+        });
+    },
+    render: function(){
+       
+        return (
+            React.createElement("div", {id: "raw", style: {display: (this.props.active ? 'block' : 'none' )}, className: "stat-table clearfix"}, 
+                React.createElement("p", {id: "raw-body", dangerouslySetInnerHTML: {__html: this.formatJSON(this.props.raw)}}
+                )
+            ) 
+        )
+    }
+});
+
 var StatsTables = React.createClass({displayName: "StatsTables",
     click: function(e){
         e.preventDefault();
@@ -138,13 +171,15 @@ var StatsTables = React.createClass({displayName: "StatsTables",
     },
     render: function(){
         return (
-            React.createElement("div", {id: "stats-tables", className: "clearfix"}, 
+            React.createElement("div", {id: "stats-tables", className: "clearfix scrollspy"}, 
                 React.createElement("ul", {id: "stats-tabs"}, 
                     React.createElement("li", {className: this.state.active == 'flags' ?  'active': '', id: "corrected-tab", onClick: this.click, "data-active": "flags"}, "Data Corrected"), 
-                    React.createElement("li", {className: this.state.active == 'use' ?  'active': '', id: "use-tab", onClick: this.click, "data-active": "use"}, "Data Use")
+                    React.createElement("li", {className: this.state.active == 'use' ?  'active': '', id: "use-tab", onClick: this.click, "data-active": "use"}, "Data Use"), 
+                    React.createElement("li", {className: this.state.active == 'raw' ?  'active': '', id: "raw-tab", onClick: this.click, "data-active": "raw"}, "Raw")
                 ), 
                 React.createElement(FieldsTable, {active: this.state.active=='flags', flags: this.props.flags, stotal: this.props.stotal, uuid: this.props.uuid}), 
-                React.createElement(UseTable, {active: this.state.active=='use', use: this.props.use, uuid: this.props.uuid})
+                React.createElement(UseTable, {active: this.state.active=='use', use: this.props.use, uuid: this.props.uuid}), 
+                React.createElement(RawView, {active: this.state.active=='raw', raw: this.props.raw})
             )
         )
     }
@@ -152,7 +187,7 @@ var StatsTables = React.createClass({displayName: "StatsTables",
 var Title = React.createClass({displayName: "Title",
     render: function(){
         return(
-            React.createElement("h1", {id: "title"}, React.createElement("span", null, "Recordset:"), " ", this.props.keyid)
+            React.createElement("h1", {id: "title", dangerouslySetInnerHTML: {__html: this.props.keyid}})
         );
     }
 });
@@ -166,7 +201,7 @@ var Description = React.createClass({displayName: "Description",
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
         return(
-            React.createElement("div", {id: "description"}, 
+            React.createElement("div", {id: "description", className: "scrollspy"}, 
                 React.createElement("p", {className: "clearfix"}, 
                 logo, 
                 React.createElement("span", null, 
@@ -184,137 +219,59 @@ var Last = React.createClass({displayName: "Last",
     }
 });
 
-var Buttons = React.createClass({displayName: "Buttons",
-    render: function(){
-        var search = JSON.stringify({recordset: this.props.keyid})
-        return(
-            React.createElement("div", {id: "buttons"}, 
-                React.createElement("a", {href: '/portal/search?rq='+search}, 
-                   React.createElement("button", {className: "btn button"}, "Search This Recordset")
-                ), 
-                React.createElement("button", {"data-target": "#raw", "data-toggle": "modal", className: "btn button"}, 
-                    "View Raw Data"
-                )
-            )
-        )
-    }
-});
-
-var Contacts = React.createClass({displayName: "Contacts",
-    render: function(){
-        function check(val,prefix,postfix){
-             var acc = [];
-            if(_.isArray(val)){
-                _.each(val,function(v){
-                    if(_.isString(v) && !_.isEmpty(v)) {
-                        acc.push(v);
-                    }
-                });
-                if(_.isString(prefix)){
-                    val = acc.join(prefix);
-                }else{
-                    val = acc.join(' ');                
-                }
-            }else if(_.isNumber(val)){
-                val = val.toString();
-            }else{
-                if(_.isUndefined(val) || _.isEmpty(val)){
-                    val = '';
-                }
-            }
-            if(!_.isEmpty(val) && _.isString(prefix)){
-                val = prefix + val;
-            }
-            if(!_.isEmpty(val) && _.isString(postfix)){
-                val = val + postfix;
-            } 
-            return val;           
-        }
-        function makeContact(contact,ind){
-            var name = check(contact.first_name,'',' ') + check(contact.last_name);
-            var email = check(contact.email);
-            var phone = check(contact.phone);
-            var role = check(contact.role);
-            return (
-                React.createElement("ul", {className: "contact", key: "contact-"+ind}, 
-                    React.createElement("li", null, name), 
-                    React.createElement("li", null, role), 
-                    React.createElement("li", null, React.createElement("a", {href: 'mailto: '+email}, email)), 
-                    React.createElement("li", null, phone)
-                )
-            );            
-        }
-        
-        var contacts = [];
-        _.each(this.props.data.contacts, function(item,ind){
-            contacts.push(makeContact(item,ind));
-        });
-        var link;
-
-        if(_.has(this.props.data,'institution_web_address') && !_.isEmpty(this.props.data.institution_web_address)){
-            link = (
-                React.createElement("div", {className: "wrapper"}, 
-                    React.createElement("div", {className: "info"}, "Website"), 
-                    React.createElement("a", {href: this.props.data.institution_web_address}, 
-                        this.props.data.institution_web_address
-                    )
-                )
-            );
-        }
-
-        return (
-            React.createElement("div", {id: "contacts", className: "clearfix"}, 
-                React.createElement("h2", {className: "title"}, "Contacts"), 
-                contacts
-            )
-        )
-    }
-});
+var Contacts = require('./shared/contacts');
 
 var Raw = require('./shared/raw');
 
 module.exports = React.createClass({displayName: "exports",
+    navList: function(){
+
+        //var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
+        //var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
+
+        return(
+            React.createElement("ul", {id: "side-nav-list"}, 
+                React.createElement("li", {className: "title"}, "Contents"), 
+                React.createElement("li", null, React.createElement("a", {href: "#description"}, "Description")), 
+                React.createElement("li", null, React.createElement("a", {href: "#contacts"}, "Contacts")), 
+                React.createElement("li", null, React.createElement("a", {href: "#stats-tables"}, "All Data"))
+            )            
+        )
+    },
     render: function(){
         var raw = this.props.recordset;
         var data = raw.data;
         var id = raw.uuid;
         var last = data.update.substring(0,10);
+        var search = '/portal/search?rq={"recordset":"'+id+'"}';
         return (
-            React.createElement("div", {id: "container"}, 
-                React.createElement(Title, {key: data.collection_name, keyid: data.collection_name}), 
-                React.createElement(Description, {data: data}), 
-                React.createElement(Buttons, {key: id, keyid: id}), 
-                React.createElement("div", {id: "info", className: "clearfix"}, 
-                    React.createElement("div", {className: "wrapper"}, 
-                        React.createElement("div", {className: "info"}, "Total Specimen Records:",  
-                            React.createElement("span", {id: "specimen-total"}, 
-                                " ", React.createElement(Total, {key: 'Specimen', keyid: 'Specimen', total: formatNum(this.props.stotal)})
-                            )
+            React.createElement("div", {className: "container-fluid"}, 
+                React.createElement("div", {className: "row"}, 
+                    React.createElement("div", {id: "content", className: "col-lg-7 col-lg-offset-2 col-md-10 col-sm-10"}, 
+                        React.createElement("h1", {id: "banner", className: "pull-left"}, "Recordset"), 
+                        React.createElement("a", {id: "search-button", className: "pull-right", href: search}, "Search Recordset"), 
+                        React.createElement(Title, {key: data.collection_name, keyid: data.collection_name}), 
+                        React.createElement("span", {className: "info"}, 
+                            "Specimen Records: ", React.createElement(Total, {key: 'Specimen', keyid: 'Specimen', total: formatNum(this.props.stotal)})
                         ), 
-                        React.createElement("div", {className: "info"}, "Total Media Records:", 
-                            React.createElement("span", {id: "media-total"}, 
-                                " ", React.createElement(Total, {key: 'Media', keyid: 'Media', total: formatNum(this.props.mtotal)})
-                            )
+                        React.createElement("span", {className: "info"}, 
+                            "Media Records: ", React.createElement(Total, {key: 'Media', keyid: 'Media', total: formatNum(this.props.mtotal)})
                         ), 
-                        React.createElement("div", {className: "info"}, "Last Update:",  
-                            React.createElement("span", {id: "last"}, 
-                                " ", React.createElement(Last, {key: last, keyid: last})
-                            )
+                        React.createElement("span", {className: "info"}, 
+                            "Last Update: ", React.createElement(Last, {key: last, keyid: last})
+                        ), 
+                                
+                        React.createElement(Description, {data: data}), 
+                        React.createElement(Contacts, {data: data}), 
+                        React.createElement(StatsTables, {uuid: raw.uuid, raw: raw, use: this.props.use, flags: this.props.flags, stotal: this.props.stotal})
+                    ), 
+                    React.createElement("div", {className: "col-lg-2 col-md-2 col-sm-2"}, 
+                        React.createElement("div", {id: "side-nav"}, 
+                            this.navList()
                         )
                     )
-                ), 
-                React.createElement(Contacts, {data: data}), 
-                React.createElement(StatsTables, {uuid: raw.uuid, use: this.props.use, flags: this.props.flags, stotal: this.props.stotal}), 
-               
-                React.createElement(Raw, {data: raw})
+                )
             )
         )
     }
-})
-
-
-//get field missing counts for specimen records
-
-
-//get Recordset map points
-//searchServer.esQuery('records',{from:0, size:})
+});

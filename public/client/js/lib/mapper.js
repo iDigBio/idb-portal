@@ -67,6 +67,7 @@ module.exports = IDBMap =  function(elid, options){
         $('#'+elid).css('width', (width-53)+'px').css('height', (height-53)+'px');
         self.map.invalidateSize();
     }
+
     var formatNum = function (val){
         if(isNaN(val)){
             return val;
@@ -74,6 +75,7 @@ module.exports = IDBMap =  function(elid, options){
             return val.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     }
+    
     var MaximizeButton =  L.Control.extend({
         options: {
             position:"topright"

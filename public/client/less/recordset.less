@@ -1,6 +1,7 @@
 @import 'variables.less';
-
-.modal-dialog{
+@import 'raw.less';
+@import 'sidenav.less';
+/*.modal-dialog{
     z-index: 4050;
 }
 
@@ -109,7 +110,7 @@
             color: #555;
             font-weight: bold;
             padding-bottom:5px;
-        }*/
+        }
 
     }
     #use-table{
@@ -159,7 +160,118 @@
     }
 
 }
+*/
+body{
+    min-height:800px;
+    position: relative;
+    background-color: #eee;
+    font-size: 13px;
+}
+#content{
+    background-color: #fefefe;
+    box-shadow: 1px 1px 2px #ccc;
+    text-shadow: 1px 1px 1px white;
+    h1#banner{
+        color:#999;
+        //text-shadow: 1px 1px 1px #ddd;
+        margin-left:0px;
+        font-size: 2em;
+        //font-style: italic;
+    }
+    h1#title{
+        font-size: 28px;
+        clear:both;
+    }
+    a#search-button{
+        font-weight: bold;
+        border-radius: 2px;
+        font-size: 14px;
+        color: white;
+        margin:30px 10px;
+        padding: 6px 6px;
+        background-color: lighten(@idbgreen, 5%);
+        border:none;
+        box-shadow: @shadow2;
+        &:hover{
+            transition: box-shadow .5s, background-color .5s, transform .5s;
+            box-shadow: @shadow3;
+            background-color: lighten(@idbgreen, 10%);
+        }
+    }
 
+    .info{
+        display: inline-block;
+        margin-right:15px;
+        font-size: 17px;
+        color: #666;
+        font-weight: normal;
+    }
+    #description{
+        p{
+            margin:20px 0px;
+            text-align: justify;
+            line-height: 1.2em;
+            padding:5px 0px;
+           
+            .logo{
+                max-width:150px;
+                max-height:150px;
+                margin:0px 10px 2px 0px;
+                float:left;
+                padding:4px;
+                border:1px solid #ccc;
+                background-color: white;
+            }
+        }
+        display:block;
+        clear:both;
+    }
+    #contacts{
+        margin: 10px 0px 30px 0px;
+        display:block;
+        h2.title{
+            font-size:16px;
+        }
+        table.contact{
+            float:left;
+            width: 25%;
+            min-width: 300px;
+            td{
+                &.name{
+                    font-weight: bold;
+                }
+                vertical-align: top;
+                padding: 1px 3px;
+                i{
+                    color:#999;
+                }
+            }
+        }
+    }
+    #stats-tables{
+        margin-top:40px;
+        #stats-tabs{
+            font-size: 17px;
+            padding:0px;
+            margin:0px;
+            li{
+                cursor: pointer;
+                list-style-type: none;
+                display:inline-block;
+                margin-right:20px;
+                &.active{
+                    color: #333;
+                    border-bottom: 3px solid @idbgreen;
+                }
+                color:#666;
+            }            
+        }
+        .stat-table{
+            padding-top:20px;
+            border-top: @brd;
+        }
+    }
+}
 
 .last{
     margin-left:20px;

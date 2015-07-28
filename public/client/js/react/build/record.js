@@ -225,7 +225,7 @@ module.exports = React.createClass({displayName: "exports",
                 map, 
                 media, 
                 React.createElement("li", null, React.createElement("a", {href: "#attribution"}, "Attribution")), 
-                React.createElement("li", null, React.createElement("a", {href: "#data"}, "Data"))
+                React.createElement("li", null, React.createElement("a", {href: "#data"}, "All Data"))
             )            
         )
     },

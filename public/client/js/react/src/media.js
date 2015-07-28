@@ -210,7 +210,7 @@ module.exports = React.createClass({
                 <li><a href="#media-wrapper">Media</a></li>
                 {media}
                 <li><a href="#attribution">Attribution</a></li>
-                <li><a href="#data-table">Data</a></li>
+                <li><a href="#data-table">All Data</a></li>
             </ul>  
         )
     },

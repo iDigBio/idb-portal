@@ -4,13 +4,12 @@ var _ = require('lodash');
 
 var defOrNone = function(obj,key){
     if(_.isArray(key)){
-        debugger
         var str = '';
         key.forEach(function(item){
-            if(obj[item] != 'undefined'){
+            if(typeof obj[item] != 'undefined'){
                 str += ' ' + obj[item];  
             }
-        })
+        });
         if( str.length === 0){
             return <i>none</i>;
         }else{

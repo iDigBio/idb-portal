@@ -113,17 +113,13 @@ module.exports = Provider = React.createClass({displayName: "Provider",
 
 
         var con = null;
+        var Cont = require('./contacts');
 
         if(_.has(data,'contacts') && data.contacts.length > 0){
             _.each(data.contacts,function(item){
                 contacts.push(makeContact(item));
             })
-            con = (
-                React.createElement("div", {key: "contacts", id: "contacts", className: "clearfix"}, 
-                    React.createElement("h5", {className: "title"}, "Contacts"), 
-                    contacts
-                )
-            );
+            con = React.createElement(Cont, {data: data});
         }
 
         return (

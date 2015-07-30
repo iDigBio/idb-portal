@@ -59,166 +59,29 @@
 #side-nav #side-nav-list.affix {
   margin-top: 0px;
 }
-/*.modal-dialog{
-    z-index: 4050;
+#contacts {
+  margin: 10px 0px 30px 0px;
+  display: block;
 }
-
-#container{
-    max-width:1600px;
-    margin:auto;
-    #title{
-        font-size: 1.75em;
-        font-weight: normal;
-        color:#666;
-    }
-    h2.title{
-        border-bottom:@brd;
-        font-size:1.3em;
-        color: #555;
-        font-weight: bold;
-        padding-bottom:5px;        
-    }
-    #stats-tables,#description{
-        float:left;
-        width:64%;
-        @media(max-width:@screenmed){
-            float:none;
-            width: 100%;
-        }
-    }
-    #buttons,#info,#contacts{
-        float:right;
-        width:34%;
-        @media(max-width:@screenmed){
-            float:none;
-            width: 100%;
-        }
-    }
-    #description{
-        p{
-            margin:0px;
-            text-align: justify;
-            background-color:@lightgrey;
-            border-top:@brd;
-            border-bottom: @brd;
-            padding:5px 10px;
-            min-height: 170px;
-            .logo{
-                max-width:100px;
-                max-height:100px;
-                margin:0px 10px 2px 0px;
-                float:left;
-                padding:4px;
-                border:1px solid #ccc;
-                background-color: white;
-            }
-        }
-        display:block;
-        clear:both;
-    }
-    #stats-tables{
-        float:left;
-        margin-top:30px;
-
-
-    }
-    #stats-tabs{
-
-        margin:0px;
-        margin-top:0px;
-        margin-bottom:0px;
-        margin-left:0px;
-        display:block;
-        padding:0px;
-        z-index:10;
-        list-style: none;
-        li{
-            font-weight:normal;
-            color:#999;
-            display:inline-block;
-            padding:4px 7px;
-            padding-bottom:6px;
-            border-bottom: 4px solid transparent;
-            cursor:pointer;
-            &.active{
-                border-bottom: 4px solid @idbgreen;
-                color:#333;
-            }
-            &:not(.active):hover{
-                 border-bottom: 4px solid lighten(@idbgreen,10%);
-                -webkit-transition: border 700ms ease;
-                -moz-transition: border 700ms ease;
-                -o-transition: border 700ms ease;
-                -ms-transition: border 700ms ease;
-                transition: border 700ms ease;                
-            }        
-        }
-    }
-    #fields-table{
-        border-top:@brd;
-        border-bottom: @brd;
-        padding:40px 10px 5px 10px;
-        background-color: @lightgrey;
-        .blurb{
-            margin-bottom:15px;
-        }
-        /*h4{
-            border-bottom:@brd;
-            font-size:1.3em;
-            color: #555;
-            font-weight: bold;
-            padding-bottom:5px;
-        }
-
-    }
-    #use-table{
-        border-top:@brd;
-        border-bottom: @brd;
-        padding:30px 10px 5px 10px;
-        background-color: @lightgrey;
-    }
-    #buttons{
-        padding:0px;
-        margin-bottom:15px;
-        @media(max-width:@screenmed){
-            margin: 10px 0px;
-           text-align: center;
-        }
-        .btn{
-            
-        }
-        button{
-            display:inline-block;
-            margin:0px 10px 4px 0px;
-            border-radius:2px;
-            background-color:@idbgreen;
-            color:#efe;
-            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
-        }
-    }
-    #info{
-        padding:0px;
-        margin-bottom:15px;
-        @media(max-width:@screenmed){
-            text-align: center;
-        }
-    }
-    #contacts{
-        
-        .contact, .contact li{
-            text-decoration: none;
-            list-style-type: none;
-            min-width:180px;
-            word-break:break-word;
-        }
-        .contact{
-            float:left;
-            padding-left:0px;
-        }
-    }
-
+#contacts h2.title {
+  font-size: 16px;
 }
-*/
+#contacts table.contact {
+  margin-bottom: 10px;
+  float: left;
+  width: 30%;
+  min-width: 300px;
+}
+#contacts table.contact td {
+  vertical-align: top;
+  padding: 1px 3px;
+}
+#contacts table.contact td.name {
+  font-weight: bold;
+}
+#contacts table.contact td i {
+  color: #999;
+}
 body {
   min-height: 800px;
   position: relative;
@@ -283,28 +146,6 @@ body {
   padding: 4px;
   border: 1px solid #ccc;
   background-color: white;
-}
-#content #contacts {
-  margin: 10px 0px 30px 0px;
-  display: block;
-}
-#content #contacts h2.title {
-  font-size: 16px;
-}
-#content #contacts table.contact {
-  float: left;
-  width: 25%;
-  min-width: 300px;
-}
-#content #contacts table.contact td {
-  vertical-align: top;
-  padding: 1px 3px;
-}
-#content #contacts table.contact td.name {
-  font-weight: bold;
-}
-#content #contacts table.contact td i {
-  color: #999;
 }
 #content #stats-tables {
   margin-top: 40px;

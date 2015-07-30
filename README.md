@@ -21,10 +21,3 @@ for automatic page and resource refresh when you save a file. The live reload re
 - The standalone Mapper module requires the  'gulp mapper' command to update the idbmap.js file in the /public/js directory. It's source file is /public/client/idbmap.js
 
 
-## Stand Alone Map
-- the standalone iDigBio map module can be added to website by adding the files  
-/public/css/idbmap.css
-and
-/public/js/idbmap.js  
-
-to a web page. 

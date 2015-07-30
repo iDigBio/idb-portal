@@ -71,7 +71,8 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
             React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "stat-table clearfix"}, 
                
                 React.createElement("div", {className: "blurb"}, "This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio ", React.createElement("a", {href: "/portal/search"}, "Search"), ". The first column represents the correction performed. The last two columns represent the number and percentage of" + ' ' + 
-                 "records that were corrected. A complete list of the data quality flags and their descriptions can be found ", React.createElement("a", {alt: "flag descriptions", href: "https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags"}, "here"), "."), 
+                 "records that were corrected. A complete list of the data quality flags and their descriptions can be found ", React.createElement("a", {alt: "flag descriptions", href: "https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags"}, "here"), ". Clicking on a data flag name will" + ' ' +
+                 "take you to a search for all records with this flag in this recordset."), 
                 React.createElement("table", {className: "table table-condensed pull-left tablesorter-blue", id: "table-fields"}, 
                     React.createElement("thead", null, 
                         React.createElement("tr", null, 

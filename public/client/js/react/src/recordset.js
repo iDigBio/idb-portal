@@ -71,7 +71,8 @@ var FieldsTable = React.createClass({
             <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix" >
                
                 <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction performed. The last two columns represent the number and percentage of 
-                 records that were corrected. A complete list of the data quality flags and their descriptions can be found <a alt="flag descriptions" href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>.</div>
+                 records that were corrected. A complete list of the data quality flags and their descriptions can be found <a alt="flag descriptions" href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>. Clicking on a data flag name will
+                 take you to a search for all records with this flag in this recordset.</div>
                 <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                     <thead>
                         <tr>

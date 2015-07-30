@@ -239,6 +239,9 @@ body {
   font-size: 28px;
   clear: both;
 }
+#content h2.title {
+  font-size: 16px;
+}
 #content a#search-button {
   font-weight: bold;
   border-radius: 2px;

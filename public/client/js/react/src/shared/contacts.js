@@ -20,16 +20,15 @@ var defOrNone = function(obj,key){
     }else{
         return obj[key];
     }
-
-}
+};
 
 module.exports = React.createClass({
     makeContact: function(contact){
             var name = defOrNone(contact, ['first_name', 'last_name']);
             var email = defOrNone(contact, 'email');
             email = _.isString(email) ? <a href={'mailto: '+email}>{email}</a> : email;
-            var phone =  defOrNone(contact, 'phone');
-            var role =  defOrNone(contact, 'role');
+            var phone = defOrNone(contact, 'phone');
+            var role = defOrNone(contact, 'role');
 
             return (
                 <table className="contact" key={name+email+role}>
@@ -38,8 +37,7 @@ module.exports = React.createClass({
                     <tr><td className="name">Email</td><td>{email}</td></tr>
                     <tr><td className="name">Phone</td><td>{phone}</td></tr>
                 </table>
-            );
-        
+            );   
     },
     render: function(){
         if(_.has(this.props.data, 'contacts') && _.isArray(this.props.data.contacts)){

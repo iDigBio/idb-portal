@@ -1,3 +1,13 @@
+body {
+  font-size: 13px;
+  background-color: #eee;
+}
+#collections-table,
+#map-block {
+  background-color: #fefefe;
+  box-shadow: 1px 1px 2px #ccc;
+  padding-bottom: 20px;
+}
 .link-cell {
   text-align: center;
 }

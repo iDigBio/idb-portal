@@ -183,7 +183,8 @@ var StatsTables = React.createClass({displayName: "StatsTables",
             )
         )
     }
-})
+});
+
 var Title = React.createClass({displayName: "Title",
     render: function(){
         return(
@@ -213,6 +214,7 @@ var Description = React.createClass({displayName: "Description",
     }
 });
 
+
 var Last = React.createClass({displayName: "Last",
     render: function(){
        return(React.createElement("span", null, this.props.keyid));
@@ -236,7 +238,7 @@ module.exports = React.createClass({displayName: "exports",
                 React.createElement("li", null, React.createElement("a", {href: "#contacts"}, "Contacts")), 
                 React.createElement("li", null, React.createElement("a", {href: "#stats-tables"}, "All Data"))
             )            
-        )
+        );
     },
     render: function(){
         var raw = this.props.recordset;
@@ -244,6 +246,32 @@ module.exports = React.createClass({displayName: "exports",
         var id = raw.uuid;
         var last = data.update.substring(0,10);
         var search = '/portal/search?rq={"recordset":"'+id+'"}';
+        var web = null;
+        
+        if(_.has(raw.data,'institution_web_address' && ! _.isEmpty(raw.data.institution_web_address))){
+            web = (
+                React.createElement("div", null, 
+                    React.createElement("h2", {className: "title"}, "Collection Home Page"), 
+                    React.createElement("a", {href: raw.data.institution_web_address}, raw.data.institution_web_address)
+                )
+            )
+        }
+
+        var counts = (
+            React.createElement("div", null, 
+                React.createElement("span", {className: "info"}, 
+                    "Specimen Records: ", React.createElement(Total, {key: 'Specimen', keyid: 'Specimen', total: formatNum(this.props.stotal)})
+                ), 
+                React.createElement("span", {className: "info"}, 
+                    "Media Records: ", React.createElement(Total, {key: 'Media', keyid: 'Media', total: formatNum(this.props.mtotal)})
+                ), 
+                React.createElement("span", {className: "info"}, 
+                    "Last Update: ", React.createElement(Last, {key: last, keyid: last})
+                )
+            )
+        );
+        
+
         return (
             React.createElement("div", {className: "container-fluid"}, 
                 React.createElement("div", {className: "row"}, 
@@ -251,17 +279,9 @@ module.exports = React.createClass({displayName: "exports",
                         React.createElement("h1", {id: "banner", className: "pull-left"}, "Recordset"), 
                         React.createElement("a", {id: "search-button", className: "pull-right", href: search}, "Search Recordset"), 
                         React.createElement(Title, {key: data.collection_name, keyid: data.collection_name}), 
-                        React.createElement("span", {className: "info"}, 
-                            "Specimen Records: ", React.createElement(Total, {key: 'Specimen', keyid: 'Specimen', total: formatNum(this.props.stotal)})
-                        ), 
-                        React.createElement("span", {className: "info"}, 
-                            "Media Records: ", React.createElement(Total, {key: 'Media', keyid: 'Media', total: formatNum(this.props.mtotal)})
-                        ), 
-                        React.createElement("span", {className: "info"}, 
-                            "Last Update: ", React.createElement(Last, {key: last, keyid: last})
-                        ), 
-                                
+                        counts, 
                         React.createElement(Description, {data: data}), 
+                        web, 
                         React.createElement(Contacts, {data: data}), 
                         React.createElement(StatsTables, {uuid: raw.uuid, raw: raw, use: this.props.use, flags: this.props.flags, stotal: this.props.stotal})
                     ), 

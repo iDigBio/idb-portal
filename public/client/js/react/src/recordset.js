@@ -183,7 +183,8 @@ var StatsTables = React.createClass({
             </div>
         )
     }
-})
+});
+
 var Title = React.createClass({
     render: function(){
         return(
@@ -213,6 +214,7 @@ var Description = React.createClass({
     }
 });
 
+
 var Last = React.createClass({
     render: function(){
        return(<span>{this.props.keyid}</span>);
@@ -236,7 +238,7 @@ module.exports = React.createClass({
                 <li><a href="#contacts">Contacts</a></li>
                 <li><a href="#stats-tables">All Data</a></li>
             </ul>            
-        )
+        );
     },
     render: function(){
         var raw = this.props.recordset;
@@ -244,6 +246,32 @@ module.exports = React.createClass({
         var id = raw.uuid;
         var last = data.update.substring(0,10);
         var search = '/portal/search?rq={"recordset":"'+id+'"}';
+        var web = null;
+        
+        if(_.has(raw.data,'institution_web_address' && ! _.isEmpty(raw.data.institution_web_address))){
+            web = (
+                <div>
+                    <h2 className="title">Collection Home Page</h2>
+                    <a href={raw.data.institution_web_address}>{raw.data.institution_web_address}</a>
+                </div>
+            )
+        }
+
+        var counts = (
+            <div>
+                <span className="info">
+                    Specimen Records:&nbsp;<Total key={'Specimen'} keyid={'Specimen'} total={formatNum(this.props.stotal)} />
+                </span>
+                <span className="info">
+                    Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
+                </span>
+                <span className="info">
+                    Last Update:&nbsp;<Last key={last} keyid={last} />
+                </span>
+            </div>
+        );
+        
+
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -251,17 +279,9 @@ module.exports = React.createClass({
                         <h1 id="banner" className="pull-left">Recordset</h1> 
                         <a id="search-button" className="pull-right" href={search}>Search Recordset</a>
                         <Title key={data.collection_name} keyid={data.collection_name} />
-                        <span className="info">
-                            Specimen Records:&nbsp;<Total key={'Specimen'} keyid={'Specimen'} total={formatNum(this.props.stotal)} />
-                        </span>
-                        <span className="info">
-                            Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
-                        </span>
-                        <span className="info">
-                            Last Update:&nbsp;<Last key={last} keyid={last} />
-                        </span>
-                                
+                        {counts}
                         <Description data={data} />
+                        {web}
                         <Contacts data={data} />
                         <StatsTables uuid={raw.uuid} raw={raw} use={this.props.use} flags={this.props.flags} stotal={this.props.stotal}/>
                     </div>

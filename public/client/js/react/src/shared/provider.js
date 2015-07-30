@@ -116,9 +116,6 @@ module.exports = Provider = React.createClass({
         var Cont = require('./contacts');
 
         if(_.has(data,'contacts') && data.contacts.length > 0){
-            _.each(data.contacts,function(item){
-                contacts.push(makeContact(item));
-            })
             con = <Cont data={data} />;
         }
 

@@ -14,7 +14,7 @@ var Row = React.createClass({
            
         });
         return (
-            <tr className="data-rows">
+            <tr className="data-row">
                 <td className="field-name" style={{width:'50%'}}>{name}</td>
                 <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
             </tr>

@@ -15,6 +15,10 @@ do
         for ((s=1;s<=$count;s++))
         do
             eval val="$"$s
+            if [ $val = '-j' ]
+            then
+                script+="npm install -g react-tools;"
+            fi
             if [ $val = '-i' ]
             then
                 script+="su -c 'npm install' www-data;"

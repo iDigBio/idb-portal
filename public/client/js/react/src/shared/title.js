@@ -5,7 +5,7 @@
 var React = require('react');
 var _ = require('lodash');
 
-module.exports = Title = React.createClass({
+module.exports = React.createClass({
     click: function(e){
         window.location="/portal/records/"+this.props.data.uuid
     },

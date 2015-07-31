@@ -124,7 +124,7 @@ var Record = React.createClass({
                     active=true;
                 }
                 //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
-                record.push(<Section key={'sec-'+sec} key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
+                record.push(<Section key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
                 cnt++;
             } 
         });

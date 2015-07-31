@@ -2,7 +2,7 @@
 var React = require('react');
 var _ = require('lodash');
 
-module.exports = Provider = React.createClass({
+module.exports = React.createClass({
     noLogo: function(event){
         $(event.currentTarget).remove();
     },

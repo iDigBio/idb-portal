@@ -189,7 +189,7 @@ var StatsTables = React.createClass({displayName: "StatsTables",
 var Title = React.createClass({displayName: "Title",
     render: function(){
         return(
-            React.createElement("h1", {id: "title", dangerouslySetInnerHTML: {__html: this.props.keyid}})
+            React.createElement("h1", {id: "title"}, this.props.keyid)
         );
     }
 });

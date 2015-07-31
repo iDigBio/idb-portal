@@ -15,9 +15,9 @@ do
         for ((s=1;s<=$count;s++))
         do
             eval val="$"$s
-            if [ $val = '-j' ]
+            if [ $val = '-babel' ]
             then
-                script+="npm install -g react-tools;"
+                script+="npm install -g babel;"
             fi
             if [ $val = '-i' ]
             then
@@ -46,8 +46,6 @@ do
         done
     fi
     script+="
-    cd /var/www/node/idb-portal/public/client/js/; 
-    su -c 'browserify main.js -o ../../js/client.js -t reactify' www-data; 
     cd /var/www/node/idb-portal;
     supervisorctl restart idigbio-portal-service;
     "

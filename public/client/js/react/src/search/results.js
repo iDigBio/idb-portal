@@ -112,7 +112,7 @@ var Results = module.exports =  React.createClass({
         }
     },
     render: function(){
-        var search = this.props.search, self=this, li=[];
+        var search = this.props.search, self=this, li=[], results = null;
         switch(this.props.view){
             case 'list':
                 results = <ResultsList 

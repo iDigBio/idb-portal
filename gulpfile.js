@@ -81,10 +81,10 @@ gulp.task('mapper', function(){
     gulp.src('./public/client/idbmap.js')
     .pipe(browserify({
         insertGlobals: true
-    }).transform(reactify))
+    }))
     .pipe(uglify())
     .pipe(gulp.dest('./public/js'))
-});
+})
 /*
 Task: build
 one run action when you just need to rebuild client files like react and less

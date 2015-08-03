@@ -129,7 +129,7 @@ var SearchAny = React.createClass({
         return(
             <div id="search-any" className="clearfix">
                 <h3>
-                    Start Searching
+                    Search Records
 
                     <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset search form">Reset</a>
                     <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>

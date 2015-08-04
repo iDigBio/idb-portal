@@ -335,7 +335,7 @@ module.exports = React.createClass({
             <div className="container-fluid">
                 <div className="row">
                     <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10"> 
-                        <h1 id="banner">Specimen Records</h1> 
+                        <h1 id="banner">Specimen Records </h1> 
                         <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
                         <Title data={this.props.record}  attribution={this.props.record.attribution}/>
                         <div id="summary-info" className="clearfix">

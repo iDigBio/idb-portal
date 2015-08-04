@@ -1,7 +1,7 @@
 
 
 var React = require('react');
-var MediaPage = require('./react/build/media');
+var MediaPage = require('./react/src/media');
 
 React.render(
     <MediaPage mediarecord={data.mediarecord} record={data.record} />,

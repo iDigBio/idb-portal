@@ -4,7 +4,7 @@
 ***/
 
 var React = require('react');
-var CollectionsPage = require('./react/build/collections');
+var CollectionsPage = require('./react/src/collections');
 //React.render(<CollectionsPage data={collections} />, document.getElementById('datatable'));
 
 var L= require('leaflet');

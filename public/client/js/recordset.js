@@ -13,7 +13,7 @@ var keys=Object.keys(fields.byDataTerm);
 var missing={};
 var stotal=0,mtotal=0;
 */
-var Recordset = require('./react/build/recordset');
+var Recordset = require('./react/src/recordset');
 var React = require('react');
 
 React.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} uuid={uuid}/>, document.getElementById('main'));

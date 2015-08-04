@@ -12,7 +12,9 @@ var gulp = require('gulp'),
     less = require('gulp-less'),
     uglify = require('gulp-uglify'),
     path = require('path'),
-    rename = require('gulp-rename');
+    rename = require('gulp-rename'),
+    babel = require('gulp-babel'),
+    babelify = require('babelify');
 
 /*
 Task: default
@@ -24,7 +26,8 @@ gulp.task('default',function(){
         //build js changes 
     function buildReact(){
       return  gulp.src("./public/client/js/react/src/**/*.js")
-        .pipe(react())
+        //.pipe(react())
+        .pipe(babel())
         .pipe(gulp.dest('./public/client/js/react/build'))
     }
     buildReact();
@@ -34,7 +37,8 @@ gulp.task('default',function(){
     })
 
     var bundle = watchify('./public/client/js/main.js');
-    bundle.transform('reactify');
+    //bundle.transform('reactify');
+    bundle.transform(babelify.configure({blacklist:["strict"]}))
     bundle.on('update',rebundle)
 
     function rebundle(){
@@ -46,17 +50,23 @@ gulp.task('default',function(){
         .pipe(source('client.js'))
         .pipe(gulp.dest('./public/js'))
     }
-    //live reload of compiled files
-    livereload.listen();
-    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
-    //build less css changes
-    gulp.watch('public/client/less/**').on('change', function(){
+
+    function buildLess(){
         return gulp.src('./public/client/less/**/*.less')
         .pipe(less({
             paths: [ path.join(__dirname, 'less', 'includes') ]
         }))
-        .pipe(gulp.dest('./public/css'));
+        .pipe(gulp.dest('./public/css'));        
+    }
+
+    gulp.watch('public/client/less/**').on('change', function(){
+        return buildLess();
     })
+    //live reload of compiled files
+    livereload.listen();
+    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
+    //build less css changes
+
     return rebundle();
 });
 /*

@@ -1,7 +1,7 @@
 
 
 var React = require('react')
-var SearchPage = require('./react/build/search');
+var SearchPage = require('./react/src/search');
 
 React.initializeTouchEvents(true);
 React.render(

@@ -16,10 +16,6 @@ do
         for ((s=1;s<=$count;s++))
         do
             eval val="$"$s
-            if [ $val = '-babel' ]
-            then
-                script+="npm install -g babel;"
-            fi
             if [ $val = '-i' ]
             then
                 script+="su -c 'npm install' www-data;"

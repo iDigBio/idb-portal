@@ -4,7 +4,7 @@ var React = require('react');
 //window.queryBuilder = require('./search/lib/querybuilder');
 var L = require('leaflet/dist/leaflet');
 //provides order for sections
-var RecordPage = require('./react/build/record');
+var RecordPage = require('./react/src/record');
 
 React.render(
     <RecordPage record={record} />,

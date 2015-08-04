@@ -1,1 +1,1 @@
-require('./react/build/publishers');
+require('./react/src/publishers');

@@ -1,6 +1,6 @@
 node_modules/
 public/components/
-public/client/js/react/build/.module-cache/
+public/client/js/react/build/
 *~
 .nide
 public/js/app.js

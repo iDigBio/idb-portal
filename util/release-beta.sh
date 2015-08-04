@@ -4,6 +4,7 @@ for i in {1..5}
 do
     script="
     cd /var/www/node/idb-portal;
+    su -c 'git reset --hard' www-data;
     su -c 'git checkout master' www-data;
     su -c 'git pull' www-data;
     "

@@ -65,7 +65,14 @@ var FieldsTable = React.createClass({displayName: "FieldsTable",
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
             return React.createElement(Fieldrow, {key: flag, name: flag, total: self.props.flags[flag].itemCount, value: perc, uuid: self.props.uuid})
-        })
+        });
+
+        if(flagrows.length === 0){
+            flagrows.push(
+                React.createElement("tr", null, React.createElement("td", {colSpan: "3", style: {"textAlign":"center","fontWeight":"bold"}}, "No Flags for this Recordset"))
+            )
+        }
+
         var sty = {'textAlign': 'center'};
         return (
             React.createElement("div", {id: "fields-table", style: {display: (this.props.active ? 'block':'none')}, className: "stat-table clearfix"}, 

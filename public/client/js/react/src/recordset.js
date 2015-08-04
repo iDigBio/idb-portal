@@ -65,7 +65,14 @@ var FieldsTable = React.createClass({
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
             return <Fieldrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc} uuid={self.props.uuid} />
-        })
+        });
+
+        if(flagrows.length === 0){
+            flagrows.push(
+                <tr><td colSpan="3" style={{"textAlign":"center","fontWeight":"bold"}}>No Flags for this Recordset</td></tr>
+            )
+        }
+
         var sty = {'textAlign': 'center'};
         return (
             <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix" >

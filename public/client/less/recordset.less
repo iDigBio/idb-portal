@@ -9,6 +9,7 @@ body{
     background-color: #eee;
     font-size: 13px;
 }
+
 #content{
     @import 'contacts.less';
     
@@ -85,6 +86,11 @@ body{
                 list-style-type: none;
                 display:inline-block;
                 margin-right:20px;
+                border-bottom: 3px solid transparent;
+                &:hover{
+                    border-bottom: 3px solid lighten(@idbgreen, 10%);
+                    transition: border-bottom 1s;
+                }
                 &.active{
                     color: #333;
                     border-bottom: 3px solid @idbgreen;

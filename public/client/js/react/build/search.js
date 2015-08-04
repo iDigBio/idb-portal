@@ -129,7 +129,7 @@ var SearchAny = React.createClass({displayName: "SearchAny",
         return(
             React.createElement("div", {id: "search-any", className: "clearfix"}, 
                 React.createElement("h3", null, 
-                    "Start Searching", 
+                    "Search Records", 
 
                     React.createElement("a", {className: "btn pull-right", id: "reset-button", onClick: this.resetSearch, title: "reset search form"}, "Reset"), 
                     React.createElement("a", {className: "btn pull-right", title: "help", "data-toggle": "modal", "data-target": "#search-help"}, "Help")

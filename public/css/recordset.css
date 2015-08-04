@@ -160,7 +160,12 @@ body {
   list-style-type: none;
   display: inline-block;
   margin-right: 20px;
+  border-bottom: 3px solid transparent;
   color: #666;
+}
+#content #stats-tables #stats-tabs li:hover {
+  border-bottom: 3px solid #87bc72;
+  transition: border-bottom 1s;
 }
 #content #stats-tables #stats-tabs li.active {
   color: #333;

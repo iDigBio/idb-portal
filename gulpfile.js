@@ -27,7 +27,7 @@ gulp.task('default',function(){
     function buildReact(){
       return  gulp.src("./public/client/js/react/src/**/*.js")
         //.pipe(react())
-        .pipe(babel())
+        .pipe(babel({blacklist: ["strict"]}))
         .pipe(gulp.dest('./public/client/js/react/build'))
     }
     buildReact();

@@ -135,7 +135,7 @@ var Group = React.createClass({
         if(_.has(this.props.record, 'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
             var imgs = [];
             var media = this.props.record.indexTerms.mediarecords;
-            for(id in media){
+            for(var id in media){
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >

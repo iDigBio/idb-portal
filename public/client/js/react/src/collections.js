@@ -79,7 +79,7 @@ module.exports = React.createClass({
                 showFilter={true} 
                 resultsPerPage={20}
                 columns={['institution','collection',
-                'contact','contact_role', 'update_url', 'collection_uuid']}  
+                'contact','contact_role', 'update_url', 'collection_uuid', 'recordsets']}  
                 columnMetadata={columnMeta.concat(cols)}
                 enableInfiniteScroll={true} bodyHeight={400} 
                 useFixedHeader={true} />
@@ -136,18 +136,20 @@ var Recordsets = React.createClass({
     render: function(){
         var d = this.props.data;
         
-        if(_.isString(d)){
+        if(_.isString(d) && !_.isEmpty(d)){
             var records = d.split(/,/);
             var links=[];
+
             records.forEach(function(item){
                 if(item.trim().length > 0){
-                    links.push(
+                    /*links.push(
                         <a href={'/portal/recordsets/'+item.trim()} key={item}>{item}</a>
-                    )
+                    )*/
+                    links.push('"'+item.trim()+'"');
                 }
             })
             return <span>
-                    {links}
+                    <a href={'/portal/search?rq={"recordset":['+links.join(',')+']}'}>Search Recordset(s)</a>
                     </span>
         }else{
             return <span/>

@@ -100,22 +100,34 @@ var FieldsTable = React.createClass({
 var UseTable = React.createClass({
     render: function(){
         var rows=[], uuid=this.props.uuid;
-        _.each(this.props.use.dates,function(val,key){
-            var r = val[uuid];
-           
-            var date=key.substring(5,7)+' / '+key.substring(0,4);
 
+        if(_.isEmpty(this.props.use.dates) === false){
+            _.each(this.props.use.dates,function(val,key){
+                var r = val[uuid];
+               
+                var date=key.substring(5,7)+' / '+key.substring(0,4);
+
+                rows.push(
+                    <tr key={key}>
+                        <td>{date}</td>
+                        <td className="value">{formatNum(r.search)}</td>
+                        <td className="value">{formatNum(r.download)}</td>
+                        <td className="value">{formatNum(r.seen)}</td>
+                        <td className="value">{formatNum(r.viewed_records)}</td>
+                        <td className="value">{formatNum(r.viewed_media)}</td>
+                    </tr>
+                )
+            })            
+        }else{
             rows.push(
-                <tr key={key}>
-                    <td>{date}</td>
-                    <td className="value">{formatNum(r.search)}</td>
-                    <td className="value">{formatNum(r.download)}</td>
-                    <td className="value">{formatNum(r.seen)}</td>
-                    <td className="value">{formatNum(r.viewed_records)}</td>
-                    <td className="value">{formatNum(r.viewed_media)}</td>
+                <tr key="none">
+                    <td colSpan="6" style={{textAlign: "center", fontWeight: "bold"}}>
+                        No Use Data for this Recordset
+                    </td>
                 </tr>
             )
-        })
+        }
+
 
         return (
             <div id="use-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix">

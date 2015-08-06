@@ -110,8 +110,8 @@ h4 {
   font-weight: normal;
 }
 #jump .jump {
-  margin: 10px;
-  font-size: 1.3em;
+  margin: 8px;
+  font-size: 1.2em;
   display: inline-block;
 }
 @media (max-width: 992px) {

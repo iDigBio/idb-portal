@@ -1161,14 +1161,6 @@
   margin: 2px;
   float: right;
 }
-i.spinner {
-  width: 16px;
-  height: 16px;
-  display: inline-block;
-  margin: 0px;
-  margin-bottom: -3px;
-  background-image: url(/portal/img/spinner.gif);
-}
 #main,
 #react-wrapper,
 #top,
@@ -1182,6 +1174,14 @@ header {
 }
 input::-webkit-input-placeholder {
   color: red;
+}
+i.spinner {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  margin: 0px;
+  margin-bottom: -3px;
+  background-image: url(/portal/img/spinner.gif);
 }
 .bold {
   font-weight: bold;

@@ -96,22 +96,10 @@ gulp.task('mapper', function(){
     .pipe(gulp.dest('./public/js'))
 })
 /*
-Task: build
-one run action when you just need to rebuild client files like react and less
-see  /public/client/libs file for which files are included
+Task: buildLess  [THIS IS USED FOR RELEASE BUILD PROCESSES]
+build public/client/less files to public/css files
 */
-gulp.task('build',function(){
-    gulp.src("./public/client/js/react/src/**/*.js")
-    .pipe(react())
-    .pipe(gulp.dest('./public/client/js/react/build'));
-
-    gulp.src('./public/client/js/main.js')
-    .pipe(browserify({
-        insertGlobals: true
-    }))
-    .pipe(rename('client.js'))
-    .pipe(gulp.dest('./public/js'));
-
+gulp.task('buildLess',function(){
     gulp.src('./public/client/less/**/*.less')
     .pipe(less({
         paths: [ path.join(__dirname, 'less', 'includes') ]

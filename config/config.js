@@ -58,8 +58,8 @@ var config = {
 				label: "Our Data",
 				submenu: [
 					{url: "/portal/publishers", label: 'Publishers'},
-					{url: "/portal/collections", label: 'Collections'}
-
+					{url: "/portal/collections", label: 'Collections'},
+					{url: "/wiki/index.php/IDigBio_API", label: 'iDigBio API'}
 				]
 			},
 			tools: {

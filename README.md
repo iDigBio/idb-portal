@@ -5,7 +5,7 @@ Node,Express,React,Leaflet,Lodash,jQuery
 
 
 ## Installing
-
+- install Nodejs with npm preferablly from package 
 - git clone this repo
 - cd to project root 'idb-portal/'
 ```

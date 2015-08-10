@@ -3,6 +3,8 @@ var React = require('react')
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
+var dqFlags = require('../../lib/dq_flags');
+
 
 var Row = React.createClass({
     render: function(){
@@ -67,7 +69,7 @@ var Flags = React.createClass({
     render: function(){
         var rows = _.map(this.props.flags, function(flag){
             return (
-                <tr><td>{flag}</td></tr>
+                <tr><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
             )
         })
 

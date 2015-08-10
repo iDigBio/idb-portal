@@ -59,7 +59,7 @@ var config = {
 				submenu: [
 					{url: "/portal/publishers", label: 'Publishers'},
 					{url: "/portal/collections", label: 'Collections'},
-					{url: "/wiki/index.php/IDigBio_API", label: 'iDigBio API'}
+					{url: "https://www.idigbio.org/wiki/index.php/IDigBio_API", label: 'iDigBio API'}
 				]
 			},
 			tools: {

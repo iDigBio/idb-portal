@@ -5,7 +5,7 @@
 var React = require('react')
 var fields = require('../../lib/fields');
 var _ = require('lodash');
-
+var dqFlags = require('../../lib/dq_flags');
 //var helpers = require('./search/lib/helpers');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
@@ -29,7 +29,7 @@ var Total = React.createClass({
     }
 });
 
-var Fieldrow = React.createClass({
+var Flagrow = React.createClass({
     checkVal: function(val){
         if(_.isNaN(val)||val==='NaN'){
             return '-';
@@ -42,7 +42,14 @@ var Fieldrow = React.createClass({
         var sty2 = {'width': '170px'};
         return (
             <tr>
-                <td><b><a href={'/portal/search?rq={"flags":"'+this.props.name+'","recordset":"'+this.props.uuid+'"}'}>{this.props.name}</a></b></td>
+                <td>
+                    <b>
+                        <a href={'/portal/search?rq={"flags":"'+this.props.name+'","recordset":"'+this.props.uuid+'"}'}>
+                            {this.props.name}
+                        </a>
+                    </b>
+                    &nbsp;&nbsp;<span className="badge" title={dqFlags[this.props.name]} data-toggle="tooltip">i</span>
+                </td>
                 <td style={sty2} className="value-column record-count">{this.checkVal(this.props.total)}</td>
                 <td className="value-column">
                     <div className="perc-box">
@@ -59,12 +66,12 @@ var Fieldrow = React.createClass({
     }
 });
 
-var FieldsTable = React.createClass({
+var FlagsTable = React.createClass({
     render: function(){
         var self = this;
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
-            return <Fieldrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc} uuid={self.props.uuid} />
+            return <Flagrow key={flag} name={flag} total={self.props.flags[flag].itemCount} value={perc} uuid={self.props.uuid} />
         });
 
         if(flagrows.length === 0){
@@ -75,7 +82,7 @@ var FieldsTable = React.createClass({
 
         var sty = {'textAlign': 'center'};
         return (
-            <div id="fields-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix" >
+            <div id="flags-table" style={{display: (this.props.active ? 'block':'none')}} className="stat-table clearfix" >
                
                 <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction performed. The last two columns represent the number and percentage of 
                  records that were corrected. A complete list of the data quality flags and their descriptions can be found <a alt="flag descriptions" href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>. Clicking on a data flag name will
@@ -197,7 +204,7 @@ var StatsTables = React.createClass({
                     <li className={this.state.active == 'use' ?  'active': ''} id="use-tab" onClick={this.click} data-active="use">Data Use</li>
                     <li className={this.state.active == 'raw' ?  'active': ''} id="raw-tab" onClick={this.click} data-active="raw">Raw</li>
                 </ul>
-                <FieldsTable active={this.state.active=='flags'} flags={this.props.flags} stotal={this.props.stotal} uuid={this.props.uuid} />
+                <FlagsTable active={this.state.active=='flags'} flags={this.props.flags} stotal={this.props.stotal} uuid={this.props.uuid} />
                 <UseTable active={this.state.active=='use'} use={this.props.use} uuid={this.props.uuid} />
                 <RawView active={this.state.active=='raw'} raw={this.props.raw}/>
             </div>

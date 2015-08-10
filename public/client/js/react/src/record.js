@@ -3,6 +3,8 @@ var React = require('react')
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
+var dqFlags = require('../../lib/dq_flags');
+
 
 var Row = React.createClass({
     render: function(){
@@ -67,7 +69,7 @@ var Flags = React.createClass({
     render: function(){
         var rows = _.map(this.props.flags, function(flag){
             return (
-                <tr><td>{flag}</td></tr>
+                <tr><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
             )
         })
 
@@ -335,7 +337,7 @@ module.exports = React.createClass({
             <div className="container-fluid">
                 <div className="row">
                     <div id="content" className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10"> 
-                        <h1 id="banner">Specimen Records </h1> 
+                        <h1 id="banner">Specimen Record</h1> 
                         <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
                         <Title data={this.props.record}  attribution={this.props.record.attribution}/>
                         <div id="summary-info" className="clearfix">

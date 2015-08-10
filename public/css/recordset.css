@@ -175,6 +175,13 @@ body {
   padding-top: 20px;
   border-top: 1px solid #cccccc;
 }
+#content #flags-table .badge {
+  text-shadow: none;
+  cursor: pointer;
+}
+#content #flags-table td .tooltip-inner {
+  text-shadown: none;
+}
 .last {
   margin-left: 20px;
 }

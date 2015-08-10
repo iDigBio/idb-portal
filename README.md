@@ -7,12 +7,12 @@ Node,Express,React,Leaflet,Lodash,jQuery
 ## Installing
 - install Nodejs with npm preferablly from package 
 - git clone this repo
-- cd to project root 'idb-portal/'
-```
-- npm install -G gulp bower
-- npm install
-- bower install
-- node app.js NODE_ENV=prod [with credential keys]
+- cd to project root 'idb-portal/' and run commands
+```bash
+$ npm install -G gulp bower
+$ npm install
+$ bower install
+$ node app.js NODE_ENV=prod [with credential keys]
 ```
 
 ## Gulp Tasks for Development

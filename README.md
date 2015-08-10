@@ -1,7 +1,7 @@
 idb-portal
 ==========
 
-Node,Express,React,Leaflet,Lodash,jQuery
+Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 
 
 ## Installing

@@ -76,7 +76,12 @@ var Flags = React.createClass({
         return (
             <div id="flags" style={{display: (this.props.active ? 'block' : 'none' )}}>
                 <table className="table table-striped table-bordered table-condensed">
-                    {rows}
+                    <thead>
+                        <tr><th>Type</th><th>Description</th></tr>
+                    </thead>
+                    <tbody>
+                        {rows}
+                    </tbody>
                 </table>
             </div>
         )

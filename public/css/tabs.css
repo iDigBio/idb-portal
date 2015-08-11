@@ -1,0 +1,22 @@
+ul.tabs {
+  font-size: 17px;
+  padding: 0px;
+  margin: 0px;
+}
+ul.tabs li {
+  cursor: pointer;
+  list-style-type: none;
+  display: inline-block;
+  padding: 0px 10px;
+  border-bottom: 3px solid transparent;
+  letter-spacing: .02em;
+  color: #666;
+}
+ul.tabs li:hover {
+  border-bottom: 3px solid #87bc72;
+  transition: border-bottom 0.5s;
+}
+ul.tabs li.active {
+  color: #333;
+  border-bottom: 3px solid #6aaa51;
+}

@@ -199,7 +199,7 @@ var StatsTables = React.createClass({
     render: function(){
         return (
             <div id="stats-tables" className="clearfix scrollspy">
-                <ul id="stats-tabs">
+                <ul className="tabs" id="stats-tabs">
                     <li className={this.state.active == 'flags' ?  'active': ''} id="corrected-tab" onClick={this.click} data-active="flags">Data Corrected</li>
                     <li className={this.state.active == 'use' ?  'active': ''} id="use-tab" onClick={this.click} data-active="use">Data Use</li>
                     <li className={this.state.active == 'raw' ?  'active': ''} id="raw-tab" onClick={this.click} data-active="raw">Raw</li>

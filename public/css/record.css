@@ -237,19 +237,25 @@ h1#banner {
   white-space: pre-line;
   color: #555;
 }
-#data ul {
+#data ul.tabs {
   font-size: 17px;
   padding: 0px;
   margin: 0px;
 }
-#data ul li {
+#data ul.tabs li {
   cursor: pointer;
   list-style-type: none;
   display: inline-block;
-  margin-right: 20px;
+  padding: 0px 10px;
+  border-bottom: 3px solid transparent;
+  letter-spacing: .02em;
   color: #666;
 }
-#data ul li.active {
+#data ul.tabs li:hover {
+  border-bottom: 3px solid #87bc72;
+  transition: border-bottom 0.5s;
+}
+#data ul.tabs li.active {
   color: #333;
   border-bottom: 3px solid #6aaa51;
 }

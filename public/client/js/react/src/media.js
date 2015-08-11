@@ -109,7 +109,7 @@ var Table = React.createClass({
 
         return (
             <div id="data-table" className="scrollspy">
-                <ul onClick={this.tabClick}>
+                <ul className="tabs" onClick={this.tabClick}>
                     <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
                     <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
                 </ul>

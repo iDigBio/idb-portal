@@ -182,19 +182,25 @@ h1#banner {
   font-weight: normal;
   width: 50%;
 }
-#data-table ul {
+#data-table ul.tabs {
   font-size: 17px;
   padding: 0px;
   margin: 0px;
 }
-#data-table ul li {
+#data-table ul.tabs li {
   cursor: pointer;
   list-style-type: none;
   display: inline-block;
-  margin-right: 20px;
+  padding: 0px 10px;
+  border-bottom: 3px solid transparent;
+  letter-spacing: .02em;
   color: #666;
 }
-#data-table ul li.active {
+#data-table ul.tabs li:hover {
+  border-bottom: 3px solid #87bc72;
+  transition: border-bottom 0.5s;
+}
+#data-table ul.tabs li.active {
   color: #333;
   border-bottom: 3px solid #6aaa51;
 }

@@ -139,7 +139,7 @@ var Record = React.createClass({
         return (
             <div id="data" className="scrollspy section">
                 
-                <ul onClick={this.tabClick}>
+                <ul className="tabs" onClick={this.tabClick}>
                     <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
                     {flagsTab}
                     <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>

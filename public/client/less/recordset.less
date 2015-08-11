@@ -77,27 +77,9 @@ body{
 
     #stats-tables{
         margin-top:40px;
-        #stats-tabs{
-            font-size: 17px;
-            padding:0px;
-            margin:0px;
-            li{
-                cursor: pointer;
-                list-style-type: none;
-                display:inline-block;
-                margin-right:20px;
-                border-bottom: 3px solid transparent;
-                &:hover{
-                    border-bottom: 3px solid lighten(@idbgreen, 10%);
-                    transition: border-bottom 1s;
-                }
-                &.active{
-                    color: #333;
-                    border-bottom: 3px solid @idbgreen;
-                }
-                color:#666;
-            }            
-        }
+        
+        @import 'tabs.less';
+        
         .stat-table{
             padding-top:20px;
             border-top: @brd;

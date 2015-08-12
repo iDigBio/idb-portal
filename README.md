@@ -10,8 +10,8 @@ Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 - cd to project root 'idb-portal/' and run commands
 ```bash
 $ npm install -G gulp bower
-$ npm install
 $ bower install
+$ npm install
 $ node app.js NODE_ENV=prod [with credential keys]
 ```
 

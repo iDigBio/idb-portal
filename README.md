@@ -48,10 +48,12 @@ task: buildLess
 ## General Code Layout/Architecture
 The iDigBio portal is mostly a front-side rendered app that takes advantage of Reacts' server-side rendering to allow proper search engine crawling of content pages like Record, MediaRecord and Recordset.
 
--There is a template in the views directory for each type of page: 
+-There is a template in the /app/views directory for each type of page: 
   * home.html, search.html, record.html, media.html, publishers.html, recordset.html, collections.html, collection.html, tutorial.html
 
-- Each page has a corresponding file in the /public/client/js directory. 
+- Each page has a corresponding JavaScript file in the /public/client/js directory. 
+
+- All the client side JS is compiled into two files  /public/js/client.js   -> src file is /public/client/js/main.js  .    /public/js/libs.js -> src file is /public/client/libs.js
 
 - All pages except Home and Tutorial have corresponding React components in /public/client/js/react/src. 
 

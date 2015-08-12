@@ -46,7 +46,7 @@ task: buildLess
 - /util/release-beta.sh   /util/release-prod.sh 
 
 ## General Code Layout/Architecture
-The iDigBio portal is mostly a front-side rendered app that takes advantage of client side rendering to allow proper SEO purposes.
+The iDigBio portal is mostly a front-side rendered app that takes advantage of Reacts' server-side rendering to allow proper search engine crawling of content pages like Record, MediaRecord and Recordset.
 
 -There is a template in the views directory for each type of page: 
   * home.html, search.html, record.html, media.html, publishers.html, recordset.html, collections.html, collection.html, tutorial.html

@@ -52,10 +52,12 @@ The iDigBio portal is mostly a front-side rendered app that takes advantage of R
   * home.html, search.html, record.html, media.html, publishers.html, recordset.html, collections.html, collection.html, tutorial.html
 
 - Each page has a corresponding file in the /public/client/js directory. 
+
 - All pages except Home and Tutorial have corresponding React components in /public/client/js/react/src. 
-- React components like record, media, recordset and collection avoid using libraries like jQuery which do not work on the server side so they can be properly prerendered by the server. As such any jQuery tools used (which are only necessary for interactivity) are initialized in the their top level modules in the /public/client/js directory
-after the React component has rendered.
-- record, media, recordset are all objects in the iDigBio API so they are prerendered by server so they can be properly crawled by search engines. 
+
+- React components like record, media, recordset avoid using libraries like jQuery which do not work on the server side so they can be properly prerendered by the server. As such any jQuery tools used (which are only necessary for interactivity) are initialized in the their top level modules in the /public/client/js directory
+after the React component has rendered in the browser. Also, these page work by requisting the API data on the server and rendering the React component to the page before its sent to the browser. The data is also rendered to the head of these pages so that the browser will do its own React component rendering once the page has loaded.
+
 - (specimen) record pages are discovered by google through the '/list' endpoint. This is a special endpoint not intended for public display so there are no links in the portal to it. /list pages contain links to all record objects in the iDigBio API.
 
 - Each page has a corresponding LESS file in the /public/client/less direcotory. All LESS files are compiled to individual CSS files in /public/css. Each page view template contains a link to its CSS file. The CSS IS NOT compiled into one large client file like the JS code is for the entire portal.

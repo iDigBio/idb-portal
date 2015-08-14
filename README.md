@@ -64,4 +64,35 @@ after the React component has rendered in the browser. Also, these page work by 
 
 - Each page has a corresponding LESS file in the /public/client/less direcotory. All LESS files are compiled to individual CSS files in /public/css. Each page view template contains a link to its CSS file. The CSS IS NOT compiled into one large client file like the JS code is for the entire portal.
 - Each one of the corresponding page LESS files will include one or more sub files for reusable display components. 
-  
+## Stand-alone Map module Use
+
+Embedding the specimen in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
+
+```html
+<html>
+  <head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <meta content="width=device-width,initial-scale=1.0" name="viewport">
+    <title>idb map test</title>
+    <link href="//beta-portal.idigbio.org/portal/css/idbmap.css" rel="stylesheet" type="text/css">
+    <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="//beta-portal.idigbio.org/portal/js/idbmap.js"></script>
+    <style>
+      #map{
+        width:700px;
+        height:500px;
+        position:absolute;
+      }
+    </style>
+    <script>
+      $(document).ready(function(){
+        var map = new IDBMap('map');
+        map.query({"genus":"carex"})       
+      })
+    </script>
+  </head>
+  <body>
+    <div id="map"></div>
+  </body>
+ </html>
+ ```

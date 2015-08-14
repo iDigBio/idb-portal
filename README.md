@@ -111,9 +111,19 @@ The following is a list of other options that allow greater control of the map i
 - **drawControl**: (true | false) [defaults to true] - displays the rectangle and circle bounding box controls.
 - **legend**: (true | false) [defaults to true] - displays the map legend in the lower left corner.
 - **scale**: (true | false) [defaults to true] - displays the map scale legend in the lower right corner.
-- **queryChange** (function | false) [defaults to false] - a function that is passed an api query formated object that represents a search. If this function is supplied, any alterations to the original query that produced the specimen map will be passed this updated query instead of running the query internally to update the map. Actions that alter the original query would be drawing of a boundry box or clicking on the "set map bounds" link in a specimen pop-up window.
+- **queryChange** (function | false) [defaults to false] - a function that is passed an api query formated object that represents a search. If this function is supplied, any alterations to the original query that produced the specimen map will be passed this updated query instead of running the query internally to update the map. Ultimately the maps public "query" method should be called to update the map. Actions that alter the original query would be drawing of a boundry box or clicking on the "set map bounds" link in a specimen pop-up window. In practice, this function is used by the Portal search page to communicate boundry box changes to the rest of search page components. Ultimately the maps public "query" method is called to update the map instead of the map calling the query method internally if the queryChange function wasn't supplied.
 - **loadingControl** (true | false) [defaults to true] - displays the loading spinner in the top left side of the map when a map layer is busy rendering/loading.
 - **zoomControl** (true | false) [defaults to true] - displays zoom-in and zoom-out controls.
 - **fullScreenControl** (true | false) [defaults to true] - displays the full-screen control button in the top right corner. This option uses the full-screen functionality that is common in most up-to-date browsers.
+
+
+The following example shows how to initialize the map with altenate options like do not display bounding draw control features or the image generation button.
+
+
 ```js
-var map = new IDBMap('map',
+$(function(){
+    var map = new IDBMap('map',{imageButton: false, drawControl: false, function(query){
+       //do something cool with the query
+    });
+});
+```

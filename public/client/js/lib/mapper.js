@@ -35,8 +35,8 @@ var GeoPoint = require('geopoint');
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 }
-
-window.IDBMap = module.exports = function(elid, options){
+ 
+module.exports = function(elid, options){
     var self=this;
     /*
     * Basic Options
@@ -138,7 +138,7 @@ window.IDBMap = module.exports = function(elid, options){
         options: {
             position:"topleft"
         },
-        _div: L.DomUtil.create('a', 'image-button'),
+        _div: L.DomUtil.create('div', 'image-button leaflet-bar'),
         imageClick: function(map,control){
             return function(e){
                 e.preventDefault();
@@ -193,7 +193,7 @@ window.IDBMap = module.exports = function(elid, options){
             }
         },
         onAdd: function(map){
-            this._div.innerHTML = '<div title="download map image" id="map-image-button" class="map-button-icon camera-icon"></div>';
+            this._div.innerHTML = '<a title="download map image" id="map-image-button" class="map-button-icon camera-icon "></a>';
             L.DomEvent.addListener(this._div, 'click', this.imageClick(map,this));
             return this._div;
         },
@@ -521,47 +521,49 @@ window.IDBMap = module.exports = function(elid, options){
         }
     }
 
-   self.currentQueryTime=0;
-    
+    self.currentQueryTime=0;
+    self.currentQuery = '';
     var _query = _.debounce(function(){
         var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
-        self.currentQueryTime = time;
-
-        $.ajax(mapapi,{
-            data: q,
-            success: function(resp){
-                //console.log(resp.shortCode)
-                //make sure last query run is the last one that renders
-                //as responses can be out of order
-                //mapCode = resp.shortCode;
-                self.map.mapCode = resp.shortCode;
-                self.map.resp=resp;
-                if(time>=self.currentQueryTime){
-                    if(options.legend){
-                        if(typeof legend == 'object'){
-                            //self.map.removeControl(legend);
-                            legend.removeFrom(self.map)
+        if(self.currentQuery !== q){
+            self.currentQuery = q;
+            self.currentQueryTime = time;
+            $.ajax(mapapi,{
+                data: q,
+                success: function(resp){
+                    //console.log(resp.shortCode)
+                    //make sure last query run is the last one that renders
+                    //as responses can be out of order
+                    //mapCode = resp.shortCode;
+                    self.map.mapCode = resp.shortCode;
+                    self.map.resp=resp;
+                    if(time>=self.currentQueryTime){
+                        if(options.legend){
+                            if(typeof legend == 'object'){
+                                //self.map.removeControl(legend);
+                                legend.removeFrom(self.map)
+                            }
+                            legend = new legendPanel();
+                            self.map.addControl(legend);                        
                         }
-                        legend = new legendPanel();
-                        self.map.addControl(legend);                        
+                        if(typeof idblayer == 'object'){
+                            self.map.removeLayer(removeIdblayer());
+                        }
+                        self.map.addLayer(makeIdblayer(resp.tiles));
+                        if(typeof utf8grid == 'object'){
+                            self.map.removeLayer(removeUtflayer());
+                        }
+                        self.map.addLayer(makeUtflayer(resp.utf8grid));
                     }
-                    if(typeof idblayer == 'object'){
-                        self.map.removeLayer(removeIdblayer());
-                    }
-                    self.map.addLayer(makeIdblayer(resp.tiles));
-                    if(typeof utf8grid == 'object'){
-                        self.map.removeLayer(removeUtflayer());
-                    }
-                    self.map.addLayer(makeUtflayer(resp.utf8grid));
-                }
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            type: 'POST',
-            crossDomain: true
-        });            
+                },
+                dataType: 'json',
+                contentType: 'application/json',
+                type: 'POST',
+                crossDomain: true
+            }); 
+        }
         
 
     }, 100,{'leading': false, 'trailing': true});

@@ -38,7 +38,7 @@ function loadPage(){
 	}
 }
 
-$(document).ready(function(){
+$(function(){
 	//if errors occur on page load try once to clear localStore and refresh
 	try{
 		loadPage();

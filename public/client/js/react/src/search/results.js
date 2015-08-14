@@ -64,7 +64,7 @@ var Results = module.exports =  React.createClass({
             self.lastQueryStringed = JSON.stringify(query);
 
 
-        },300,{leading: true, trailing: true});
+        },700,{leading: true, trailing: true});
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;

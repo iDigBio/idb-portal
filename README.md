@@ -68,7 +68,11 @@ after the React component has rendered in the browser. Also, these page work by 
 
 ## Stand-alone Map module Use
 
-Embedding the specimen in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
+Embedding the specimen map in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
+
+The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery. 
+In this example the map is initialized with the element ID of an HTML DIV tag that will contain the map.
+The map is then queried using the same query format as designed for the [iDigBio Search API Query Format] link](https://github.com/idigbio/idigbio-search-api/wiki). 
 
 ```html
 <html>
@@ -76,9 +80,9 @@ Embedding the specimen in a website is easy. The following is an example HTML co
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
     <meta content="width=device-width,initial-scale=1.0" name="viewport">
     <title>idb map test</title>
-    <link href="//beta-portal.idigbio.org/portal/css/idbmap.css" rel="stylesheet" type="text/css">
+    <link href="//www.idigbio.org/portal/css/idbmap.css" rel="stylesheet" type="text/css">
     <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
-    <script src="//beta-portal.idigbio.org/portal/js/idbmap.js"></script>
+    <script src="//www.idigbio.org/portal/js/idbmap.js"></script>
     <style>
       #map{
         width:700px;

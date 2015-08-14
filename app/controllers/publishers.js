@@ -17,7 +17,7 @@ module.exports = function(app, config) {
                     token: req.session._csrf,
                     data: JSON.stringify(body)
                 });
-            });
+            }); 
         },
         collection: function(req,res){
             request.get({"url": 'http://internal.idigbio.org/collections/'+req.params.id, "json": true}, function(err, resp, body){

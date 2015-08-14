@@ -301,7 +301,7 @@ module.exports = function(elid, options){
             return function(e){
                 e.preventDefault();
                 internalQuery(query);
-            }
+            } 
         }
         
         var setClick = _.noop;
@@ -527,8 +527,8 @@ module.exports = function(elid, options){
         var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
-        if(self.currentQuery !== q){
-            self.currentQuery = q;
+        //if(self.currentQuery !== q){
+           // self.currentQuery = q;
             self.currentQueryTime = time;
             $.ajax(mapapi,{
                 data: q,
@@ -563,7 +563,7 @@ module.exports = function(elid, options){
                 type: 'POST',
                 crossDomain: true
             }); 
-        }
+        //}
         
 
     }, 100,{'leading': false, 'trailing': true});

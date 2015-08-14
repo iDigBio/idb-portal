@@ -68,6 +68,8 @@ after the React component has rendered in the browser. Also, these page work by 
 
 ## Stand-alone Map module Use
 
+The specimen map used in the portal search page is available freely for public use as a stand-alone map module in JavaScript. 
+
 Embedding the specimen map in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
 
 The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery. 

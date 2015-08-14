@@ -64,6 +64,8 @@ after the React component has rendered in the browser. Also, these page work by 
 
 - Each page has a corresponding LESS file in the /public/client/less direcotory. All LESS files are compiled to individual CSS files in /public/css. Each page view template contains a link to its CSS file. The CSS IS NOT compiled into one large client file like the JS code is for the entire portal.
 - Each one of the corresponding page LESS files will include one or more sub files for reusable display components. 
+
+
 ## Stand-alone Map module Use
 
 Embedding the specimen in a website is easy. The following is an example HTML code for simply adding the map to a web page. 

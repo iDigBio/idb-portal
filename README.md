@@ -68,11 +68,13 @@ after the React component has rendered in the browser. Also, these page work by 
 
 ## Stand-alone Map module Use
 
+The specimen map used in the portal search page is available freely for public use as a stand-alone map module in JavaScript. 
+
 Embedding the specimen map in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
 
 The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery. 
 In this example the map is initialized with the element ID of an HTML DIV tag that will contain the map.
-The map is then queried using the same query format as designed for the [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki/Query-Format). 
+The map is then queried for all specimens (that have a geopoint) with genus "carex" using the same query format as designed for the [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki/Query-Format). 
 
 ```html
 <html>
@@ -102,3 +104,35 @@ The map is then queried using the same query format as designed for the [iDigBio
   </body>
  </html>
  ```
+### Map options
+The example above sets the map with same options the Portal Search page uses.
+The following is a list of other options that allow greater control of the map in the context of more complicated web user interactivity.
+
+- **imageButton**: (true | false) [defaults to true] - displays the camera icon button which allows the generation of an image of the map in its current state.
+- **maximizeControl** (true | false) [defaults to false] - an alternate maximize map button option that uses a modal window to maximize the map to the current size of the browser view port. This is an alternative maximize option to the FullScreen view.
+- **drawControl**: (true | false) [defaults to true] - displays the rectangle and circle bounding box controls.
+- **legend**: (true | false) [defaults to true] - displays the map legend in the lower left corner.
+- **scale**: (true | false) [defaults to true] - displays the map scale legend in the lower right corner.
+- **queryChange** (function | false) [defaults to false] - a function that is passed an api query formated object that represents a search. If this function is supplied, any alterations to the original query that produced the specimen map will be passed this updated query instead of running the query internally to update the map. Ultimately the maps public "query" method should be called to update the map. Actions that alter the original query would be drawing of a boundry box or clicking on the "set map bounds" link in a specimen pop-up window. In practice, this function is used by the Portal search page to communicate boundry box changes to the rest of search page components. Ultimately the maps public "query" method is called to update the map instead of the map calling the query method internally if the queryChange function wasn't supplied.
+- **loadingControl** (true | false) [defaults to true] - displays the loading spinner in the top left side of the map when a map layer is busy rendering/loading.
+- **zoomControl** (true | false) [defaults to true] - displays zoom-in and zoom-out controls.
+- **fullScreenControl** (true | false) [defaults to true] - displays the full-screen control button in the top right corner. This option uses the full-screen functionality that is common in most up-to-date browsers.
+
+The following example shows how to initialize the map with altenate options like do not display bounding draw control features or the image generation button and queryChange function for communicating query changes to outter contexts.
+
+
+```js
+$(function(){
+    var map = new IDBMap('map',{imageButton: false, drawControl: false, queryChange: function(query){
+       //do something cool with the query in your web page app then update the map
+       map.query(query);
+    });
+});
+```
+
+### map methods
+
+- query(idbquery)  - takes a iDigBio query formatted object as a parameter and updates the map with the results.
+```js
+   map.query({"specificepithet":"concolor", "genus":"puma"})
+```

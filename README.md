@@ -129,3 +129,10 @@ $(function(){
     });
 });
 ```
+
+### map methods
+
+- query(idbquery)  - takes a iDigBio query formatted object as a parameter and updates the map with the results.
+```js
+   map.query({"specificepithet":"concolor", "genus":"puma"})
+```

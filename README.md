@@ -72,7 +72,7 @@ Embedding the specimen map in a website is easy. The following is an example HTM
 
 The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery. 
 In this example the map is initialized with the element ID of an HTML DIV tag that will contain the map.
-The map is then queried using the same query format as designed for the [iDigBio Search API Query Format] link](https://github.com/idigbio/idigbio-search-api/wiki). 
+The map is then queried using the same query format as designed for the [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki). 
 
 ```html
 <html>

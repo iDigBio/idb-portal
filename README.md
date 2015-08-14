@@ -116,14 +116,14 @@ The following is a list of other options that allow greater control of the map i
 - **zoomControl** (true | false) [defaults to true] - displays zoom-in and zoom-out controls.
 - **fullScreenControl** (true | false) [defaults to true] - displays the full-screen control button in the top right corner. This option uses the full-screen functionality that is common in most up-to-date browsers.
 
-
-The following example shows how to initialize the map with altenate options like do not display bounding draw control features or the image generation button.
+The following example shows how to initialize the map with altenate options like do not display bounding draw control features or the image generation button and queryChange function for communicating query changes to outter contexts.
 
 
 ```js
 $(function(){
-    var map = new IDBMap('map',{imageButton: false, drawControl: false, function(query){
-       //do something cool with the query
+    var map = new IDBMap('map',{imageButton: false, drawControl: false, queryChange: function(query){
+       //do something cool with the query in your web page app then update the map
+       map.query(query);
     });
 });
 ```

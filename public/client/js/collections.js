@@ -5,9 +5,12 @@
 
 var React = require('react');
 var CollectionsPage = require('./react/src/collections');
+
+
 //React.render(<CollectionsPage data={collections} />, document.getElementById('datatable'));
 
 var L= require('leaflet');
+require('../../components/leaflet.fullscreen/Control.FullScreen');
 var triggerPopup = function(id){
     scrollToMap();
     map.setView(ref[id]._latlng).setZoomAround(ref[id]._latlng,8)
@@ -18,6 +21,7 @@ var scrollToMap = function(){
         scrollTop: $("#map").offset().top-40
     }, 700);
 }
+
 React.render(<CollectionsPage data={collections} openMapPopup={triggerPopup} />, document.getElementById('datatable'));
 
 var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -35,8 +39,17 @@ var map = L.map('map',{
     boxZoom: true,
     zoomControl: true,
     worldCopyJump: true,
+    fullscreenControl: true,
+    fullscreenControlOptions: {
+        position: "topright",
+        forceSeparateButton: true
+    },
+    zoomControl: false
 });
 
+map.addControl(L.control.zoom({
+    position: 'topright'
+}));
 //add mapper modal for maximize view
 var cols=[],ref={};
 var layer = new L.layerGroup();

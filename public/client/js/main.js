@@ -5,7 +5,7 @@
 "use strict"
 
 if ($('html').is('.ie-old')) {
-    alert('iDigBio Portal will not work on this Browser. Please update Internet Explorer to version 10 or newer');
+    alert('iDigBio Portal will not work on this browser properly. Please update Internet Explorer to version 10 or newer');
 }
 
 function loadPage(){

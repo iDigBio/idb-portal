@@ -1,6 +1,5 @@
 require('jquery');
 module.exports = {
-    //host: '//localhost:19196/v2/',
     host: (function(){
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
             return window.idbapi.host;

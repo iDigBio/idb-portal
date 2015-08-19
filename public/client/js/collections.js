@@ -43,6 +43,7 @@ var layer = new L.layerGroup();
 layer.addTo(map);
 
 L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';
+L.Icon.Default.iconSize = [25, 39];
 var multiIcon = L.icon({
     iconUrl: '/portal/img/mapmarker.png',
     iconSize: [38, 40],

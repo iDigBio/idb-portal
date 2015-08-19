@@ -152,7 +152,36 @@
               </figure>
             </div>
 
-
+            <h4 id="linking">Linking to a Specific Search</h4>
+            <p>The iDigBio Portal search page allows for predefining a specific search with a URI link using URL parameters that are similar to iDigBio API parameters. Below is a table of parameters and values accepted and an example URI.</p>
+            <table>
+              <thead>
+                <tr><th>Parmeter</th><th>Description</th><th>Values Accepted</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>rq</td>
+                  <td>A JSON style object provided in the <a href="https://github.com/idigbio/idigbio-seach-api/WIKI">iDigBio Search API Query</a> format.
+                  </td>
+                  <td>See <a href="https://github.com/idigbio/idigbio-seach-api/WIKI">iDigBio Search API Query</a></td>
+                </tr>
+                <tr>
+                  <td>sort</td>
+                  <td>A JSON formatted object or array of objects using a key value pair to represent a value to sort on and a direction to sort either "asc" or "desc".
+                  </td>
+                  <td>ex:
+                    {"genus":"asc"}
+                      ex:
+                      [{"genus":"asc"},{"species":"desc"}]
+                  </td>
+                </tr>
+                <tr>
+                  <td>view</td>
+                  <td>Which results view to be formatted</td>
+                  <td>
+                    list, labels or images
+                  </td>
+                </tr>
         </div>
       </div>
       <div class="col-lg-2 col-md-2">

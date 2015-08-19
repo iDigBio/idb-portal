@@ -50,16 +50,24 @@ module.exports = function(search){
     }
     if(url('?sort')){
         try{
-            var sort = JSON.parse(decodeURIComponent(url('?sort')));
-            if(_.isString(sort) && _.isObject(fields.byTerm[sort])){
+            var sort = decodeURIComponent(url('?sort'));
+            if(_.has(fields.byTerm,sort)){
                 search.sorting = [{name: sort, order: 'asc'}];
-            }else if(_.isArray(sort) && _.isObject(sort[0])){
-                var s=[];
-                sort.forEach(function(item){
-                    _.forOwn(item,function(v,k){
-                        s.push({name: k, order: v})
+            }else{
+                var s = [];
+                sort = JSON.parse(sort);
+                if(_.isArray(sort) && _.isObject(sort[0])){
+                    sort.forEach(function(item){
+                        _.forOwn(item,function(v,k){
+                            s.push({name: k, order: v})
+                        });
                     });
-                });
+                    search.sorting = s;
+                }else if(_.isObject(sort)){
+                    _.forOwn(sort, function(v,k){
+                        s.push({name: k, order: v})
+                    });                    
+                }
                 search.sorting = s;
             }
         }catch(e){

@@ -1,9 +1,7 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html class="no-js ie6" lang="en"> <![endif]-->
-<!--[if IE 7 ]>    <html class="no-js ie7" lang="en"> <![endif]-->
-<!--[if IE 8 ]>    <html class="no-js ie8" lang="en"> <![endif]-->
-<!--[if (gte IE 9)|!(IE)]><!-->
-<html class="no-js" lang="en">
+<!--[if lt IE 10 ]> <html class="ie-old" lang="en"> <![endif]-->
+<!--[if (gte IE 10)|!(IE)]><!-->
+<html class="js" lang="en">
 <!--<![endif]-->
   <head>
     <meta charset="utf-8">
@@ -34,7 +32,7 @@
   <body>
     <header>
       <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> 
-      <input type="hidden" id="api-url" name="api-url" value="{{ urls.api }}" />
+      
       <!-- wakulla header -->
       <div class="sixteen columns full alpha omega" id="header">
         <div id="nav" class="hidden-print">
@@ -158,6 +156,7 @@
     <script>
       {% autoescape false %}
       {{ javascript }}
+      {{ apiconfig }}
       {% endautoescape %}
     </script>
     <!-- load gloabal libs here managed with bower packages-->

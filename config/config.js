@@ -82,7 +82,6 @@ var config = {
 		login: "https://www.idigbio.org/login",
 		logout: "/logout",
 		registerOrg: "https://www.idigbio.org/login/accounts/new",
-		api: "https://api.idigbio.org/v1"
 	}
 };
 
@@ -129,9 +128,7 @@ if (process.env.NODE_ENV == "beta") {
 				}
 			]
 		},
-		urls: {
-			api: "http://beta-api.idigbio.org/v1"
-		}		
+		'api': 'https://beta-search.idigbio.org/v2/'		
 	});
 } else if (process.env.NODE_ENV == "prod") {
 	_.merge(config, {
@@ -200,9 +197,6 @@ if (process.env.NODE_ENV == "beta") {
 					port: 9200
 				}
 			]
-		},
-		urls: {
-			api: "http://localhost:19197/v1"
 		}
 	});
 } else {
@@ -239,9 +233,6 @@ if (process.env.NODE_ENV == "beta") {
 					port: 9200
 				}
 			]
-		},
-		urls: {
-			api: "http://localhost:19197/v1"
 		}
 	});
 }

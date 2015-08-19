@@ -4,6 +4,10 @@
 *****/
 "use strict"
 
+if ($('html').is('.ie-old')) {
+    alert('iDigBio Portal will not work on this Browser. Please update Internet Explorer to version 10 or newer');
+}
+
 function loadPage(){
 	var path = url(1) == 'portal' ? url(2) : url(1);
 	switch(path){
@@ -45,7 +49,7 @@ $(function(){
 		localStorage.removeItem('reloaded');
 	}catch(e){
 		if(localStorage){
-			console.log(e);
+			console.warn(e);
 			if(localStorage.getItem('reloaded') === null){
 				localStorage.clear();
 				localStorage.setItem('reloaded','true');

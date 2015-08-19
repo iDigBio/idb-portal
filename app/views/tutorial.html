@@ -152,18 +152,18 @@
               </figure>
             </div>
 
-            <h4 id="linking">Linking to a Specific Search</h4>
+            <h3 id="linking" class="scrollspy" style="margin-top:30px;">Linking to a Specific Search</h3>
             <p>The iDigBio Portal search page allows for predefining a specific search with a URI link using URL parameters that are similar to iDigBio API parameters. Below is a table of parameters and values accepted and an example URI.</p>
-            <table>
+            <table class="table table-bordered table-striped table-condensed">
               <thead>
                 <tr><th>Parmeter</th><th>Description</th><th>Values Accepted</th></tr>
               </thead>
               <tbody>
                 <tr>
                   <td>rq</td>
-                  <td>A JSON style object provided in the <a href="https://github.com/idigbio/idigbio-seach-api/WIKI">iDigBio Search API Query</a> format.
+                  <td>A JSON style object provided in the <a href="https://github.com/idigbio/idigbio-search-api/wiki/Query-Format">iDigBio Search API Query</a> format.
                   </td>
-                  <td>See <a href="https://github.com/idigbio/idigbio-seach-api/WIKI">iDigBio Search API Query</a></td>
+                  <td>See <a href="https://github.com/idigbio/idigbio-search-api/wiki/Query-Format">iDigBio Search API Query</a></td>
                 </tr>
                 <tr>
                   <td>sort</td>
@@ -177,11 +177,20 @@
                 </tr>
                 <tr>
                   <td>view</td>
-                  <td>Which results view to be formatted</td>
+                  <td>Which format to show the results in</td>
                   <td>
-                    list, labels or images
+                    value can be either "list", "labels", "images", "recordsets"
                   </td>
                 </tr>
+              </tbody>
+            </table>
+            <p>
+              The following URI example links to a search for specimens with Genus "Carex" that has images with the results sorting on Specific Epithet and results view set to the Labels view.
+
+              <a href='/portal/search?rq={"genus":"carex"}&sort=specificepithet&view=labels'> 
+                https://www.idigbio.org/portal/search?rq={"genus":"carex"}&sort=specificepithet&view=labels
+              </a>
+            </p>
         </div>
       </div>
       <div class="col-lg-2 col-md-2">
@@ -193,6 +202,7 @@
                     <li><a href="#searching">Performing Searches</a></li>
                     <li><a href="#viewing">Viewing Search Results</a></li>
                     <li><a href="#map">Mapped Search Results</a></li>
+                    <li><a href="#linking">Linking to a Search</a></li>
                 </ul>
             </div>
       </div>

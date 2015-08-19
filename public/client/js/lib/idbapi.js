@@ -1,7 +1,13 @@
 require('jquery');
 module.exports = {
     //host: '//localhost:19196/v2/',
-    host:'//search.idigbio.org/v2/',
+    host: (function(){
+        if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
+            return window.idbapi.host;
+        } else{
+            return 'https://search.idigbio.org/v2/';
+        }
+    }).call(),
     search: function(query,callback){
         this._basic('POST','search/records/',query,callback);
     },

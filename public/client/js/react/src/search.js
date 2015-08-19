@@ -41,7 +41,7 @@ var Main = module.exports =  React.createClass({
         //set results view
         var state={optionsTab:'filters',resultsTab:'list'};
         if(url('?view')){
-            var types =['list','labels','images'], view = url('?view');
+            var types =['list','labels','images','recordsets'], view = url('?view');
             if(types.indexOf(view) > -1){
                 localStorage.setItem('resultsTab', view);
                 state['resultsTab']=view;
@@ -62,12 +62,12 @@ var Main = module.exports =  React.createClass({
             _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
                 search.filters.push(Filters.newFilterProps(filter));
             });
-            window.history.replaceState({},'search',url('path'));
         }else if(searchHistory.history.length > 0){
             search.filters = _.map(searchHistory.history[0].filters, function(filter){
                 return Filters.newFilterProps(filter.name);
             });
         }
+        window.history.replaceState({},'search',url('path'));
         searchHistory.push(search);
         state['search']=search;
         return state;

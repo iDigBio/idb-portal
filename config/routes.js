@@ -8,12 +8,17 @@ module.exports = function(app, config) {
     var user = require('../app/controllers/user')(app, config);
     var view = require('../app/controllers/view')(app, config);
     var publishers = require('../app/controllers/publishers')(app, config);
+    var apipath = config.api;
 
+    //app.expose('var idbpath ='+config.api+';', 'javascript');
     app.all('*', function(req, res, next) {
         //res.expose(config.searchServer, 'searchServer');
+        //res.expose('test', 'test');
         res.expose(req.headers, 'headers');
+        res.expose({"host": config.api}, 'idbapi');
         next();
     });
+
     app.get('/eol_api/*', function(req,res){
         var url;
         if (req.originalUrl.slice(0,7) == "/portal") {
@@ -28,6 +33,7 @@ module.exports = function(app, config) {
             res.send(response.body);
         });
     });
+
     app.get('/', home.index);
     app.get('/search*', search.searchBackbone);
     app.post('/stats', search.sendStats);

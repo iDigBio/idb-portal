@@ -1,17 +1,18 @@
-body.mac ::-webkit-scrollbar {
+html.mac ::-webkit-scrollbar {
   -webkit-appearance: none;
 }
-body.mac ::-webkit-scrollbar:vertical {
+html.mac ::-webkit-scrollbar:vertical {
   width: 16px;
 }
-body.mac ::-webkit-scrollbar:horizontal {
+html.mac ::-webkit-scrollbar:horizontal {
   height: 11px;
 }
-body.mac ::-webkit-scrollbar-thumb {
+html.mac ::-webkit-scrollbar-thumb {
+  border-radius: 8px;
   border: 2px solid white;
   background-color: rgba(0, 0, 0, 0.4);
 }
-body.mac ::-webkit-scrollbar-track {
+html.mac ::-webkit-scrollbar-track {
   background-color: #fff;
   border-radius: 8px;
 }

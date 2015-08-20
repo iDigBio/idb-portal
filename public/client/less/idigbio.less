@@ -1,7 +1,7 @@
 @import 'variables.less';
 
 //make scroll bars always appear for OS x webkit browsers
-body.mac{
+html.mac{
   ::-webkit-scrollbar {
       -webkit-appearance: none;
   }
@@ -15,7 +15,7 @@ body.mac{
   }
 
   ::-webkit-scrollbar-thumb {
-      //border-radius: 8px;
+      border-radius: 8px;
       border: 2px solid white; 
       background-color: rgba(0, 0, 0, .4);
   }

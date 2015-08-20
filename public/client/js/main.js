@@ -39,11 +39,13 @@ function loadPage(){
 }
 
 $(function(){
+	//warning to old IE browsers
 	if ($('html').is('.ie-old')) {
 	    alert('iDigBio Portal will not work on this browser properly. Please update Internet Explorer to version 10 or newer');
 	}
+	//set class for mac browsers for webkit css
 	if(navigator.platform.toLowerCase().indexOf('mac') > -1){
-		$('body').addClass('mac');
+		$('html').addClass('mac');
 	}
 	//if errors occur on page load try once to clear localStore and refresh
 	try{

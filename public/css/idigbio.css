@@ -1,18 +1,17 @@
-::-webkit-scrollbar {
+body.mac ::-webkit-scrollbar {
   -webkit-appearance: none;
 }
-::-webkit-scrollbar:vertical {
-  width: 11px;
+body.mac ::-webkit-scrollbar:vertical {
+  width: 16px;
 }
-::-webkit-scrollbar:horizontal {
+body.mac ::-webkit-scrollbar:horizontal {
   height: 11px;
 }
-::-webkit-scrollbar-thumb {
-  border-radius: 8px;
+body.mac ::-webkit-scrollbar-thumb {
   border: 2px solid white;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
 }
-::-webkit-scrollbar-track {
+body.mac ::-webkit-scrollbar-track {
   background-color: #fff;
   border-radius: 8px;
 }

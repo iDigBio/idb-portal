@@ -4,10 +4,6 @@
 *****/
 "use strict"
 
-if ($('html').is('.ie-old')) {
-    alert('iDigBio Portal will not work on this browser properly. Please update Internet Explorer to version 10 or newer');
-}
-
 function loadPage(){
 	var path = url(1) == 'portal' ? url(2) : url(1);
 	switch(path){
@@ -43,6 +39,12 @@ function loadPage(){
 }
 
 $(function(){
+	if ($('html').is('.ie-old')) {
+	    alert('iDigBio Portal will not work on this browser properly. Please update Internet Explorer to version 10 or newer');
+	}
+	if(navigator.platform.toLowerCase().indexOf('mac') > -1){
+		$('body').addClass('mac');
+	}
 	//if errors occur on page load try once to clear localStore and refresh
 	try{
 		loadPage();

@@ -87,7 +87,7 @@
   float: left;
 }
 #filters #filters-holder {
-  overflow-y: scroll;
+  overflow: auto;
   height: 265px;
   margin: 0px;
   padding: 0px;

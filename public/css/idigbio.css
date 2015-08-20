@@ -2,7 +2,7 @@ html.mac ::-webkit-scrollbar {
   -webkit-appearance: none;
 }
 html.mac ::-webkit-scrollbar:vertical {
-  width: 16px;
+  width: 11px;
 }
 html.mac ::-webkit-scrollbar:horizontal {
   height: 11px;

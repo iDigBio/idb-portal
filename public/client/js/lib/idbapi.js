@@ -1,4 +1,4 @@
-require('jquery');
+//require('jquery');
 module.exports = {
     host: (function(){
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){

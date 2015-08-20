@@ -1,19 +1,13 @@
 var request = require('request');
 
 module.exports = function(app, config) {
-
-    //home route
     var home = require('../app/controllers/home')(app, config);
     var search = require('../app/controllers/search')(app, config);
     var user = require('../app/controllers/user')(app, config);
     var view = require('../app/controllers/view')(app, config);
     var publishers = require('../app/controllers/publishers')(app, config);
-    var apipath = config.api;
 
-    //app.expose('var idbpath ='+config.api+';', 'javascript');
     app.all('*', function(req, res, next) {
-        //res.expose(config.searchServer, 'searchServer');
-        //res.expose('test', 'test');
         res.expose(req.headers, 'headers');
         res.expose({"host": config.api}, 'idbapi');
         next();
@@ -26,7 +20,6 @@ module.exports = function(app, config) {
         } else {
             url = "http://eol.org/api" + req.originalUrl.slice(8)
         }
-        //console.log(url);
         request.get({
             url: url
         },function (error, response, body) {
@@ -37,7 +30,6 @@ module.exports = function(app, config) {
     app.get('/', home.index);
     app.get('/search*', search.searchBackbone);
     app.post('/stats', search.sendStats);
-    //app.get('/records/:id', search.searchid);
     app.get('/search/:type/:id', search.searchid);
     app.get('/view/:type/:id', view.type);
     app.get('/records/:id', view.record);

@@ -1,6 +1,6 @@
 // ### QueryBuilder
-// module for building Elastic Search queries 
-// and basic Search Object for search state
+// module for building API queries from Search State object
+
 var fields = require('./fields');
 
 module.exports = (function(){

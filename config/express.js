@@ -3,11 +3,7 @@ var expose = require('express-expose');
 var cons = require('consolidate');
 var swig = swig = require('swig');
 var RedisStore = require('connect-redis')(express);
-//var crypto = require('crypto');
-//var a3 = require('../lib/a3')
-//var libuuid = require('node-uuid');
 var _ = require('lodash');
-//var helper = require('../lib/helper');//(app,config);
 
 module.exports = function(app, config) {
     app.configure(function() {

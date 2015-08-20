@@ -1,4 +1,17 @@
-
+/*
+*Map Module
+*initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
+*options:
+*   imageButton: true|false (defautl: true)
+*   maximizeControl: true|false (default: false) (alternative to fullscreen control)
+*   drawControl: true|false
+*   legend: true|false
+*   scale: true|false
+*   queryChange: function that is passed an rq query object from the mapper. If this function is provided, 
+*      drawing boundaries and "set mapping bounds" links will call this function instead of running the 
+*      query internally to update the map.  This is useful for when the map is bound to some external system
+*      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
+***/
 var L = require('leaflet/dist/leaflet');
 var $ = require('jquery');
 var _ = require('lodash');
@@ -15,23 +28,7 @@ var fields = require('./fields');
 require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
 var GeoPoint = require('geopoint');
-//require('../../../../public/components/Leaflet.fullscreen/dist/Leaflet.fullscreen.min');
-//elid: string name of element id;
-//options: object map of settings
-/*
-*Map object
-*initialize with new IDBMap(elid=String of element to bind to,options={} to overide defaults)
-*options:
-*   imageButton: true|false (defautl: true)
-*   maximizeControl: true|false (default: false) (alternative to fullscreen control)
-*   drawControl: true|false
-*   legend: true|false
-*   scale: true|false
-*   queryChange: function that is passed an rq query object from the mapper. If this function is provided, 
-*      drawing boundaries and "set mapping bounds" links will call this function instead of running the 
-*      query internally to update the map.  This is useful for when the map is bound to some external system
-*      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
-***/
+
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 }

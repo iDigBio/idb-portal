@@ -154,7 +154,7 @@ $(function(){
 });
 ```
 
-### map methods
+### Map methods
 
 - query(idbquery)  - takes a [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki/Query-Format) object as a parameter and updates the map with the results.
 ```js

@@ -40,10 +40,23 @@ command: gulp buildLess
 task: buildLess
 - A one time LESS file compiler to the /public/css directory. This task mostly exists for the release build process so the prod/beta server can compile all the LESS files to the /public/css directory.
 
-## Release process
+## Utility Scripts
 
-- Two release script files exists for beta and prod release.
+The /util directory contains various ruby and shell scripts maintaining and releasing the code.
+
+### Release Scripts
+Two release script files exists for beta and prod release.
 - /util/release-beta.sh   /util/release-prod.sh 
+
+### Darwin Core Fields 
+
+The ordering and readable labels for Darwin Core fields are maintained in a Google Docs spreadsheet. If this spreadsheet is updated the code for the dwc field dictionary needs to be updated for the client-side js.
+- use /util/fields-generator.rb  to update the dictionary in /public/client/js/lib/dwc_fields.js
+
+### Data Quality Flags
+
+The data quality flag names and descriptions are maintained in a Google Docs spreadsheet. 
+- use /util/dq-flags-generator.rb to update the dictionary in /public/client/js/lib/dq_flags.js when the spreadshet is updated
 
 ## General Code Layout/Architecture
 The iDigBio portal is mostly a front-side rendered app that takes advantage of Reacts' server-side rendering to allow proper search engine crawling of content pages like Record, MediaRecord and Recordset.

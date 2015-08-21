@@ -93,7 +93,7 @@
 }
 #attribution #provider-info .logo {
   max-height: 100px;
-  max-width: 200px;
+  max-width: 130px;
   margin: 5px 10px 0px 0px;
   border: 1px solid #ccc;
   padding: 4px;
@@ -299,6 +299,6 @@ h1#banner {
   max-width: 90%;
 }
 #media #gallery .gallery-image:hover {
-  transition: box-shadow 0.5s, transform 0.5s;
+  transition: box-shadow 0.3s, transform 0.3s;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }

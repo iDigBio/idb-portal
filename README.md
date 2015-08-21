@@ -78,6 +78,17 @@ after the React component has rendered in the browser. Also, these page work by 
 - Each page has a corresponding LESS file in the /public/client/less direcotory. All LESS files are compiled to individual CSS files in /public/css. Each page view template contains a link to its CSS file. The CSS IS NOT compiled into one large client file like the JS code is for the entire portal.
 - Each one of the corresponding page LESS files will include one or more sub files for reusable display components. 
 
+### Search Page Architecture
+The Search page React component is split in various subcomponent React files kept in
+/public/client/js/react/src/search/ directory that are loaded in the main React search.js file.
+
+Any changes to the search state are communicated through the searchChange function in the search.js parent component. The searchChange function is passed to all subcomponents as a property if that subcomponent has to communicate changes to the search. This changing of search state allows the page be reactive to all input changes on the search page since changing the search state triggers a render in React. 
+
+See the Search.js   statics.defaultSearch for an example of what a search state structure looks like.
+
+History is maintained by the searchHistory object using the localStorage API through the client/js/libs/history.js file. The searchChange function pushes changes to history through this object.
+
+Results view tab and the advanced search features tab are kept track of in localStorage API and are maintained through the viewChange function in the search.js page component. 
 
 ## Stand-alone Map module Use
 

@@ -121,7 +121,7 @@ var Publishers = React.createClass({
     return (
       <table className="table table-bordered datatable table-condensed tablesorter-blue">
         <thead>
-          <tr><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
+          <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
           <tr>
             <th>Publisher Name</th>
             <th className="statcol">Digest</th>
@@ -192,7 +192,7 @@ var Recordsets = React.createClass({
         <h4>{this.props.name}</h4>
         <table className="table table-bordered datatable table-condensed tablesorter-blue">
           <thead>
-            <tr><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
+            <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
             <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
           </thead>
           <tbody>

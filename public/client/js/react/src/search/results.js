@@ -171,6 +171,7 @@ var ResultsList = React.createClass({
     },
     setColumns: function(columns){
         this.setState({columns: columns});
+        this.forceUpdate();
         if(localStorage){
             localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
         }
@@ -186,6 +187,16 @@ var ResultsList = React.createClass({
     },
     resetColumns: function(){
         this.setColumns(this.defaultColumns());
+    },
+    addColumn: function(e){
+        e.preventDefault();
+        var self = this;
+        var col = _.find(_.keys(fields.byTerm),function(name){
+            return self.state.columns.indexOf(name)===-1 
+        });
+        var cols = this.state.columns;
+        cols.unshift(col);
+        this.setColumns(cols);
     },
     sortColumn: function(e){
         e.preventDefault();
@@ -327,6 +338,7 @@ var ResultsList = React.createClass({
         }else if(rows.length===0){
             rows.push(<tr key={'row-no-results'} className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
         }
+        /*
         //column selection modal list
         var list=[];
         //sort list
@@ -361,7 +373,7 @@ var ResultsList = React.createClass({
             });
             list.push(<table key={"group-"+group} className="group-table">{group}</table>)
         });
-
+        */
         return(
             <div id="result-list" className="panel">
                 <div id="column-list" className="modal fade">
@@ -369,18 +381,17 @@ var ResultsList = React.createClass({
                         <div className="modal-content">
                             <div className="modal-header">
                                 <label>Select Display Columns</label>
-                                <button onClick={this.resetColumns} id="reset">
+                                <button onClick={this.addColumn} id="reset" className="btn">
+                                    Add
+                                </button>
+                                <button onClick={this.resetColumns} id="reset" className="btn">
                                     Reset
                                 </button>
                                 <button type="button" className="close pull-right" data-dismiss="modal">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <div className="modal-body clearfix">
-                                
-                                    {list}
-                                
-                            </div>
+                            <ResultListColumnSelector columns={this.state.columns} setColumns={this.setColumns} />
                             <div className="modal-footer">
 
                             </div>
@@ -397,6 +408,90 @@ var ResultsList = React.createClass({
                 </table>
             </div>
         )
+    }
+});
+
+var ResultListColumnSelector = React.createClass({
+    moveColumn: function(e){
+        e.preventDefault();
+        var cols = this.props.columns;
+        var name = e.target.attributes['data-column'].value;
+        var ind = cols.indexOf(name);
+        var mov = cols.splice(ind,1);
+        if(e.target.attributes['data-move'].value == 'up'){
+            ind--;
+        }else{
+            ind++;
+        }
+        cols.splice(ind,0,name);
+        this.props.setColumns(cols);
+    },
+
+    removeColumn: function(e){
+        e.preventDefault();
+        var name = e.currentTarget.attributes['data-column'].value;
+        var cols = this.props.columns;
+        if(cols.length > 1){
+            cols.splice(cols.indexOf(name),1);
+            this.props.setColumns(cols);
+        }
+    },
+    selectChange: function(e){
+        e.preventDefault();
+        var cols = this.props.columns;
+        cols[this.props.columns.indexOf(e.target.name)] = e.target.value;
+        this.props.setColumns(cols);
+    },
+    render: function(){
+
+        var self = this, selects = []; 
+        _.each(self.props.columns, function(column){
+            var fgroups = [];
+            _.each(fields.searchGroups,function(val){
+                var fltrs = [];
+                _.each(fields.byGroup[val],function(field){
+                    if(field.hidden){
+                        //noop
+                    }else{
+                        
+                        var selected = field.term == column ? true : false;
+                        var disabled = (self.props.columns.indexOf(field.term) > -1 && selected == false) ? 'disabled' : '';
+                        fltrs.push(
+                            <option disabled={disabled} value={field.term} key={field.term}>
+                                {field.name}
+                            </option>
+                        );
+                    }
+                });
+                fgroups.push(
+                  <optgroup key={val} label={fields.groupNames[val]}>
+                    &nbsp;&nbsp;{fltrs}
+                  </optgroup>
+                );
+            });
+            var updisabled = self.props.columns.indexOf(column) === 0 ? true : false;
+            var downdisabled = self.props.columns.indexOf(column) === self.props.columns.length-1 ? true : false;
+            selects.push(
+                <div className="column-select-wrapper clearfix">            
+                        <div className="up-down">
+                            <button className="btn up" title="move left" disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
+                            <button className="btn down" title="move right" disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
+                        </div>
+                        <select key={column+'-selector'} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
+                            {fgroups}
+                        </select>
+                        <button className="btn remove " disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
+                            <i className="glyphicon glyphicon-minus"/>
+                        </button>
+                </div>
+            );            
+        });
+        
+        return(
+            <div className="modal-body clearfix" >
+                {selects}
+            </div>
+        );
     }
 });
 

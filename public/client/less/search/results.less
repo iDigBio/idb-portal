@@ -77,7 +77,7 @@
     #result-list{
         .modal-dialog{
             z-index: 4050;
-            //width:70%;
+            width:70%;
             @media(max-width: @screenmed){
                 width:70%;
             }
@@ -139,7 +139,31 @@
                         border-left:none;
                         background-color:#eee;
                     }  
+                }
+
+                .column-select-trans-enter{
+                    opacity: 0.01;
+                    background-color: red;
                 }             
+                .column-select-trans-enter.column-select-trans-enter-active{
+                    background-color: white;
+                    opacity: 1;
+                    transition: background-color .5s, opacity .5s ease-in;  
+                }
+                .column-select-trans-leave{
+                    opacity: 0.5;
+                }             
+                .column-select-trans-leave.column-select-trans-leave-active{
+                    opacity: 0;
+                    transition: opacity .3s ease-in;  
+                }
+                .column-select-trans-appear{
+                    opacity: 0.01;
+                    transition: opacity .5s ease-in;
+                }
+                .column-select-trans-appear.column-select-trans-appear-active{
+                    opacity: 1;
+                }
             }
 
         }

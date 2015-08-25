@@ -3,6 +3,7 @@ var React = require('react');
 var idbapi = require('../../../lib/idbapi');
 var queryBuilder = require('../../../lib/querybuilder');
 var PureRender = require('react/addons').addons.PureRenderMixin;
+var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
 
 React.initializeTouchEvents(true);
 
@@ -166,15 +167,19 @@ var ResultsList = React.createClass({
             return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
         }
     },
+    resetColumns: function(){
+            this.setColumns(this.defaultColumns());
+    },
     defaultColumns: function(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
     },
     setColumns: function(columns){
-        this.setState({columns: columns});
-        this.forceUpdate();
-        if(localStorage){
-            localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
-        }
+        this.setState({columns: columns},function(){
+            this.forceUpdate();
+            if(localStorage){
+                localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
+            }
+        });
     },
     columnCheckboxClick: function(e){
         var columns = _.cloneDeep(this.state.columns);
@@ -184,9 +189,6 @@ var ResultsList = React.createClass({
             columns.splice(columns.indexOf(e.currentTarget.name),1);
         }
         this.setColumns(columns);
-    },
-    resetColumns: function(){
-        this.setColumns(this.defaultColumns());
     },
     addColumn: function(e){
         e.preventDefault();
@@ -338,7 +340,7 @@ var ResultsList = React.createClass({
         }else if(rows.length===0){
             rows.push(<tr key={'row-no-results'} className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
         }
-        /*
+        
         //column selection modal list
         var list=[];
         //sort list
@@ -373,25 +375,27 @@ var ResultsList = React.createClass({
             });
             list.push(<table key={"group-"+group} className="group-table">{group}</table>)
         });
-        */
+        
         return(
             <div id="result-list" className="panel">
                 <div id="column-list" className="modal fade">
                     <div className="modal-dialog">
                         <div className="modal-content">
                             <div className="modal-header">
-                                <label>Select Display Columns</label>
-                                <button onClick={this.addColumn} id="reset" className="btn">
-                                    Add
-                                </button>
-                                <button onClick={this.resetColumns} id="reset" className="btn">
+                                <label>List Results Columns</label>
+                                <button onClick={this.resetColumns} id="reset" className="">
                                     Reset
                                 </button>
                                 <button type="button" className="close pull-right" data-dismiss="modal">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
-                            <ResultListColumnSelector columns={this.state.columns} setColumns={this.setColumns} />
+                            <div className="modal-body clearfix">
+                                
+                                    {list}
+                                
+                            </div>
+                            
                             <div className="modal-footer">
 
                             </div>
@@ -408,15 +412,24 @@ var ResultsList = React.createClass({
                 </table>
             </div>
         )
+        //<ResultListColumnSelector columns={this.state.columns} setColumns={this.setColumns} />
     }
 });
 
 var ResultListColumnSelector = React.createClass({
+    getInitialState: function(){
+        return {columns: this.props.columns};
+    },
+    addColumn: function(){
+        var cols = this.state.columns;
+        cols.push('none');
+        this.setState({columns: cols});
+    },
     moveColumn: function(e){
         e.preventDefault();
-        var cols = this.props.columns;
+        var cols = this.state.columns;
         var name = e.target.attributes['data-column'].value;
-        var ind = cols.indexOf(name);
+        var ind = parseInt(e.target.attributes['data-index'].value);
         var mov = cols.splice(ind,1);
         if(e.target.attributes['data-move'].value == 'up'){
             ind--;
@@ -424,29 +437,54 @@ var ResultListColumnSelector = React.createClass({
             ind++;
         }
         cols.splice(ind,0,name);
-        this.props.setColumns(cols);
+        this.setState({columns: cols},function(){
+            this.setColumns();
+        })
     },
-
+    setColumns: function(){
+        this.props.setColumns(_.without(this.state.columns,'none'));
+    },
+    resetColumns: function(){
+        this.setState({columns: this.defaultColumns()},function(){
+            this.setColumns();
+        })
+    },
+    defaultColumns: function(){
+        return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
+    },
     removeColumn: function(e){
         e.preventDefault();
         var name = e.currentTarget.attributes['data-column'].value;
         var cols = this.props.columns;
         if(cols.length > 1){
-            cols.splice(cols.indexOf(name),1);
-            this.props.setColumns(cols);
+            cols.splice(parseInt(e.currentTarget.attributes['data-index'].value),1);
+            this.setState({columns: cols},function(){
+                this.setColumns();
+            });
         }
     },
     selectChange: function(e){
         e.preventDefault();
-        var cols = this.props.columns;
-        cols[this.props.columns.indexOf(e.target.name)] = e.target.value;
-        this.props.setColumns(cols);
+        var cols = this.state.columns;
+        cols[parseInt(e.target.attributes['data-index'].value)] = e.target.value;
+        this.setState({columns: cols},function(){
+            this.setColumns();
+        })
+    },
+    componentWillMount: function(){
+        this.colCount = this.props.columns.length;
     },
     render: function(){
 
-        var self = this, selects = []; 
-        _.each(self.props.columns, function(column){
-            var fgroups = [];
+        var self = this, selects = [];
+
+        _.each(self.state.columns, function(column,ind){
+            if(column==='none'){
+                var nonesel = true;
+            }else{
+                nonesel = false;
+            }
+            var fgroups = [<option key="none" value="none" data-index={ind}>Select a field</option>];
             _.each(fields.searchGroups,function(val){
                 var fltrs = [];
                 _.each(fields.byGroup[val],function(field){
@@ -457,7 +495,7 @@ var ResultListColumnSelector = React.createClass({
                         var selected = field.term == column ? true : false;
                         var disabled = (self.props.columns.indexOf(field.term) > -1 && selected == false) ? 'disabled' : '';
                         fltrs.push(
-                            <option disabled={disabled} value={field.term} key={field.term}>
+                            <option disabled={disabled} data-index={ind} value={field.term} key={field.term}>
                                 {field.name}
                             </option>
                         );
@@ -469,26 +507,47 @@ var ResultListColumnSelector = React.createClass({
                   </optgroup>
                 );
             });
-            var updisabled = self.props.columns.indexOf(column) === 0 ? true : false;
-            var downdisabled = self.props.columns.indexOf(column) === self.props.columns.length-1 ? true : false;
+            var updisabled = ( ind === 0 );
+            var downdisabled = ( ind === self.state.columns.length-1 );
             selects.push(
-                <div className="column-select-wrapper clearfix">            
+                <div key={column+'-'+ind} className="column-select-wrapper clearfix">            
                         <div className="up-down">
-                            <button className="btn up" title="move left" disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
-                            <button className="btn down" title="move right" disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
+                            <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
+                            <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
                         </div>
-                        <select key={column+'-selector'} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
+                        <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
                             {fgroups}
                         </select>
-                        <button className="btn remove " disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
+                        <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
                             <i className="glyphicon glyphicon-minus"/>
                         </button>
                 </div>
             );            
         });
         
+        var trans; 
+        if(this.colCount !== this.props.columns.length){
+            trans = true;
+            this.colCount = this.props.columns.length;
+        }else{
+            trans = false
+        }
+
+        /*return(
+            <div className="modal-body clearfix" >
+                <ReactCSSTransitionGroup transitionEnter={trans} transitionLeave={trans} transitionName="column-select-trans">
+                {selects}
+                </ReactCSSTransitionGroup>
+            </div>
+        );*/
         return(
             <div className="modal-body clearfix" >
+                <button onClick={this.addColumn} id="reset" className="">
+                    Add <i className="glyphicon glyphicon-plus"/>
+                </button>
+                <button onClick={this.resetColumns} id="reset" className="">
+                    Reset
+                </button>
                 {selects}
             </div>
         );

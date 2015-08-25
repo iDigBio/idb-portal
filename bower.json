@@ -10,7 +10,7 @@
     "bootstrap-material-design": "*",
     "jquery.tablesorter": "*",
     "async": "*",
-    "leaflet": "0.7.3",
+    "leaflet": "~0.7",
     "leaflet.draw": "*",
     "rainbowvis": "anomal/RainbowVis-JS",
     "fgh": "https://bitbucket.org/monoid/fgh/raw/465610eb2dcca8e48b84f7ed6927b81fd292bb65/fgh.js",

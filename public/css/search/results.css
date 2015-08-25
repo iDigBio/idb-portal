@@ -65,6 +65,7 @@
 }
 #results #result-list .modal-dialog {
   z-index: 4050;
+  width: 70%;
   margin: 20px auto;
 }
 @media (max-width: 992px) {
@@ -128,6 +129,29 @@
   border: 1px solid #ccc;
   border-left: none;
   background-color: #eee;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-enter {
+  opacity: 0.01;
+  background-color: red;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-enter.column-select-trans-enter-active {
+  background-color: white;
+  opacity: 1;
+  transition: background-color 0.5s, opacity 0.5s ease-in;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-leave {
+  opacity: 0.5;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-leave.column-select-trans-leave-active {
+  opacity: 0;
+  transition: opacity 0.3s ease-in;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-appear {
+  opacity: 0.01;
+  transition: opacity 0.5s ease-in;
+}
+#results #result-list .modal-dialog .modal-body .column-select-trans-appear.column-select-trans-appear-active {
+  opacity: 1;
 }
 #results #result-list #column-list table {
   float: left;

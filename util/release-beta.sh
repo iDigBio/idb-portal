@@ -30,6 +30,7 @@ do
             fi
             if [ $val = '-u' ]
             then
+                script+="su -c 'bower cache clean' www-data;"
                 script+="su -c 'bower update' www-data;"
             fi
         done

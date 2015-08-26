@@ -247,6 +247,7 @@ h1#banner {
 #media-wrapper img {
   border: 1px solid #ccc;
   padding: 5px;
+  width: 50%;
   max-height: 350px;
   max-width: 450px;
   margin: 20px auto;

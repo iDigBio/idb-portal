@@ -221,7 +221,7 @@ module.exports = React.createClass({
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10" id="container">
+                    <div className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10" id="container">
                         <h1 id="banner">Media Record</h1> 
                         <span id="summary">{this.taxaBreadCrumbs()}</span>  
                         <Title data={this.props.record} attribution={this.props.mediarecord.attribution} includeLink={true} mediaSearch={true} />

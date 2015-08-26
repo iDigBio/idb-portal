@@ -56,12 +56,25 @@ var layer = new L.layerGroup();
 layer.addTo(map);
 
 L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';
-L.Icon.Default.iconSize = [25, 39];
+
 var multiIcon = L.icon({
     iconUrl: '/portal/img/mapmarker.png',
-    iconSize: [38, 40],
-    iconAnchor: [22, 40],
-    popupAnchor: [-3, -35]
+    iconSize: [22, 23],
+    iconAnchor: [10, 20],
+    popupAnchor: [1, -9],
+    shadowUrl: '/portal/components/leaflet/dist/images/marker-shadow.png',
+    shadowSize: [30,22],
+    shadowAnchor: [9,20] 
+});
+
+var singleIcon = L.icon({
+    iconUrl: '/portal/components/leaflet/dist/images/marker-icon.png',
+    iconSize: [15, 22],
+    iconAnchor: [10, 20],
+    popupAnchor: [-3, -9],
+    shadowUrl: '/portal/components/leaflet/dist/images/marker-shadow.png',
+    shadowSize: [30,22],
+    shadowAnchor: [12,20]    
 });
 
 //add map points
@@ -101,7 +114,7 @@ _.each(lookup,function(val,key){
         cont += '<label><a target="'+val.collection_uuid+'"href="/portal/collections/'+val.collection_uuid+'">'+
             name+'</a></label><address>'+val.physical_address+'<br>'+val.physical_city+', '+val.physical_state+' '+
         val.physical_zip+'</address>';
-        m = L.marker([val.lat,val.lon]);
+        m = L.marker([val.lat,val.lon], {icon: singleIcon});
         ref[val.collection_uuid]=m;
     }
     cont+='</div>';

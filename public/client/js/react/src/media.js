@@ -224,7 +224,7 @@ module.exports = React.createClass({
                     <div className="col-lg-7 col-lg-offset-2 col-md-10 col-sm-10" id="container">
                         <h1 id="banner">Media Record</h1> 
                         <span id="summary">{this.taxaBreadCrumbs()}</span>  
-                        <Title data={this.props.record} attribution={this.props.mediarecord.attribution} includeLink={true} />
+                        <Title data={this.props.record} attribution={this.props.mediarecord.attribution} includeLink={true} mediaSearch={true} />
                         <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
                         <Group record={this.props.record} keyid={source.uuid}/>
                         <Provider data={this.props.mediarecord.attribution} />

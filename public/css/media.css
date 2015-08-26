@@ -227,7 +227,6 @@ h1#banner {
   border: 1px solid #cccccc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   padding: 4px;
-  max-width: 90%;
 }
 #other-images #images-wrapper .gallery-image:hover {
   transition: box-shadow 0.3s, transform 0.3s;
@@ -248,7 +247,6 @@ h1#banner {
   border: 1px solid #ccc;
   padding: 5px;
   width: 50%;
-  max-height: 350px;
   max-width: 450px;
   margin: 20px auto;
   background-color: white;

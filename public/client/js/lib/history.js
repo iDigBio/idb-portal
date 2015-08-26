@@ -18,11 +18,13 @@ module.exports = function(){
     }).call(this)
 
     this.push = function(searchState){
-        this.history.unshift(_.cloneDeep(searchState));
-        while(this.history.length > 15){
-            this.history.pop();
+        if(JSON.stringify(searchState) !== JSON.stringify(this.history[0])){
+            this.history.unshift(_.cloneDeep(searchState));
+            while(this.history.length > 15){
+                this.history.pop();
+            }
+            this.save();
         }
-        this.save();
     }
 
     this.save = function(){

@@ -238,26 +238,6 @@ var ResultsList = React.createClass({
         }
         
     },
-    /*setSortable: function(){
-        var self=this;
-        $('#results-headers').sortable({
-            update: function(event,ui){
-                var headers = this;
-                var cols = $(this).sortable('toArray');
-                $(headers).sortable('destroy');
-                self.setColumns(cols);
-
-            },
-            items: "> .data-column",
-            containment: 'parent'
-        });
-    },
-    componentDidMount: function(){
-        //this.setSortable();
-    },
-    componentDidUpdate: function(){
-        //this.setSortable();
-    },*/
     render: function(){
         var columns = this.state.columns,self=this;
      

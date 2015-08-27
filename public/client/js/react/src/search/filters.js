@@ -218,11 +218,9 @@ var TextFilter = React.createClass({
                 query = {rq: rq, count: 15, top_fields:[name]};
 
                 idbapi.summary('top/basic/',query, function(resp) {
-                    var list = _.map(resp[name], function(v,k){
+                    respCallback(_.map(resp[name], function(v,k){
                         return k;
-                    })
-                    list.sort();
-                    respCallback(list);
+                    }).sort());
                 })
             },
             focus: function (event,ui){

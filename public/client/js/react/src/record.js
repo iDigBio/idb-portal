@@ -4,6 +4,7 @@ var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var fields = require('../../lib/fields');
 var dqFlags = require('../../lib/dq_flags');
+var idbapi = require('../../lib/idbapi');
 
 
 var Row = React.createClass({
@@ -169,7 +170,7 @@ var Img = React.createClass({
     render: function(){
         return (
             <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
-                <img className="gallery-image" onError={this.error} src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} /> 
+                <img className="gallery-image" onError={this.error} src={idbapi.media_host + 'mrlookup/'+this.props.keyid+'?size=webview'} /> 
             </a>
         );
     }

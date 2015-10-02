@@ -1,10 +1,22 @@
 //require('jquery');
+
+if (typeof window === "undefined") {
+    window = global;
+}
+
 module.exports = {
     host: (function(){
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
             return window.idbapi.host;
         } else{
             return 'https://search.idigbio.org/v2/';
+        }
+    }).call(),
+    media_host: (function(){
+        if(typeof window.idbapi == 'object' && typeof window.idbapi.media_host == 'string'){
+            return window.idbapi.media_host;
+        } else{
+            return 'https://media.idigbio.org/';
         }
     }).call(),
     search: function(query,callback){

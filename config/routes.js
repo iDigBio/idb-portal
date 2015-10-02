@@ -9,7 +9,9 @@ module.exports = function(app, config) {
 
     app.all('*', function(req, res, next) {
         res.expose(req.headers, 'headers');
-        res.expose({"host": config.api}, 'idbapi');
+        var idbapi = {"host": config.api, "media_host": config.media};
+        global.idbapi = idbapi;
+        res.expose(idbapi, 'idbapi');
         next();
     });
 

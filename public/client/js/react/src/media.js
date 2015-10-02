@@ -2,6 +2,7 @@
 var React = require('react');
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
+var idbapi = require('../../lib/idbapi');
 
 var Media = React.createClass({
     error: function(event){
@@ -20,7 +21,7 @@ var Media = React.createClass({
         return (
             <div key={this.props.keyid} id="media-wrapper" className="scrollspy section clearfix" >
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
-                    <img className="media" src={'https://media.idigbio.org/mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
+                    <img className="media" src={idbapi.media_host + 'mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
                 <a className="media-link hidden-print" href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
                     Download Media File
@@ -139,7 +140,7 @@ var Group = React.createClass({
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
-                            <img className="gallery-image" src={'https://media.idigbio.org/mrlookup/'+media[id]+'?size=webview'} onError={this.error} /> 
+                            <img className="gallery-image" src={idbapi.media_host + 'mrlookup/'+media[id]+'?size=webview'} onError={this.error} /> 
                         </a>
                     )                    
                 }

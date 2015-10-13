@@ -10,7 +10,7 @@ var idbapi = require('../../lib/idbapi');
 var Row = React.createClass({
     render: function(){
         var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
-        var regex = /[\A|\s]+(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+        var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
         var str = this.props.data.replace(regex, function(match){
             var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
             return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";

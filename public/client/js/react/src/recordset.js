@@ -18,7 +18,11 @@ var keys=Object.keys(fields.byDataTerm);
 var missing={};
 var stotal=0,mtotal=0;
 var formatNum = function(num){
-    return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    if (typeof num != "undefined") {
+        return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else {
+        return "0"
+    }
 }
 
 var Total = React.createClass({

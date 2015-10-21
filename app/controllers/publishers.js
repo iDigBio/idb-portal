@@ -38,7 +38,7 @@ module.exports = function(app, config) {
             });
         },
         recordset: function(req,res){
-            var flags;
+            var flags = {};
             var stotal=0,mtotal=0;
             var rset={},rbody={},use;
             var keys = Object.keys(fields.byDataTerm);

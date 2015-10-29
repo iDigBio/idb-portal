@@ -30,7 +30,7 @@ var config = {
 			},
 			publishers: {
 				url: "/portal/publishers",
-				label: "Our Data",
+				label: "Data",
 				submenu: [
 					{url: "/portal/publishers", label: 'Publishers'},
 					{url: "/portal/collections", label: 'Collections'},

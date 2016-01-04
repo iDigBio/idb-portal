@@ -9,7 +9,7 @@ Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 - git clone this repo
 - cd to project root 'idb-portal/' and run commands
 ```bash
-$ npm install -G gulp bower
+$ sudo -H npm install -g gulp bower babel-cli
 $ bower install
 $ npm install
 $ node app.js NODE_ENV=prod [with credential keys]

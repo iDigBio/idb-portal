@@ -87,7 +87,7 @@ if (process.env.NODE_ENV == "beta") {
 		'port': 3000,
 		'hostname': 'localhost',
 		'redis': {
-			host: 'idb-redis-dev.acis.ufl.edu'
+			host: 'localhost'
 		}
 	});
 } else {
@@ -95,7 +95,7 @@ if (process.env.NODE_ENV == "beta") {
 		'port': 3000,
 		'hostname': 'idb-api-dev.acis.ufl.edu',
 		'redis': {
-			host: 'idb-redis-dev.acis.ufl.edu'
+			host: 'localhost'
 		}
 	});
 };

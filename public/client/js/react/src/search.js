@@ -41,7 +41,7 @@ var Main = module.exports =  React.createClass({
         //set results view
         var state={optionsTab:'filters',resultsTab:'list'};
         if(url('?view')){
-            var types =['list','labels','images','recordsets'], view = url('?view');
+            var types =['list','labels','media','recordsets'], view = url('?view');
             if(types.indexOf(view) > -1){
                 localStorage.setItem('resultsTab', view);
                 state['resultsTab']=view;
@@ -140,7 +140,7 @@ var SearchAny = React.createClass({
                 <div className="checkbox">
                     <label>
                         <input type="checkbox" name="image" onChange={this.checkClick} checked={this.props.search.image}/>
-                        Must have image
+                        Must have media
                     </label>
                 </div>
                 <div className="checkbox">
@@ -167,7 +167,7 @@ var SearchAny = React.createClass({
                                         Full text searches across all data fields can be executed with the "search all fields" box at the top of the search form.
                                     </li>
                                     <li>
-                                        Check the <b>Must have image</b> and <b>Must have map point</b> checkboxes to only show records with images and/or mapping data respectively.
+                                        Check the <b>Must have media</b> and <b>Must have map point</b> checkboxes to only show records with media and/or mapping data respectively.
                                     </li>
                                     <li> 
                                         Use the field <em>Filters</em> tab to add exact match terms on a per field basis to your search.

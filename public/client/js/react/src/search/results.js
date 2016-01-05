@@ -123,14 +123,14 @@ var Results = module.exports =  React.createClass({
             case 'labels':
                 results = <ResultsLabels results={this.state.results} loading={this.state.loading} />;
                 break;
-            case 'images':
+            case 'media':
                 results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
                 break;
             case 'recordsets':
                 results = <Providers attribution={this.state.attribution} />;
                 break;
         }
-        ['list','labels','images','recordsets'].forEach(function(item){
+        ['list','labels','media','recordsets'].forEach(function(item){
             var cl = item == self.props.view ? 'active' : ''; 
             li.push(
                 <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
@@ -775,7 +775,7 @@ var ResultsImages = React.createClass({
         if(images.length === 0 && !self.state.loading){
             images.push(
                 <div key="no-images" className="no-images">
-                    <h4>No Images Available</h4>
+                    <h4>No Media Available</h4>
                 </div>
             )
         }

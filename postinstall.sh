@@ -3,7 +3,7 @@
 echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 
 # Client Side Dependancies
-node_modules/bower/bin/bower install
+node_modules/bower/bin/bower install --allow-root
 
 #compile jsx to build files for server side use of React
 babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --blacklist strict

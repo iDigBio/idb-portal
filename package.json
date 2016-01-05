@@ -73,7 +73,7 @@
     "gulp-uglify": "^1.1.0",
     "reactify": "*",
     "babelify": "*",
-    "gulp-babel": "*"
+    "gulp-babel": "^5.3"
   },
   "keywords": [],
   "repository": "git://github.com/idigbio/idigbio-portal",

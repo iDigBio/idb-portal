@@ -1,7 +1,6 @@
-FROM nodesource/trusty:0.10.41
+FROM nodesource/trusty:5.3.0
 
-RUN npm -g install npm@latest
-RUN npm install -g bower gulp babel-cli
+RUN npm install -g bower gulp babel@^5.0
 ADD package.json package.json
 ADD npm-shrinkwrap.json npm-shrinkwrap.json
 ADD bower.json bower.json

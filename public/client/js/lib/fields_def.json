@@ -233,7 +233,7 @@
         "group": "locality",
         "dataterm": "dwc:maximumDepthInMeters"
     },
-    "Occurence ID":{
+    "Occurrence ID":{
         "term": "occurrenceid",
         "type": "text",
         "group":"specimen",

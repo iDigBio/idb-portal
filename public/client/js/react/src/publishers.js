@@ -260,8 +260,9 @@ async.parallel([
         if(_.isUndefined(pubs[item.indexTerms.publisher])){
           pubs[item.indexTerms.publisher]=defpub();
         }
-        pubs[item.indexTerms.publisher].recordsets[item.uuid]=item.data.collection_name;//(item.data) 
-        //pubs[item.indexTerms.publisher].recordsets[item.uuid].name = ;
+        if(!_.isUndefined(item.data)){
+          pubs[item.indexTerms.publisher].recordsets[item.uuid]=item.data.collection_name;
+        }
       });
       callback();
     });    

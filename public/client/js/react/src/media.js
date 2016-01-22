@@ -23,8 +23,12 @@ var Media = React.createClass({
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
                     <img className="media" src={idbapi.media_host + 'mrlookup/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
-                <a className="media-link hidden-print" href={link} download={this.props.keyid} target={'_'+this.props.keyid}>
-                    Download Media File
+                 Media retrieved from:<br />{link}
+                <a className="media-link hidden-print" href={link} target={'_'+this.props.keyid} title="click to open original media file">
+                    Open in browser<br />
+                </a>
+                <a className="media-link hidden-print" href={link} download={this.props.keyid} target={'_'+this.props.keyid} title="click to open original media file">
+                    Download File<br />
                 </a>
             </div>
         );

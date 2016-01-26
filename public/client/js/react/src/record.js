@@ -273,7 +273,7 @@ module.exports = React.createClass({
         var values=[];
         _.each(list, function(item){
             if(_.has(data,item)){
-                var vals = _.map(_.words(data[item]),function(i){
+                var vals = _.map(_.words(data[item], /[^ ]+/g),function(i){
                     return _.capitalize(i);
                 }).join(' ');
                 values.push(<tr key={'named-'+item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);

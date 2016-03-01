@@ -165,7 +165,6 @@ var UpdateLink = React.createClass({
         var d=this.props.rowData;
 
         var url = 'https://docs.google.com/forms/d/1slWOvxuLpuPdvDihSibLQq9BPsOqPzK8Hh93zCW3dRI/viewform?';
-        url += 'entry.823080433=the+collection+is+already+in+the+list'
         url += GoogleFormQS(326174790, d.institution);
         url += GoogleFormQS(2031121141, d.collection);
         url += GoogleFormQS(4068754, d.institution_code);

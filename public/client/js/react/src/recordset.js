@@ -275,7 +275,8 @@ module.exports = React.createClass({
         var raw = this.props.recordset;
         var data = raw.data;
         var id = raw.uuid;
-        var last = data.update.substring(0,10);
+        var lastupdate = data.update.substring(0,10);
+        var datemodified = raw.indexTerms.datemodified.substring(0,10);
         var search = '/portal/search?rq={"recordset":"'+id+'"}';
         var web = null;
         
@@ -289,16 +290,15 @@ module.exports = React.createClass({
         }
 
         var counts = (
-            <div>
-                <span className="info">
-                    Specimen Records:&nbsp;<Total key={'Specimen'} keyid={'Specimen'} total={formatNum(this.props.stotal)} />
-                </span>
-                <span className="info">
-                    Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
-                </span>
-                <span className="info">
-                    Last Update:&nbsp;<Last key={last} keyid={last} />
-                </span>
+            <div className="row">
+                <div className="col-sm-5 info">
+                        Specimen Records:&nbsp;<Total key={'Specimen'} keyid={'Specimen'} total={formatNum(this.props.stotal)} /><br />
+                        Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
+                </div>
+                <div className="col-sm-5 info">
+                        Last Update:&nbsp;<Last key={lastupdate + '-update'} keyid={lastupdate} /><br />
+                        Last Modified:&nbsp;<Last key={datemodified + '-modified'} keyid={datemodified} />
+                </div>
             </div>
         );
         

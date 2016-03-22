@@ -41,6 +41,7 @@ module.exports = function(app, config) {
             var flags = {};
             var stotal=0,mtotal=0;
             var rset={},rbody={},use;
+            var lastRecord='',lastMedia='';
             var keys = Object.keys(fields.byDataTerm);
             request.get({"url": config.api+'view/recordsets/'+req.params.id, "json": true}, function(err, resp, body){
                 if(body.found===false){
@@ -80,10 +81,23 @@ module.exports = function(app, config) {
                                 use=body;
                                 cback(null,'four');
                             })
+                        },
+                        function(cback){
+                            request.post({"url": config.api+'summary/modified/records/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(err, resp, body){
+                                lastRecord=body.lastModified.substring(0,10);
+                                cback(null,'five');
+                            })
+                        },
+                        function(cback){
+                            request.post({"url": config.api+'summary/modified/media/', "json": true, "body": {mq: {recordset: req.params.id}}}, function(err, resp, body){
+                                lastMedia=body.lastModified.substring(0,10);
+                                cback(null,'six');
+                            })
                         }
                     ],function(err,results){
                         var React = require('react');
                         var Rp = React.createFactory(RecordsetPage);
+                        var lastmodified=lastRecord>=lastMedia?lastRecord:lastMedia;
                         res.render('recordset',{
                             activemenu: 'publishers',
                             user: req.user,
@@ -91,10 +105,11 @@ module.exports = function(app, config) {
                             uuid: "'"+req.params.id+"'",
                             mtotal: mtotal,
                             stotal: stotal,
+                            lastmodified: lastmodified,
                             flags: JSON.stringify(flags),
                             recordset: JSON.stringify(rbody),
                             use: JSON.stringify(use),
-                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, uuid: req.params.id}))
+                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, lastmodified: lastmodified, uuid: req.params.id}))
                         });
                     })                           
                 }

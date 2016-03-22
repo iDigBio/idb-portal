@@ -34,10 +34,11 @@
 {% autoescape false %}
   var mtotal={{ mtotal }};
   var stotal={{ stotal }};
-  var uuid={{ uuid }};
+  var use={{ use }};
   var flags={{ flags }};
   var recordset={{ recordset }};
-  var use={{ use }};
+  var lastmodified='{{ lastmodified }}';
+  var uuid={{ uuid }};
 {% endautoescape %}
 </script>
   {% parent %}

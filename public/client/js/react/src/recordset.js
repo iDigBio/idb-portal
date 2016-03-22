@@ -9,11 +9,9 @@ var dqFlags = require('../../lib/dq_flags');
 //var helpers = require('./search/lib/helpers');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
-
 var keys=Object.keys(fields.byDataTerm);
 //add terms which aren't in data terms
 //keys.push('idigbio:recordId');
-
 
 var missing={};
 var stotal=0,mtotal=0;
@@ -182,7 +180,6 @@ var RawView = React.createClass({
         });
     },
     render: function(){
-       
         return (
             <div id="raw" style={{display: (this.props.active ? 'block' : 'none' )}} className="stat-table clearfix">
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
@@ -277,9 +274,10 @@ module.exports = React.createClass({
         var id = raw.uuid;
         var lastupdate = data.update.substring(0,10);
         var datemodified = raw.indexTerms.datemodified.substring(0,10);
+        var lastmodified=this.props.lastmodified;
         var search = '/portal/search?rq={"recordset":"'+id+'"}';
         var web = null;
-        
+
         if(_.has(raw.data,'institution_web_address' && ! _.isEmpty(raw.data.institution_web_address))){
             web = (
                 <div>
@@ -293,11 +291,12 @@ module.exports = React.createClass({
             <div className="row">
                 <div className="col-sm-5 info">
                         Specimen Records:&nbsp;<Total key={'Specimen'} keyid={'Specimen'} total={formatNum(this.props.stotal)} /><br />
-                        Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
                 </div>
                 <div className="col-sm-5 info">
-                        Last Update:&nbsp;<Last key={lastupdate + '-update'} keyid={lastupdate} /><br />
-                        Last Modified:&nbsp;<Last key={datemodified + '-modified'} keyid={datemodified} />
+                        Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
+                </div>
+                <div className="col-sm-12 info">
+                    iDigBio last ingested date:&nbsp;<Last key={lastmodified+'lastmodified'} keyid={lastmodified} />
                 </div>
             </div>
         );
@@ -325,4 +324,5 @@ module.exports = React.createClass({
             </div>
         )
     }
+
 });

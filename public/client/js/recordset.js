@@ -16,7 +16,7 @@ var stotal=0,mtotal=0;
 var Recordset = require('./react/src/recordset');
 var React = require('react');
 
-React.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} uuid={uuid}/>, document.getElementById('main'));
+React.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} lastmodified={lastmodified} uuid={uuid}/>, document.getElementById('main'));
 var rs = $('#recordsetID').val();
 $('#table-fields, #table-use').tablesorter();
 

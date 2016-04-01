@@ -296,7 +296,7 @@ module.exports = React.createClass({
                         Media Records:&nbsp;<Total key={'Media'} keyid={'Media'} total={formatNum(this.props.mtotal)} />
                 </div>
                 <div className="col-sm-12 info">
-                    iDigBio last ingested date:&nbsp;<Last key={lastmodified+'lastmodified'} keyid={lastmodified} />
+                    iDigBio Last Ingested Date:&nbsp;<Last key={lastmodified+'lastmodified'} keyid={lastmodified} />
                 </div>
             </div>
         );

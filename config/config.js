@@ -42,7 +42,7 @@ var config = {
 				label: "Research Tools"
 			},
 			contact: {
-				url: "//www.idigbio.org/contact",
+				url: "//www.idigbio.org/contact/Portal_feedback",
 				label: 'Feedback'
 			}
 		},

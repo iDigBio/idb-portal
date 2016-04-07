@@ -19,17 +19,18 @@
          <div style="margin:10px;">
         		<div id="introduction" style="background-color: #E5E5E5;border-bottom: 1px solid #FFFFFF;height: 1px;margin: 9px 1px;width:100%;" class="scrollspy"></div>
             	<h3 >Introduction</h3>
-            	<p><u>The iDigBio specimen portal</u> (<em>https://www.idigbio.org/portal</em>) provides access to millions of records about neontological and paleontological specimens curated at museums and other institutions in the US. Records might include information about the specimen, when, where and by whom it was collected, the institution providing the data, and media related to the specimen (currently only images of the specimen or the specimen label are available). The main intent of this tutorial is to familiarize the user with the search capabilities of this portal.</p>
+            	<p><u>The iDigBio specimen portal</u> (<em>https://www.idigbio.org/portal</em>) provides access to millions of records about neontological and paleontological specimens curated at museums and other institutions in the US. Records might include information about the specimen, when, where and by whom it was collected, the institution providing the data, images and other media related to the specimen. The main intent of this tutorial is to familiarize the user with the search capabilities of this portal.</p>
               <h3 id="requirements" style="margin-top:30px;">Requirements</h3>
               <p>
                 The iDigBio Portal requires the use of an HTML5 compliant browser with cookies enabled. The Portal has been tested successfully against, and is supported for, the following browsers:<br>
-                <b>Chrome</b><br>
+                <br><b>Chrome</b><br>
                 <b>Firefox</b><br>
                 <b>Safari</b><br>
                 <b>Internet Explorer</b> 10,11<br>
+                <b>Microsoft Edge</b>
               </p>
             	<h3 id="navigating" class="scrollspy" style="margin-top:30px;">Portal Navigation</h3>
-            	<p>The main features of the portal can be accessed through the <b>Green Menu Bar</b> <em>(Fig. 1)</em> near the top of the page.  The menu choices include links to the <em><b>iDigBio Home</b></em>, the <em><b>Portal Home</b></em> page, the <em><b>Search Records</b></em> page, <em><b>Tutorial</b></em> (this page), and <em><b>Feedback</b></em>, which are detailed next.</p>
+            	<p>The main features of the portal can be accessed through the <b>Green Menu Bar</b> <em>(Fig. 1)</em> near the top of the page.  The menu choices include links to the <em><b>iDigBio Home</b></em>, the <em><b>Portal Home</b></em> page, the <em><b>Search Records</b></em> page, <em><b>Tutorial</b></em> (this page), the <em><b>Data</b></em> page, the <em><b>Research Tools</b></em> page, and <em><b>Feedback</b></em>, which are detailed next.</p>
               <div class="clearfix">
                 <figure id="fig1" >
                 	<figcaption>Fig. 1</figcaption>
@@ -44,7 +45,7 @@
 
         		<p>The <em><b>Tutorial</b></em> page is this page.</p>
 
-             <p>Use the <em><b>Our Data</b></em> menu to access the <em><b>Publishers</b></em> and <em><b>Collections</b></em> submenu pages. The <em><b>Publications</b></em> page provides general count and usage statistics about the datasets and publishers provided to iDigBio. The <em><b>Collections</b></em> page provides a comprehensive list of collections and institutions that house data in the United States.</p>
+             <p>Use the <em><b>Data</b></em> menu to access the <em><b>Publishers</b></em> and <em><b>Collections</b></em> submenu pages. The <em><b>Publishers</b></em> page provides general count and usage statistics about the datasets and publishers provided to iDigBio. The <em><b>Collections</b></em> page provides a comprehensive list of collections and institutions that house data in the United States.</p>
 
             <p>Use the <em><b>Research Tools</b></em> page to view research software that make use of services and data.</p>
 
@@ -61,11 +62,11 @@
             </p>
               <figure id="fig2"  class="clearfix">
                   <figcaption>Fig. 2</figcaption>
-                  <img style="width:60%;" src="/portal/img/tutorial/search-page.png">
+                  <img src="/portal/img/tutorial/search-page.png">
               </figure>
         		<h4 id="searching" class="scrollspy" style="margin-top:30px;">Understanding and Performing Searches</h4>
 
-        		<p>The search form section of the <em><b>Search Records</b></em> page <em>(Fig. 3)</em> provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have image</b> restricts mapped and record results to those specimens that have related images. Checking the <b>Must have map point</b> restricts the record results section to show only records that contain geopoint data (mapping results can contain only records with geopoint data).</p>
+        		<p>The search form section of the <em><b>Search Records</b></em> page <em>(Fig. 3)</em> provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have media</b> restricts mapped and record results to those specimens that have related images and other media. Checking the <b>Must have map point</b> restricts the record results section to show only records that contain geopoint data (mapping results can contain only records with geopoint data).</p>
             <div class="clearfix">      		
               <figure id="fig3">
                   <figcaption>Fig. 3</figcaption>
@@ -117,7 +118,7 @@
 
         		<h3 id="viewing" class="scrollspy" style="margin-top:30px;">Viewing Results</h3>
 
-        		<p>Results data are displayed below the search form and mapped results sections. This section displays the total number of results matching your search criteria and gives you three options for displaying the results: <b>List</b> view, <b>Label</b> view, <b>Images</b> gallery and the <b>Recordsets</b> view. The <b>List</b> view allows you to display any number of columns of DwC data that are searchable in iDigBio. The right side of the <b>List</b> view headers provides a configuration button that allows you to select which columns are viewable in the list. The <b>Label</b> view displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Images</b> gallery displays all images associated with the specimen records search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record. The <b>Recordsets</b> view provides a list of recordsets and record counts that are present in the search results. </p> 
+        		<p>Results data are displayed below the search form and mapped results sections. This section displays the total number of results matching your search criteria and gives you four options for displaying the results: <b>List</b> view, <b>Label</b> view, <b>Media</b> gallery and the <b>Recordsets</b> view. The <b>List</b> view allows you to display any number of columns of DwC data that are searchable in iDigBio. The right side of the <b>List</b> view headers provides a configuration button that allows you to select which columns are viewable in the list. The <b>Label</b> view displays a stylized specimen label, with a pre-determined set of information (taxonomy, geography, and collection data) and a thumbnail of a related image when available. The <b>Media</b> gallery displays all images and media associated with the specimen record search results. Each image contains a pre-determined set of information (taxonomy, collection data) displayed as a label over the image. Clicking on the image will open its associated media record. The <b>Recordsets</b> view provides a list of recordsets and record counts that are present in the search results. </p> 
 
         		<p>Clicking on a single row of the table or a single label displays a complete specimen record page <em>(Fig. 7)</em>, including a summary section at the top, any associated media, a map with the location if applicable and the attribution information.  The very bottom portion of the page includes all data available in the idigbio API. It includes a complete list of the Darwin Core data, a list of data correction/issue flags and their descriptions and a complete view of the raw data as it exists in the API. With the raw data you can have a peek at the data that is available to you to add value to other portals. It can also be used to view additional information created by iDigBio, such as the internal GUID or when the record was ingested or updated in our system, and to detect whether iDigBio is not accurately displaying the data as it came from the provider.</p>
             <p>Clicking on the image in the 
@@ -136,11 +137,11 @@
             <p>The map provides several controls for further interaction. The top left corner provides two sets of controls. The camera button <img src="/portal/img/tutorial/camera-button.png" /> allows you to create a PNG image of the map as displayed the moment you click the button. This feature can take several seconds to generate the image. The buttons below the camera button provide boundary drawing capabilities. Click the rectangle <img src="/portal/img/tutorial/rectangle-button.png" /> or circle button <img src="/portal/img/tutorial/circle-button.png" /> to draw a rectangular or circular boundary around a geographic area to further limit your results to records with geopoints inside the boundry. The button in the top right corner is a toggle between regular and a full screen mode. Below the full screen button are the zoom-in and zoom-out buttons. The map zoom can also be changed with a mouse scroll wheel when the mouse pointer is over the map. You can also draw a boundary to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary.</p>
 
             <div class="clearfix">
-              <figure id="fig8"  style="float:left;margin:20px;" >
+              <figure id="fig8" style="display:inline-block;margin:10px 10px;" >
                   <figcaption>Fig. 8</figcaption>          
                   <img src="/portal/img/tutorial/heatmap.jpg"> 
               </figure>
-              <figure id="fig9"  style="float:right;margin:20px;">
+              <figure id="fig9" style="display:inline-block;margin:10px 10px;">
                   <figcaption>Fig. 9</figcaption>          
                   <img src="/portal/img/tutorial/pointmap.jpg"> 
               </figure>
@@ -173,7 +174,7 @@
                   <td>view</td>
                   <td>Which format to show the results in</td>
                   <td>
-                    value can be either "list", "labels", "images", "recordsets"
+                    value can be either "list", "labels", "media", "recordsets"
                   </td>
                 </tr>
               </tbody>

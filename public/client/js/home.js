@@ -102,7 +102,7 @@ idbapi.summary('top/records/',media,function(response){
             type: 'pie',
             onclick: function(d,el){
                 if(d.name.toLowerCase()!='other'){
-                    window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}&view=images';
+                    window.location = '/portal/search?rq={"kingdom":"'+d.name+'"}&view=media';
                 }
             }
         },

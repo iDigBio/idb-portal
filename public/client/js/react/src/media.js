@@ -189,7 +189,7 @@ module.exports = React.createClass({
             output.push(
                 <a 
                     key={'bread-'+item} 
-                    href={'/portal/search?rq={'+search.join(',')+'}&view=images'}
+                    href={'/portal/search?rq={'+search.join(',')+'}&view=media'}
                     title={'SEARCH IMAGES '+title.join(', ')}
                 >{_.capitalize(values[index])}</a>
             );

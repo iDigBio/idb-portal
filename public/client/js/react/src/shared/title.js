@@ -58,7 +58,7 @@ module.exports = React.createClass({
 
             var str = '/portal/search?rq={'+ order.join(',')+'}';
             if(this.props.mediaSearch){
-                str += '&view=images';
+                str += '&view=media';
             }
             var nameLink = <a title={'SEARCH ' + linktitle.join(', ')} href={str}>{title}</a>;
 

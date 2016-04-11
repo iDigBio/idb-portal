@@ -190,7 +190,7 @@ module.exports = React.createClass({
                 <a 
                     key={'bread-'+item} 
                     href={'/portal/search?rq={'+search.join(',')+'}&view=media'}
-                    title={'SEARCH IMAGES '+title.join(', ')}
+                    title={'SEARCH MEDIA '+title.join(', ')}
                 >{_.capitalize(values[index])}</a>
             );
             if((order.length-1) > index){

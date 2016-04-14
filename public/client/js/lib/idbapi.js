@@ -16,7 +16,7 @@ module.exports = {
         if(typeof window.idbapi == 'object' && typeof window.idbapi.media_host == 'string'){
             return window.idbapi.media_host;
         } else{
-            return 'https://media.idigbio.org/';
+            return 'https://api.idigbio.org/';
         }
     }).call(),
     search: function(query,callback){

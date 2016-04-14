@@ -631,7 +631,7 @@ var ResultsLabels = React.createClass({
                         onError={this.errorImage}  
                         className="pull-right label-image" 
                         alt={title} 
-                        src={idbapi.host + "media/"+data.mediarecords[0]+"?size=thumbnail"} /> 
+                        src={idbapi.media_host + "v2/media/"+data.mediarecords[0]+"?size=thumbnail"} /> 
                 </span>  
             )
         } 
@@ -751,7 +751,7 @@ var ResultsImages = React.createClass({
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+uuid}>
                 <span className="img-count">{count}</span>
                 <img alt={name.join(' ')} 
-                src={idbapi.host + "media/"+uuid+"?size=thumbnail"}
+                src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
                 onError={this.errorImage}/>
                 <div className="gallery-image-text">
                     <div className="image-text">

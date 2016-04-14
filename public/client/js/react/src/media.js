@@ -21,7 +21,7 @@ var Media = React.createClass({
         return (
             <div key={this.props.keyid} id="media-wrapper" className="scrollspy section clearfix" >
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
-                    <img className="media" src={idbapi.host + 'media/'+this.props.keyid+'?size=webview'} onError={this.error}/>
+                    <img className="media" src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} onError={this.error}/>
                 </a>
                  Media retrieved from:<br />{link}
                 <a className="media-link hidden-print" href={link} target={'_'+this.props.keyid} title="click to open original media file">
@@ -144,7 +144,7 @@ var Group = React.createClass({
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
-                            <img className="gallery-image" src={idbapi.host + 'media/'+media[id]+'?size=webview'} onError={this.error} /> 
+                            <img className="gallery-image" src={idbapi.media_host + 'v2/media/'+media[id]+'?size=webview'} onError={this.error} /> 
                         </a>
                     )                    
                 }

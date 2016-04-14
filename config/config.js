@@ -2,7 +2,7 @@
 var _ = require('lodash');
 var config = {
 	api: 'https://search.idigbio.org/v2/',
-	media: 'https://media.idigbio.org/',
+	media: 'https://api.idigbio.org/',
 	crypt_key: process.env.IDB_CRYPT_KEY,
 	secret: process.env.IDB_SECRET,
 	root: require('path').normalize(__dirname + '/..'),
@@ -72,7 +72,7 @@ if (process.env.NODE_ENV == "beta") {
 			host: 'idb-redis-beta.acis.ufl.edu'
 		},
 		'api': 'https://beta-search.idigbio.org/v2/',
-		'media': 'https://beta-media.idigbio.org/'
+		'media': 'https://beta-api.idigbio.org/'
 	});
 } else if (process.env.NODE_ENV == "prod") {
 	_.merge(config, {

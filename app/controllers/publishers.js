@@ -10,7 +10,7 @@ module.exports = function(app, config) {
     return {
         collections: function(req,res){
 
-            request.get({"url": 'http://internal.idigbio.org/collections', "json": true}, function(err, resp, body){
+            request.get({"url": 'http://internal.idigbio.org:8080/collections.json', "json": true}, function(err, resp, body){
                 res.render('collections', {
                     activemenu: 'publishers',
                     user: req.user,
@@ -20,7 +20,7 @@ module.exports = function(app, config) {
             }); 
         },
         collection: function(req,res){
-            request.get({"url": 'http://internal.idigbio.org/collections/'+req.params.id, "json": true}, function(err, resp, body){
+            request.get({"url": 'http://internal.idigbio.org:8080/collections.json/'+req.params.id, "json": true}, function(err, resp, body){
                 
                 res.render('collection', {
                     activemenu: 'publishers',

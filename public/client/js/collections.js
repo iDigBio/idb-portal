@@ -80,6 +80,10 @@ var singleIcon = L.icon({
 //add map points
 var lookup={};
 _.each(collections,function(item){
+    
+    if(item.lat=="NA"){item.lat=null;}
+    if(item.lon=="NA"){item.lat=null;}
+
     if(item.lat !== null && item.lon !== null){
         var key = item.lat+' '+item.lon;
         if(_.isUndefined(lookup[key])){
@@ -93,6 +97,7 @@ _.each(collections,function(item){
         }
     }
 });
+
 
 _.each(lookup,function(val,key){
     var cont = '<div class="map-popup">', m;

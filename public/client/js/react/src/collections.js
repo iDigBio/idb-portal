@@ -78,6 +78,7 @@ module.exports = React.createClass({
                 results={this.props.data} 
                 showFilter={true} 
                 resultsPerPage={20}
+                initialSort={'institution'}
                 columns={['institution','collection',
                 'contact','contact_role', 'update_url', 'collection_uuid', 'recordsets']}  
                 columnMetadata={columnMeta.concat(cols)}

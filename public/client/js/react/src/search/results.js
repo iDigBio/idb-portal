@@ -717,7 +717,7 @@ var ResultsImages = React.createClass({
         return {results: this.props.results, loading: false};
     },
     errorImage: function(e){
-        e.target.attributes['src'].value = '/portal/img/missing.gif';
+        e.target.attributes['src'].value = '/portal/img/missing.svg';
     },
     componentWillMount: function(){
         if(!this.props.search.image){

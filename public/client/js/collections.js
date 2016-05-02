@@ -106,7 +106,7 @@ _.each(lookup,function(val,key){
         cont+='<h5>'+val[0].institution+'</h5><div class="multi">';
         _.each(val,function(item){
             var name = _.isEmpty(item.collection.trim()) ? 'Collection' : item.collection;
-            cont+='<label><a target="'+item.collection_uuid+'"href="/portal/collections/'+item.collection_uuid+'">'+
+            cont+='<label><a target="'+item.collection_uuid+'"href="/portal/collections/'+item.collection_uuid.replace('urn:uuid:','')+'">'+
                 name+'</a></label>';
             ref[item.collection_uuid]=m;
         });
@@ -116,7 +116,7 @@ _.each(lookup,function(val,key){
     }else{
         cont+='<h5>'+val.institution+'</h5>';
         var name = _.isEmpty(val.collection.trim()) ? 'Collection' : val.collection;
-        cont += '<label><a target="'+val.collection_uuid+'"href="/portal/collections/'+val.collection_uuid+'">'+
+        cont += '<label><a target="'+val.collection_uuid+'"href="/portal/collections/'+val.collection_uuid.replace('urn:uuid:','')+'">'+
             name+'</a></label><address>'+val.physical_address+'<br>'+val.physical_city+', '+val.physical_state+' '+
         val.physical_zip+'</address>';
         m = L.marker([val.lat,val.lon], {icon: singleIcon});

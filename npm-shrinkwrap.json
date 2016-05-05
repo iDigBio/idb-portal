@@ -9167,6 +9167,11 @@
       "from": "leaflet-image@*",
       "resolved": "https://registry.npmjs.org/leaflet-image/-/leaflet-image-0.1.0.tgz"
     },
+    "leaflet-sleep": {
+      "version": "0.1.0",
+      "from": "leaflet-sleep@*",
+      "resolved": "https://registry.npmjs.org/leaflet-sleep/-/leaflet-sleep-0.1.0.tgz"
+    },
     "less": {
       "version": "2.3.1",
       "from": "less@*",

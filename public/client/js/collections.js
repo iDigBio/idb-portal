@@ -11,6 +11,7 @@ var CollectionsPage = require('./react/src/collections');
 
 var L= require('leaflet');
 require('../../components/leaflet.fullscreen/Control.FullScreen');
+require('../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 var triggerPopup = function(id){
     scrollToMap();
     map.setView(ref[id]._latlng).setZoomAround(ref[id]._latlng,8)
@@ -30,10 +31,10 @@ var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     reuseTiles: true
 });
 
-
 var map = L.map('map',{
     center: [47,-100],
     zoom: 3,
+    minZoom: 2,
     layers: [base],
     scrollWheelZoom: true,
     boxZoom: true,
@@ -41,10 +42,12 @@ var map = L.map('map',{
     worldCopyJump: true,
     fullscreenControl: true,
     fullscreenControlOptions: {
-        position: "topright",
-        forceSeparateButton: true
+    position: "topright",
+    forceSeparateButton: true
     },
-    zoomControl: false
+    zoomControl: false,
+    sleepOpacity:.9,
+    sleepTime: 5
 });
 
 map.addControl(L.control.zoom({

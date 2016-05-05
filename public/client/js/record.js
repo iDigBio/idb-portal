@@ -3,6 +3,7 @@ var React = require('react');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
 var L = require('leaflet/dist/leaflet');
+require('../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 //provides order for sections
 var RecordPage = require('./react/src/record');
 
@@ -40,7 +41,10 @@ if(_.has(record.indexTerms,'geopoint')){
         zoom: 0,
         layers: [base],
         scrollWheelZoom: true,
-        boxZoom: false
+        boxZoom: false,
+        sleepOpacity:.9,
+        sleepTime: 5,
+        wakeTime: 750
     });
 
     L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';

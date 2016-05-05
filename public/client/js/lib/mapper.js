@@ -13,6 +13,7 @@
 *      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
 ***/
 var L = require('leaflet/dist/leaflet');
+require('../../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 var $ = require('jquery');
 var _ = require('lodash');
 var helpers = require('./helpers');
@@ -582,7 +583,9 @@ module.exports = function(elid, options){
         scrollWheelZoom: true,
         boxZoom: true,
         zoomControl: false,
-        worldCopyJump: true
+        worldCopyJump: true,
+        sleepOpacity:.9,
+        sleepTime: 5
     };
 
     this.map = L.map(elid,mapDefaults);

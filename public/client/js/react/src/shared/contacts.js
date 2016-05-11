@@ -22,6 +22,16 @@ var defOrNone = function(obj,key){
     }
 };
 
+var phDisplay = function(phone){
+    if(typeof(phone)==='string'){
+        if(phone.includes('none')) {
+            return '';
+        } else {
+            return <tr><td className="name">Phone</td><td>{phone}</td></tr>;
+        }
+    }
+};
+
 module.exports = React.createClass({
     makeContact: function(contact){
             var name = defOrNone(contact, ['first_name', 'last_name']);
@@ -35,7 +45,7 @@ module.exports = React.createClass({
                     <tr><td className="name">Name</td><td>{name}</td></tr>
                     <tr><td className="name">Role</td><td>{role}</td></tr>
                     <tr><td className="name">Email</td><td>{email}</td></tr>
-                    <tr><td className="name">Phone</td><td>{phone}</td></tr>
+                    {phDisplay(phone)}
                 </table>
             );   
     },

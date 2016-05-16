@@ -77,7 +77,8 @@ var Table = React.createClass({
         //add unknown keys to end of list
         var dif = _.difference(Object.keys(this.props.record.data),order);
         var merged = order.concat(dif), count=0;
-        var regex = /(\bhttps?:\/\/(\S|\w)+)/;
+        var regex = /(\bhttps?:\/\/(\S|\w| )+)/;
+
         _.each(order,function(key){
             var name = _.isUndefined(dwc.names[key]) ? key: dwc.names[key];
             var val = self.props.record.data[key];

@@ -224,7 +224,7 @@ var Title = React.createClass({
 var Description = React.createClass({
     render: function(){
         var logo = '';
-        if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
+        if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url) && goodURL(this.props.data.logo_url)){
             logo = <img className="logo" src={this.props.data.logo_url}/>;
         }
         //decode html characters that appear in some descriptions
@@ -241,6 +241,10 @@ var Description = React.createClass({
         )
     }
 });
+
+function goodURL(sURL){
+
+}
 
 
 var Last = React.createClass({

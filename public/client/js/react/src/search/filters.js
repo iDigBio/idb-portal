@@ -1,8 +1,7 @@
-
-var React = require('react/addons');
-var RCTgroup = React.addons.CSSTransitionGroup;
+var React = require('react');
+var RCTgroup = require('react-addons-css-transition-group');
+var PureRender = require('react-addons-pure-render-mixin');
 var idbapi = require('../../../lib/idbapi');
-var PureRender = require('react/addons').addons.PureRenderMixin;
 
 var Filters = module.exports = React.createClass({
     mixins: [PureRender],

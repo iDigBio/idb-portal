@@ -2,8 +2,8 @@
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
 var queryBuilder = require('../../../lib/querybuilder');
-var PureRender = require('react/addons').addons.PureRenderMixin;
-var ReactCSSTransitionGroup = React.addons.CSSTransitionGroup;
+var PureRender = require('react-addons-pure-render-mixin');
+var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
 React.initializeTouchEvents(true);
 

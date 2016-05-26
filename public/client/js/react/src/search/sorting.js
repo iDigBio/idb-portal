@@ -2,9 +2,9 @@
  * @jsx React.DOM
  */
 
-var React = require('react/addons')
-var RCTgroup = React.addons.CSSTransitionGroup;
-var PureRender = require('react/addons').addons.PureRenderMixin;
+var React = require('react')
+var RCTgroup = require('react-addons-css-transition-group');
+var PureRender = require('react-addons-pure-render-mixin');
 
 var Sort = module.exports = React.createClass({
     //mixins: [PureRender],

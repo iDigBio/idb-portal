@@ -350,7 +350,7 @@ var ResultsList = React.createClass({
                     )
                 }
             });
-            list.push(<table key={"group-"+group} className="group-table">{group}</table>)
+            list.push(<table key={"group-"+group} className="group-table"><tbody>{group}</tbody></table>)
         });
         
         return(

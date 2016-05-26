@@ -1,7 +1,8 @@
 var React = require('react')
+var ReactDom = require('react-dom');
 var SearchPage = require('./react/src/search');
 
-React.render(
+ReactDom.render(
     <SearchPage />,
     document.getElementById('main')
 )

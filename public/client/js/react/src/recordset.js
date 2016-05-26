@@ -224,8 +224,8 @@ var Title = React.createClass({
 var Description = React.createClass({
     render: function(){
         var logo = '';
-        if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url) && goodURL(this.props.data.logo_url)){
-            logo = <img className="logo" src={this.props.data.logo_url}/>;
+        if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
+            logo = <Img className="logo" src={this.props.data.logo_url} />
         }
         //decode html characters that appear in some descriptions
         var desc = _.unescape(this.props.data.collection_description);
@@ -242,11 +242,6 @@ var Description = React.createClass({
     }
 });
 
-function goodURL(sURL){
-
-}
-
-
 var Last = React.createClass({
     render: function(){
        return(<span>{this.props.keyid}</span>);
@@ -256,6 +251,30 @@ var Last = React.createClass({
 var Contacts = require('./shared/contacts');
 
 var Raw = require('./shared/raw');
+
+var Img = React.createClass({
+
+    componentDidMount: function () {
+
+        var self = this;
+        var img = new Image();
+        img.onerror = function () {
+            self.setState({ src: '' });
+        };
+
+        img.src = this.props.src;
+
+    },
+
+    errs: function(event) {
+        this.props.src='';
+    },
+
+    render: function () {
+        return <img className="logo" onError={this.errs} src={this.props.src} />;
+    }
+
+});
 
 module.exports = React.createClass({
     navList: function(){

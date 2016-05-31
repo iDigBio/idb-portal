@@ -1,5 +1,5 @@
-
 var React = require('react')
+var ReactDOM = require('react-dom')
 var idbapi = require('../../lib/idbapi');
 
 function formatNum (num){
@@ -322,7 +322,7 @@ async.parallel([
     });
   }
 ],function(error){
-    React.render(
+    ReactDOM.render(
       <Page/>,
       document.getElementById('main')
     );  

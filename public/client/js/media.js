@@ -1,9 +1,9 @@
 
 
-var React = require('react');
+var ReactDOM = require('react-dom');
 var MediaPage = require('./react/src/media');
 
-React.render(
+ReactDOM.render(
     <MediaPage mediarecord={data.mediarecord} record={data.record} />,
      document.getElementById('react-wrapper')
 );

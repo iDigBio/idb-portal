@@ -3,11 +3,8 @@
 * Collections init page:  'var collections' data is defined/embeded at top of collections.html template.
 ***/
 
-var React = require('react');
+var ReactDOM = require('react-dom');
 var CollectionsPage = require('./react/src/collections');
-
-
-//React.render(<CollectionsPage data={collections} />, document.getElementById('datatable'));
 
 var L= require('leaflet');
 require('../../components/leaflet.fullscreen/Control.FullScreen');
@@ -23,7 +20,7 @@ var scrollToMap = function(){
     }, 700);
 }
 
-React.render(<CollectionsPage data={collections} openMapPopup={triggerPopup} />, document.getElementById('datatable'));
+ReactDOM.render(<CollectionsPage data={collections} openMapPopup={triggerPopup} />, document.getElementById('datatable'));
 
 var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution: 'Map data © OpenStreetMap',

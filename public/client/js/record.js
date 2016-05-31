@@ -1,4 +1,5 @@
 
+var ReactDOM = require('react-dom');
 var React = require('react');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
@@ -7,7 +8,7 @@ require('../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 //provides order for sections
 var RecordPage = require('./react/src/record');
 
-React.render(
+ReactDOM.render(
     <RecordPage record={record} />,
     document.getElementById('react-wrapper')
 ) 

@@ -3,6 +3,7 @@ var request = require('request');
 var path = require('path'),
     appDir = path.dirname(require.main.filename);
 var React = require('react');
+var ReactDOMServer = require('react-dom/server');
 var RecordPage = React.createFactory(require(appDir+'/public/client/js/react/build/record'));
 var MediaPage = React.createFactory(require(appDir+'/public/client/js/react/build/media'));
 var async = require('async');
@@ -35,8 +36,7 @@ module.exports = function(app, config) {
 				if(body.uuid){
 					var record = body;
 					var React = require('react');
-					//console.log(recordset)
-					var Page = React.renderToString(RecordPage({record: record}));
+					var Page = ReactDOMServer.renderToString(RecordPage({record: record}));
 					//
 					
 					res.render('record', {
@@ -72,7 +72,7 @@ module.exports = function(app, config) {
 					var render = function(){
 
 						var React = require('react');
-						var Page = React.renderToString(MediaPage({mediarecord: mediarecord, record: record}));
+						var Page = ReactDOMServer.renderToString(MediaPage({mediarecord: mediarecord, record: record}));
 			           
 			            res.render('media', {
 			                activemenu: 'search',

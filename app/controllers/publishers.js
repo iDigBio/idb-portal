@@ -96,6 +96,7 @@ module.exports = function(app, config) {
                         }
                     ],function(err,results){
                         var React = require('react');
+                        var ReactDOMServer = require('react-dom/server');
                         var Rp = React.createFactory(RecordsetPage);
                         var lastmodified=lastRecord>=lastMedia?lastRecord:lastMedia;
                         res.render('recordset',{
@@ -109,7 +110,7 @@ module.exports = function(app, config) {
                             flags: JSON.stringify(flags),
                             recordset: JSON.stringify(rbody),
                             use: JSON.stringify(use),
-                            content: React.renderToString(Rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, lastmodified: lastmodified, uuid: req.params.id}))
+                            content: ReactDOMServer.renderToString(Rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, lastmodified: lastmodified, uuid: req.params.id}))
                         });
                     })                           
                 }

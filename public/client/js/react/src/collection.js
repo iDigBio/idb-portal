@@ -63,7 +63,7 @@ module.exports = Collection = React.createClass({
                 <h2>{title}</h2>
                 <a className="pull-right" href={url} target="_new">Update/Add Information</a>
                 <table className="table table-bordered table-condensed table-striped">
-                    {rows}
+                    <tbody>{rows}</tbody>
                 </table>
             </div>
         )

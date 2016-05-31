@@ -121,7 +121,7 @@ var Table = React.createClass({
                 </ul>
                 <section id="record" className="clearfix" style={{display: (this.state.active == 'record' ? 'block' : 'none' )}}>
                     <table className="table table-striped table-condensed table-bordered">
-                    {rows}
+                    <tbody>{rows}</tbody>
                     </table>
                 </section>
                 <section id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>

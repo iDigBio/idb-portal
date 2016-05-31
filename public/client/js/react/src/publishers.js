@@ -26,6 +26,7 @@ var StatsTable = React.createClass({
       return (
           <div>
               <table className="table table-bordered table-condensed" id="statstable">
+                <tbody>
                   <tr>
                       <th>&nbsp;</th>
                       <th className="statcol">Record Count</th>
@@ -45,7 +46,8 @@ var StatsTable = React.createClass({
                       <td>Total Indexed (all data) *</td>
                       <td className="valcol">{formatNum(totals.indexrecords)}</td>
                       <td className="valcol">{formatNum(totals.indexmedia)}</td>
-                  </tr>    
+                  </tr>
+                </tbody>  
               </table>
               <p>* Data that is marked deleted in iDigBio remains indexed until a cleanup is run.</p>
           </div>

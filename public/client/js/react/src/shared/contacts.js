@@ -42,10 +42,12 @@ module.exports = React.createClass({
 
             return (
                 <table className="contact" key={name+email+role}>
+                    <tbody>
                     <tr><td className="name">Name</td><td>{name}</td></tr>
                     <tr><td className="name">Role</td><td>{role}</td></tr>
                     <tr><td className="name">Email</td><td>{email}</td></tr>
                     {phDisplay(phone)}
+                    </tbody>
                 </table>
             );   
     },

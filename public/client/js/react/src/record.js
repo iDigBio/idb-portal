@@ -59,7 +59,7 @@ var Section = React.createClass({
             <div id={this.props.name} className={cl} >
                 <h5>{dwc.names[this.props.name]}</h5>
                 <table className="table table-striped table-condensed table-bordered">
-                    {rows}
+                    <tbody>{rows}</tbody>
                 </table>
             </div>
         );
@@ -349,15 +349,19 @@ module.exports = React.createClass({
                         <div id="summary-info" className="clearfix">
                             <div className="pull-left sec">
                                 <table>
-                                {this.namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
-                                {lat}
-                                {lon}
+                                  <tbody>
+                                    {this.namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
+                                    {lat}
+                                    {lon}
+                                  </tbody>
                                 </table>
                             </div>
                             <div className="pull-left sec collection">
                                 <table>
-                                {this.namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
-                                {eventdate}
+                                  <tbody>
+                                    {this.namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
+                                    {eventdate}
+                                  </tbody>
                                 </table>
                             </div>
                         </div>

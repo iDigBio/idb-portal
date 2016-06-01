@@ -87,13 +87,9 @@ var Publishers = React.createClass({
             <td className="valcol" colSpan="3">{formatNum(dr)}</td>
           )
         } else {
-          rec_cols = (
-            <span>
-              <td className="valcol">{formatNum(dr)}</td>
-              <td className="valcol">{formatNum(ar)}</td>
-              <td className="valcol">{formatNum(ir)}</td>
-            </span>
-          )
+          rec_cols1 = (<td className="valcol">{formatNum(dr)}</td>)
+          rec_cols2 = (<td className="valcol">{formatNum(ar)}</td>)
+          rec_cols3 = (<td className="valcol">{formatNum(ir)}</td>)
         }
 
         if (qp.merged && dm == am && am == im) {
@@ -101,20 +97,22 @@ var Publishers = React.createClass({
             <td className="valcol" colSpan="3">{formatNum(dm)}</td>
           )
         } else {
-          media_cols = (
-            <span>
-              <td className="valcol">{formatNum(dm)}</td>
-              <td className="valcol">{formatNum(am)}</td>
-              <td className="valcol">{formatNum(im)}</td>
-            </span>
-          )
+          media_cols1 = (<td className="valcol">{formatNum(dm)}</td>)
+          media_cols2 = (<td className="valcol">{formatNum(am)}</td>)
+          media_cols3 = (<td className="valcol">{formatNum(im)}</td>)
         }
 
         return (
           <tr key={key}>
             <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
             {rec_cols}
+            {rec_cols1}
+            {rec_cols2}
+            {rec_cols3}
             {media_cols}
+            {media_cols1}
+            {media_cols2}
+            {media_cols3}
           </tr>
         );        
       }
@@ -156,13 +154,9 @@ var Recordsets = React.createClass({
             <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>
           )
         } else {
-          rec_cols = (
-            <span>
-              <td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>
-              <td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>
-              <td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>
-            </span>
-          )
+          rec_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>)
+          rec_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>)
+          rec_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>)
         }
 
         if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
@@ -170,20 +164,22 @@ var Recordsets = React.createClass({
             <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestmedia)}</td>
           )
         } else {
-          media_cols = (
-            <span>
-              <td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>
-              <td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>
-              <td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>
-            </span>
-          )
+          media_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>)
+          media_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>)
+          media_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>)
         }
 
         return (
           <tr>
             <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
             {rec_cols}
+            {rec_cols1}
+            {rec_cols2}
+            {rec_cols3}
             {media_cols}
+            {media_cols1}
+            {media_cols2}
+            {media_cols3}
           </tr>
         )
       }

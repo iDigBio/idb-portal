@@ -4,6 +4,7 @@
 ***/
 
 var ReactDOM = require('react-dom');
+var React = require('react');
 var CollectionsPage = require('./react/src/collections');
 
 var L= require('leaflet');

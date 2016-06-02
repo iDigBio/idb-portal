@@ -26,8 +26,7 @@ gulp.task('default',function(){
         //build js changes 
     function buildReact(){
       return  gulp.src("./public/client/js/react/src/**/*.js")
-        //.pipe(react())
-        .pipe(babel({blacklist: ["strict"]}))
+        .pipe(babel({presets: ["es2015", "react"]}))
         .pipe(gulp.dest('./public/client/js/react/build'))
     }
     buildReact();
@@ -37,8 +36,7 @@ gulp.task('default',function(){
     })
 
     var bundle = watchify('./public/client/js/main.js');
-    //bundle.transform('reactify');
-    bundle.transform(babelify.configure({blacklist:["strict"]}))
+    bundle.transform(babelify.configure({presets: ["es2015", "react"]}))
     bundle.on('update',rebundle)
 
     function rebundle(){

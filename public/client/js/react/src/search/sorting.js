@@ -1,7 +1,3 @@
-/**
- * @jsx React.DOM
- */
-
 var React = require('react')
 var RCTgroup = require('react-addons-css-transition-group');
 var PureRender = require('react-addons-pure-render-mixin');

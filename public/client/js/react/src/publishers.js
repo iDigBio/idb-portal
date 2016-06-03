@@ -81,7 +81,7 @@ var Publishers = React.createClass({
         return null;
       }else{
         var qp = getQueryParams(window.location.search);
-        var rec_cols, media_cols;
+        var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
         if (qp.merged && dr == ar && ar == ir) {
           rec_cols = (
             <td className="valcol" colSpan="3">{formatNum(dr)}</td>
@@ -148,7 +148,7 @@ var Recordsets = React.createClass({
         return null;
       }else{
         var qp = getQueryParams(window.location.search);
-        var rec_cols, media_cols;
+        var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
         if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
           rec_cols = (
             <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>

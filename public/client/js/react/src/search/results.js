@@ -646,7 +646,7 @@ var ResultsLabels = React.createClass({
     },
     errorImage: function(e){
         //debugger
-        e.target.attributes['src'].value='/portal/img/notavailable.jpg';
+        e.target.attributes['src'].value='/portal/img/missing.svg';
     },
     openMedia: function(e){
         e.preventDefault();

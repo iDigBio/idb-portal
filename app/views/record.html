@@ -5,7 +5,7 @@
 {% block cssblock %}
 {% endblock %}
 {% if record.indexTerms.mediarecords -%}
-<meta property="og:image" content="https://api.idigbio.org/v1/mediarecords/{{ record.indexTerms.mediarecords[0] }}/media?quality=webview" />
+<meta property="og:image" content="https://api.idigbio.org/v2/media/{{ record.indexTerms.mediarecords[0] }}?size=webview" />
 {% else %}
 <meta property="og:image" content="https://www.idigbio.org/sites/default/files/sites/default/files/idigbio_og.png" />    
 {%- endif %}

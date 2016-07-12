@@ -37,7 +37,7 @@ if(_.has(record.indexTerms,'geopoint')){
         reuseTiles: true
     });
 
-    map = L.map('map-box',{
+    var map = L.map('map-box',{
         center: [0,0],
         zoom: 0,
         layers: [base],

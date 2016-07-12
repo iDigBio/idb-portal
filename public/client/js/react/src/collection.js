@@ -1,8 +1,7 @@
-
 var React = require('react');
 var helpers = require('../../lib/helpers');
 
-module.exports = Collection = React.createClass({
+var Collection = React.createClass({
 
     render: function(){
         var self=this;
@@ -10,7 +9,7 @@ module.exports = Collection = React.createClass({
 
         var rows =_.map(_.without(_.keys(self.props.data),'update_url'),function(key){
             var frags = key.split('_');
-            for(i=0; i<frags.length; i++) {
+            for(var i=0; i<frags.length; i++) {
                 frags[i] = frags[i].charAt(0).toUpperCase() + frags[i].slice(1);
             }
            var val,link;
@@ -70,6 +69,7 @@ module.exports = Collection = React.createClass({
     }
 });
 
+module.exports = Collection;
 
 function UpdateLink (d){
 
@@ -104,7 +104,7 @@ function UpdateLink (d){
 function GoogleFormQS(entryID, querypart) {
     var encodedComponent = encodeURIComponent(querypart);
 
-    result = encodedComponent === 'undefined' || encodedComponent === '' || encodedComponent === 'null' ? '' : '&entry.' + entryID + '=' + encodedComponent;
+    var result = encodedComponent === 'undefined' || encodedComponent === '' || encodedComponent === 'null' ? '' : '&entry.' + entryID + '=' + encodedComponent;
 
     return result;
 };

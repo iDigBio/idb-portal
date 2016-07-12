@@ -1,3 +1,4 @@
+var React = require('react');
 var ReactDOM = require('react-dom');
 var CollectionPage = require('./react/src/collection');
 //var collection rendered in head of page

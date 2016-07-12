@@ -13,5 +13,4 @@ window.searchHistory = new SearchHistory;
 require('../components/bootstrap/dist/js/bootstrap.min');
 require('../components/jquery.tablesorter/dist/js/jquery.tablesorter');
 require('../components/materialize/js/scrollspy');
-require('es5-shim/es5-shim.min');
-require('es5-shim/es5-sham.min');
+require('es5-shim');

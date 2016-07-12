@@ -22,12 +22,8 @@
 
 {% block content %}
 <input type="hidden" value="{{ id }}" id="recordsetID">
-<div id="main" class="container-fluid" style="margin:0px;">
-    {% autoescape false %}
-    {{ content }}
-    {% endautoescape %}
-</div>
-{% endblock %} 
+<div id="main" class="container-fluid" style="margin:0px;">{% autoescape false %}{{ content }}{% endautoescape %}</div>
+{% endblock %}
 
 {% block appblock %}
 <script type="text/javascript">

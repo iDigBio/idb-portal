@@ -41,7 +41,7 @@ module.exports = React.createClass({
             var role = defOrNone(contact, 'role');
 
             return (
-                <table className="contact" key={name+email+role}>
+                <table className="contact" key={_.uniqueId()}>
                     <tbody>
                     <tr><td className="name">Name</td><td>{name}</td></tr>
                     <tr><td className="name">Role</td><td>{role}</td></tr>

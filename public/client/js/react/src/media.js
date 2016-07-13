@@ -5,8 +5,8 @@ var _ = require('lodash');
 var idbapi = require('../../lib/idbapi');
 
 var Media = React.createClass({
-    error: function(event){
-        $(event.currentTarget).attr('src','/portal/img/missing.svg');
+    errorImage: function(e){
+        e.target.attributes['src'].value = '/portal/img/missing.svg';
     },
     render: function(){
         var link='';
@@ -21,7 +21,9 @@ var Media = React.createClass({
         return (
             <div key={this.props.keyid} id="media-wrapper" className="scrollspy section clearfix" >
                 <a className="clearfix" target={'_'+this.props.keyid} href={link} title="click to open original media file">
-                    <img className="media" src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} onError={this.error}/>
+                    <img className="media" 
+                    src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} 
+                    onError={this.errorImage}/>
                 </a>
                  Media retrieved from:<br />{link}
                 <a className="media-link hidden-print" href={link} target={'_'+this.props.keyid} title="click to open original media file">
@@ -32,6 +34,10 @@ var Media = React.createClass({
                 </a>
             </div>
         );
+
+    },
+    componentDidMount: function(){
+        
     }
 });
 
@@ -134,8 +140,8 @@ var Table = React.createClass({
 });
 
 var Group = React.createClass({
-    error: function(event){
-        $(event.currentTarget).attr('src','/portal/img/missing.svg');
+    errorImage: function(e){
+        e.target.attributes['src'].value = '/portal/img/missing.svg';
     },
     render: function(){
         if(_.has(this.props.record, 'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
@@ -145,7 +151,7 @@ var Group = React.createClass({
                 if(media[id] != this.props.keyid){
                     imgs.push(
                         <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
-                            <img className="gallery-image" src={idbapi.media_host + 'v2/media/'+media[id]+'?size=webview'} onError={this.error} /> 
+                            <img className="gallery-image" src={idbapi.media_host + 'v2/media/'+media[id]+'?size=webview'} onError={this.errorImage} />
                         </a>
                     )                    
                 }
@@ -203,18 +209,18 @@ module.exports = React.createClass({
     },
     navList: function(){
 
-        var media = null;
+        var othermedia = null;
         //var med = this.props.indexTerms.mediarecords
         
         if( _.has(this.props.record,'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
-            media = <li><a href="#other-images">Other Media</a></li>
+            othermedia = <li><a href="#other-images">Other Media</a></li>
         }
 
         return(
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
                 <li><a href="#media-wrapper">Media</a></li>
-                {media}
+                {othermedia}
                 <li><a href="#attribution">Attribution</a></li>
                 <li><a href="#data-table">All Data</a></li>
             </ul>  
@@ -232,7 +238,7 @@ module.exports = React.createClass({
                         <span id="summary">{this.taxaBreadCrumbs()}</span>  
                         <Title data={this.props.record} attribution={this.props.mediarecord.attribution} includeLink={true} mediaSearch={true} />
                         <Media key={source.uuid+'_media'} keyid={source.uuid} data={source.data} />
-                        <Group record={this.props.record} keyid={source.uuid}/>
+                        <Group record={this.props.record} keyid={source.uuid} />
                         <Provider data={this.props.mediarecord.attribution} />
                         <Table record={source} />
                     </div>

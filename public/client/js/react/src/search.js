@@ -59,7 +59,7 @@ var Main = module.exports =  React.createClass({
         //set current search
         if(url('?rq') || url('?sort')){
             paramsParser(search);//mutates search object filters
-            _.each(_.difference(_.pluck(Filters.defaultFilters(), 'name'), _.pluck(search.filters, 'name')),function(filter){
+            _.each(_.difference(_.map(Filters.defaultFilters(), 'name'), _.map(search.filters, 'name')),function(filter){
                 search.filters.push(Filters.newFilterProps(filter));
             });
         }else if(searchHistory.history.length > 0){

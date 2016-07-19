@@ -9,7 +9,7 @@ table {
 }
 #publishers-wrapper {
   background-color: #fefefe;
-  box-shadow: 1px 1px 2px #cccccc;
+  box-shadow: 1px 1px 2px #ccc;
 }
 .table thead th.statcol,
 #statstable .statcol {

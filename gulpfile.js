@@ -7,14 +7,15 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     gutil = require('gulp-util'),
     watchify = require('watchify'),
-    browserify = require('gulp-browserify'),
-    react = require('gulp-react'),
+    gulpbrowserify = require('gulp-browserify'),
+    browserify = require('browserify'),
     less = require('gulp-less'),
     uglify = require('gulp-uglify'),
     path = require('path'),
     rename = require('gulp-rename'),
     babel = require('gulp-babel'),
-    babelify = require('babelify');
+    babelify = require('babelify'),
+    buffer = require('vinyl-buffer');
 
 /*
 Task: default
@@ -23,30 +24,43 @@ builds all react and less files and client files that are part of standard devel
 see  /public/client/js /public/client/less dirs for which files are included
 */
 gulp.task('default',function(){
-        //build js changes 
-    function buildReact(){
-      return  gulp.src("./public/client/js/react/src/**/*.js")
-        .pipe(babel({presets: ["es2015", "react"]}))
-        .pipe(gulp.dest('./public/client/js/react/build'))
-    }
+
+    //build js changes 
+
     buildReact();
 
     gulp.watch(['public/client/js/react/src/**']).on('change',function(){
         buildReact();
     })
 
-    var bundle = watchify('./public/client/js/main.js');
-    bundle.transform(babelify.configure({presets: ["es2015", "react"]}))
-    bundle.on('update',rebundle)
+    var bundle = watchify(browserify({ cache: {}, packageCache: {}, entries:['./public/client/js/main.js'], plugin: [watchify]}));
+    bundle.transform(babelify.configure({presets: ["es2015", "react"]}));
+    bundle.on('update',rebundle);
 
+    //live reload of compiled files
+    livereload.listen();
+    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
+
+    //build less css changes*/
+    gulp.watch('public/client/less/**').on('change', function(){
+        return buildLess();
+    })
+
+    function buildReact(){
+      return  gulp.src("./public/client/js/react/src/**/*.js")
+        .pipe(babel({presets: ["es2015", "react"]}))
+        .pipe(gulp.dest('./public/client/js/react/build'));
+    }
+    
     function rebundle(){
         return bundle.bundle()
         .on('error',function(e){
             gutil.log('Browserify Error:', e);
         })
-        //.pipe(uglify())
         .pipe(source('client.js'))
-        .pipe(gulp.dest('./public/js'))
+        .pipe(buffer())
+        .pipe(uglify())
+        .pipe(gulp.dest('./public/js'));
     }
 
     function buildLess(){
@@ -57,48 +71,44 @@ gulp.task('default',function(){
         .pipe(gulp.dest('./public/css'));        
     }
 
-    gulp.watch('public/client/less/**').on('change', function(){
-        return buildLess();
-    })
-    //live reload of compiled files
-    livereload.listen();
-    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
-    //build less css changes
-
     return rebundle();
+
 });
+
 /*
 Task: libs
 builds file of global libs
 see  /public/client/libs file for which files are included
 */
 gulp.task('libs', function(){
-    gulp.src('./public/client/libs.js')
-    .pipe(browserify({
+     return gulp.src('./public/client/libs.js')
+    .pipe(gulpbrowserify({
         insertGlobals: true
     }))
     .pipe(uglify())
     .pipe(gulp.dest('./public/js'))
 });
+
 /*
 Task: mapper
 builds globablized mapper module for standalone use
 see  /public/client/mapper
 */
 gulp.task('mapper', function(){
-    gulp.src('./public/client/idbmap.js')
-    .pipe(browserify({
+    return gulp.src('./public/client/idbmap.js')
+    .pipe(gulpbrowserify({
         insertGlobals: true
     }))
     .pipe(uglify())
     .pipe(gulp.dest('./public/js'))
 })
+
 /*
 Task: buildLess  [THIS IS USED FOR RELEASE BUILD PROCESSES]
 build public/client/less files to public/css files
 */
 gulp.task('buildLess',function(){
-    gulp.src('./public/client/less/**/*.less')
+    return gulp.src('./public/client/less/**/*.less')
     .pipe(less({
         paths: [ path.join(__dirname, 'less', 'includes') ]
     }))

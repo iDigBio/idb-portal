@@ -92,6 +92,7 @@
  },
   "keywords": [],
   "repository": "git://github.com/idigbio/idigbio-portal",
+  "license": "LGPL-3.0",
   "engines": {
     "node": "*"
   }

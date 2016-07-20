@@ -1,12 +1,16 @@
 {
   "name": "idigbio",
   "description": "iDigBio Portal",
-  "version": "5.0.0",
-  "author": "Greg Traub <gtraub@acis.ufl.edu>",
+  "version": "5.0.5",
+  "author": "Richard Garand <rjgarand@ufl.edu>",
   "contributors": [
     {
       "name": "Alex Thompson",
       "email": "godfoder@acis.ufl.edu"
+    },
+    {
+      "name": "Richard Garand",
+      "email": "rjgarand@ufl.edu"
     },
     {
       "name": "Greg Traub",

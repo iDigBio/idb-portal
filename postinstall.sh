@@ -6,7 +6,7 @@ echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 node_modules/bower/bin/bower install --allow-root
 
 #compile jsx to build files for server side use of React
-babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --blacklist strict
+babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --presets [ es2015 react ]
 #compile full client side file with jsx transforms for browser side client
 node_modules/browserify/bin/cmd.js -o public/js/client.js  public/client/js/main.js -t [ babelify --presets [ es2015 react ] ]
 #minify client side file

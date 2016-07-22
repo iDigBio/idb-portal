@@ -89,7 +89,7 @@
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0",
     "zombie": "~2.5.1"
- },
+  },
   "keywords": [],
   "repository": "git://github.com/idigbio/idigbio-portal",
   "license": "LGPL-3.0",

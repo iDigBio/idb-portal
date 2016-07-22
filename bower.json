@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "directory": "public/components",
   "dependencies": {
-    "async": "^1.5.1",
+    "async": "^2.0.0",
     "backbone": "^1.2.3",
     "blobjs": "eligrey/Blob.js",
     "bootstrap": "^3.3.6",
@@ -12,6 +12,7 @@
     "canvasblob": "eligrey/canvas-toBlob.js",
     "fgh": "https://bitbucket.org/monoid/fgh/raw/465610eb2dcca8e48b84f7ed6927b81fd292bb65/fgh.js",
     "filesaver": "eligrey/FileSaver.js",
+    "jquery": "~2.1.4",
     "jquery.tablesorter": "^2.25.0",
     "leaflet": "~0.7.7",
     "leaflet-loading": "ebrelsford/Leaflet.loading",

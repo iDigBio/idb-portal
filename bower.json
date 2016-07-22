@@ -17,7 +17,6 @@
     "leaflet": "~0.7.7",
     "leaflet-loading": "ebrelsford/Leaflet.loading",
     "leaflet-utfgrid": "danzel/Leaflet.utfgrid",
-    "leaflet.draw": "^0.2.4",
     "leaflet.draw": "Leaflet/Leaflet.draw",
     "leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "materialize": "^0.97.5",
@@ -29,5 +28,8 @@
     "**/.*",
     "node_modules",
     "components"
-  ]
+  ],
+  "resolutions": {
+    "jquery": "~2.1.4"
+  }
 }

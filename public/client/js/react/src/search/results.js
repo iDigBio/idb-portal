@@ -745,7 +745,7 @@ var ResultsImages = React.createClass({
         var text=_.without([specimen['dwc:institutionCode'],specimen['dwc:collectionCode'],specimen['dwc:eventdate']],undefined);
 
         return (
-            <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'image-'+uuid}>
+            <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'a-'+uuid+_.random(999999)}>
                 <span className="img-count">{count}</span>
                 <img alt={name.join(' ')} 
                 src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}

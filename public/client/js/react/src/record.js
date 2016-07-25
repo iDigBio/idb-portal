@@ -70,7 +70,7 @@ var Flags = React.createClass({
     render: function(){
         var rows = _.map(this.props.flags, function(flag){
             return (
-                <tr><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
+                <tr key={'flag-'+flag}><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
             )
         })
 

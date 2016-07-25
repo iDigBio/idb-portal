@@ -170,7 +170,7 @@ var Recordsets = React.createClass({
         }
 
         return (
-          <tr>
+          <tr key={'publisher-'+uuid}>
             <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
             {rec_cols}
             {rec_cols1}

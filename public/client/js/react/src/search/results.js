@@ -553,7 +553,7 @@ var ResultsLabels = React.createClass({
         } 
         var auth='';
         if(_.has(raw, 'dwc:scientificNameAuthorship')){
-            auth = <span className="author">{raw['dwc:scientificNameAuthorship']}</span>;
+            auth = <span key="author" className="author">{raw['dwc:scientificNameAuthorship']}</span>;
         }
 
         var family='';
@@ -589,7 +589,7 @@ var ResultsLabels = React.createClass({
         }
         if(middle.length>0){
             content.push(
-                <span className="middle">
+                <span key="middle" className="middle">
                     {middle}
                 </span>
             )
@@ -608,7 +608,7 @@ var ResultsLabels = React.createClass({
             var imgcount,img;
             if(data.mediarecords.length > 1){ 
                 imgcount = (
-                    <span className="image-count">
+                    <span key="image-count" className="image-count">
                         {data.mediarecords.length}
                     </span>
                 )
@@ -798,7 +798,7 @@ var Providers = React.createClass({
 
         var list = _.map(this.props.attribution, function(item){
             return (
-                <tr>
+                <tr key={'record-'+item.uuid}>
                     <td><a href={"/portal/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
                     <td>{helpers.formatNum(item.itemCount)}</td>
                     <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>

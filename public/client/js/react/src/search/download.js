@@ -146,7 +146,6 @@ var Downloader = React.createClass({
             }else{
                 localStorage.setItem('downloads', JSON.stringify({downloads: downloads}));
             }
-            this.setState({downloads: downloads});
         }
         return {time: 'calculating', disabled: false, downloads: downloads};
     },

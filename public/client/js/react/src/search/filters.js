@@ -413,10 +413,11 @@ var DateRangeFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter;
-        var name = filter.name, label = fields.byTerm[name].name,
-        exists = filter.exists ,
-        missing = filter.missing,
-        disabled = false;
+        var name = filter.name;
+        var label = fields.byTerm[name].name;
+        var exists = filter.exists;
+        var missing = filter.missing;
+        var disabled = false;
         if(exists || missing){
             disabled=true;
         }
@@ -502,10 +503,11 @@ var NumericRangeFilter = React.createClass({
     },
     render: function(){
         var filter = this.props.filter;
-        var name = filter.name, label = fields.byTerm[name].name
-        exists = filter.exists ,
-        missing = filter.missing,
-        disabled = false;
+        var name = filter.name;
+        var label = fields.byTerm[name].name;
+        var exists = filter.exists;
+        var missing = filter.missing;
+        var disabled = false;
         if(exists || missing){
             disabled=true;
         }

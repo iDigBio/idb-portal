@@ -214,7 +214,7 @@ var TextFilter = React.createClass({
                 last = split[split.length-1].toLowerCase(),
                 rq = queryBuilder.buildQueryShim(self.props.search);
                 rq[name]={'type':'prefix', 'value': last};
-                query = {rq: rq, count: 15, top_fields:[name]};
+                var query = {rq: rq, count: 15, top_fields:[name]};
 
                 idbapi.summary('top/basic/',query, function(resp) {
                     respCallback(_.map(resp[name], function(v,k){

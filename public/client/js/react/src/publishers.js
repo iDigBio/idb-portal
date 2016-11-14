@@ -253,7 +253,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.recordsets({"fields":["data.collection_name","publisher"],"limit":1000},function(resp){
+    idbapi.recordsets({"fields":["data.collection_name","publisher"],"limit":3000},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.indexTerms.publisher])){
           pubs[item.indexTerms.publisher]=defpub();

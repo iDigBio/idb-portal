@@ -123,22 +123,22 @@
 #filters #filters-holder .filter {
   background: #fafafa;
   /* Old browsers */
-  background: -moz-linear-gradient(top, #fafafa 0%, #ececec 100%);
+  background: -moz-linear-gradient(top, #fafafa 0%, #ECECEC 100%);
   /* FF3.6+ */
   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, #fafafa), color-stop(100%, #f0f0f0));
   /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #fafafa 0%, #ececec 100%);
+  background: -webkit-linear-gradient(top, #fafafa 0%, #ECECEC 100%);
   /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #fafafa 0%, #ececec 100%);
+  background: -o-linear-gradient(top, #fafafa 0%, #ECECEC 100%);
   /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #fafafa 0%, #ececec 100%);
+  background: -ms-linear-gradient(top, #fafafa 0%, #ECECEC 100%);
   /* IE10+ */
-  background: linear-gradient(to bottom, #fafafa 0%, #ececec 100%);
+  background: linear-gradient(to bottom, #fafafa 0%, #ECECEC 100%);
   /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fafafa', endColorstr='@lightgrey', GradientType=0);
   /* IE6-9 */
   margin-top: 0px;
-  border-right: 1px solid #cccccc;
+  border-right: 1px solid #ccc;
   padding: 4px;
 }
 #filters #filters-holder .filter .filter-name {
@@ -291,7 +291,7 @@
   margin: 0px;
   margin-left: 20px;
   padding: 0px;
-  background-color: #ececec;
+  background-color: #ECECEC;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 #results #results-menu li:first-letter {
@@ -306,7 +306,7 @@
   letter-spacing: .07em;
   font-weight: normal;
   text-align: center;
-  border-bottom: 4px solid #ececec;
+  border-bottom: 4px solid #ECECEC;
   padding: 4px 10px;
   border-radius: 3px 3px 0px 0px;
   cursor: pointer;
@@ -318,7 +318,7 @@
   padding: 4px 10px;
   cursor: auto;
   color: #333;
-  box-shadow: 0px -1px 1px #eeeeee;
+  box-shadow: 0px -1px 1px #eee;
   border-bottom: 4px solid #6aaa51;
 }
 #results #results-menu li:not(.active):hover {
@@ -380,14 +380,14 @@
   border-bottom: 1px solid #bbb;
   border-right: none;
   border-radius: 4px 0px 0px 0px;
-  background: #eeeeee url(images/up.png) no-repeat center center;
+  background: #eee url(images/up.png) no-repeat center center;
 }
 #results #result-list .modal-dialog .modal-body .column-select-wrapper .up-down button.down {
   border: 1px solid #ccc;
   border-top: 1px solid #eee;
   border-right: none;
   border-radius: 0px 0px 0px 4px;
-  background: #eeeeee url(images/down.png) no-repeat center center;
+  background: #eee url(images/down.png) no-repeat center center;
 }
 #results #result-list .modal-dialog .modal-body .column-select-wrapper .column-select {
   display: inline-block;
@@ -475,7 +475,7 @@
   text-align: center;
   height: 50px;
   font-size: 1.2em;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
 }
 #results #result-list #data-table tbody tr.no-results-row td {
   padding: 20px;
@@ -536,7 +536,7 @@
   height: 150px;
   overflow: hidden;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
-  background-color: #ececec;
+  background-color: #ECECEC;
   padding: 3px 8px;
 }
 @media (max-width: 1790px) {
@@ -560,7 +560,7 @@
   transition: background-color 0.5s;
 }
 #results #result-labels .result-label h5.title {
-  color: #03a9f4;
+  color: #03A9F4;
   font-weight: bold;
   display: inline-block;
   max-width: 65%;
@@ -700,7 +700,7 @@
 #results #results-images .image {
   height: 230px;
   width: 15.50%;
-  background-color: #ececec;
+  background-color: #ECECEC;
   margin: 10px;
   float: left;
   border-radius: 3px;
@@ -801,7 +801,7 @@
   margin: 0px auto;
   padding: 0px 0px;
   background-color: white;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   width: 100%;
   float: left;
 }
@@ -831,8 +831,8 @@
 #sorting #sort-add {
   text-align: right;
   padding: 4px 20px;
-  background-color: #ececec;
-  border-bottom: 1px solid #cccccc;
+  background-color: #ECECEC;
+  border-bottom: 1px solid #ccc;
   margin-top: 0px;
 }
 #sorting label {
@@ -918,8 +918,8 @@
 }
 #download {
   padding: 0px;
-  background-color: #ececec;
-  border-bottom: 1px solid #cccccc;
+  background-color: #ECECEC;
+  border-bottom: 1px solid #ccc;
   margin: 0px;
 }
 #download .sub#current {
@@ -941,7 +941,7 @@
 #download #downloads-section {
   width: 100%;
   background-color: white;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   margin: 0px;
 }
 #download #downloads-section label {
@@ -958,7 +958,7 @@
   }
 }
 #download #downloads-section table {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   width: 100%;
   margin: 3px 0px;
 }
@@ -1188,7 +1188,7 @@
 }
 .map-item-nav span.nav-left:not(.disable):hover,
 .map-item-nav span.nav-right:not(.disable):hover {
-  border-color: #607d8b;
+  border-color: #607D8B;
   background-color: #ddd;
 }
 .map-popup-wrapper {
@@ -1270,7 +1270,7 @@ i.spinner {
   margin-left: 470px;
   margin-right: 15px;
   height: 490px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   border-radius: 4px;
   position: relative;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
@@ -1282,9 +1282,9 @@ i.spinner {
   height: 490px;
   float: left;
   background-color: #fafafa;
-  border-right: 1px solid #cccccc;
-  border-bottom: 1px solid #cccccc;
-  border-top: 1px solid #cccccc;
+  border-right: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  border-top: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   -webkit-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   -moz-box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
@@ -1329,7 +1329,7 @@ i.spinner {
 #options #options-menu li.tab a {
   text-decoration: none;
   color: #333;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   border-bottom: none;
   padding: 3px 6px 2px 6px;
   border-radius: 3px 3px 0px 0px;
@@ -1340,7 +1340,7 @@ i.spinner {
   cursor: pointer;
 }
 #options #options-menu li.tab a.active {
-  background-color: #ececec;
+  background-color: #ECECEC;
   padding-bottom: 4px;
 }
 #options #options-menu li.tab a.active:hover {
@@ -1352,7 +1352,7 @@ i.spinner {
 #options .section {
   display: none;
   width: 100%;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   border-radius: none;
   margin: 0px;
   magin-top: 3px;
@@ -1365,11 +1365,11 @@ i.spinner {
 #options .option-group {
   margin: 0px;
   margin-bottom: 0px;
-  background-color: #ececec;
+  background-color: #ECECEC;
   display: table;
   width: 100%;
   padding: 5px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
 }
 #options .option-group select {
   display: inline;
@@ -1427,7 +1427,7 @@ i.spinner {
     float: none;
     width: 90%;
     margin: 10px 20px;
-    border-left: 1px solid #cccccc;
+    border-left: 1px solid #ccc;
     height: 460px;
   }
   #filter-selects select {

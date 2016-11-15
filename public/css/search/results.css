@@ -14,7 +14,7 @@
   margin: 0px;
   margin-left: 20px;
   padding: 0px;
-  background-color: #ececec;
+  background-color: #ECECEC;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
 }
 #results #results-menu li:first-letter {
@@ -29,7 +29,7 @@
   letter-spacing: .07em;
   font-weight: normal;
   text-align: center;
-  border-bottom: 4px solid #ececec;
+  border-bottom: 4px solid #ECECEC;
   padding: 4px 10px;
   border-radius: 3px 3px 0px 0px;
   cursor: pointer;
@@ -41,7 +41,7 @@
   padding: 4px 10px;
   cursor: auto;
   color: #333;
-  box-shadow: 0px -1px 1px #eeeeee;
+  box-shadow: 0px -1px 1px #eee;
   border-bottom: 4px solid #6aaa51;
 }
 #results #results-menu li:not(.active):hover {
@@ -103,14 +103,14 @@
   border-bottom: 1px solid #bbb;
   border-right: none;
   border-radius: 4px 0px 0px 0px;
-  background: #eeeeee url(images/up.png) no-repeat center center;
+  background: #eee url(images/up.png) no-repeat center center;
 }
 #results #result-list .modal-dialog .modal-body .column-select-wrapper .up-down button.down {
   border: 1px solid #ccc;
   border-top: 1px solid #eee;
   border-right: none;
   border-radius: 0px 0px 0px 4px;
-  background: #eeeeee url(images/down.png) no-repeat center center;
+  background: #eee url(images/down.png) no-repeat center center;
 }
 #results #result-list .modal-dialog .modal-body .column-select-wrapper .column-select {
   display: inline-block;
@@ -198,7 +198,7 @@
   text-align: center;
   height: 50px;
   font-size: 1.2em;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
 }
 #results #result-list #data-table tbody tr.no-results-row td {
   padding: 20px;
@@ -259,7 +259,7 @@
   height: 150px;
   overflow: hidden;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
-  background-color: #ececec;
+  background-color: #ECECEC;
   padding: 3px 8px;
 }
 @media (max-width: 1790px) {
@@ -283,7 +283,7 @@
   transition: background-color 0.5s;
 }
 #results #result-labels .result-label h5.title {
-  color: #03a9f4;
+  color: #03A9F4;
   font-weight: bold;
   display: inline-block;
   max-width: 65%;
@@ -423,7 +423,7 @@
 #results #results-images .image {
   height: 230px;
   width: 15.50%;
-  background-color: #ececec;
+  background-color: #ECECEC;
   margin: 10px;
   float: left;
   border-radius: 3px;
@@ -524,7 +524,7 @@
   margin: 0px auto;
   padding: 0px 0px;
   background-color: white;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   width: 100%;
   float: left;
 }

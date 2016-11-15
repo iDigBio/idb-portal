@@ -13,7 +13,7 @@
     "filesaver": "eligrey/FileSaver.js",
     "jquery": "~2.2.4",
     "jquery.tablesorter": "^2.27.8",
-    "leaflet": "~0.7.7",
+    "leaflet": "~0.7.3",
     "leaflet-loading": "ebrelsford/Leaflet.loading",
     "leaflet-utfgrid": "danzel/Leaflet.utfgrid",
     "leaflet-draw": "Leaflet/Leaflet.draw#0.3.x",

@@ -31,7 +31,7 @@
 #side-nav #side-nav-list li.title {
   color: #111;
   font-size: 17px;
-  border-bottom: 1px solid #cccccc;
+  border-bottom: 1px solid #ccc;
   padding: 0px;
   margin-bottom: 8px;
 }
@@ -85,7 +85,7 @@
 }
 #attribution #provider-info {
   font-size: 13px;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   padding: 5px 0px;
 }
 #attribution #provider-info .title {
@@ -109,7 +109,7 @@
 }
 #raw {
   font-size: 13px;
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
 }
 #raw #raw-body {
   overflow: auto;
@@ -162,7 +162,7 @@ h1#banner {
 }
 #data-table #raw,
 #data-table #record {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   padding-top: 20px;
 }
 #data-table table tbody tr td {
@@ -216,7 +216,7 @@ h1#banner {
   }
 }
 #other-images #images-wrapper {
-  border-top: 1px solid #cccccc;
+  border-top: 1px solid #ccc;
   margin: 0px auto;
   padding: 10px 0px;
 }
@@ -224,7 +224,7 @@ h1#banner {
   display: relative;
   max-height: 100px;
   margin: 5px;
-  border: 1px solid #cccccc;
+  border: 1px solid #ccc;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   padding: 4px;
 }

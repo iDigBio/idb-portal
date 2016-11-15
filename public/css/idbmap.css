@@ -1,6 +1,6 @@
 @import '/portal/components/leaflet/dist/leaflet.css';
 @import '/portal/components/leaflet-loading/src/Control.Loading.css';
-@import '/portal/components/leaflet.draw/dist/leaflet.draw.css';
+@import '/portal/components/leaflet-draw/dist/leaflet.draw.css';
 @import '/portal/components/leaflet.fullscreen/Control.FullScreen.css';
 .fullscreen {
   margin: 0px;
@@ -154,7 +154,7 @@
 }
 .map-item-nav span.nav-left:not(.disable):hover,
 .map-item-nav span.nav-right:not(.disable):hover {
-  border-color: #607D8B;
+  border-color: #607d8b;
   background-color: #ddd;
 }
 .map-popup-wrapper {

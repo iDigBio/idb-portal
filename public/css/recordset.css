@@ -1,6 +1,6 @@
 #raw {
   font-size: 13px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #cccccc;
 }
 #raw #raw-body {
   overflow: auto;
@@ -34,7 +34,7 @@
 #side-nav #side-nav-list li.title {
   color: #111;
   font-size: 17px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 1px solid #cccccc;
   padding: 0px;
   margin-bottom: 8px;
 }
@@ -174,7 +174,7 @@ body {
 }
 #content #stats-tables .stat-table {
   padding-top: 20px;
-  border-top: 1px solid #ccc;
+  border-top: 1px solid #cccccc;
 }
 #content #flags-table .badge {
   text-shadow: none;

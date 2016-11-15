@@ -27,7 +27,7 @@ require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
 var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
 var fields = require('./fields');
-require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
+require('../../../../public/components/leaflet-draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
 var GeoPoint = require('geopoint');
 

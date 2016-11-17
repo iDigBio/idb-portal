@@ -41,7 +41,7 @@
     "http-proxy": "~1.8.1",
     "jquery": "~2.1.4",
     "jquery-ui-browserify": "1.11.0-pre-seelio",
-    "leaflet": "^0.7.3",
+    "leaflet": "0.7.3",
     "leaflet-image": "^0.2.1",
     "leaflet-sleep": "^0.5.0",
     "less": "^2.7.1",

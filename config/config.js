@@ -24,9 +24,9 @@ var config = {
 				url: "/portal/search",
 				label: "Search Records"
             },
-			tutorial: {
-				url: "/portal/tutorial",
-				label: "Tutorial"
+			learning: {
+				url: "//www.idigbio.org/content/learning-center",
+				label: "Learning Center"
 			},
 			publishers: {
 				url: "/portal/publishers",

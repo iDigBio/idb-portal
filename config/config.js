@@ -38,8 +38,8 @@ var config = {
 				]
 			},
 			tools: {
-				url: "//www.idigbio.org/content/community-research-tools",
-				label: "Research Tools"
+				url: "//www.idigbio.org/content/idigbio-collaborations-enabling-research",
+				label: "Research Collaboration"
 			},
 			contact: {
 				url: "//www.idigbio.org/contact/Portal_feedback",

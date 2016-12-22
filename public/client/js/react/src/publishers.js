@@ -266,7 +266,7 @@ async.parallel([
     });    
   },
   function(callback){
-    idbapi.summary('stats/api',{inverted: "true",minDate:"now-1h"},function(resp){
+    idbapi.summary('stats/api',{inverted: "true",minDate:"now-1d"},function(resp){
       _.forEach(resp.recordsets,function(val,key){
         var d = _.keys(val).sort().reverse()[0];
         if(_.isUndefined(rsets[key])){

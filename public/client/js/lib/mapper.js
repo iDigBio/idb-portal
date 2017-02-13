@@ -523,7 +523,7 @@ module.exports = function(elid, options){
     self.currentQueryTime=0;
     self.currentQuery = '';
     var _query = _.debounce(function(){
-        var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+        var query = {rq: idbquery, type: 'auto', threshold: 100000};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
         //if(self.currentQuery !== q){

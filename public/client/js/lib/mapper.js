@@ -529,7 +529,6 @@ module.exports = function(elid, options){
         //if(self.currentQuery !== q){
            // self.currentQuery = q;
             self.currentQueryTime = time;
-            console.log(q, time);
             $.ajax(mapapi,{
                 data: q,
                 success: function(resp){
@@ -537,7 +536,6 @@ module.exports = function(elid, options){
                     //make sure last query run is the last one that renders
                     //as responses can be out of order
                     //mapCode = resp.shortCode;
-                    console.log(resp.shortCode, time, self.currentQueryTime);
                     if(time>=self.currentQueryTime){
                         self.map.mapCode = resp.shortCode;
                         self.map.resp=resp;

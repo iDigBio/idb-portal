@@ -537,7 +537,7 @@ module.exports = function(elid, options){
                     //make sure last query run is the last one that renders
                     //as responses can be out of order
                     //mapCode = resp.shortCode;
-                    console.log(mapCode, time, self.currentQueryTime);
+                    console.log(resp.shortCode, time, self.currentQueryTime);
                     if(time>=self.currentQueryTime){
                         self.map.mapCode = resp.shortCode;
                         self.map.resp=resp;

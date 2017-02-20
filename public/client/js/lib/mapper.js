@@ -529,6 +529,7 @@ module.exports = function(elid, options){
         //if(self.currentQuery !== q){
            // self.currentQuery = q;
             self.currentQueryTime = time;
+            console.log(q, time);
             $.ajax(mapapi,{
                 data: q,
                 success: function(resp){
@@ -536,9 +537,10 @@ module.exports = function(elid, options){
                     //make sure last query run is the last one that renders
                     //as responses can be out of order
                     //mapCode = resp.shortCode;
-                    self.map.mapCode = resp.shortCode;
-                    self.map.resp=resp;
+                    console.log(mapCode, time, self.currentQueryTime);
                     if(time>=self.currentQueryTime){
+                        self.map.mapCode = resp.shortCode;
+                        self.map.resp=resp;
                         if(options.legend){
                             if(typeof legend == 'object'){
                                 //self.map.removeControl(legend);

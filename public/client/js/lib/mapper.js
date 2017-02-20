@@ -567,7 +567,7 @@ module.exports = function(elid, options){
         //}
         
 
-    }, 100,{'leading': false, 'trailing': true});
+    }, 500,{'leading': false, 'trailing': true});
 
     /* 
     * Init MAP, Options and Event Handlers

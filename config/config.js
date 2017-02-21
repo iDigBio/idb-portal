@@ -3,7 +3,6 @@ var _ = require('lodash');
 var config = {
 	api: 'https://search.idigbio.org/v2/',
 	media: 'https://api.idigbio.org/',
-	crypt_key: process.env.IDB_CRYPT_KEY,
 	secret: process.env.IDB_SECRET,
 	root: require('path').normalize(__dirname + '/..'),
 	app: {

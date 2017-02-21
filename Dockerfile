@@ -1,5 +1,6 @@
 FROM node:6-alpine
 
+RUN adduser -S www-data
 RUN apk add --no-cache make gcc g++ python bash git
 RUN npm install -g yarn
 WORKDIR /var/www
@@ -12,4 +13,4 @@ RUN yarn postinstall
 EXPOSE 19199
 
 USER www-data
-CMD ["node","app.js"]
+CMD ["npm", "start"]

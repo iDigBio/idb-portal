@@ -1,0 +1,23 @@
+{
+  "presets": [
+    "node6",
+    "stage-3",
+    "react"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./",
+        ],
+        "alias": {}
+      }
+    ],
+    "transform-promise-to-bluebird",
+    "transform-react-display-name",
+    "transform-decorators",
+    "transform-class-properties",
+    "transform-es2015-classes"
+  ]
+}

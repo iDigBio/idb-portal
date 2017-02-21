@@ -1,10 +1,8 @@
 var request = require('request');
 var async = require('async');
-var path = require('path'),
-    appDir = path.dirname(require.main.filename);
-var config = require(appDir+'/config/config');
-var RecordsetPage = require(appDir+'/public/client/js/react/build/recordset');
-var fields = require(appDir+'/public/client/js/lib/fields');
+var config = require('config/config');
+var RecordsetPage = require('public/client/js/react/build/recordset');
+var fields = require('public/client/js/lib/fields');
 //var RecordsetPage = require(appDir+'/public/react/build/recordset');
 module.exports = function(app, config) {
     return {

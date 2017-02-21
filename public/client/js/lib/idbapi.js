@@ -1,7 +1,7 @@
 //require('jquery');
 
 if (typeof window === "undefined") {
-    window = global;
+    var window = global;
 }
 
 module.exports = {

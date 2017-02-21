@@ -1,11 +1,9 @@
 
 var request = require('request');
-var path = require('path'),
-    appDir = path.dirname(require.main.filename);
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
-var RecordPage = React.createFactory(require(appDir+'/public/client/js/react/build/record'));
-var MediaPage = React.createFactory(require(appDir+'/public/client/js/react/build/media'));
+var RecordPage = React.createFactory(require('public/client/js/react/build/record'));
+var MediaPage = React.createFactory(require('public/client/js/react/build/media'));
 var async = require('async');
 var _ = require('lodash');
 

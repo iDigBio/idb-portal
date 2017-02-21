@@ -4,19 +4,15 @@ var http = require('http');
 var _ = require('lodash');
 var openid = require('openid');
 
+var relyingParty = new openid.RelyingParty(
+    'https://www.idigbio.org/portal/verify', // Verification URL (yours) MUST have full url with protocol
+    null, // Realm (optional, specifies realm for OpenID authentication)
+    true, // Use stateless verification
+    false, // Strict mode
+    []
+);
 
-module.exports = function(app, config) {
-    var relyingParty = new openid.RelyingParty(
-        'https://www.idigbio.org/portal/verify', // Verification URL (yours) MUST have full url with protocol
-        null, // Realm (optional, specifies realm for OpenID authentication)
-        true, // Use stateless verification
-        false, // Strict mode
-        []
-    );
-
-    //var helper = require('../../lib/helper')(app,config);
-
-    return {
+var createUsers = {
         login: function(req, res) {
             res.render('login.html');
         },
@@ -78,4 +74,5 @@ module.exports = function(app, config) {
             }
         }
     }
-}
+
+export default createUsers;

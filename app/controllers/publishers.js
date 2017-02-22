@@ -3,10 +3,12 @@ var async = require('async');
 var config = require('config/config');
 var RecordsetPage = require('public/client/js/react/build/recordset');
 var fields = require('public/client/js/lib/fields');
-var config = require("config/config");
+
+import config from 'config/config';
+import logger from 'app/logging';
 
 //var RecordsetPage = require(appDir+'/public/react/build/recordset');
-var createPublishers = {
+export default {
     collections: function(req,res){
 
         request.get({"url": 'http://idigbio.github.io/idb-us-collections/collections.json', "json": true}, function(err, resp, body){
@@ -118,6 +120,4 @@ var createPublishers = {
     recordsetRedirect: function(req,res){
         res.redirect('/portal/recordsets/'+req.params.id);
     } 
-}
-
-export default createPublishers;
+};

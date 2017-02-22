@@ -6,9 +6,10 @@ var RecordPage = React.createFactory(require('public/client/js/react/build/recor
 var MediaPage = React.createFactory(require('public/client/js/react/build/media'));
 var async = require('async');
 var _ = require('lodash');
-var config = require("config/config");
+import config from 'config/config';
+import logger from 'app/logging';
 
-var createViews = {
+export default {
 	person: function(req, res) {
 		res.render('person', {
 			activemenu: 'people',
@@ -118,6 +119,4 @@ var createViews = {
             }); 
 		});
 	}
-}
-
-export default createViews;
+};

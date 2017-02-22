@@ -1,12 +1,13 @@
 var request = require('request');
-var config = require("config/config");
+import config from 'config/config';
+import logger from 'app/logging';
 
-var createSearch = {
+export default {
   searchid: function(req, res) {
     //req.params.type = 'record'
     config.client.query("Select * from idigbio_saved_searches where id=$1 and type=$2", [req.params.id, req.params.type], function(error, results) {
       if (error) {
-        console.log(error);
+        logger.error(error);
         res.send(500);
       } else {
         if (results.rowCount > 0) {
@@ -91,6 +92,4 @@ var createSearch = {
       );
     }
   }
-}
-
-export default createSearch;
+};

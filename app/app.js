@@ -8,13 +8,12 @@ var favicon = require("serve-favicon");
 var methodOverride = require("method-override");
 var morgan = require("morgan");
 var cons = require('consolidate');
-var swig = swig = require('swig');
+var swig = require('swig');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
-var _ = require('lodash');
-var request = require('request');
 
-var config = require('config/config');
+import config from 'config/config';
+import logger from 'app/logging';
 
 var home = require('app/controllers/home').default;
 var search = require('app/controllers/search').default;
@@ -25,12 +24,9 @@ var publishers = require('app/controllers/publishers').default;
 var app = express();
 export default app;
 
-Object.keys(config).forEach(function(key){
-    app.set(key,config[key])
-});
 app.use(compression());
-//set cache expiration on public directory
-app.use(serveStatic(config.root + '/public',{maxAge: 86400000}));
+// set cache expiration on public directory
+app.use(serveStatic(config.root + '/public', {maxAge: 86400000}));
 app.use(serveStatic(config.root + '/public'));
 app.engine('html', cons.swig);
 app.engine('haml', cons.haml);
@@ -46,8 +42,8 @@ app.use(favicon(config.root + '/public/img/favicon.ico'));
 app.use(morgan(':remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.urlencoded({"extended": true}));
 app.use(session({
-    secret: app.get('secret'),
-    store: new RedisStore(app.get('redis')),
+    secret: config.secret,
+    store: new RedisStore(config.redis),
     resave: false,
     saveUninitialized: true,        
     cookie: { //a week in milliseconds
@@ -91,7 +87,10 @@ app.use(function(req, res, next) {
     next();
 });
 app.use(methodOverride());
-app.locals = config;
+app.use(function(err, req, res, next) {
+  logger.error("Request Error:", err);
+  next(err);
+})
 
 app.all('*', function(req, res, next) {
     res.expose(req.headers, 'headers');
@@ -126,10 +125,5 @@ app.get('/login/javascripts/async.js', function(req, res, next) {
 app.use(function(req, res) {
     res.status(404).render('404', {
         title: "404"
-    });
-});
-app.use(function(req, res) {
-    res.status(500).render('500', {
-        title: "500"
     });
 });

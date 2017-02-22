@@ -1,6 +1,6 @@
+import logger from 'app/logging';
 
-
-var createHome = {
+export default {
 	index: function(req, res) {
 
 		res.render('home', {
@@ -16,6 +16,4 @@ var createHome = {
 			user: req.user
 		});
 	},
-}
-
-export default createHome;
+};

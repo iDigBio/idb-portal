@@ -1,6 +1,6 @@
 var request = require('request');
-import config from 'config/config';
-import logger from 'app/logging';
+import config from 'config/config'; // eslint-disable-line no-unused-vars
+import logger from 'app/logging'; // eslint-disable-line no-unused-vars
 
 export default {
   searchid: function(req, res) {
@@ -12,7 +12,7 @@ export default {
       } else if(results.rowCount > 0) {
           var labels = {};
           var state = {};
-          if(results.rows[0].state != "") {
+          if(results.rows[0].state !== "") {
             state = JSON.parse(results.rows[0].search);
           }
           config.searchconfig[req.params.type].base_fields.forEach(function(f) {
@@ -39,7 +39,7 @@ export default {
     var labels = {};
     var state = {};
     if(req.query["state"]) {
-      if(req.query["state"][0] == "{") {
+      if(req.query["state"][0] === "{") {
         state = JSON.parse(req.query["state"]);
       } else {
         state = JSON.parse(new Buffer(req.query["state"], 'base64').toString('ascii'));
@@ -50,14 +50,14 @@ export default {
     });
     var ctx = [];
     config.fieldobj.context_list.forEach(function(val) {
-      if(config.context_lists[req.params.type].indexOf(val) != -1) {
+      if(config.context_lists[req.params.type].indexOf(val) !== -1) {
         ctx.push(val);
       }
     });
     res.expose(ctx, "contexts");
     res.expose(state, "initstate");
     res.expose(config.searchconfig[req.params.type], "searchcfg");
-    var page = req.params.type == 'records' ? 'search3' : 'mediarecords-search';
+    var page = req.params.type === 'records' ? 'search3' : 'mediarecords-search';
     res.render(page, {
       activemenu: req.params.type,
       'view_type': req.params.type,

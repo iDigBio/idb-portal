@@ -1,7 +1,7 @@
-var express = require('express');
-var config = require('./config/config');
-
 require('babel-register');
+
+var express = require('express');
+var config = require('./config/config').default;
 
 function registerGracefulShutdown(signal, server, id) {
   process.on(signal, function() {
@@ -15,13 +15,13 @@ function registerGracefulShutdown(signal, server, id) {
 
 function startThisProcess(app, id) {
   return new Promise(function(resolve, reject) {
-	id = id || 'main';
-	  const server = app.listen(config.port, function() {
-	    console.log(`Server(${id}) listening on port ${config.port}`);
-	  });
-	  registerGracefulShutdown('SIGTERM', server, id);
-	  registerGracefulShutdown('SIGINT', server, id);
-	  resolve();
+  id = id || 'main';
+    const server = app.listen(config.port, function() {
+      console.log(`Server(${id}) listening on port ${config.port}`);
+    });
+    registerGracefulShutdown('SIGTERM', server, id);
+    registerGracefulShutdown('SIGINT', server, id);
+    resolve();
   });
 }
 

@@ -45,20 +45,20 @@ app.use(session({
     secret: config.secret,
     store: new RedisStore(config.redis),
     resave: false,
-    saveUninitialized: true,        
-    cookie: { //a week in milliseconds
+    saveUninitialized: true,
+    cookie: { // a week in milliseconds
         maxAge: 7 * 24 * 60 * 60 * 1000
     }
 }));
 app.use(csrf());
 app.use(function(req, res, next) {
     if(req.session) {
-        //for simple cache breaking urls
+        // for simple cache breaking urls
         var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';
         function randString(length) {
             length = length ? length : 32;
             var string = '';
-            for (var i = 0; i < length; i++) {
+            for(var i = 0; i < length; i++) {
                 var randomNumber = Math.floor(Math.random() * chars.length);
                 string += chars.substring(randomNumber, randomNumber + 1);
             }
@@ -70,17 +70,17 @@ app.use(function(req, res, next) {
                 is_authenticated: true,
                 login: req.session.login,
                 random: randString()
-            }
-        }else{
+            };
+        } else {
             req.user = {
                 random: randString()
-            }                     
-        } 
-    }else{
+            };
+        }
+    } else {
         req.user = {};
     }
-    //is user on portal.idigbio.org or www.idigbio.org/portal ?
-    
+    // is user on portal.idigbio.org or www.idigbio.org/portal ?
+
     req.user.refurl = req.originalUrl;
     req.user.host = req.headers.host;
     req.user.protocol = req.protocol;
@@ -90,7 +90,7 @@ app.use(methodOverride());
 app.use(function(err, req, res, next) {
   logger.error("Request Error:", err);
   next(err);
-})
+});
 
 app.all('*', function(req, res, next) {
     res.expose(req.headers, 'headers');
@@ -121,7 +121,7 @@ app.get('/verify', user.verify);
 app.get('/login/javascripts/async.js', function(req, res, next) {
     res.setHeader("Content-Type", "text/javascript");
     res.send("");
-})
+});
 app.use(function(req, res) {
     res.status(404).render('404', {
         title: "404"

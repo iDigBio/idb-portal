@@ -4,16 +4,15 @@ import logger from 'app/logging';
 
 export default {
   searchid: function(req, res) {
-    //req.params.type = 'record'
+    // req.params.type = 'record'
     config.client.query("Select * from idigbio_saved_searches where id=$1 and type=$2", [req.params.id, req.params.type], function(error, results) {
-      if (error) {
+      if(error) {
         logger.error(error);
         res.send(500);
-      } else {
-        if (results.rowCount > 0) {
-          var labels = {}
-          var state = {}
-          if (results.rows[0].state != "") {
+      } else if(results.rowCount > 0) {
+          var labels = {};
+          var state = {};
+          if(results.rows[0].state != "") {
             state = JSON.parse(results.rows[0].search);
           }
           config.searchconfig[req.params.type].base_fields.forEach(function(f) {
@@ -34,14 +33,13 @@ export default {
         } else {
           res.send(404);
         }
-      }
     });
   },
   search: function(req, res) {
-    var labels = {}
-    var state = {}
-    if (req.query["state"]) {
-      if (req.query["state"][0] == "{") {
+    var labels = {};
+    var state = {};
+    if(req.query["state"]) {
+      if(req.query["state"][0] == "{") {
         state = JSON.parse(req.query["state"]);
       } else {
         state = JSON.parse(new Buffer(req.query["state"], 'base64').toString('ascii'));
@@ -52,7 +50,7 @@ export default {
     });
     var ctx = [];
     config.fieldobj.context_list.forEach(function(val) {
-      if (config.context_lists[req.params.type].indexOf(val) != -1) {
+      if(config.context_lists[req.params.type].indexOf(val) != -1) {
         ctx.push(val);
       }
     });
@@ -69,26 +67,26 @@ export default {
       token: req.session._csrf
     });
   },
-  //portal search page
-  searchBackbone: function(req, res){
+  // portal search page
+  searchBackbone: function(req, res) {
     res.set('Cache-Control', 'public');
     res.render('search', {
       activemenu: 'search',
       user: req.user,
       token: req.session._csrf
-    });     
+    });
   },
 
-  sendStats: function(req, res){
+  sendStats: function(req, res) {
     res.send(200);
     var ip = req.ip;
     var forward = req.headers['x-forwarded-for'];
-    //don't send acis and localhost/dev requests
-    if(typeof forward != 'undefined' && forward.indexOf('10.244.19') !== 0  && ip !== '127.0.0.1'){
-      var stats = {form:{type: req.body.type, search: req.body.search, results: req.body.results}};
+    // don't send acis and localhost/dev requests
+    if(typeof forward !== 'undefined' && forward.indexOf('10.244.19') !== 0  && ip !== '127.0.0.1') {
+      var stats = {form: {type: req.body.type, search: req.body.search, results: req.body.results}};
       request.post(
         'http://idb-redis-stats.acis.ufl.edu:3000',
-        stats 
+        stats
       );
     }
   }

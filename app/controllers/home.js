@@ -11,7 +11,7 @@ export default {
 		//   res.render('home', { activemenu: 'home', user: req.user });
 	},
 	tutorial: function(req, res) {
-		res.render('tutorial',{
+		res.render('tutorial', {
 			activemenu: 'tutorial',
 			user: req.user
 		});

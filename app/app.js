@@ -40,7 +40,6 @@ export default app;
 app.use(compression());
 // set cache expiration on public directory
 app.use(serveStatic(config.root + '/public', {maxAge: 86400000}));
-app.use(serveStatic(config.root + '/public'));
 app.engine('html', cons.swig);
 app.engine('haml', cons.haml);
 // NOTE: Swig requires some extra setup so that it knows where to look for includes and parent templates
@@ -56,7 +55,7 @@ app.use(morgan(':remote-addr - ":method :url HTTP/:http-version" :status :res[co
 app.use(bodyParser.urlencoded({"extended": true}));
 
 var store = new RedisStore(config.redis);
-if (config.env === "test") {
+if(config.env === "test") {
   store.client.unref();
 }
 app.use(session({

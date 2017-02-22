@@ -54,9 +54,14 @@ app.set('views', config.root + '/app/views');
 app.use(favicon(config.root + '/public/img/favicon.ico'));
 app.use(morgan(':remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.urlencoded({"extended": true}));
+
+var store = new RedisStore(config.redis);
+if (config.env === "test") {
+  store.client.unref();
+}
 app.use(session({
   secret: config.secret,
-  store: new RedisStore(config.redis),
+  store: store,
   resave: false,
   saveUninitialized: true,
   cookie: {

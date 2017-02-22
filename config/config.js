@@ -2,6 +2,7 @@
 var path = require('path');
 var _ = require('lodash');
 var config = {
+  env: process.env.NODE_ENV,
   api: 'https://search.idigbio.org/v2/',
   media: 'https://api.idigbio.org/',
   secret: process.env.IDB_SECRET || "imnotsecret",

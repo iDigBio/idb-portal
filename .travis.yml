@@ -19,7 +19,7 @@ after_success:
   fi
 env:
   global:
-  - DOCKER_IMAGE=idigbio/idigbio-search-api
+  - DOCKER_IMAGE=idigbio/idb-portal
   - BUILDING=$DOCKER_IMAGE:$TRAVIS_COMMIT
 notifications:
   slack:

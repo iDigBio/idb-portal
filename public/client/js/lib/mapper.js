@@ -12,24 +12,26 @@
 *      query internally to update the map.  This is useful for when the map is bound to some external system
 *      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
 ***/
-var L = require('leaflet/dist/leaflet');
-require('../../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 var $ = require('jquery');
 var _ = require('lodash');
+var GeoPoint = require('geopoint');
 var helpers = require('./helpers');
+var idbapi = require('./idbapi');
+var fields = require('./fields');
+
 var comploc = '../../../../public/components/';
-//require('./leaflet-utfgrid');
+var path = require('path');
+var L = require('../../../../public/components/leaflet/dist/leaflet');
+var leafletImage = require('../../../../public/components/leaflet-image/leaflet-image');
+var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
+require('../../../../public/components/leaflet-sleep/Leaflet.Sleep');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 require('../../../../public/components/leaflet-loading/src/Control.Loading');
-var leafletImage = require('leaflet-image/leaflet-image');
-var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
-var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
-var fields = require('./fields');
 require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
-var GeoPoint = require('geopoint');
+
 
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);

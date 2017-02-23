@@ -70,7 +70,7 @@ if(process.env.NODE_ENV === "beta") {
     'port': 19199,
     'hostname': 'beta-portal.idigbio.org',
     'redis': {
-      host: 'idb-redis-beta.acis.ufl.edu'
+      host: 'idb-redis-search-beta.acis.ufl.edu'
     },
     'api': 'https://beta-search.idigbio.org/v2/',
     'media': 'https://beta-api.idigbio.org/'

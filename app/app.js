@@ -2,6 +2,7 @@ var express = require('express');
 var expose = require("express-expose");
 var compression = require("compression");
 var bodyParser = require("body-parser");
+var cookieParser = require("cookie-parser");
 var csrf = require("csurf");
 var serveStatic = require("serve-static");
 var favicon = require("serve-favicon");
@@ -58,6 +59,7 @@ var store = new RedisStore(config.redis);
 if(config.env === "test") {
   store.client.unref();
 }
+app.use(cookieParser(config.secret));
 app.use(session({
   secret: config.secret,
   store: store,
@@ -97,6 +99,8 @@ app.use(function(err, req, res, next) {
   next(err);
 });
 
+// Expose config to the template renderer, especially for menu structure
+app.locals = config;
 app.all('*', function(req, res, next) {
   res.expose(req.headers, 'headers');
   var idbapi = {"host": config.api, "media_host": config.media};

@@ -1,7 +1,7 @@
 {
   "presets": [
     "node6",
-    "stage-3",
+    "stage-0",
     "react"
   ],
   "plugins": [
@@ -10,6 +10,7 @@
       {
         "root": [
           "./",
+          "public/components"
         ],
         "alias": {}
       }

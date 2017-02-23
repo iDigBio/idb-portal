@@ -21,16 +21,16 @@ var fields = require('./fields');
 
 var comploc = '../../../../public/components/';
 var path = require('path');
-var L = require(path.join(comploc, 'leaflet/dist/leaflet'));
-var leafletImage = require(path.join(comploc, 'leaflet-image/leaflet-image'));
-var FileSaver = require(path.join(comploc, 'filesaver/FileSaver.min'));
-require(path.join(comploc, 'leaflet-sleep/Leaflet.Sleep'));
-require(path.join(comploc, 'leaflet-utfgrid/dist/leaflet.utfgrid'));
-require(path.join(comploc, 'leaflet-loading/src/Control.Loading'));
-require(path.join(comploc, 'blobjs/Blob'));
-require(path.join(comploc, 'canvasblob/canvas-toBlob.js'));
-require(path.join(comploc, 'leaflet.draw/dist/leaflet.draw'));
-require(path.join(comploc, 'leaflet.fullscreen/Control.FullScreen'));
+var L = require('../../../../public/components/leaflet/dist/leaflet');
+var leafletImage = require('../../../../public/components/leaflet-image/leaflet-image');
+var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
+require('../../../../public/components/leaflet-sleep/Leaflet.Sleep');
+require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
+require('../../../../public/components/leaflet-loading/src/Control.Loading');
+require('../../../../public/components/blobjs/Blob');
+require('../../../../public/components/canvasblob/canvas-toBlob.js');
+require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
+require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
 
 
 Math.trunc = Math.trunc || function(x) {

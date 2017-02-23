@@ -55,20 +55,29 @@ app.use(favicon(config.root + '/public/img/favicon.ico'));
 app.use(morgan(':remote-addr - ":method :url HTTP/:http-version" :status :res[content-length] - :response-time ms'));
 app.use(bodyParser.urlencoded({"extended": true}));
 
-var store = new RedisStore(config.redis);
-if(config.env === "test") {
-  store.client.unref();
-}
+
 app.use(cookieParser(config.secret));
-app.use(session({
-  secret: config.secret,
-  store: store,
-  resave: false,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 7 * 24 * 60 * 60 * 1000
-  }
-}));
+if(config.env === "test") {
+  app.use(session({
+    secret: config.secret,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    }
+  }));
+} else {
+  var store = new RedisStore(config.redis);
+  app.use(session({
+    secret: config.secret,
+    store: store,
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 7 * 24 * 60 * 60 * 1000
+    }
+  }));
+}
 app.use(csrf());
 app.use(function(req, res, next) {
   if(req.session) {

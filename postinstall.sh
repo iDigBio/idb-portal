@@ -6,6 +6,10 @@ set -x
 
 echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 
+if [ ! -d public/js ]; then
+    mkdir public/js
+fi
+
 # Client Side Dependancies
 node_modules/bower/bin/bower install --allow-root && \
 

@@ -20,7 +20,7 @@
     "leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "materialize": "^0.97.5",
     "mustache": "^2.3.0",
-    "rainbowvis": "anomal/RainbowVis-JS",
+    "rainbowvis": "anomal/RainbowVis-JS"
   },
   "ignore": [
     "**/.*",

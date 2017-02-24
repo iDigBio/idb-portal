@@ -2,3 +2,9 @@ node_modules
 .git
 Dockerfile
 yarn.lock
+public/components
+public/client/js/react/build/
+public/js/app.js
+public/js/client.js
+public/js/libs.js
+public/js/idbmap.js

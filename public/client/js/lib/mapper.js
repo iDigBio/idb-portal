@@ -29,7 +29,7 @@ require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 require('../../../../public/components/leaflet-loading/src/Control.Loading');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
-require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
+require('../../../../public/components/leaflet-draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
 
 

@@ -11,6 +11,6 @@ window.async = require('async');
 var SearchHistory = require('./js/lib/history');
 window.searchHistory = new SearchHistory;
 require('../components/bootstrap/dist/js/bootstrap.min');
-require('../components/jquery.tablesorter/dist/js/jquery.tablesorter');
+require('../components/tablesorter/dist/js/jquery.tablesorter');
 require('../components/materialize/js/scrollspy');
 require('es5-shim');

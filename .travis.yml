@@ -1,0 +1,26 @@
+sudo: required
+services:
+- docker
+install:
+- docker build -t $BUILDING .
+script:
+- docker run --rm -it $BUILDING npm test
+after_success:
+- docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD"
+- |
+  if [ -n "$TRAVIS_TAG" ]; then
+    docker tag $BUILDING $DOCKER_IMAGE:$TRAVIS_TAG;
+    docker push $DOCKER_IMAGE:$TRAVIS_TAG;
+  fi
+- |
+  if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then
+    docker tag $BUILDING $DOCKER_IMAGE:$TRAVIS_BRANCH;
+    docker push $DOCKER_IMAGE:$TRAVIS_BRANCH;
+  fi
+env:
+  global:
+  - DOCKER_IMAGE=idigbio/idb-portal
+  - BUILDING=$DOCKER_IMAGE:$TRAVIS_COMMIT
+notifications:
+  slack:
+    secure: hBdS1mIVFVg8jTQwU2nXKyfLRPbUMYCQK0g+NEjkSvWl3hvAnZREGo2JBFgincdB2/wAJhuynBQXN7MSwxGm4jTjvTrs1SOPP7hssTr+xFrXuOs9tYDNLICcUmc8iIkt9oblw/jWCKHUDnphmcZ4sy3uJDuxuKGHdBjXYAq/eZw=

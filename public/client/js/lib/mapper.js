@@ -12,24 +12,26 @@
 *      query internally to update the map.  This is useful for when the map is bound to some external system
 *      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
 ***/
-var L = require('leaflet/dist/leaflet');
-require('../../../../node_modules/leaflet-sleep/Leaflet.Sleep');
 var $ = require('jquery');
 var _ = require('lodash');
+var GeoPoint = require('geopoint');
 var helpers = require('./helpers');
+var idbapi = require('./idbapi');
+var fields = require('./fields');
+
 var comploc = '../../../../public/components/';
-//require('./leaflet-utfgrid');
+var path = require('path');
+var L = require('../../../../public/components/leaflet/dist/leaflet');
+var leafletImage = require('../../../../public/components/leaflet-image/leaflet-image');
+var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
+require('../../../../public/components/leaflet-sleep/Leaflet.Sleep');
 require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
 require('../../../../public/components/leaflet-loading/src/Control.Loading');
-var leafletImage = require('leaflet-image/leaflet-image');
-var idbapi = require('./idbapi');
 require('../../../../public/components/blobjs/Blob');
 require('../../../../public/components/canvasblob/canvas-toBlob.js');
-var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
-var fields = require('./fields');
-require('../../../../public/components/leaflet-draw/dist/leaflet.draw');
+require('../../../../public/components/leaflet.draw/dist/leaflet.draw');
 require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
-var GeoPoint = require('geopoint');
+
 
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
@@ -523,7 +525,7 @@ module.exports = function(elid, options){
     self.currentQueryTime=0;
     self.currentQuery = '';
     var _query = _.debounce(function(){
-        var query = {rq: idbquery, type: 'auto', threshold: 100000, style: {fill: '#f33',stroke: 'rgb(229,245,249,.8)'}};
+        var query = {rq: idbquery, type: 'auto', threshold: 100000};
         var q = JSON.stringify(query), d = new Date;
         var time = d.getTime();
         //if(self.currentQuery !== q){
@@ -536,9 +538,9 @@ module.exports = function(elid, options){
                     //make sure last query run is the last one that renders
                     //as responses can be out of order
                     //mapCode = resp.shortCode;
-                    self.map.mapCode = resp.shortCode;
-                    self.map.resp=resp;
                     if(time>=self.currentQueryTime){
+                        self.map.mapCode = resp.shortCode;
+                        self.map.resp=resp;
                         if(options.legend){
                             if(typeof legend == 'object'){
                                 //self.map.removeControl(legend);
@@ -565,7 +567,7 @@ module.exports = function(elid, options){
         //}
         
 
-    }, 100,{'leading': false, 'trailing': true});
+    }, 500,{'leading': false, 'trailing': true});
 
     /* 
     * Init MAP, Options and Event Handlers

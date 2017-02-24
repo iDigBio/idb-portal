@@ -1,14 +1,16 @@
-FROM nodesource/trusty:5.3.0
+FROM node:6-alpine
 
-RUN npm install -g bower gulp babel@^5.0
-ADD package.json package.json
-ADD npm-shrinkwrap.json npm-shrinkwrap.json
-ADD bower.json bower.json
-RUN npm install --ignore-scripts
-RUN bower install --allow-root
+RUN adduser -S www-data
+
+RUN apk add --no-cache make gcc g++ python bash git
+RUN npm install -g yarn
+WORKDIR /var/www
+ADD package.json bower.json postinstall.sh .yarnclean /var/www/
+RUN yarn --ignore-scripts && yarn cache clean
 ADD . .
-RUN ./postinstall.sh
+RUN yarn postinstall
+
 
 EXPOSE 19199
 
-CMD ["node","app.js"]
+CMD ["npm", "start"]

@@ -1,9 +1,0 @@
-[submodule "static/tutorial"]
-	path = static/tutorial
-	url = git@github-idigbio-api-node:iDigBio/idigbio-api-node.wiki.git
-[submodule "static/lib/elasticsearch-js"]
-	path = static/lib/elasticsearch-js
-	url = https://github.com/iDigBio/elasticsearch-js.git
-[submodule "static/lib/cartodb-leaflet"]
-	path = static/lib/cartodb-leaflet
-	url = https://github.com/iDigBio/cartodb-leaflet.git

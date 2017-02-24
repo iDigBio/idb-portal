@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Do not execute directly, execute via npm postinstall / yarn run postinstall.
+
 echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"
 
 # Client Side Dependancies
@@ -8,19 +10,16 @@ node_modules/bower/bin/bower install --allow-root
 #compile jsx to build files for server side use of React
 babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --blacklist strict
 #compile full client side file with jsx transforms for browser side client
-#for Babel 5.8.34
-#node_modules/browserify/bin/cmd.js -o public/js/client.js  public/client/js/main.js -t [ babelify --presets [ es2015 react ] ]
-#for Babel 5.8.20
-node_modules/browserify/bin/cmd.js -o public/js/client.js  public/client/js/main.js -t [ babelify ]
+browserify -o public/js/client.js  public/client/js/main.js -t [ babelify --presets es2015 react ]
 #minify client side file
-node_modules/uglify-js/bin/uglifyjs -o public/js/client.js public/js/client.js
+uglifyjs -o public/js/client.js public/js/client.js
 
 #node_modules/uglify-js/bin/uglifyjs -o public/components/underscore/underscore-min.js public/components/underscore/underscore.js
-node_modules/browserify/bin/cmd.js -o public/js/libs.js  public/client/libs.js
-node_modules/uglify-js/bin/uglifyjs -o public/js/libs.js public/js/libs.js
+browserify -o public/js/libs.js  public/client/libs.js
+uglifyjs -o public/js/libs.js public/js/libs.js
 
-node_modules/browserify/bin/cmd.js -o public/js/idbmap.js  public/client/idbmap.js
-node_modules/uglify-js/bin/uglifyjs -o public/js/idbmap.js public/js/idbmap.js
+browserify -o public/js/idbmap.js  public/client/idbmap.js
+uglifyjs -o public/js/idbmap.js public/js/idbmap.js
 
 gulp buildLess
 

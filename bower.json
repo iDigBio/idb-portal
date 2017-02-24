@@ -16,7 +16,7 @@
     "leaflet-sleep": "^0.5.0",
     "leaflet-loading": "ebrelsford/Leaflet.loading",
     "leaflet-utfgrid": "danzel/Leaflet.utfgrid",
-    "leaflet.draw": "~0.3.2",
+    "leaflet-draw": "~0.3.2",
     "leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "materialize": "^0.97.5",
     "mustache": "^2.3.0",

@@ -70,7 +70,8 @@ if(process.env.NODE_ENV === "beta") {
     'port': 19199,
     'hostname': 'beta-portal.idigbio.org',
     'redis': {
-      host: 'idb-redis-search-beta.acis.ufl.edu'
+      'host': 'idb-redis10-beta.acis.ufl.edu',
+      'db': 2
     },
     'api': 'https://beta-search.idigbio.org/v2/',
     'media': 'https://beta-api.idigbio.org/'
@@ -80,7 +81,8 @@ if(process.env.NODE_ENV === "beta") {
     'port': 19199,
     'hostname': 'portal.idigbio.org',
     'redis': {
-      host: 'idb-redis-search-prod.acis.ufl.edu'
+      'host': 'idb-redis10-prod.acis.ufl.edu',
+      'db': 2
     }
   });
 } else if(process.env.NODE_ENV === "local") {
@@ -88,7 +90,8 @@ if(process.env.NODE_ENV === "beta") {
     'port': 3000,
     'hostname': 'localhost',
     'redis': {
-      host: 'localhost'
+      'host': 'localhost',
+      'db': 2
     }
   });
 } else {
@@ -96,7 +99,8 @@ if(process.env.NODE_ENV === "beta") {
     'port': 3000,
     'hostname': 'idb-api-dev.acis.ufl.edu',
     'redis': {
-      host: 'localhost'
+      'host': 'localhost',
+      'db': 2
     }
   });
 }

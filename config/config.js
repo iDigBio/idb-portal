@@ -80,7 +80,7 @@ if(process.env.NODE_ENV === "beta") {
     'port': 19199,
     'hostname': 'portal.idigbio.org',
     'redis': {
-      host: 'idb-redis.acis.ufl.edu'
+      host: 'idb-redis-search-prod.acis.ufl.edu'
     }
   });
 } else if(process.env.NODE_ENV === "local") {

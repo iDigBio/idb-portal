@@ -121,7 +121,7 @@ app.all('*', function(req, res, next) {
 app.get('/', home.index);
 app.get('/search*', search.searchBackbone);
 app.post('/stats', search.sendStats);
-app.get('/search/:type/:id', search.searchid);
+// app.get('/search/:type/:id', search.searchid);
 app.get('/view/:type/:id', view.type);
 app.get('/records/:id', view.record);
 app.get('/mediarecords/:id', view.media);

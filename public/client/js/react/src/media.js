@@ -144,7 +144,7 @@ var Group = React.createClass({
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     },
     render: function(){
-        if(_.has(this.props.record, 'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
+        if( _.has(this.props.record,'indexTerms') && _.has(this.props.record.indexTerms,'mediarecords') && this.props.record.indexTerms.mediarecords.length > 1){
             var imgs = [];
             var media = this.props.record.indexTerms.mediarecords;
             for(var id in media){
@@ -211,8 +211,8 @@ module.exports = React.createClass({
 
         var othermedia = null;
         //var med = this.props.indexTerms.mediarecords
-        
-        if( _.has(this.props.record,'indexTerms') && this.props.record.indexTerms.mediarecords.length > 1){
+
+        if( _.has(this.props.record,'indexTerms') && _.has(this.props.record.indexTerms,'mediarecords') && this.props.record.indexTerms.mediarecords.length > 1){
             othermedia = <li><a href="#other-images">Other Media</a></li>
         }
 

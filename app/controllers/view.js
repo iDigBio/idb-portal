@@ -88,7 +88,7 @@ export default {
             if(r_err) {
               logger.error(r_err);
             }
-            record = body;
+            record = r_body;
             render();
           });
         } else {

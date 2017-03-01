@@ -1,6 +1,6 @@
 {
   "name": "idb-controller",
-  "version": "5.1.5",
+  "version": "5.1.6",
   "directory": "public/components",
   "dependencies": {
     "async": "^2.0.0",

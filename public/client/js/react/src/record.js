@@ -333,6 +333,8 @@ module.exports = React.createClass({
         var eventdate=null;
         if(index.eventdate){
             eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.eventdate}</td></tr>;
+        }else if(index.datecollected){
+            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.datecollected}</td></tr>;
         }
         var lat = null, lon = null;
         if(index.geopoint){

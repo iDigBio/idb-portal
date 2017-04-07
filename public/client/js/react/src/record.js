@@ -331,10 +331,12 @@ module.exports = React.createClass({
         });
 
         var eventdate=null;
-        if(index.eventdate){
-            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.eventdate}</td></tr>;
-        }else if(index.datecollected){
-            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{index.datecollected}</td></tr>;
+        if(index.datecollected){
+            var d = new Date(index.datecollected)
+            // Most of the stored dates don't have a Time Zone, so are treated as UTC. Increment the time by the timezone offset, otherwise most displayed values would be displayed as one day early
+            d.setTime(d.getTime() + d.getTimezoneOffset() * 60000) 
+            var formatedDC = d.getFullYear() + '-' + ((d.getMonth() < 10) ? '0' + (d.getMonth() + 1) : d.getMonth() + 1 ) + '-' + ((d.getDate() < 10) ? '0' + d.getDate() : d.getDate());
+            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{formatedDC}</td></tr>;
         }
         var lat = null, lon = null;
         if(index.geopoint){

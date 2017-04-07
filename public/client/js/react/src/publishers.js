@@ -224,6 +224,7 @@ var pubs={},rsets={};
 var defpub= function(){
   return {recordsets:{},name:''};
 }
+var maxRecordsets = 3000;
 var defsets = function(){
   return {
     apimedia: 0,
@@ -237,7 +238,7 @@ var defsets = function(){
 var totals = defsets();
 async.parallel([
   function(callback){
-    idbapi.publishers({"fields":["data.name","data.base_url"],"limit":1000},function(resp){
+    idbapi.publishers({"fields":["data.name","data.base_url"],"limit":maxRecordsets},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.uuid])){
             pubs[item.uuid] = defpub();
@@ -253,7 +254,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.recordsets({"fields":["data.collection_name","publisher"],"limit":3000},function(resp){
+    idbapi.recordsets({"fields":["data.collection_name","publisher"],"limit":maxRecordsets},function(resp){
       resp.items.forEach(function(item){
         if(_.isUndefined(pubs[item.indexTerms.publisher])){
           pubs[item.indexTerms.publisher]=defpub();
@@ -281,7 +282,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.summary('stats/digest',{inverted: "true",dateInterval:"day"},function(resp){
+    idbapi.summary('stats/digest',{inverted: "true",dateInterval:"day",minDate:"now-1y"},function(resp){
       _.forEach(resp.recordsets,function(val,key){
         var d = _.keys(val).sort().reverse()[0];
         if(_.isUndefined(rsets[key])){
@@ -296,7 +297,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.summary('top/records',{top_fields:["recordset"],count: 1000}, function(resp){
+    idbapi.summary('top/records',{top_fields:["recordset"],count: maxRecordsets}, function(resp){
       _.forEach(resp.recordset,function(val,key){
         if(_.isUndefined(rsets[key])){
           rsets[key]=defsets();
@@ -308,7 +309,7 @@ async.parallel([
     });
   },
   function(callback){
-    idbapi.summary('top/media',{top_fields:["recordset"],count: 1000}, function(resp){
+    idbapi.summary('top/media',{top_fields:["recordset"],count: maxRecordsets}, function(resp){
       _.forEach(resp.recordset,function(val,key){
         if(_.isUndefined(rsets[key])){
           rsets[key]=defsets();

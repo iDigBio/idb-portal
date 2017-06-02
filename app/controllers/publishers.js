@@ -58,6 +58,14 @@ export default {
           token: req.session._csrf,
           id: req.params.id
         });
+      } else if (body.statusCode >= 400) {
+        res.status(body.statusCode);
+        res.render('404', {
+          activemenu: 'publishers',
+          user: req.user,
+          token: req.session._csrf,
+          id: req.params.id
+        });
       } else {
         rbody = body;
         async.parallel([

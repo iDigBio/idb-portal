@@ -566,7 +566,7 @@ var ResultsLabels = React.createClass({
             var d = new Date(data['datecollected']);
             // Most of the stored dates don't have a Time Zone, so are treated as UTC. Increment the time by the timezone offset, otherwise most displayed values would be displayed as one day early
             d.setTime(d.getTime() + d.getTimezoneOffset() * 60000);
-            formatedDC = d.getFullYear() + '-' + ((d.getMonth() < 10) ? '0' + (d.getMonth() + 1) : d.getMonth() + 1 ) + '-' + ((d.getDate() < 10) ? '0' + d.getDate() : d.getDate());
+            formatedDC = d.getFullYear() + '-' + ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : d.getMonth() + 1 ) + '-' + ((d.getDate() < 10) ? '0' + d.getDate() : d.getDate());
             content.push(<span key="event-date2" className="date">{formatedDC}</span>);
         }
 

@@ -280,7 +280,7 @@ var TextFilter = React.createClass({
                 if(val.length > 0){
                     output.push(val);
                     $.ajax({
-                        url: '/portal/eol_api/search/1.0.json?page=1&q='+val, //'http://eol.org/api/search/1.0.json?page=1&q='+val,
+                        url: 'http://eol.org/api/search/1.0.json?page=1&q='+val,
                         type: 'GET',
                         crossDomain: true,
                         dataType: 'jsonp',

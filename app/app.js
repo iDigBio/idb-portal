@@ -129,6 +129,7 @@ app.get('/eol_api/*', function(req, res) {
     request.get({
         url: url
     }, function(error, response, body) {
+        res.setHeader("Content-Type", "application/json");
         res.send(response.body);
     });
 });

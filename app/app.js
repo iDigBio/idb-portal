@@ -12,6 +12,7 @@ var cons = require('consolidate');
 var swig = require('swig');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
+var request = require('request');
 
 import config from 'config/config';
 import logger from 'app/logging';
@@ -116,6 +117,21 @@ app.all('*', function(req, res, next) {
   global.idbapi = idbapi;
   res.expose(idbapi, 'idbapi');
   next();
+});
+
+app.get('/eol_api/*', function(req, res) {
+    var url = "";
+    if(req.originalUrl.slice(0, 7) === "/portal") {
+        url = "http://eol.org/api" + req.originalUrl.slice(15);
+    } else {
+        url = "http://eol.org/api" + req.originalUrl.slice(8);
+    }
+    request.get({
+        url: url
+    }, function(error, response, body) {
+        res.setHeader("Content-Type", "application/json");
+        res.send(response.body);
+    });
 });
 
 app.get('/', home.index);

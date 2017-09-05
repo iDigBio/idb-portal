@@ -57,6 +57,7 @@
     "react": "^15.2.1",
     "react-addons-css-transition-group": "^15.2.1",
     "react-addons-pure-render-mixin": "^15.2.1",
+    "react-datetime": "^2.10.1",
     "react-dom": "^15.2.1",
     "reactify": "^1.1.1",
     "redis": "^2.6.2",

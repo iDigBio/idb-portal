@@ -1,6 +1,10 @@
 var request = require('request');
 var async = require('async');
 var RecordsetPage = require('public/client/js/react/build/recordset');
+var StatsPage = require('public/client/js/react/build/stats');
+
+var React = require('react');
+var ReactDOMServer = require('react-dom/server');
 
 import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
@@ -40,6 +44,20 @@ export default {
       user: req.user,
       token: req.session._csrf
     });
+  },
+  stats: function(req, res) {
+    var render = function() {
+      var Page = ReactDOMServer.renderToString(StatsPage());
+      res.render('media', {
+          activemenu: 'search',
+          id: req.params.id,
+          user: req.user,
+          token: req.session._csrf,
+          content: Page,
+          data: JSON.stringify({}),
+      });
+    };
+    render();
   },
   recordset: function(req, res) {
     var flags = {};
@@ -111,8 +129,6 @@ export default {
           if(a_err) {
             logger.error(a_err); // This should probably actually be handled better.
           }
-          var React = require('react');
-          var ReactDOMServer = require('react-dom/server');
           var rp = React.createFactory(RecordsetPage);
           var lastmodified = lastRecord >= lastMedia ? lastRecord : lastMedia;
           res.render('recordset', {

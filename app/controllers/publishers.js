@@ -47,9 +47,10 @@ export default {
   },
   stats: function(req, res) {
     var render = function() {
-      var Page = ReactDOMServer.renderToString(StatsPage());
-      res.render('media', {
-          activemenu: 'search',
+      var sp = React.createFactory(StatsPage);
+      var Page = ReactDOMServer.renderToString(sp({}));
+      res.render('stats', {
+          activemenu: 'publishers',
           id: req.params.id,
           user: req.user,
           token: req.session._csrf,

@@ -21,7 +21,8 @@
     "materialize": "^0.97.5",
     "mustache": "^2.3.0",
     "rainbowvis": "anomal/RainbowVis-JS",
-    "tablesorter": "jquery.tablesorter#^2.28.5"
+    "tablesorter": "jquery.tablesorter#^2.28.5",
+    "react-datetime": "^2.10.1"
   },
   "ignore": [
     "**/.*",

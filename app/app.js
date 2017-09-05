@@ -143,7 +143,7 @@ app.get('/records/:id', view.record);
 app.get('/mediarecords/:id', view.media);
 app.get('/tutorial', home.tutorial);
 app.get('/publishers', publishers.publishers);
-app.get('/stats', publishers.stats);
+app.get('/portalstats', publishers.stats);
 app.get('/collections', publishers.collections);
 app.get('/collections/:id', publishers.collection);
 app.get('/recordsets/:id', publishers.recordset);

@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "async": "^2.0.0",
+    "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "body-parser": "^1.16.1",
     "bootstrap": "^3.3.6",
     "bower": "^1.7.9",

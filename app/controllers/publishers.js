@@ -25,6 +25,13 @@ export default {
     request.get({"url": 'http://idigbio.github.io/idb-us-collections/collections/' + req.params.id, "json": true}, function(err, resp, body) {
       if(err) {
         logger.error(err);
+        res.status(404);
+        res.render('404', {
+          activemenu: 'publishers',
+          user: req.user,
+          token: req.session._csrf,
+          id: req.params.id
+        });
       }
       res.render('collection', {
         activemenu: 'publishers',

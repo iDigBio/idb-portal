@@ -1,6 +1,6 @@
-//require('jquery');
+var request = require('request');
 
-if (typeof window === "undefined") {
+if(typeof window === "undefined") {
     var window = global;
 }
 
@@ -48,31 +48,32 @@ module.exports = {
     countRecords: function(query,callback){
         this.summary('count/records/',query,callback);
     },
-    _basic: function(method,arg1,arg2,arg3){
-        var options={
-            error: function(jqxhr,status,error){
-                console.log(status +': '+error);
-            },
-            dataType: 'json',
-            contentType: 'application/json',
-            type: method
-        }
-        var path=this.host;
-        [arg1,arg2,arg3].forEach(function(arg){
-            switch(typeof(arg)){
+    _basic: function(method,arg1,arg2,arg3) {
+        var options = {
+            method: method,
+            uri: this.host,
+        };
+        var cb;
+        [arg1, arg2, arg3].forEach(function(arg) {
+            switch (typeof arg) {
                 case 'object':
-                    options.data=JSON.stringify(arg);
+                    options.json = arg;
                     break;
                 case 'string':
-                    path+=arg;
+                    options.uri += arg;
                     break;
                 case 'function':
-                    options.success = function(response){
-                        arg(response);
-                    }
+                    cb = function(err, resp, body) {
+                        if(err) {
+                            console.log(err);
+                        }
+                        arg(body);
+                    };
+                    break;
+                default:
                     break;
             }
         });
-        $.ajax(path,options);        
+        request(options, cb);
     }
-}
+};

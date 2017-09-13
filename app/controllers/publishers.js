@@ -29,6 +29,7 @@ export default {
     request.get({"url": 'http://idigbio.github.io/idb-us-collections/collections/' + req.params.id, "json": true}, function(err, resp, body) {
       if(err) {
         logger.error(err);
+      } else if(resp.statusCode === 404) {
         res.status(404);
         res.render('404', {
           activemenu: 'publishers',
@@ -36,13 +37,14 @@ export default {
           token: req.session._csrf,
           id: req.params.id
         });
+      } else {
+        res.render('collection', {
+          activemenu: 'publishers',
+          user: req.user,
+          token: req.session._csrf,
+          data: JSON.stringify(body)
+        });
       }
-      res.render('collection', {
-        activemenu: 'publishers',
-        user: req.user,
-        token: req.session._csrf,
-        data: JSON.stringify(body)
-      });
     });
   },
   publishers: function(req, res) {

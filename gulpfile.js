@@ -15,7 +15,8 @@ var gulp = require('gulp'),
     rename = require('gulp-rename'),
     babel = require('gulp-babel'),
     babelify = require('babelify'),
-    buffer = require('vinyl-buffer');
+    buffer = require('vinyl-buffer'),
+    browserifyCss = require('browserify-css');
 
 /*
 Task: default
@@ -34,7 +35,7 @@ gulp.task('default',function(){
     })
 
     var bundle = watchify(browserify({ cache: {}, packageCache: {}, entries:['./public/client/js/main.js'], plugin: [watchify]}));
-    bundle.transform(babelify.configure({presets: ["es2015", "react"]}));
+    bundle.transform(babelify.configure({presets: ["es2015", "react"]})).transform(browserifyCss, {global: true});
     bundle.on('update',rebundle);
 
     //live reload of compiled files

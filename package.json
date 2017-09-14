@@ -29,6 +29,7 @@
     "bootstrap": "^3.3.6",
     "bower": "^1.7.9",
     "browserify": "^13.0.1",
+    "browserify-css": "^0.12.0",
     "compression": "^1.6.2",
     "connect-redis": "^3.2.0",
     "consolidate": "^0.14.1",
@@ -59,6 +60,7 @@
     "react": "^15.2.1",
     "react-addons-css-transition-group": "^15.2.1",
     "react-addons-pure-render-mixin": "^15.2.1",
+    "react-c3js": "^0.1.19",
     "react-datetime": "^2.10.1",
     "react-dom": "^15.2.1",
     "reactify": "^1.1.1",
@@ -123,5 +125,10 @@
       "/public/"
     ],
     "setupTestFrameworkScriptFile": "<rootDir>/__tests__/init"
+  },
+  "browserify-css": {
+      "autoInject": true,
+      "minify": true,
+      "rootDir": "."
   }
 }

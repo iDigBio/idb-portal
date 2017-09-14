@@ -3,6 +3,6 @@ var ReactDOM = require('react-dom');
 var StatsPage = require('./react/src/stats');
 
 ReactDOM.render(
-    <StatsPage />,
+    <StatsPage usage={data.usage}/>,
      document.getElementById('react-wrapper')
 );

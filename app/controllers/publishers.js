@@ -1,5 +1,6 @@
 var request = require('request');
 var async = require('async');
+var _ = require('lodash');
 var RecordsetPage = require('public/client/js/react/build/recordset');
 var StatsPage = require('public/client/js/react/build/stats');
 
@@ -55,7 +56,31 @@ export default {
     });
   },
   stats: function(req, res) {
-    var render = function() {
+    var usage = {};
+    async.parallel([
+      function(cback) {
+        var params = {"dateInterval": "month", "minDate": "2015-01-01"};
+        request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          _.forEach(a_body.dates, (rs_data, date) => {
+            usage[date] = {};
+            _.forEach(rs_data, (stats, rs) => {
+              _.forEach(stats, (v, k) => {
+                if(usage[date][k]) {
+                  usage[date][k] += v;
+                } else {
+                  usage[date][k] = v;
+                }
+              });
+            });
+          });
+
+          cback(a_err, 'one');
+        });
+      },
+    ], function(a_err, results) {
+      if(a_err) {
+        logger.error(a_err); // This should probably actually be handled better.
+      }
       var sp = React.createFactory(StatsPage);
       var Page = ReactDOMServer.renderToString(sp({}));
       res.render('stats', {
@@ -64,10 +89,9 @@ export default {
           user: req.user,
           token: req.session._csrf,
           content: Page,
-          data: JSON.stringify({}),
+          data: JSON.stringify({usage: usage}),
       });
-    };
-    render();
+    });
   },
   recordset: function(req, res) {
     var flags = {};

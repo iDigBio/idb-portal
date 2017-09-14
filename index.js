@@ -1,5 +1,9 @@
 require('babel-register');
 
+require.extensions['.css'] = () => {
+  return;
+};
+
 var express = require('express');
 var config = require('./config/config').default;
 

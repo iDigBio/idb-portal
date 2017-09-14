@@ -15,29 +15,40 @@ class Usage extends React.Component {
 
     render() {
         var totals = {};
-        var dates = [];
-        var cats = {};
+        var preProc = {"x": []};
         if (this.props.data) {
             _.forEach(this.props.data, (stat, date) => {
-                dates.push(date);
                 date = moment(date, "YYYY-MM-DD");
                 if (this.props.startDate <= date && date <= this.props.endDate) {
+                    preProc.x.push(date.format("YYYY-MM-DD"));
                     _.forEach(stat, (count, cat) => {
-                        // Meow 🐱
-                        if (cats[cat]) {
-                            cats[cat].push(count);
-                        } else {
-                            cats[cat] = [count];
-                        }
+
                         if (totals[cat]) {
                             totals[cat] += count;
                         } else {
                             totals[cat] = count;
                         }
+
+                        if(count > 0){
+                            count = Math.log(count) / Math.LN10;
+                        } else{
+                            count = 0;
+                        }
+
+                        if (preProc[cat]) {
+                            preProc[cat].push(count);
+                        } else {
+                            preProc[cat] = [count]
+                        }
                     });
                 }
             });
         }
+        var cols = [];
+        _.forEach(preProc, (values, cat) => {
+            values.unshift(cat)
+            cols.push(values)
+        })
         return (
             <div>
                 <table>
@@ -71,6 +82,7 @@ class Usage extends React.Component {
                       </tr>
                   </tbody>
                 </table>
+                <C3Chart data={{x: "x", columns: cols}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return Math.pow(10, d).toFixed(0)}}}}} />
             </div>
         );
     }

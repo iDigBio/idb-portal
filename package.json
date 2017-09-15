@@ -124,6 +124,9 @@
       "init.js",
       "/public/"
     ],
+    "moduleNameMapper": {
+      "\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
+    },
     "setupTestFrameworkScriptFile": "<rootDir>/__tests__/init"
   },
   "browserify-css": {

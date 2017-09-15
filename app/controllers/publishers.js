@@ -57,9 +57,14 @@ export default {
   },
   stats: function(req, res) {
     var usage = {};
+    var ingest = {};
+    var collected = {};
+    var taxon = {};
+    var flags = {};
+    var defaultMin = "2015-01-01";
     async.parallel([
       function(cback) {
-        var params = {"dateInterval": "month", "minDate": "2015-01-01"};
+        var params = {"dateInterval": "month", "minDate": defaultMin};
         request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
           _.forEach(a_body.dates, (rs_data, date) => {
             usage[date] = {};
@@ -77,6 +82,62 @@ export default {
           cback(a_err, 'one');
         });
       },
+      function(cback) {
+        var params = {"dateInterval": "month", "minDate": defaultMin};
+        request.post({"url": config.api + 'summary/stats/api', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          _.forEach(a_body.dates, (rs_data, date) => {
+            ingest[date] = {};
+            var rsCount = 0;
+            _.forEach(rs_data, (stats, rs) => {
+              rsCount += 1;
+              _.forEach(stats, (v, k) => {
+                if(ingest[date][k]) {
+                  ingest[date][k] += v;
+                } else {
+                  ingest[date][k] = v;
+                }
+              });
+            });
+            ingest[date]["recordsets"] = rsCount;
+          });
+
+          cback(a_err, 'two');
+        });
+      },
+      function(cback) {
+        var params = {"dateInterval": "year"};
+        request.post({"url": config.api + 'summary/datehist', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          _.forEach(a_body.dates, (rs_data, date) => {
+            collected[date] = {"Date Collected": rs_data.itemCount};
+          });
+
+          cback(a_err, 'three');
+        });
+      },
+      function(cback) {
+        var params = {top_fields: ["kingdom", "family"], count: 10};
+        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          taxon["records"] = a_body;
+
+          cback(a_err, 'four');
+        });
+      },
+      function(cback) {
+        var params = {top_fields: ["kingdom", "family"], count: 10, rq: {hasMedia: true}};
+        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          taxon["mediarecords"] = a_body;
+
+          cback(a_err, 'five');
+        });
+      },
+      function(cback) {
+        var params = {top_fields: ["flags"], count: 100};
+        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
+          flags = a_body;
+
+          cback(a_err, 'six');
+        });
+      },
     ], function(a_err, results) {
       if(a_err) {
         logger.error(a_err); // This should probably actually be handled better.
@@ -89,7 +150,7 @@ export default {
           user: req.user,
           token: req.session._csrf,
           content: Page,
-          data: JSON.stringify({usage: usage}),
+          data: JSON.stringify({usage: usage, ingest: ingest, defaultMin: defaultMin, collected: collected, taxon: taxon, flags: flags}),
       });
     });
   },

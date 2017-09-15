@@ -18,7 +18,7 @@ var Stats = React.createClass({
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10" id="container">
-                        <Charts usage={this.props.usage}/>
+                        <Charts usage={this.props.usage} ingest={this.props.ingest} collected={this.props.collected} taxon={this.props.taxon} flags={this.props.flags} />
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">
                         <div id="side-nav">

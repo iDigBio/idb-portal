@@ -82,13 +82,205 @@ class Usage extends React.Component {
                       </tr>
                   </tbody>
                 </table>
-                <C3Chart data={{x: "x", columns: cols}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return Math.pow(10, d).toFixed(0)}}}}} />
+                <h3>Data Usage</h3>
+                <C3Chart data={{x: "x", columns: cols, "hide": ["search"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return Math.pow(10, d).toLocaleString()}}}}} />
             </div>
         );
     }
 }
 
-class Charts extends React.Component {
+class Ingest extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+
+    render() {
+        var preProc = {"x": []};
+        if (this.props.data) {
+            _.forEach(this.props.data, (stat, date) => {
+                date = moment(date, "YYYY-MM-DD");
+                if (this.props.startDate <= date && date <= this.props.endDate) {
+                    preProc.x.push(date.format("YYYY-MM-DD"));
+                    _.forEach(stat, (count, cat) => {
+                        if (preProc[cat]) {
+                            preProc[cat].push(count);
+                        } else {
+                            preProc[cat] = [count]
+                        }
+                    });
+                }
+            });
+        }
+        var cols = [];
+        _.forEach(preProc, (values, cat) => {
+            values.unshift(cat)
+            cols.push(values)
+        })
+        return (
+            <div>
+                <h3>Data Ingestion</h3>
+                <C3Chart data={{x: "x", columns: cols, "hide": ["recordsets"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+            </div>
+        );
+    }
+}
+
+class Collected extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            startDate: moment("1700-01-01", "YYYY-MM-DD"),
+            endDate: moment(),
+        };
+    }
+
+
+    render() {
+        var preProc = {"x": []};
+        if (this.props.data) {
+            _.forEach(this.props.data, (stat, date) => {
+                date = moment(date, "YYYY-MM-DD");
+                if (this.state.startDate <= date && date <= this.state.endDate) {
+                    preProc.x.push(date.format("YYYY-MM-DD"));
+                    _.forEach(stat, (count, cat) => {
+                        if (preProc[cat]) {
+                            preProc[cat].push(count);
+                        } else {
+                            preProc[cat] = [count]
+                        }
+                    });
+                }
+            });
+        }
+        var cols = [];
+        _.forEach(preProc, (values, cat) => {
+            values.unshift(cat)
+            cols.push(values)
+        })
+        return (
+            <div>
+                <h3>Temporal Coverage</h3>
+                <form className="form-inline">
+                    <div className="form-group">
+                        <label className="control-label" htmlFor="startDate">Start:</label>
+                        <Datetime viewMode="months" defaultValue={this.state.startDate} timeFormat={false} onChange={m => this.setState({startDate: m})} inputProps={{name: "startDate"}} />
+                    </div>
+                    <div className="form-group">
+                        <label className="control-label" htmlFor="endDate">End:</label>
+                        <Datetime viewMode="months" defaultValue={this.state.endDate} timeFormat={false} onChange={m => this.setState({endDate: m})} inputProps={{name: "endDate"}} />
+                    </div>
+                </form>
+                <C3Chart data={{x: "x", columns: cols}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+            </div>
+        );
+    }
+}
+
+class Taxon extends React.Component {
+    constructor(props) {
+        super(props);
+
+        var preProc = {};
+        this.kingdomData = {}
+
+        if (this.props.data) {
+            _.forEach(this.props.data.kingdom, (stat, kingdom) => {
+                preProc[kingdom] = [ stat.itemCount ];
+                this.kingdomData[kingdom] = {}
+                _.forEach(stat.family, (count, cat) => {
+                    if (this.kingdomData[kingdom][cat]) {
+                        this.kingdomData[kingdom][cat].push(count.itemCount);
+                    } else {
+                        this.kingdomData[kingdom][cat] = [count.itemCount]
+                    }
+                });
+            });
+        }
+        this.state = {
+            activeData: "base"
+        };
+
+        var cols = [];
+        _.forEach(preProc, (values, cat) => {
+            values.unshift(cat)
+            cols.push(values)
+        })
+        _.forEach(this.kingdomData, (kd, k) => {
+            var kc = [];
+            _.forEach(kd, (values, f) => {
+                values.unshift(f)
+                kc.push(values)
+            })
+            this.kingdomData[k] = kc;
+        })
+        this.kingdomData["base"] = cols;
+    }
+
+    render() {
+        return (
+            <C3Chart unloadBeforeLoad={true} data={{
+                columns: this.kingdomData[this.state.activeData],
+                type: "pie",
+                onclick: (d, element) => {
+                    this.setState({activeData: d.name});
+                }
+            }} axis={{y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+        );
+    }
+}
+
+class Flags extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.cols = [["x"],["flags"]]
+
+        if (this.props.data) {
+            _.forEach(this.props.data.flags, (stat, f) => {
+                this.cols[0].push(f)
+                this.cols[1].push(stat.itemCount)
+            });
+        }
+    }
+
+    render() {
+        console.log(this.cols)
+        return (
+            <div>
+                <h3>Data Quality</h3>
+                <C3Chart data={{
+                    x: "x",
+                    columns: this.cols,
+                    type: "bar",
+                }} axis={{x: {type: "category", tick: {rotate: -60}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+            </div>
+        );
+    }
+}
+
+class TaxonPies extends React.Component {
+    constructor(props) {
+        super(props);        
+    }
+
+
+    render() {
+        return (
+            <div>
+                <h3>Taxonomic Coverage</h3>
+
+                <h4>Records</h4>
+                <Taxon data={this.props.data.records} />
+
+                <h4>Media</h4>
+                <Taxon data={this.props.data.mediarecords} />
+            </div>
+        )
+    }
+}
+
+class StatsCharts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -111,15 +303,31 @@ class Charts extends React.Component {
                     </div>
                 </form>
 
-                <ul>
-                    <li> Start Date: {this.state.startDate.format("YYYY-MM-DD")}</li>
-                    <li> End Date: {this.state.endDate.format("YYYY-MM-DD")}</li>
-                </ul>
-
-                <Usage startDate={this.state.startDate} endDate={this.state.endDate} recordset={this.props.recordset} data={this.props.usage} />
+                <Usage startDate={this.state.startDate} endDate={this.state.endDate} data={this.props.usage} />
+                <Ingest startDate={this.state.startDate} endDate={this.state.endDate} data={this.props.ingest} />
             </div>
         )
     }
 };
+
+
+class Charts extends React.Component {
+    constructor(props) {
+        super(props);
+    }
+
+    render() {
+        return (
+            <div>
+                <StatsCharts ingest={this.props.ingest} usage={this.props.usage} />
+                <Collected data={this.props.collected} />
+                <TaxonPies data={this.props.taxon} />
+                <Flags data={this.props.flags} />
+            </div>
+        )
+    }
+};
+
+Charts.defaultProps = {ingest: {dates:{}}, usage: {dates:{}}, collected:{dates:{}}, taxon:{records:{}, mediarecords:{}}, flags: {}}
 
 module.exports = Charts

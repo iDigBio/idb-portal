@@ -468,6 +468,8 @@ module.exports = function(elid, options){
             useJsonP: false
         })
        
+        console.log(utf8grid);
+
         utf8grid.on('click',mapClick);
         utf8grid.on('mouseover', mapHover);
         utf8grid.on('mouseout', mapHoverout);

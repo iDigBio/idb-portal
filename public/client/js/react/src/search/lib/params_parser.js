@@ -17,6 +17,8 @@ module.exports = function(search){
                     }
                 }else if(k==='hasImage' && _.isBoolean(v)){
                     search.image = v;
+                }else if(k==='hasMedia' && _.isBoolean(v)){
+                    search.image = v;
                 }else if(k==='geopoint' && _.isObject(v)){
                     if(v.type === 'geo_bounding_box'){
                         delete v.type

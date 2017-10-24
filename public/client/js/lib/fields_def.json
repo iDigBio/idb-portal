@@ -355,5 +355,17 @@
         "term": "flags",
         "type": "text",
         "group": "other"
+    },
+    "Sequences": {
+        "term": "associatedsequences",
+        "type": "text",
+        "group": "specimen",
+        "dataterm": "dwc:associatedSequences"
+    },
+    "Dataset ID": {
+        "term": "datasetid",
+        "type": "text",
+        "group": "specimen",
+        "dataterm": "dwc:datasetID"
     }
 }

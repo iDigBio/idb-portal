@@ -29,10 +29,12 @@ class Usage extends React.Component {
                             totals[cat] = count;
                         }
 
-                        if(count > 0){
-                            count = Math.log(count) / Math.LN10;
-                        } else{
-                            count = 0;
+                        if(this.props.log) {
+                            if(count > 0){
+                                count = Math.log(count) / Math.LN10;
+                            } else{
+                                count = 0;
+                            }
                         }
 
                         if (preProc[cat]) {
@@ -83,7 +85,7 @@ class Usage extends React.Component {
                   </tbody>
                 </table>
                 <h3>Data Usage</h3>
-                <C3Chart data={{x: "x", columns: cols, "hide": ["search"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return Math.pow(10, d).toLocaleString()}}}}} />
+                <C3Chart data={{x: "x", columns: cols, "hide": ["search"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: (d) => {if(this.props.log){ return Math.pow(10, d).toLocaleString() } else { return d }}}}}} />
             </div>
         );
     }
@@ -245,7 +247,6 @@ class Flags extends React.Component {
     }
 
     render() {
-        console.log(this.cols)
         return (
             <div>
                 <h3>Data Quality</h3>
@@ -284,9 +285,26 @@ class StatsCharts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment("2015-01-01", "YYYY-MM-DD"),
+            startDate: moment("2015-01-16", "YYYY-MM-DD"),
             endDate: moment(),
+            log: true,
+            cumulative: true,
+            ingestData: props.ingestCumulative,
         };
+    }
+
+    toggleCumulative() {
+        var id, newcumulative = !this.state.cumulative;
+        if (newcumulative) {
+            id = this.props.ingestCumulative;
+        } else {
+            id  = this.props.ingest;
+        }
+
+        this.setState({
+            cumulative: newcumulative,
+            ingestData: id,
+        })
     }
 
     render() {
@@ -303,8 +321,17 @@ class StatsCharts extends React.Component {
                     </div>
                 </form>
 
-                <Usage startDate={this.state.startDate} endDate={this.state.endDate} data={this.props.usage} />
-                <Ingest startDate={this.state.startDate} endDate={this.state.endDate} data={this.props.ingest} />
+                <Usage startDate={this.state.startDate} endDate={this.state.endDate} data={this.props.usage} log={this.state.log} />
+                <div className="form-group">
+                    <label className="control-label" htmlFor="logcheck">Log Scale: </label>
+                    <input name="logcheck" type="checkbox" checked={this.state.log} onChange={() => this.setState({log: !this.state.log})}/>
+                </div>
+
+                <Ingest startDate={this.state.startDate} endDate={this.state.endDate} data={this.state.ingestData}/>
+                <div className="form-group">
+                    <label className="control-label" htmlFor="cumulativecheck">Cumulative: </label>
+                    <input name="cumulativecheck" type="checkbox" checked={this.state.cumulative} onChange={this.toggleCumulative.bind(this)}/>
+                </div>
             </div>
         )
     }
@@ -319,7 +346,7 @@ class Charts extends React.Component {
     render() {
         return (
             <div>
-                <StatsCharts ingest={this.props.ingest} usage={this.props.usage} />
+                <StatsCharts ingest={this.props.ingest} ingestCumulative={this.props.ingestCumulative} usage={this.props.usage} />
                 <Collected data={this.props.collected} />
                 <TaxonPies data={this.props.taxon} />
                 <Flags data={this.props.flags} />
@@ -328,6 +355,6 @@ class Charts extends React.Component {
     }
 };
 
-Charts.defaultProps = {ingest: {dates:{}}, usage: {dates:{}}, collected:{dates:{}}, taxon:{records:{}, mediarecords:{}}, flags: {}}
+Charts.defaultProps = {ingest: {dates:{}}, ingestCumulative: {dates:{}}, usage: {dates:{}}, collected:{dates:{}}, taxon:{records:{}, mediarecords:{}}, flags: {}}
 
 module.exports = Charts

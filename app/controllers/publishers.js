@@ -58,10 +58,11 @@ export default {
   stats: function(req, res) {
     var usage = {};
     var ingest = {};
+    var ingestCumulative = {};
     var collected = {};
     var taxon = {};
     var flags = {};
-    var defaultMin = "2015-01-01";
+    var defaultMin = "2015-01-16";
     async.parallel([
       function(cback) {
         var params = {"dateInterval": "month", "minDate": defaultMin};
@@ -86,20 +87,28 @@ export default {
         var params = {"dateInterval": "month", "minDate": defaultMin};
         request.post({"url": config.api + 'summary/stats/api', "json": true, "body": params}, function(a_err, a_resp, a_body) {
           _.forEach(a_body.dates, (rs_data, date) => {
-            ingest[date] = {};
+            ingestCumulative[date] = {};
             var rsCount = 0;
             _.forEach(rs_data, (stats, rs) => {
               rsCount += 1;
               _.forEach(stats, (v, k) => {
-                if(ingest[date][k]) {
-                  ingest[date][k] += v;
+                if(ingestCumulative[date][k]) {
+                  ingestCumulative[date][k] += v;
                 } else {
-                  ingest[date][k] = v;
+                  ingestCumulative[date][k] = v;
                 }
               });
             });
-            ingest[date]["recordsets"] = rsCount;
+            ingestCumulative[date]["recordsets"] = rsCount;
           });
+
+          var dates = _.keys(ingestCumulative).sort();
+          for(var i = dates.length - 2; i > 0; i--) {
+            ingest[dates[i]] = {};
+            _.forEach(ingestCumulative[dates[i]], (v, k) => {
+              ingest[dates[i]][k] = ingestCumulative[dates[i + 1]][k] - ingestCumulative[dates[i]][k];
+            });
+          }
 
           cback(a_err, 'two');
         });
@@ -150,7 +159,7 @@ export default {
           user: req.user,
           token: req.session._csrf,
           content: Page,
-          data: JSON.stringify({usage: usage, ingest: ingest, defaultMin: defaultMin, collected: collected, taxon: taxon, flags: flags}),
+          data: JSON.stringify({usage: usage, ingest: ingest, ingestCumulative: ingestCumulative, defaultMin: defaultMin, collected: collected, taxon: taxon, flags: flags}),
       });
     });
   },

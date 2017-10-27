@@ -84,7 +84,7 @@ class Usage extends React.Component {
                       </tr>
                   </tbody>
                 </table>
-                <h3>Data Usage</h3>
+                <h3><a name="data-usage">Data Usage</a></h3>
                 <C3Chart data={{x: "x", columns: cols, "hide": ["search"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: (d) => {if(this.props.log){ return Math.pow(10, d).toLocaleString() } else { return d }}}}}} />
             </div>
         );
@@ -121,7 +121,7 @@ class Ingest extends React.Component {
         })
         return (
             <div>
-                <h3>Data Ingestion</h3>
+                <h3><a name="data-ingestion">Data Ingestion</a></h3>
                 <C3Chart data={{x: "x", columns: cols, "hide": ["recordsets"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
             </div>
         );
@@ -162,7 +162,7 @@ class Collected extends React.Component {
         })
         return (
             <div>
-                <h3>Temporal Coverage</h3>
+                <h3><a name="temporal-coverage">Temporal Coverage</a></h3>
                 <form className="form-inline">
                     <div className="form-group">
                         <label className="control-label" htmlFor="startDate">Start:</label>
@@ -249,7 +249,7 @@ class Flags extends React.Component {
     render() {
         return (
             <div>
-                <h3>Data Quality</h3>
+                <h3><a name="data-quality">Data Quality</a></h3>
                 <C3Chart data={{
                     x: "x",
                     columns: this.cols,
@@ -269,7 +269,7 @@ class TaxonPies extends React.Component {
     render() {
         return (
             <div>
-                <h3>Taxonomic Coverage</h3>
+                <h3><a name="taxon-coverage">Taxonomic Coverage</a></h3>
 
                 <h4>Records</h4>
                 <Taxon data={this.props.data.records} />

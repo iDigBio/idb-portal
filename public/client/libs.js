@@ -12,7 +12,7 @@ var SearchHistory = require('./js/lib/history');
 window.searchHistory = new SearchHistory;
 require('bootstrap');
 require('tablesorter');
-require('hammerjs/hammer.js');
+window.Hammer = require('hammerjs/hammer.js');
 require('materialize-css/dist/js/materialize.js');
 require('es5-shim');
 window.c3 = require('c3');

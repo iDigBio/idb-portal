@@ -200,7 +200,7 @@ module.exports = function(elid, options){
         }
     });
 
-    var legendPanel = L.Control.extend({
+    var LegendPanel = L.Control.extend({
         options: {
             position: "bottomleft"
         },
@@ -461,7 +461,7 @@ module.exports = function(elid, options){
     }
 
     var makeUtflayer = function(path){
-        utf8grid = L.UtfGrid(path,{
+        utf8grid = new L.UtfGrid(path,{
             useJsonP: false
         })
        
@@ -543,10 +543,10 @@ module.exports = function(elid, options){
                         if(options.legend){
                             if(typeof legend == 'object'){
                                 //self.map.removeControl(legend);
-                                legend.removeFrom(self.map)
+                                legend.remove();
                             }
-                            legend = new legendPanel();
-                            self.map.addControl(legend);                        
+                            legend = new LegendPanel();
+                            self.map.addControl(legend);
                         }
                         if(typeof idblayer == 'object'){
                             self.map.removeLayer(removeIdblayer());
@@ -571,7 +571,7 @@ module.exports = function(elid, options){
     /* 
     * Init MAP, Options and Event Handlers
     ****/
-    var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    var base = new L.TileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
         minZoom: 0,
         reuseTiles: true
@@ -589,7 +589,7 @@ module.exports = function(elid, options){
         sleepTime: 5
     };
 
-    this.map = L.map(elid,mapDefaults);
+    this.map = new L.Map(elid,mapDefaults);
 
     if(options.maximizeControl){
         this.map.addControl(new MaximizeButton());

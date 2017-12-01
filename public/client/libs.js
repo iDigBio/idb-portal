@@ -14,3 +14,4 @@ require('bootstrap');
 require('tablesorter');
 require('materialize-css');
 require('es5-shim');
+require('cs3');

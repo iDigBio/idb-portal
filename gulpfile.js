@@ -35,7 +35,18 @@ gulp.task('default',function(){
     })
 
     var bundle = watchify(browserify({ cache: {}, packageCache: {}, entries:['./public/client/js/main.js'], plugin: [watchify]}));
-    bundle.transform(babelify.configure({presets: ["es2015", "react"]})).transform(browserifyCss, {global: true});
+    bundle.transform(babelify.configure({presets: ["es2015", "react"]})).transform(browserifyCss, {
+        global: true,
+        processRelativeUrl: function(relativeUrl) {
+            if (_.contains(['.jpg','.png','.gif', "ttf", "woff", "woff2", "svg"], path.extname(relativeUrl))) {
+                // Embed image and font data with data URI
+                var DataUri = require('datauri');
+                var dUri = new DataUri(relativeUrl);
+                return dUri.content;
+            }
+            return relativeUrl;
+        }
+    });
     bundle.on('update',rebundle);
 
     //live reload of compiled files

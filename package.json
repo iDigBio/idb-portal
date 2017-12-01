@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "start": "node index.js",
-    "postinstall": "./postinstall.sh && node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'public/components', 'junction') } catch (e) { }\"",
+    "postinstall": "./postinstall.sh",
     "test": "NODE_ENV=test BLUEBIRD_DEBUG=1 jest"
   },
   "dependencies": {
@@ -40,6 +40,7 @@
     "cookie-parser": "^1.4.3",
     "csurf": "^1.9.0",
     "d3-queue": "^3.0.3",
+    "datauri": "^1.0.5",
     "elasticsearchclient": "~0.5.3",
     "envify": "~1.2.1",
     "es5-shim": "^4.5.9",

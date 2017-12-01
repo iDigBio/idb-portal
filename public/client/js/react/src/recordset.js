@@ -13,6 +13,8 @@ var keys=Object.keys(fields.byDataTerm);
 //add terms which aren't in data terms
 //keys.push('idigbio:recordId');
 
+import 'tablesorter/dist/css/theme.blue.min.css'
+
 var missing={};
 var stotal=0,mtotal=0;
 var formatNum = function(num){

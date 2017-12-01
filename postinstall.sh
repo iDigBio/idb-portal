@@ -10,9 +10,6 @@ if [ ! -d public/js ]; then
     mkdir public/js
 fi
 
-# Client Side Dependancies
-node_modules/bower/bin/bower install --allow-root && \
-
 #compile jsx to build files for server side use of React
 babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --blacklist strict && \
 #compile full client side file with jsx transforms for browser side client

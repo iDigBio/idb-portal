@@ -3,8 +3,8 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
-var L = require('../../components/leaflet/dist/leaflet');
-require('../../components/leaflet-sleep/Leaflet.Sleep');
+var L = require('leaflet');
+require('leaflet-sleep');
 //provides order for sections
 var RecordPage = require('./react/src/record');
 

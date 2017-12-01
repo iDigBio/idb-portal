@@ -2,9 +2,25 @@
 # yarn lockfile v1
 
 
-"@types/react@>=15":
-  version "16.0.5"
-  resolved "https://registry.yarnpkg.com/@types/react/-/react-16.0.5.tgz#d713cf67cc211dea20463d2a0b66005c22070c4b"
+"@bower_components/leaflet-loading@ebrelsford/Leaflet.loading":
+  version "0.1.24"
+  resolved "https://codeload.github.com/ebrelsford/Leaflet.loading/tar.gz/bfc810ea31f55e0a30ed65cbb0bf7f8bfc857bce"
+
+"@bower_components/leaflet-sleep@CliffCloud/Leaflet.Sleep#^0.5.0":
+  version "0.5.1"
+  resolved "https://codeload.github.com/CliffCloud/Leaflet.Sleep/tar.gz/b04abb9ce224fd6a1161b5cf1f52f95704377ff9"
+
+"@bower_components/leaflet-utfgrid@danzel/Leaflet.utfgrid":
+  version "1.0.0"
+  resolved "https://codeload.github.com/danzel/Leaflet.utfgrid/tar.gz/e1248262404b9b80b0c78745caab1aa0079ef0a0"
+
+"@bower_components/leaflet.fullscreen@brunob/leaflet.fullscreen":
+  version "1.4.3"
+  resolved "https://codeload.github.com/brunob/leaflet.fullscreen/tar.gz/96a5a1458bdcf433b801f4fa7c9ef19f88795940"
+
+"@elastic/filesaver@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@elastic/filesaver/-/filesaver-1.1.2.tgz#1998ffb3cd89c9da4ec12a7793bfcae10e30c77a"
 
 Base64@~0.2.0:
   version "0.2.1"
@@ -1648,7 +1664,7 @@ bytes@2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-2.4.0.tgz#7d97196f9d5baf7f6935e25985549edd2a6c2339"
 
-c3@^0.4.11:
+c3@^0.4.11, c3@^0.4.18:
   version "0.4.18"
   resolved "https://registry.yarnpkg.com/c3/-/c3-0.4.18.tgz#6f1c4409635263b8a3de607edbab4bdc678c62cb"
   dependencies:
@@ -1954,15 +1970,7 @@ concat-map@0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/concat-map/-/concat-map-0.0.1.tgz#d8a96bd77fd68df7793a73036a3ba0d5405d477b"
 
-concat-stream@^1.4.6, concat-stream@^1.5.2, concat-stream@~1.5.0, concat-stream@~1.5.1:
-  version "1.5.2"
-  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.5.2.tgz#708978624d856af41a5a741defdd261da752c266"
-  dependencies:
-    inherits "~2.0.1"
-    readable-stream "~2.0.0"
-    typedarray "~0.0.5"
-
-concat-stream@^1.6.0:
+concat-stream@^1.4.6, concat-stream@^1.5.2, concat-stream@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.6.0.tgz#0aac662fd52be78964d5532f694784e70110acf7"
   dependencies:
@@ -1976,6 +1984,14 @@ concat-stream@~1.4.1, concat-stream@~1.4.5:
   dependencies:
     inherits "~2.0.1"
     readable-stream "~1.1.9"
+    typedarray "~0.0.5"
+
+concat-stream@~1.5.0, concat-stream@~1.5.1:
+  version "1.5.2"
+  resolved "https://registry.yarnpkg.com/concat-stream/-/concat-stream-1.5.2.tgz#708978624d856af41a5a741defdd261da752c266"
+  dependencies:
+    inherits "~2.0.1"
+    readable-stream "~2.0.0"
     typedarray "~0.0.5"
 
 config-chain@~1.1.10:
@@ -2106,7 +2122,7 @@ create-hmac@^1.1.0, create-hmac@^1.1.2:
     create-hash "^1.1.0"
     inherits "^2.0.1"
 
-create-react-class@^15.5.2, create-react-class@^15.5.x:
+create-react-class@^15.5.2:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.0.tgz#ab448497c26566e1e29413e883207d57cfe7bed4"
   dependencies:
@@ -2185,6 +2201,10 @@ currently-unhandled@^0.4.1:
 cycle@1.0.x:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.3.tgz#21e80b2be8580f98b468f379430662b046c34ad2"
+
+d3-queue@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/d3-queue/-/d3-queue-2.0.3.tgz#07fbda3acae5358a9c5299aaf880adf0953ed2c2"
 
 d3-queue@^3.0.3:
   version "3.0.4"
@@ -3086,18 +3106,9 @@ find-up@^1.0.0, find-up@^1.1.2:
     path-exists "^2.0.0"
     pinkie-promise "^2.0.0"
 
-findup-sync@0.4.2:
+findup-sync@0.4.2, findup-sync@^0.4.2:
   version "0.4.2"
   resolved "https://registry.yarnpkg.com/findup-sync/-/findup-sync-0.4.2.tgz#a8117d0f73124f5a4546839579fe52d7129fb5e5"
-  dependencies:
-    detect-file "^0.1.0"
-    is-glob "^2.0.1"
-    micromatch "^2.3.7"
-    resolve-dir "^0.1.0"
-
-findup-sync@^0.4.2:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/findup-sync/-/findup-sync-0.4.3.tgz#40043929e7bc60adf0b7f4827c4c6e75a0deca12"
   dependencies:
     detect-file "^0.1.0"
     is-glob "^2.0.1"
@@ -3673,6 +3684,10 @@ gulplog@^1.0.0:
 hamljs@^0.6.2:
   version "0.6.2"
   resolved "https://registry.yarnpkg.com/hamljs/-/hamljs-0.6.2.tgz#7b7116cf6dbe7278e42b3f6ef8725a33e177c8e3"
+
+hammerjs@^2.0.8:
+  version "2.0.8"
+  resolved "https://registry.yarnpkg.com/hammerjs/-/hammerjs-2.0.8.tgz#04ef77862cff2bb79d30f7692095930222bf60f1"
 
 handlebars@^4.0.3:
   version "4.0.6"
@@ -4466,7 +4481,7 @@ jquery-ui-browserify@1.11.0-pre-seelio:
   version "1.11.0-pre-seelio"
   resolved "https://registry.yarnpkg.com/jquery-ui-browserify/-/jquery-ui-browserify-1.11.0pre-seelio.tgz#fad5b16d0e90550db9725fff661bdaa9415058fe"
 
-jquery@~2.2.4:
+jquery@>=1.2.6, "jquery@^3.0.0 || ^2.1.4", jquery@~2.2.4:
   version "2.2.4"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.2.4.tgz#2c89d6889b5eac522a7eea32c14521559c6cbf02"
 
@@ -4649,6 +4664,24 @@ lcid@^1.0.0:
   resolved "https://registry.yarnpkg.com/lcid/-/lcid-1.0.0.tgz#308accafa0bc483a3867b4b6f2b9506251d1b835"
   dependencies:
     invert-kv "^1.0.0"
+
+leaflet-draw@^0.4.13:
+  version "0.4.13"
+  resolved "https://registry.yarnpkg.com/leaflet-draw/-/leaflet-draw-0.4.13.tgz#b9467d8d6523edc5912e93727951005b77b62895"
+
+leaflet-image@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/leaflet-image/-/leaflet-image-0.4.0.tgz#e84f22ff6288f09b9b0e2f51a4850a9f07968cc1"
+  dependencies:
+    d3-queue "2.0.3"
+
+leaflet-sleep@^0.5.1:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/leaflet-sleep/-/leaflet-sleep-0.5.1.tgz#91f8433f38edbb6b8a9b78d3d04ec7396e9f60f6"
+
+leaflet@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.2.0.tgz#fd5d93d9cb00091f5f8a69206d0d6744c1c82697"
 
 "less@2.6.x || ^2.7.1", less@^2.7.1:
   version "2.7.2"
@@ -5166,6 +5199,13 @@ marked@^0.3.6, marked@~0.3.0:
   version "0.3.6"
   resolved "https://registry.yarnpkg.com/marked/-/marked-0.3.6.tgz#b2c6c618fccece4ef86c4fc6cb8a7cbf5aeda8d7"
 
+materialize-css@^0.100.2:
+  version "0.100.2"
+  resolved "https://registry.yarnpkg.com/materialize-css/-/materialize-css-0.100.2.tgz#9ca32b24904c9a04491fc7d0a2e9402e7b1dae07"
+  dependencies:
+    hammerjs "^2.0.8"
+    jquery "^3.0.0 || ^2.1.4"
+
 media-typer@0.3.0:
   version "0.3.0"
   resolved "https://registry.yarnpkg.com/media-typer/-/media-typer-0.3.0.tgz#8710d7af0aa626f8fffa1ce00168545263255748"
@@ -5250,11 +5290,11 @@ mime-types@^2.1.11, mime-types@^2.1.12, mime-types@~2.1.11, mime-types@~2.1.13, 
   dependencies:
     mime-db "~1.26.0"
 
-mime@1.3.4, mime@^1.2.11, mime@^1.3.4:
+mime@1.3.4:
   version "1.3.4"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.3.4.tgz#115f9e3b6b3daf2959983cb38f149a2d40eb5d53"
 
-mime@^1.3.6:
+mime@^1.2.11, mime@^1.3.4, mime@^1.3.6:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/mime/-/mime-1.4.0.tgz#69e9e0db51d44f2a3b56e48b7817d7d137f1a343"
 
@@ -6357,15 +6397,14 @@ react-c3js@^0.1.19:
   dependencies:
     c3 "^0.4.11"
 
-react-datetime@^2.10.1:
-  version "2.10.1"
-  resolved "https://registry.yarnpkg.com/react-datetime/-/react-datetime-2.10.1.tgz#25ba863551ae6e5ae80d8a7f99d359ea063c4a38"
+react-datetime@^2.11.0:
+  version "2.11.0"
+  resolved "https://registry.yarnpkg.com/react-datetime/-/react-datetime-2.11.0.tgz#6560a8e5b81f7e52986083dc2e8cb94bb74528ea"
   dependencies:
-    "@types/react" ">=15"
     create-react-class "^15.5.2"
     object-assign "^3.0.0"
     prop-types "^15.5.7"
-    react-onclickoutside "^5.9.0"
+    react-onclickoutside "^6.5.0"
 
 react-dom@^15.2.1:
   version "15.4.2"
@@ -6375,11 +6414,9 @@ react-dom@^15.2.1:
     loose-envify "^1.1.0"
     object-assign "^4.1.0"
 
-react-onclickoutside@^5.9.0:
-  version "5.11.1"
-  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-5.11.1.tgz#00314e52567cf55faba94cabbacd119619070623"
-  dependencies:
-    create-react-class "^15.5.x"
+react-onclickoutside@^6.5.0:
+  version "6.7.0"
+  resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.0.tgz#997a4d533114c9a0a104913638aa26afc084f75c"
 
 react-test-renderer@^15.4.2:
   version "15.4.2"
@@ -7087,7 +7124,7 @@ source-map@0.1.31:
   dependencies:
     amdefine ">=0.0.4"
 
-source-map@0.1.34, source-map@~0.1.30, source-map@~0.1.31, source-map@~0.1.7:
+source-map@0.1.34:
   version "0.1.34"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.1.34.tgz#a7cfe89aec7b1682c3b198d0acfb47d7d090566b"
   dependencies:
@@ -7097,7 +7134,7 @@ source-map@0.5.x, source-map@^0.5.0, source-map@^0.5.1, source-map@^0.5.3, sourc
   version "0.5.6"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.6.tgz#75ce38f52bf0733c5a7f0c118d81334a2bb5f412"
 
-source-map@^0.1.38:
+source-map@^0.1.38, source-map@~0.1.30, source-map@~0.1.31, source-map@~0.1.7:
   version "0.1.43"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.1.43.tgz#c24bc146ca517c1471f5dacbe2571b2b7f9e3346"
   dependencies:
@@ -7408,6 +7445,12 @@ table@^3.7.8:
     lodash "^4.0.0"
     slice-ansi "0.0.4"
     string-width "^2.0.0"
+
+tablesorter@^2.29.0:
+  version "2.29.0"
+  resolved "https://registry.yarnpkg.com/tablesorter/-/tablesorter-2.29.0.tgz#cd3e14a0accd4648ee0259d43cc3ab7db8d045a1"
+  dependencies:
+    jquery ">=1.2.6"
 
 tar-fs@^1.7.0:
   version "1.15.1"

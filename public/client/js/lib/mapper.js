@@ -19,18 +19,15 @@ var helpers = require('./helpers');
 var idbapi = require('./idbapi');
 var fields = require('./fields');
 
-var comploc = '../../../../public/components/';
-var path = require('path');
-var L = require('../../../../public/components/leaflet/dist/leaflet');
-var leafletImage = require('../../../../public/components/leaflet-image/leaflet-image');
-var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
-require('../../../../public/components/leaflet-sleep/Leaflet.Sleep');
-require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
-require('../../../../public/components/leaflet-loading/src/Control.Loading');
-require('../../../../public/components/blobjs/Blob');
-require('../../../../public/components/canvasblob/canvas-toBlob.js');
-require('../../../../public/components/leaflet-draw/dist/leaflet.draw');
-require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
+var L = require('leaflet');
+var leafletImage = require('leaflet-image');
+// FileSaver Still required for edge support shimming
+var FileSaver = require('@elastic/filesaver');
+require('leaflet-sleep');
+require('@bower-components/leaflet-utfgrid');
+require('@bower-components/leaflet-loading');
+require('leaflet-draw');
+require('@bower-components/leaflet-fullscreen');
 
 
 Math.trunc = Math.trunc || function(x) {
@@ -464,7 +461,7 @@ module.exports = function(elid, options){
     }
 
     var makeUtflayer = function(path){
-        utf8grid = L.utfGrid(path,{
+        utf8grid = L.UtfGrid(path,{
             useJsonP: false
         })
        

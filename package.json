@@ -19,10 +19,14 @@
   ],
   "scripts": {
     "start": "node index.js",
-    "postinstall": "./postinstall.sh",
+    "postinstall": "./postinstall.sh && node -e \"try { require('fs').symlinkSync(require('path').resolve('node_modules/@bower_components'), 'public/components', 'junction') } catch (e) { }\"",
     "test": "NODE_ENV=test BLUEBIRD_DEBUG=1 jest"
   },
   "dependencies": {
+    "@bower_components/leaflet-loading": "ebrelsford/Leaflet.loading",
+    "@bower_components/leaflet-utfgrid": "danzel/Leaflet.utfgrid",
+    "@bower_components/leaflet.fullscreen": "brunob/leaflet.fullscreen",
+    "@elastic/filesaver": "^1.1.2",
     "async": "^2.0.0",
     "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "body-parser": "^1.16.1",
@@ -30,6 +34,7 @@
     "bower": "^1.7.9",
     "browserify": "^13.0.1",
     "browserify-css": "^0.12.0",
+    "c3": "^0.4.18",
     "compression": "^1.6.2",
     "connect-redis": "^3.2.0",
     "consolidate": "^0.14.1",
@@ -49,8 +54,13 @@
     "http-proxy": "~1.8.1",
     "jquery": "~2.2.4",
     "jquery-ui-browserify": "1.11.0-pre-seelio",
+    "leaflet": "^1.2.0",
+    "leaflet-draw": "^0.4.13",
+    "leaflet-image": "^0.4.0",
+    "leaflet-sleep": "^0.5.1",
     "less": "^2.7.1",
     "lodash": "^4.13.1",
+    "materialize-css": "^0.100.2",
     "method-override": "^2.3.7",
     "moment": "^2.18.1",
     "morgan": "^1.8.1",
@@ -61,7 +71,7 @@
     "react-addons-css-transition-group": "^15.2.1",
     "react-addons-pure-render-mixin": "^15.2.1",
     "react-c3js": "^0.1.19",
-    "react-datetime": "^2.10.1",
+    "react-datetime": "^2.11.0",
     "react-dom": "^15.2.1",
     "reactify": "^1.1.1",
     "redis": "^2.6.2",
@@ -69,6 +79,7 @@
     "serve-favicon": "^2.4.0",
     "serve-static": "^1.11.2",
     "swig": "^1.4.2",
+    "tablesorter": "^2.29.0",
     "uglify-js": "~2.4.24",
     "underscore": "^1.8.3",
     "winston": "^2.3.1"
@@ -115,7 +126,8 @@
   "repository": "git://github.com/idigbio/idigbio-portal",
   "license": "LGPL-3.0",
   "engines": {
-    "node": ">=4"
+    "node": ">=4",
+    "yarn": ">= 1.0.0"
   },
   "jest": {
     "testPathIgnorePatterns": [
@@ -130,8 +142,8 @@
     "setupTestFrameworkScriptFile": "<rootDir>/__tests__/init"
   },
   "browserify-css": {
-      "autoInject": true,
-      "minify": true,
-      "rootDir": "."
+    "autoInject": true,
+    "minify": true,
+    "rootDir": "."
   }
 }

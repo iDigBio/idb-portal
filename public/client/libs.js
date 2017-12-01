@@ -11,7 +11,7 @@ window.async = require('async');
 var SearchHistory = require('./js/lib/history');
 window.searchHistory = new SearchHistory;
 require('bootstrap');
-require('tablesorter');
+window.tablesorter = require('tablesorter/dist/js/jquery.tablesorter.js');
 window.Hammer = require('hammerjs/hammer.js');
 require('materialize-css/dist/js/materialize.js');
 require('es5-shim');

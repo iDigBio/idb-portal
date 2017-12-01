@@ -2,6 +2,8 @@ var React = require('react')
 var ReactDOM = require('react-dom')
 var idbapi = require('../../lib/idbapi');
 
+import 'tablesorter/dist/css/theme.blue.min.css'
+
 function formatNum (num){
   return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

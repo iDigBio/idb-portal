@@ -35,7 +35,7 @@ gulp.task('default',function(){
     })
 
     var bundle = watchify(browserify({ cache: {}, packageCache: {}, entries:['./public/client/js/main.js'], plugin: [watchify]}));
-    bundle.transform(babelify.configure({presets: ["es2015", "react"]})).transform(browserifyCss, {
+    bundle.transform(babelify.configure({presets: ["env", "react"]})).transform(browserifyCss, {
         global: true,
         processRelativeUrl: function(relativeUrl) {
             if (_.contains(['.jpg','.png','.gif', "ttf", "woff", "woff2", "svg"], path.extname(relativeUrl))) {
@@ -60,10 +60,24 @@ gulp.task('default',function(){
 
     function buildReact(){
       return  gulp.src("./public/client/js/react/src/**/*.js")
-        .pipe(babel({presets: ["es2015", "react"]}))
+        .pipe(
+            babel({presets: ["env", "react"]})
+            .transform(browserifyCss, {
+                global: true,
+                processRelativeUrl: function(relativeUrl) {
+                    if (_.contains(['.jpg','.png','.gif', "ttf", "woff", "woff2", "svg"], path.extname(relativeUrl))) {
+                        // Embed image and font data with data URI
+                        var DataUri = require('datauri');
+                        var dUri = new DataUri(relativeUrl);
+                        return dUri.content;
+                    }
+                    return relativeUrl;
+                }
+            })
+        )
         .pipe(gulp.dest('./public/client/js/react/build'));
     }
-    
+
     function rebundle(){
         return bundle.bundle()
         .on('error',function(e){

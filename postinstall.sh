@@ -13,7 +13,7 @@ fi
 #compile jsx to build files for server side use of React
 babel public/client/js/react/src/ --out-dir public/client/js/react/build/ --blacklist strict && \
 #compile full client side file with jsx transforms for browser side client
-browserify -o public/js/client.js  public/client/js/main.js -g browserify-css -t [ babelify --presets es2015 react ] && \
+browserify -o public/js/client.js  public/client/js/main.js -g browserify-css -t [ babelify --presets "env" "react" ] && \
 #minify client side file
 uglifyjs -o public/js/client.js public/js/client.js && \
 

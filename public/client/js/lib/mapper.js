@@ -24,10 +24,10 @@ var leafletImage = require('leaflet-image');
 // FileSaver Still required for edge support shimming
 var FileSaver = require('@elastic/filesaver');
 require('leaflet-sleep');
-require('@bower-components/leaflet-utfgrid');
-require('@bower-components/leaflet-loading');
+require('@bower_components/leaflet-utfgrid/src/leaflet.utfgrid.js');
+require('@bower_components/leaflet-loading/src/Control.Loading.js');
 require('leaflet-draw');
-require('@bower-components/leaflet-fullscreen');
+require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
 
 
 Math.trunc = Math.trunc || function(x) {

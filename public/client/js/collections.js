@@ -8,7 +8,7 @@ var React = require('react');
 var CollectionsPage = require('./react/src/collections');
 
 var L= require('leaflet');
-require('@bower-components/leaflet.fullscreen');
+require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
 require('leaflet-sleep');
 var triggerPopup = function(id){
     scrollToMap();

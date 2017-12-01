@@ -6,6 +6,7 @@ var idbapi = require('../../../lib/idbapi');
 
 import C3Chart from 'react-c3js';
 import 'c3/c3.css';
+import 'react-datetime/css/react-datetime.css'
 
 class Usage extends React.Component {
     constructor(props) {

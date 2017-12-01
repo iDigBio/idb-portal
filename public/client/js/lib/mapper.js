@@ -463,9 +463,7 @@ module.exports = function(elid, options){
     var makeUtflayer = function(path){
         utf8grid = new L.UtfGrid(path,{
             useJsonP: false
-        })
-       
-        console.log(utf8grid);
+        });
 
         utf8grid.on('click',mapClick);
         utf8grid.on('mouseover', mapHover);

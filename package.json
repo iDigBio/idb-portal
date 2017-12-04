@@ -102,6 +102,7 @@
     "eslint": "^3.16.0",
     "eslint-import-resolver-babel-module": "^3.0.0",
     "eslint-plugin-import": "^2.2.0",
+    "fs-extra": "^4.0.2",
     "gulp": "^3.9.1",
     "gulp-less": "^3.3.2",
     "gulp-sourcemaps": "^2.6.1",

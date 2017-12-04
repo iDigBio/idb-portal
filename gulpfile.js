@@ -12,8 +12,7 @@ var babelify = require('babelify');
 var browserifyCss = require('browserify-css');
 var _ = require("lodash");
 var path = require("path");
-var fs = require("fs");
-var DataUri = require('datauri');
+var fse = require('fs-extra');
 var less = require('gulp-less');
 
 function transformChain(b) {
@@ -23,26 +22,41 @@ function transformChain(b) {
         {
             global: true,
             processRelativeUrl: function(relativeUrl) {
-              if(fs.existsSync(relativeUrl)) {
-                if(_.includes(['.jpg', '.png', '.gif', "ttf", "woff", "woff2", "svg"], path.extname(relativeUrl))) {
-                    console.log("Inlining " + relativeUrl);
-                    // Embed image and font data with data URI
-                    var dUri = new DataUri(relativeUrl);
-                    return dUri.content;
+                var stripQueryStringAndHashFromPath = function(url) {
+                    return url.split('?')[0].split('#')[0];
+                };
+                var rootDir = path.resolve(process.cwd());
+                var relativePath = stripQueryStringAndHashFromPath(relativeUrl);
+                var queryStringAndHash = relativeUrl.substring(relativePath.length);
+
+                //
+                // Copying files from '../node_modules/bootstrap/' to 'public/vendor/bootstrap/'
+                //
+                var prefix = 'node_modules/';
+                if(_.startsWith(relativePath, prefix) && fse.existsSync(relativePath)) {
+                    var vendorPath = 'public/vendor/' + relativePath.substring(prefix.length);
+                    var source = path.join(rootDir, relativePath);
+                    var target = path.join(rootDir, vendorPath);
+
+                    gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
+                    fse.copySync(source, target);
+
+                    // Returns a new path string with original query string and hash fragments
+                    return vendorPath + queryStringAndHash;
                 }
-              }
-              return relativeUrl;
+
+                return relativeUrl;
             }
         }
     )
     .transform(babelify);
 }
 
-gulp.task('build', function () {
+gulp.task('build', function() {
 
   return gulp.src('./public/client/js/react/src/**/*.js', {read: false}) // no need of reading file because browserify does.
     // transform file objects using gulp-tap plugin
-    .pipe(tap(function (file) {
+    .pipe(tap(function(file) {
       gutil.log('bundling ' + file.path);
       // replace file contents with browserify's bundle stream
       file.contents = transformChain(browserify(file.path, {debug: true})).bundle();
@@ -51,7 +65,7 @@ gulp.task('build', function () {
     .pipe(buffer())
     // load and init sourcemaps
     .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
+    // .pipe(uglify())
     // write sourcemaps
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/client/js/react/build'));
@@ -70,7 +84,7 @@ gulp.task('libs', function() {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
+        // .pipe(uglify())
         .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
@@ -88,7 +102,7 @@ gulp.task('mapper', function() {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
+        // .pipe(uglify())
         .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
@@ -106,7 +120,7 @@ gulp.task('client', function() {
     .pipe(buffer())
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        .pipe(uglify())
+        // .pipe(uglify())
         .on('error', gutil.log)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));

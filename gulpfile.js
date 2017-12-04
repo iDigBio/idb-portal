@@ -1,12 +1,10 @@
-'use strict';
-
 var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var gutil = require('gulp-util');
 var uglify = require('gulp-uglify');
-var tap = require('gulp-tap');
+var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var babelify = require('babelify');
 var browserifyCss = require('browserify-css');
@@ -15,20 +13,7 @@ var path = require("path");
 var fse = require('fs-extra');
 var less = require('gulp-less');
 
-function transformChain(b, presets) {
-  if(typeof presets !== "object") {
-    presets = {
-      "presets": [
-        ["env", {
-          "targets": {
-            "node": "current"
-          }
-        }],
-        "react"
-      ]
-    };
-  }
-
+function transformChain(b) {
   return b
     .transform(
         browserifyCss,
@@ -63,7 +48,14 @@ function transformChain(b, presets) {
         }
     )
     .transform(babelify, {
-        "presets": presets,
+        "presets": [
+          ["env", {
+            "targets": {
+              "browsers": "last 2 versions"
+            }
+          }],
+          "react"
+        ],
         "plugins": [
           [
             "module-resolver",
@@ -84,14 +76,9 @@ function transformChain(b, presets) {
 }
 
 gulp.task('build', function() {
-
-  return gulp.src('./public/client/js/react/src/**/*.js', {read: false}) // no need of reading file because browserify does.
-    // transform file objects using gulp-tap plugin
-    .pipe(tap(function(file) {
-      gutil.log('bundling ' + file.path);
-      // replace file contents with browserify's bundle stream
-      file.contents = transformChain(browserify(file.path, {debug: true})).bundle();
-    }))
+  return gulp.src('./public/client/js/react/src/**/*.js')
+    // Don't use browserify for the backend files
+    .pipe(babel({"presets": ["env", "react"]}))
     // transform streaming contents into buffer contents (because gulp-sourcemaps does not support streaming contents)
     .pipe(buffer())
     // load and init sourcemaps
@@ -108,16 +95,7 @@ gulp.task('libs', function() {
   var b = transformChain(browserify({
     entries: './public/client/libs.js',
     debug: true,
-  }), {
-    "presets": [
-      ["env", {
-        "targets": {
-          "browsers": "last 2 versions"
-        }
-      }],
-      "react"
-    ]
-  });
+  }));
 
   return b.bundle()
     .pipe(source('libs.js'))
@@ -135,16 +113,7 @@ gulp.task('mapper', function() {
   var b = transformChain(browserify({
     entries: './public/client/idbmap.js',
     debug: true,
-  }), {
-    "presets": [
-      ["env", {
-        "targets": {
-          "browsers": "last 2 versions"
-        }
-      }],
-      "react"
-    ]
-  });
+  }));
 
   return b.bundle()
     .pipe(source('idbmap.js'))
@@ -162,16 +131,7 @@ gulp.task('client', function() {
   var b = transformChain(browserify({
     entries: './public/client/js/main.js',
     debug: true,
-  }), {
-    "presets": [
-      ["env", {
-        "targets": {
-          "browsers": "last 2 versions"
-        }
-      }],
-      "react"
-    ]
-  });
+  }));
 
   return b.bundle()
     .pipe(source('client.js'))
@@ -192,5 +152,5 @@ gulp.task('buildLess', function() {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('default', ["client", "mapper", "libs", "build", "buildLess"], function() {
+gulp.task('default', ["client", "mapper", "libs", "buildLess"], function() {
 });

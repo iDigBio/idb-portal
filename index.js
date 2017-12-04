@@ -1,4 +1,28 @@
-require('babel-register');
+require('babel-register')({
+  "presets": [
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }],
+    "react"
+  ],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": [
+          "./"
+        ],
+        "alias": {}
+      }
+    ],
+    "transform-promise-to-bluebird",
+    "transform-react-display-name",
+    "transform-class-properties",
+    "transform-es2015-classes"
+  ]
+});
 
 require.extensions['.css'] = () => {
   return;

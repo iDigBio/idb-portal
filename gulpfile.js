@@ -15,7 +15,20 @@ var path = require("path");
 var fse = require('fs-extra');
 var less = require('gulp-less');
 
-function transformChain(b) {
+function transformChain(b, presets) {
+  if(typeof presets !== "object") {
+    presets = {
+      "presets": [
+        ["env", {
+          "targets": {
+            "node": "current"
+          }
+        }],
+        "react"
+      ]
+    };
+  }
+
   return b
     .transform(
         browserifyCss,
@@ -49,7 +62,25 @@ function transformChain(b) {
             }
         }
     )
-    .transform(babelify);
+    .transform(babelify, {
+        "presets": presets,
+        "plugins": [
+          [
+            "module-resolver",
+            {
+              "root": [
+                "./"
+              ],
+              "alias": {}
+            }
+          ],
+          "transform-promise-to-bluebird",
+          "transform-react-display-name",
+          "transform-class-properties",
+          "transform-es2015-classes"
+        ]
+      }
+    );
 }
 
 gulp.task('build', function() {
@@ -77,7 +108,16 @@ gulp.task('libs', function() {
   var b = transformChain(browserify({
     entries: './public/client/libs.js',
     debug: true,
-  }));
+  }), {
+    "presets": [
+      ["env", {
+        "targets": {
+          "browsers": "last 2 versions"
+        }
+      }],
+      "react"
+    ]
+  });
 
   return b.bundle()
     .pipe(source('libs.js'))
@@ -95,7 +135,16 @@ gulp.task('mapper', function() {
   var b = transformChain(browserify({
     entries: './public/client/idbmap.js',
     debug: true,
-  }));
+  }), {
+    "presets": [
+      ["env", {
+        "targets": {
+          "browsers": "last 2 versions"
+        }
+      }],
+      "react"
+    ]
+  });
 
   return b.bundle()
     .pipe(source('idbmap.js'))
@@ -113,7 +162,16 @@ gulp.task('client', function() {
   var b = transformChain(browserify({
     entries: './public/client/js/main.js',
     debug: true,
-  }));
+  }), {
+    "presets": [
+      ["env", {
+        "targets": {
+          "browsers": "last 2 versions"
+        }
+      }],
+      "react"
+    ]
+  });
 
   return b.bundle()
     .pipe(source('client.js'))
@@ -126,10 +184,10 @@ gulp.task('client', function() {
     .pipe(gulp.dest('./public/js/'));
 });
 
-gulp.task('buildLess',function(){
+gulp.task('buildLess', function() {
     return gulp.src('./public/client/less/**/*.less')
     .pipe(less({
-        paths: [ path.join(__dirname, 'less', 'includes') ]
+        paths: [path.join(__dirname, 'less', 'includes')]
     }))
     .pipe(gulp.dest('./public/css'));
 });

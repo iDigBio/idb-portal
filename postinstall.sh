@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -x
-
 # Do not execute directly, execute via npm postinstall / yarn run postinstall.
 
 echo "+++++++++++++ BEGIN POSTINSTALL +++++++++++++"

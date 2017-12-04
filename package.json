@@ -80,7 +80,7 @@
     "serve-static": "^1.11.2",
     "swig": "^1.4.2",
     "tablesorter": "^2.29.0",
-    "uglify-js": "~2.4.24",
+    "uglify-js": "^3.2.1",
     "underscore": "^1.8.3",
     "winston": "^2.3.1"
   },
@@ -92,8 +92,7 @@
     "babel-plugin-module-resolver": "^2.5.0",
     "babel-plugin-transform-promise-to-bluebird": "^1.1.1",
     "babel-preset-env": "^1.6.1",
-    "babel-preset-react": "^6.11.1",
-    "babel-preset-stage-3": "^6.17.0",
+    "babel-preset-react": "^6.24.1",
     "babel-register": "^6.18.0",
     "babelify": "^7.3.0",
     "browserify": "^14.5.0",

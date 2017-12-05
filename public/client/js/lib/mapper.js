@@ -19,18 +19,15 @@ var helpers = require('./helpers');
 var idbapi = require('./idbapi');
 var fields = require('./fields');
 
-var comploc = '../../../../public/components/';
-var path = require('path');
-var L = require('../../../../public/components/leaflet/dist/leaflet');
-var leafletImage = require('../../../../public/components/leaflet-image/leaflet-image');
-var FileSaver = require('../../../../public/components/filesaver/FileSaver.min');
-require('../../../../public/components/leaflet-sleep/Leaflet.Sleep');
-require('../../../../public/components/leaflet-utfgrid/dist/leaflet.utfgrid');
-require('../../../../public/components/leaflet-loading/src/Control.Loading');
-require('../../../../public/components/blobjs/Blob');
-require('../../../../public/components/canvasblob/canvas-toBlob.js');
-require('../../../../public/components/leaflet-draw/dist/leaflet.draw');
-require('../../../../public/components/leaflet.fullscreen/Control.FullScreen');
+var L = require('leaflet');
+var leafletImage = require('leaflet-image');
+// FileSaver Still required for edge support shimming
+var FileSaver = require('@elastic/filesaver');
+require('leaflet-sleep');
+require('@bower_components/leaflet-utfgrid/src/leaflet.utfgrid.js');
+require('@bower_components/leaflet-loading/src/Control.Loading.js');
+require('leaflet-draw');
+require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
 
 
 Math.trunc = Math.trunc || function(x) {
@@ -203,7 +200,7 @@ module.exports = function(elid, options){
         }
     });
 
-    var legendPanel = L.Control.extend({
+    var LegendPanel = L.Control.extend({
         options: {
             position: "bottomleft"
         },
@@ -464,11 +461,9 @@ module.exports = function(elid, options){
     }
 
     var makeUtflayer = function(path){
-        utf8grid = L.utfGrid(path,{
+        utf8grid = new L.UtfGrid(path,{
             useJsonP: false
-        })
-       
-        console.log(utf8grid);
+        });
 
         utf8grid.on('click',mapClick);
         utf8grid.on('mouseover', mapHover);
@@ -546,10 +541,10 @@ module.exports = function(elid, options){
                         if(options.legend){
                             if(typeof legend == 'object'){
                                 //self.map.removeControl(legend);
-                                legend.removeFrom(self.map)
+                                legend.remove();
                             }
-                            legend = new legendPanel();
-                            self.map.addControl(legend);                        
+                            legend = new LegendPanel();
+                            self.map.addControl(legend);
                         }
                         if(typeof idblayer == 'object'){
                             self.map.removeLayer(removeIdblayer());
@@ -574,7 +569,7 @@ module.exports = function(elid, options){
     /* 
     * Init MAP, Options and Event Handlers
     ****/
-    var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+    var base = new L.TileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap',
         minZoom: 0,
         reuseTiles: true
@@ -592,7 +587,7 @@ module.exports = function(elid, options){
         sleepTime: 5
     };
 
-    this.map = L.map(elid,mapDefaults);
+    this.map = new L.Map(elid,mapDefaults);
 
     if(options.maximizeControl){
         this.map.addControl(new MaximizeButton());

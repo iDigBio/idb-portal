@@ -7,9 +7,9 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 var CollectionsPage = require('./react/src/collections');
 
-var L= require('../../components/leaflet/dist/leaflet');
-require('../../components/leaflet.fullscreen/Control.FullScreen');
-require('../../components/leaflet-sleep/Leaflet.Sleep');
+var L= require('leaflet');
+require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
+require('leaflet-sleep');
 var triggerPopup = function(id){
     scrollToMap();
     map.setView(ref[id]._latlng).setZoomAround(ref[id]._latlng,8)

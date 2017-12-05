@@ -1,117 +1,161 @@
-/*
-*Default task requires Chrome LiveReload plugin for livereload development.
-*otherwise this can be run just for browserify bundleing.
-*/
-var gulp = require('gulp'),
-    livereload = require('gulp-livereload'),
-    source = require('vinyl-source-stream'),
-    gutil = require('gulp-util'),
-    watchify = require('watchify'),
-    gulpbrowserify = require('gulp-browserify'),
-    browserify = require('browserify'),
-    less = require('gulp-less'),
-    uglify = require('gulp-uglify'),
-    path = require('path'),
-    rename = require('gulp-rename'),
-    babel = require('gulp-babel'),
-    babelify = require('babelify'),
-    buffer = require('vinyl-buffer'),
-    browserifyCss = require('browserify-css');
+var browserify = require('browserify');
+var gulp = require('gulp');
+var source = require('vinyl-source-stream');
+var buffer = require('vinyl-buffer');
+var gutil = require('gulp-util');
+var uglify = require('gulp-uglify');
+var babel = require('gulp-babel');
+var sourcemaps = require('gulp-sourcemaps');
+var babelify = require('babelify');
+var browserifyCss = require('browserify-css');
+var _ = require("lodash");
+var path = require("path");
+var fse = require('fs-extra');
+var less = require('gulp-less');
 
-/*
-Task: default
-runs Live Reload server for doing active development. Watches files for updates and 
-builds all react and less files and client files that are part of standard development cycle.
-see  /public/client/js /public/client/less dirs for which files are included
-*/
-gulp.task('default',function(){
+function transformChain(b) {
+  return b
+    .transform(
+        browserifyCss,
+        {
+            stripComments: true,
+            global: true,
+            processRelativeUrl: function(relativeUrl) {
+                var stripQueryStringAndHashFromPath = function(url) {
+                    return url.split('?')[0].split('#')[0];
+                };
+                var rootDir = path.resolve(process.cwd());
+                var relativePath = stripQueryStringAndHashFromPath(relativeUrl);
+                var queryStringAndHash = relativeUrl.substring(relativePath.length);
 
-    //build js changes 
+                //
+                // Copying files from '../node_modules/bootstrap/' to 'public/vendor/bootstrap/'
+                //
+                var prefix = 'node_modules/';
+                if(_.startsWith(relativePath, prefix)) {
+                    if(fse.existsSync(relativePath)) {
+                      var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
+                      var source = path.join(rootDir, relativePath);
+                      var target = path.join(rootDir, "public/", vendorPath);
 
-    buildReact();
+                      gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
+                      fse.copySync(source, target);
 
-    gulp.watch(['public/client/js/react/src/**']).on('change',function(){
-        buildReact();
-    })
+                      // Returns a new path string with original query string and hash fragments
+                      return vendorPath + queryStringAndHash;
+                    } else {
+                      gutil.log("Missing file" + JSON.stringify(relativePath));
+                    }
+                }
 
-    var bundle = watchify(browserify({ cache: {}, packageCache: {}, entries:['./public/client/js/main.js'], plugin: [watchify]}));
-    bundle.transform(babelify.configure({presets: ["es2015", "react"]})).transform(browserifyCss, {global: true});
-    bundle.on('update',rebundle);
+                return relativeUrl;
+            }
+        }
+    )
+    .transform(babelify, {
+        "presets": [
+          ["env", {
+            "targets": {
+              "browsers": "last 2 versions"
+            }
+          }],
+          "react"
+        ],
+        "plugins": [
+          [
+            "module-resolver",
+            {
+              "root": [
+                "./"
+              ],
+              "alias": {}
+            }
+          ],
+          "transform-promise-to-bluebird",
+          "transform-react-display-name",
+          "transform-class-properties",
+          "transform-es2015-classes"
+        ]
+      }
+    );
+}
 
-    //live reload of compiled files
-    livereload.listen();
-    gulp.watch(['app/views/*','public/js/client.js','public/css/*']).on('change',livereload.changed);
-
-    //build less css changes*/
-    gulp.watch('public/client/less/**').on('change', function(){
-        return buildLess();
-    })
-
-    function buildReact(){
-      return  gulp.src("./public/client/js/react/src/**/*.js")
-        .pipe(babel({presets: ["es2015", "react"]}))
-        .pipe(gulp.dest('./public/client/js/react/build'));
-    }
-    
-    function rebundle(){
-        return bundle.bundle()
-        .on('error',function(e){
-            gutil.log('Browserify Error:', e);
-        })
-        .pipe(source('client.js'))
-        .pipe(buffer())
-        .pipe(uglify())
-        .pipe(gulp.dest('./public/js'));
-    }
-
-    function buildLess(){
-        return gulp.src('./public/client/less/**/*.less')
-        .pipe(less({
-            paths: [ path.join(__dirname, 'less', 'includes') ]
-        }))
-        .pipe(gulp.dest('./public/css'));        
-    }
-
-    return rebundle();
+gulp.task('build', function() {
+  return gulp.src('./public/client/js/react/src/**/*.js')
+    // Don't use browserify for the backend files
+    .pipe(babel({"presets": ["env", "react"]}))
+    // transform streaming contents into buffer contents (because gulp-sourcemaps does not support streaming contents)
+    .pipe(buffer())
+    // load and init sourcemaps
+    .pipe(sourcemaps.init({loadMaps: true}))
+    // .pipe(uglify())
+    // write sourcemaps
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/client/js/react/build'));
 
 });
 
-/*
-Task: libs
-builds file of global libs
-see  /public/client/libs file for which files are included
-*/
-gulp.task('libs', function(){
-     return gulp.src('./public/client/libs.js')
-    .pipe(gulpbrowserify({
-        insertGlobals: true
-    }))
-    .pipe(uglify())
-    .pipe(gulp.dest('./public/js'))
+gulp.task('libs', function() {
+  // set up the browserify instance on a task basis
+  var b = transformChain(browserify({
+    entries: './public/client/libs.js',
+    debug: true,
+  }));
+
+  return b.bundle()
+    .pipe(source('libs.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        // .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/js/'));
 });
 
-/*
-Task: mapper
-builds globablized mapper module for standalone use
-see  /public/client/mapper
-*/
-gulp.task('mapper', function(){
-    return gulp.src('./public/client/idbmap.js')
-    .pipe(gulpbrowserify({
-        insertGlobals: true
-    }))
-    .pipe(uglify())
-    .pipe(gulp.dest('./public/js'))
-})
+gulp.task('mapper', function() {
+  // set up the browserify instance on a task basis
+  var b = transformChain(browserify({
+    entries: './public/client/idbmap.js',
+    debug: true,
+  }));
 
-/*
-Task: buildLess  [THIS IS USED FOR RELEASE BUILD PROCESSES]
-build public/client/less files to public/css files
-*/
-gulp.task('buildLess',function(){
+  return b.bundle()
+    .pipe(source('idbmap.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        // .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/js/'));
+});
+
+gulp.task('client', function() {
+  // set up the browserify instance on a task basis
+  var b = transformChain(browserify({
+    entries: './public/client/js/main.js',
+    debug: true,
+  }));
+
+  return b.bundle()
+    .pipe(source('client.js'))
+    .pipe(buffer())
+    .pipe(sourcemaps.init({loadMaps: true}))
+        // Add transformation tasks to the pipeline here.
+        // .pipe(uglify())
+        .on('error', gutil.log)
+    .pipe(sourcemaps.write('./'))
+    .pipe(gulp.dest('./public/js/'));
+});
+
+gulp.task('buildLess', function() {
     return gulp.src('./public/client/less/**/*.less')
     .pipe(less({
-        paths: [ path.join(__dirname, 'less', 'includes') ]
+        paths: [path.join(__dirname, 'less', 'includes')]
     }))
     .pipe(gulp.dest('./public/css'));
+});
+
+gulp.task('default', ["client", "mapper", "libs", "buildLess"], function() {
 });

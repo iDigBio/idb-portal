@@ -3,6 +3,7 @@
 //var HomePage = React.createFactory(require('./react/build/home'));
 var idbapi = require('./lib/idbapi');
 
+import 'c3/c3.css';
 
 var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
 var kingdomColor={'Plantae': '#6aaa51','Fungi':'#d3b833' ,'Chromista': '#cf7a0b','Animalia': '#3782cd', 'Protozoa': '#DD5656' },colorsIndex=0;
@@ -122,13 +123,13 @@ function formatNum(num){
 
 // record counts
 idbapi.summary('count/records/', function(resp) {
-    $('#recordcount').html(formatNum(JSON.parse(resp).itemCount));
+    $('#recordcount').html(formatNum(resp.itemCount));
 });
 idbapi.summary('count/media/', function(resp) {
-    $('#mediacount').html(formatNum(JSON.parse(resp).itemCount));
+    $('#mediacount').html(formatNum(resp.itemCount));
 });
 idbapi.summary('count/recordset/?rsq={"data.ingest": true}', function(resp) {
-    $('#recordsets-total').html(formatNum(JSON.parse(resp).itemCount));
+    $('#recordsets-total').html(formatNum(resp.itemCount));
 });
 
 function searchRq(value){

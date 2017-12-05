@@ -1,7 +1,10 @@
 {
   "presets": [
-    "node6",
-    "stage-0",
+    ["env", {
+      "targets": {
+        "node": "current"
+      }
+    }],
     "react"
   ],
   "plugins": [
@@ -9,15 +12,13 @@
       "module-resolver",
       {
         "root": [
-          "./",
-          "public/components"
+          "./"
         ],
         "alias": {}
       }
     ],
     "transform-promise-to-bluebird",
     "transform-react-display-name",
-    "transform-decorators",
     "transform-class-properties",
     "transform-es2015-classes"
   ]

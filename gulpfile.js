@@ -18,6 +18,7 @@ function transformChain(b) {
     .transform(
         browserifyCss,
         {
+            stripComments: true,
             global: true,
             processRelativeUrl: function(relativeUrl) {
                 var stripQueryStringAndHashFromPath = function(url) {
@@ -32,7 +33,7 @@ function transformChain(b) {
                 //
                 var prefix = 'node_modules/';
                 if(_.startsWith(relativePath, prefix) && fse.existsSync(relativePath)) {
-                    var vendorPath = 'public/vendor/' + relativePath.substring(prefix.length);
+                    var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
                     var source = path.join(rootDir, relativePath);
                     var target = path.join(rootDir, vendorPath);
 

@@ -1,10 +1,5 @@
 //required Global libs bundle
 
-if (typeof window !== "object") {
-	global.window = {};
-	var window = global.window;
-}
-
 window.$ = jQuery = require('jquery');
 require('jquery-ui-browserify');
 window.url = require('./js/lib/url');

@@ -5,6 +5,7 @@
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'leaflet/dist/leaflet.css';
+import 'jquery-ui/themes/base/all.css';
 
 function loadPage(){
     var path = url(1) == 'portal' ? url(2) : url(1);

@@ -32,16 +32,20 @@ function transformChain(b) {
                 // Copying files from '../node_modules/bootstrap/' to 'public/vendor/bootstrap/'
                 //
                 var prefix = 'node_modules/';
-                if(_.startsWith(relativePath, prefix) && fse.existsSync(relativePath)) {
-                    var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
-                    var source = path.join(rootDir, relativePath);
-                    var target = path.join(rootDir, "public/", vendorPath);
+                if(_.startsWith(relativePath, prefix)) {
+                    if(fse.existsSync(relativePath)) {
+                      var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
+                      var source = path.join(rootDir, relativePath);
+                      var target = path.join(rootDir, "public/", vendorPath);
 
-                    gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
-                    fse.copySync(source, target);
+                      gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
+                      fse.copySync(source, target);
 
-                    // Returns a new path string with original query string and hash fragments
-                    return vendorPath + queryStringAndHash;
+                      // Returns a new path string with original query string and hash fragments
+                      return vendorPath + queryStringAndHash;
+                    } else {
+                      gutil.log("Missing file" + JSON.stringify(relativePath));
+                    }
                 }
 
                 return relativeUrl;

@@ -35,7 +35,7 @@ function transformChain(b) {
                 if(_.startsWith(relativePath, prefix) && fse.existsSync(relativePath)) {
                     var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
                     var source = path.join(rootDir, relativePath);
-                    var target = path.join(rootDir, vendorPath);
+                    var target = path.join(rootDir, "public/", vendorPath);
 
                     gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
                     fse.copySync(source, target);

@@ -7287,6 +7287,10 @@ write@^0.2.1:
   dependencies:
     mkdirp "^0.5.1"
 
+wurl@^2.5.2:
+  version "2.5.2"
+  resolved "https://registry.yarnpkg.com/wurl/-/wurl-2.5.2.tgz#44c9cb2cb62dbdc7cba19cecaeea736e34147813"
+
 xml-name-validator@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/xml-name-validator/-/xml-name-validator-2.0.1.tgz#4d8b8f1eccd3419aa362061becef515e1e559635"

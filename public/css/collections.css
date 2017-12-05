@@ -36,3 +36,9 @@ div.map-popup label {
   overflow: auto;
   margin: 5px 0px;
 }
+#shim-marker-icon {
+  background: url("../../node_modules/leaflet/dist/images/marker-icon.png");
+}
+#shim-marker-shadow {
+  background: url("../../node_modules/leaflet/dist/images/marker-shadow.png");
+}

@@ -46,6 +46,8 @@ function transformChain(b) {
                     } else {
                       gutil.log("Missing file" + JSON.stringify(relativePath));
                     }
+                } else {
+                  gutil.log("Out of scope" + JSON.stringify(relativePath));
                 }
 
                 return relativeUrl;
@@ -157,5 +159,5 @@ gulp.task('buildLess', function() {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('default', ["client", "mapper", "libs", "buildLess"], function() {
+gulp.task('default', ["buildLess", "client", "mapper", "libs"], function() {
 });

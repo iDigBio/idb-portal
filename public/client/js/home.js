@@ -123,13 +123,13 @@ function formatNum(num){
 
 // record counts
 idbapi.summary('count/records/', function(resp) {
-    $('#recordcount').html(formatNum(JSON.parse(resp).itemCount));
+    $('#recordcount').html(formatNum(resp.itemCount));
 });
 idbapi.summary('count/media/', function(resp) {
-    $('#mediacount').html(formatNum(JSON.parse(resp).itemCount));
+    $('#mediacount').html(formatNum(resp.itemCount));
 });
 idbapi.summary('count/recordset/?rsq={"data.ingest": true}', function(resp) {
-    $('#recordsets-total').html(formatNum(JSON.parse(resp).itemCount));
+    $('#recordsets-total').html(formatNum(resp.itemCount));
 });
 
 function searchRq(value){

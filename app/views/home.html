@@ -27,33 +27,36 @@
                 </p>        
             </div>
         </div>
-        <div class="row " id="search">
-            <div class="col-lg-3 col-lg-offset-3 col-md-5 col-md-offset-2 col-sm-7 col-sm-offset-1" class="clearfix" id="search-row"> 
-                <h4>Search <span id="recordsets-total"></span> Recordsets</h4>
+        
+        <div class="row" id="search-row h4">
+            <div id="search-form-group" class="form-group">
                 <form class="form-inline">
-
-                    <div id="search-form-group" class="form-group">
-                        <div class="input-group">
-                            <select id="select-field" class="input-group-addon pull-left">
-                                <option value="scientificname">Scientific Name</option>
-                                <option value="fulltext">All Fields</option>
-                            </select>
-                            <input type="text" class="form-control" id="searchbox" autocomplete="off" >
-                            <a id="searchbtn" class="input-group-addon btn btn-material-lightblue">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </a>
-                        </div>
+                    <strong>Search <span id="recordsets-total"></span> Recordsets: </strong>
+                    <div class="input-group">
+                        <select id="select-field" class="input-group-addon pull-left">
+                            <option value="scientificname">Scientific Name</option>
+                            <option value="fulltext">All Fields</option>
+                        </select>
+                        <input type="text" class="form-control" id="searchbox" autocomplete="off" >
+                        <a id="searchbtn" class="input-group-addon btn btn-material-lightblue">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
                     </div>
                 </form>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3" id="jump">
-                <h4 class="clearfix">Jump To</h4>
+            
+        </div>
+
+        <div class="row" id="jump-row">
+            <div id="jump">
+                <strong>Jump To: </strong>
                 <a class="jump" href="/portal/search">Advanced Search</a>
                 <a class="jump" href="/portal/publishers">Publishers List</a>
                 <a class="jump" href="/portal/tutorial">Tutorial</a>
                 <a class="jump" href="https://www.idigbio.org/wiki/index.php/IDigBio_API">iDigBio API</a>
             </div>
         </div>
+
     </div>
 </div>
 <div class="row" id="stats-row">

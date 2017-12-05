@@ -48,7 +48,7 @@ if(_.has(record.indexTerms,'geopoint')){
         wakeTime: 750
     });
 
-    L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';
+    L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images';
     var point = L.latLng(record.indexTerms.geopoint);
     L.marker(point).addTo(map);
     map.panTo(point).setZoom(5); 

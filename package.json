@@ -98,6 +98,7 @@
     "babelify": "^7.3.0",
     "browserify": "^14.5.0",
     "browserify-css": "^0.14.0",
+    "browserify-shim": "^3.8.14",
     "es5-shim": "^4.5.9",
     "eslint": "^3.16.0",
     "eslint-import-resolver-babel-module": "^3.0.0",
@@ -143,5 +144,8 @@
     "autoInject": true,
     "minify": true,
     "rootDir": "."
+  },
+  "browserify-shim": {
+    "jQuery": "global:jQuery"
   }
 }

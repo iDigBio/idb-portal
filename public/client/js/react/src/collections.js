@@ -4,6 +4,7 @@ var Griddle = require('griddle-react');
 var helpers = require('../../lib/helpers');
 
 import '@bower_components/leaflet.fullscreen/Control.FullScreen.css';
+import '../../../../css/collections.css';
 
 var openMapPopup;
 module.exports = React.createClass({

@@ -56,24 +56,24 @@ var cols=[],ref={};
 var layer = new L.layerGroup();
 layer.addTo(map);
 
-L.Icon.Default.imagePath = '/portal/components/leaflet/dist/images';
+L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images';
 
 var multiIcon = L.icon({
     iconUrl: '/portal/img/mapmarker.png',
     iconSize: [22, 23],
     iconAnchor: [10, 20],
     popupAnchor: [1, -9],
-    shadowUrl: '/portal/components/leaflet/dist/images/marker-shadow.png',
+    shadowUrl: '/portal/vendor/leaflet/dist/images/marker-shadow.png',
     shadowSize: [30,22],
     shadowAnchor: [9,20] 
 });
 
 var singleIcon = L.icon({
-    iconUrl: '/portal/components/leaflet/dist/images/marker-icon.png',
+    iconUrl: '/portal/vendor/leaflet/dist/images/marker-icon.png',
     iconSize: [15, 22],
     iconAnchor: [10, 20],
     popupAnchor: [-3, -9],
-    shadowUrl: '/portal/components/leaflet/dist/images/marker-shadow.png',
+    shadowUrl: '/portal/vendor/leaflet/dist/images/marker-shadow.png',
     shadowSize: [30,22],
     shadowAnchor: [12,20]    
 });

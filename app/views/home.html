@@ -13,7 +13,7 @@
     <div class="col-lg-12">
         <div class="row " id="welcome">
             <div class="col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1">
-                <h4>Welcome to the iDigBio Portal</h4>
+                <h2>Welcome to the iDigBio Portal</h2>
                 <p>
                     If you are familiar with our portal's interface, you can start searching <a href="/portal/search">Specimen Records</a>.
                     If this is your first time here, you might consider browsing our <a href="/portal/tutorial">tutorial</a>.
@@ -21,33 +21,36 @@
                 </p>        
             </div>
         </div>
-        <div class="row " id="search">
-            <div class="col-lg-3 col-lg-offset-3 col-md-5 col-md-offset-2 col-sm-7 col-sm-offset-1" class="clearfix" id="search-row"> 
-                <h4>Search <span id="recordsets-total"></span> Recordsets</h4>
+        
+        <div class="row h4" id="search-row">
+            <div id="search-form-group" class="form-group">
                 <form class="form-inline">
-
-                    <div id="search-form-group" class="form-group">
-                        <div class="input-group">
-                            <select id="select-field" class="input-group-addon pull-left">
-                                <option value="scientificname">Scientific Name</option>
-                                <option value="fulltext">All Fields</option>
-                            </select>
-                            <input type="text" class="form-control" id="searchbox" autocomplete="off" >
-                            <a id="searchbtn" class="input-group-addon btn btn-material-lightblue">
-                                <i class="glyphicon glyphicon-search"></i>
-                            </a>
-                        </div>
+                    Search <span id="recordsets-total"></span> Recordsets: 
+                    <div class="input-group">
+                        <select id="select-field" class="input-group-addon pull-left">
+                            <option value="scientificname">Scientific Name</option>
+                            <option value="fulltext">All Fields</option>
+                        </select>
+                        <input type="text" class="form-control" id="searchbox" autocomplete="off" >
+                        <a id="searchbtn" class="input-group-addon btn btn-material-lightblue">
+                            <i class="glyphicon glyphicon-search"></i>
+                        </a>
                     </div>
                 </form>
             </div>
-            <div class="col-lg-3 col-md-3 col-sm-3" id="jump">
-                <h4 class="clearfix">Jump To</h4>
+            
+        </div>
+
+        <div class="row h4" id="jump-row">
+            <div id="jump">
+                Jump To: 
                 <a class="jump" href="/portal/search">Advanced Search</a>
                 <a class="jump" href="/portal/publishers">Publishers List</a>
                 <a class="jump" href="/portal/tutorial">Tutorial</a>
                 <a class="jump" href="https://www.idigbio.org/wiki/index.php/IDigBio_API">iDigBio API</a>
             </div>
         </div>
+
     </div>
 </div>
 <div class="row" id="stats-row">

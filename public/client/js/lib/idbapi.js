@@ -52,6 +52,7 @@ module.exports = {
         var options = {
             method: method,
             uri: this.host,
+            json: true
         };
         var cb;
         [arg1, arg2, arg3].forEach(function(arg) {

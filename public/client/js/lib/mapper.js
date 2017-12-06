@@ -658,12 +658,12 @@ module.exports = function(elid, options){
                     geopoint={
                         type: 'geo_bounding_box',
                         top_left: { 
-                            lat: e.layer._latlngs[1].lat,
-                            lon: e.layer._latlngs[1].lng
+                            lat: e.layer._latlngs[0][1].lat,
+                            lon: e.layer._latlngs[0][1].lng
                         },
                         bottom_right: {
-                            lat: e.layer._latlngs[3].lat,
-                            lon: e.layer._latlngs[3].lng
+                            lat: e.layer._latlngs[0][3].lat,
+                            lon: e.layer._latlngs[0][3].lng
                         } 
                     };
                     break;

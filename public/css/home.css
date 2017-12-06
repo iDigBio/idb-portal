@@ -14,10 +14,13 @@
   background-color: #a4cc95;
 }
 #search-row {
-  text-align: left;
+  text-align: center;
   padding: 0px 30px;
 }
 #search-row h4 {
+  text-align: center;
+}
+h2 {
   text-align: center;
 }
 h4 {

@@ -42,7 +42,7 @@ function transformChain(b) {
                       fse.copySync(source, target);
 
                       // Returns a new path string with original query string and hash fragments
-                      return vendorPath + queryStringAndHash;
+                      return path.join("/portal/", vendorPath + queryStringAndHash);
                     } else {
                       gutil.log("Missing file" + JSON.stringify(relativePath));
                     }

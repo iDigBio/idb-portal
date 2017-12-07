@@ -38,7 +38,7 @@
                 <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
             </ul>
         
-           <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
+<!--            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
               {% if !user.is_authenticated -%} 
               <li style="border:none;">
                <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
@@ -48,7 +48,7 @@
               {% else %}
               <li style="border:none;"><a id="logout-link" href="/portal/logout" style="color:white;font-size:.8em;">Log Out</a></li>  
               {%- endif %}
-            </div>
+            </div> -->
         
         </div>
         <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
@@ -81,7 +81,7 @@
           {%- endfor %}
           </ul>
          
-          <ul id="user-menu" style="float:right">
+<!--           <ul id="user-menu" style="float:right">
           {% if user.is_authenticated -%}          
               <li>
                 <a style="min-width:90px;" href="#">&#x25BC;&nbsp;&nbsp;{{ user.login }}</a>
@@ -95,7 +95,7 @@
                 </ul> 
               </li>
           {%- endif %}
-          </ul>
+          </ul> -->
         </div>
 
       </div>
@@ -171,9 +171,9 @@
         <script src='/portal/js/client.js'></script>
     {% endblock %}
     
-    {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
+<!--     {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
     <script src="https://www.idigbio.org/login/server/script?type=portal&t={{ user.random }}"></script>
-    {%- endif %}
+    {%- endif %} -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

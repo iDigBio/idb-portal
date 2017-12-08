@@ -41,6 +41,9 @@ function loadPage(){
                 require('./collections');
             }
             break;
+        default:
+            require('./home');
+            break;
     }
 }
 

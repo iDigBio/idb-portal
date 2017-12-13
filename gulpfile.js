@@ -8,6 +8,7 @@ var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
 var babelify = require('babelify');
 var browserifyCss = require('browserify-css');
+var shim = require('browserify-shim');
 var _ = require("lodash");
 var path = require("path");
 var fse = require('fs-extra');
@@ -15,6 +16,7 @@ var less = require('gulp-less');
 
 function transformChain(b) {
   return b
+    .transform(shim)
     .transform(
         browserifyCss,
         {

@@ -15,6 +15,6 @@ $('#side-nav-list').affix({
     }
 })
 
-$('.scrollspy').scrollSpy({
-    offsetTop: -155
-});
+// $('.scrollspy').scrollSpy({
+//     offsetTop: -155
+// });

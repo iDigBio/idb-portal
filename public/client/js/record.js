@@ -23,9 +23,9 @@ $('#side-nav-list').affix({
     }
 })
 
-$('.scrollspy').scrollSpy({
-    offsetTop: -205
-});
+// $('.scrollspy').scrollSpy({
+//     offsetTop: -205
+// });
 
 if(_.has(record.indexTerms,'geopoint')){
     $('#map').css('display','block');
@@ -37,9 +37,11 @@ if(_.has(record.indexTerms,'geopoint')){
         reuseTiles: true
     });
 
+    var point = L.latLng(record.indexTerms.geopoint);
+
     var map = L.map('map-box',{
-        center: [0,0],
-        zoom: 0,
+        center: point,
+        zoom: 5,
         layers: [base],
         scrollWheelZoom: true,
         boxZoom: false,
@@ -48,10 +50,9 @@ if(_.has(record.indexTerms,'geopoint')){
         wakeTime: 750
     });
 
-    L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images';
-    var point = L.latLng(record.indexTerms.geopoint);
+    L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images/';
     L.marker(point).addTo(map);
-    map.panTo(point).setZoom(5); 
+    //map.panTo(point).setZoom(5); 
 }       
 
 

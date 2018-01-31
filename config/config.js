@@ -35,6 +35,7 @@ var config = {
         submenu: [
           {url: "/portal/publishers", label: 'Publishers'},
           {url: "/portal/collections", label: 'Collections'},
+          {url: "/portal/portalstats", label: 'Portal Stats'},
           {url: "https://www.idigbio.org/wiki/index.php/IDigBio_API", label: 'iDigBio API'}
         ]
       },

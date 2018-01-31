@@ -52,7 +52,7 @@ module.exports = React.createClass({
                 
             },
             {
-                "columnName": "knownToContainTypes",
+                "columnName": "portalDisplay",
                 "locked": false,
                 "visible": true,
                 "customComponent": UpdateLink,
@@ -84,7 +84,7 @@ module.exports = React.createClass({
                 resultsPerPage={20}
                 initialSort={'institution'}
                 columns={['institution','collection',
-                'contact','contact_role', 'knownToContainTypes', 'collection_uuid', 'recordsets']}  
+                'contact','contact_role', 'portalDisplay', 'collection_uuid', 'recordsets']}  
                 columnMetadata={columnMeta.concat(cols)}
                 enableInfiniteScroll={true} bodyHeight={400} 
                 useFixedHeader={true} />

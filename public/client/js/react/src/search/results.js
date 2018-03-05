@@ -52,7 +52,8 @@ var Results = module.exports =  React.createClass({
                         if(response.itemCount > (searchState.from+searchState.size)){
                             more=true;
                         }
-                        self.setState({results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
+                        searchState.from = query.offset;
+                        self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
                             self.forceUpdate();
                         });
                     }
@@ -62,7 +63,7 @@ var Results = module.exports =  React.createClass({
             self.lastQueryStringed = JSON.stringify(query);
 
 
-        },700,{leading: true, trailing: true});
+        },700,{leading: true, trailing: false});
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
@@ -97,16 +98,6 @@ var Results = module.exports =  React.createClass({
                    this.getResults(); 
                 }); 
             }
-        }
-    },
-    loadMoreResults: function(){
-        var search = _.cloneDeep(this.state.search);
-
-        if(this.state.total > search.from + search.size){
-            search.from += search.size;
-            this.setState({search: search, loading: true},function(){
-               this.getResults(); 
-            }); 
         }
     },
     render: function(){

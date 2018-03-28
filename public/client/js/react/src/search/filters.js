@@ -260,12 +260,6 @@ var TextFilter = React.createClass({
                 }
             }
         }
-        var fld = fields.byTerm[this.props.filter.name];
-        if(_.has(fld,'addall') && fld.addall){
-            $(event.currentTarget).IDBAutocomplete(options);
-        }else{
-            $(event.currentTarget).autocomplete(options);
-        }
     },
     getSynonyms: function(event){
         event.preventDefault();
@@ -378,23 +372,6 @@ var DateRangeFilter = React.createClass({
         filter.range[event.currentTarget.name] = date;
         this.props.changeFilter(filter);     
     },
-    showDatePicker: function(event){
-        var d = new Date(), self=this, reg = /\d{4}-\d{1,2}-\d{1,2}/;
-
-        $(event.currentTarget).datepicker({
-            dateFormat: 'yy-mm-dd',
-            yearRange: '1701:'+d.getFullYear(),
-            //minDate: mindate,
-            //maxDate: maxdate,
-            changeYear: true,
-            changeMonth: true,
-            onSelect: function(date,obj){
-                var filter = self.props.filter;//, filter=filters[ind];   
-                filter.range[obj.input.context.name] = date;
-                self.props.changeFilter(filter);                  
-            }
-        });
-    },
     presenceClick: function(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){
@@ -436,7 +413,6 @@ var DateRangeFilter = React.createClass({
                             className="form-control date"
                             disabled={disabled} 
                             onChange={this.dateChange} 
-                            onFocus={this.showDatePicker}
                             value={filter.range.gte}
                             placeholder="yyyy-mm-dd"
                         />
@@ -449,7 +425,6 @@ var DateRangeFilter = React.createClass({
                             className="form-control date"
                             disabled={disabled} 
                             onChange={this.dateChange} 
-                            onFocus={this.showDatePicker}
                             value={filter.range.lte}
                             placeholder="yyyy-mm-dd"
                         />

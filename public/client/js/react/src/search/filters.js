@@ -170,7 +170,7 @@ var TextFilter = React.createClass({
         //function for limiting execution of consecutive key strokes
         this.debouncedTextType = _.debounce(function(){
             self.props.changeFilter(self.props.filter); 
-        },500,{leading: false, trailing: true});
+        },700,{leading: false, trailing: true});
     },
     getInitialState: function(){
         return {text: this.props.filter.text}

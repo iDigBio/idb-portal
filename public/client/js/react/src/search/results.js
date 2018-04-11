@@ -63,7 +63,7 @@ var Results = module.exports =  React.createClass({
             self.lastQueryStringed = JSON.stringify(query);
 
 
-        },700,{leading: true, trailing: false});
+        },1000,{leading: false, trailing: true});
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
@@ -89,7 +89,6 @@ var Results = module.exports =  React.createClass({
     //this is not a synthentic event
     resultsScroll: function(e){
         var search = _.cloneDeep(this.state.search);
-
         if(this.state.total > search.from + search.size){
             if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
                 search.from += search.size;

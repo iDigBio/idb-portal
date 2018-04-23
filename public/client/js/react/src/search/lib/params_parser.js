@@ -22,7 +22,7 @@ module.exports = function(search){
                 }else if(k==='geopoint' && _.isObject(v)){
                     if(v.type === 'geo_bounding_box'){
                         delete v.type
-                        _.assign(search.bounds, v);
+                        _.assign(search.mapping.bounds, v);
                     }else if(v.type === 'exists' || v.type === 'missing'){
                         search.geopoint = v.type === 'exists' ? true : false;
                     }

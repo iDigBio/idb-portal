@@ -127,7 +127,7 @@ module.exports = (function(){
             var geobounds = {}; //collects geobounds field values
             switch(search.mapping.type){
                 case 'box':
-                    _.each(search.bounds,function(val,key){
+                    _.each(search.mapping.bounds,function(val,key){
                         _.each(val, function(v,k){
                             if(v && _.isEmpty(geobounds)){
                                 geobounds={

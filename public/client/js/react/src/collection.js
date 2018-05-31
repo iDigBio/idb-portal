@@ -43,7 +43,12 @@ var Collection = React.createClass({
                     val = <span>{links}</span>
                 }
             }
-            //var val = self.props.data[key];
+            if(key=='recordsetQuery'){
+                if(_.isString(val)){
+                    val = <a href={'/portal/search?rq='+val}>{val}</a>
+                }
+            }
+
             return (
                 <tr key={key}>
                     <td className="name">{frags.join(' ')}</td>

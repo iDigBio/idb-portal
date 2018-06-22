@@ -2,7 +2,7 @@ var browserify = require('browserify');
 var gulp = require('gulp');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
-var gutil = require('gulp-util');
+var log = require('fancy-log');
 var uglify = require('gulp-uglify');
 var babel = require('gulp-babel');
 var sourcemaps = require('gulp-sourcemaps');
@@ -40,16 +40,16 @@ function transformChain(b) {
                       var source = path.join(rootDir, relativePath);
                       var target = path.join(rootDir, "public/", vendorPath);
 
-                      gutil.log('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
+                      log.info('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
                       fse.copySync(source, target);
 
                       // Returns a new path string with original query string and hash fragments
                       return path.join("/portal/", vendorPath + queryStringAndHash);
                     } else {
-                      gutil.log("Missing file" + JSON.stringify(relativePath));
+                      log.error("Missing file" + JSON.stringify(relativePath));
                     }
                 } else {
-                  gutil.log("Out of scope" + JSON.stringify(relativePath));
+                  log.error("Out of scope" + JSON.stringify(relativePath));
                 }
 
                 return relativeUrl;
@@ -112,7 +112,7 @@ gulp.task('libs', function() {
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
         // .pipe(uglify())
-        .on('error', gutil.log)
+        .on('error', log.error)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
 });
@@ -130,7 +130,7 @@ gulp.task('mapper', function() {
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
         // .pipe(uglify())
-        .on('error', gutil.log)
+        .on('error', log.error)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
 });
@@ -148,7 +148,7 @@ gulp.task('client', function() {
     .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
         // .pipe(uglify())
-        .on('error', gutil.log)
+        .on('error', log.error)
     .pipe(sourcemaps.write('./'))
     .pipe(gulp.dest('./public/js/'));
 });
@@ -161,5 +161,15 @@ gulp.task('buildLess', function() {
     .pipe(gulp.dest('./public/css'));
 });
 
-gulp.task('default', ["buildLess", "client", "mapper", "libs"], function() {
+gulp.task('leaflet-extra', function() {
+  // this leaflet resource is handled through js only so our browserifyCss methods do not recognize it.
+  var rootDir = path.resolve(process.cwd());
+  var filesource = path.join(rootDir, "/node_modules/leaflet/dist/images/marker-icon-2x.png");
+  var filetarget = path.join(rootDir, "/public/vendor/leaflet/dist/images/marker-icon-2x.png");
+  log.info('Copying file from ' + JSON.stringify(filesource) + ' to ' + JSON.stringify(filetarget));
+  fse.copySync(filesource, filetarget);
+
+});
+
+gulp.task('default', ["buildLess", "client", "mapper", "libs", "leaflet-extra"], function() {
 });

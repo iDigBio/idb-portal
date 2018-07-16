@@ -217,6 +217,30 @@ var Map = React.createClass({
     }
 });
 
+new ClipboardJS('.btn');
+var Citation = React.createClass({
+    render: function(){
+        if(_.has(this.props.data,'dcterms:bibliographicCitation')){
+            return (
+                <div id="citation" className="clearfix scrollspy section">       
+                    <h2 className="title">Citation</h2>
+                    <div>The provider has specified the following citation for use with this data.</div>
+                    <div id="citationText" className="citationtext">{this.props.data['dcterms:bibliographicCitation']}</div>
+                    <button className="btn" data-clipboard-target="#citationText">Copy citation to clipboard</button>
+                </div> 
+            )
+        }else{
+            return(
+                <div id="citation" className="clearfix scrollspy section">       
+                    <h2 className="title">Citation</h2>
+                    <div>The provider has not specified a specific citation for this data.</div>
+                    <div><a href="https://www.idigbio.org/wiki/index.php/IDigBio_API">We recommend you use these standards.</a></div>
+                </div>
+            )
+        }
+    }
+});
+
 var Provider = require('./shared/provider');
 var Title = require('./shared/title');
 
@@ -225,7 +249,7 @@ module.exports = React.createClass({
 
         var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
         var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
-
+        
         return(
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
@@ -233,6 +257,7 @@ module.exports = React.createClass({
                 {map}
                 {media}
                 <li><a href="#attribution">Attribution</a></li>
+                <li><a href="#citation">Citation</a></li>
                 <li><a href="#data">All Data</a></li>
             </ul>            
         )
@@ -372,6 +397,7 @@ module.exports = React.createClass({
                         <Map data={index} />
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
+                        <Citation data={this.props.record.data} />
                         <Record record={record} raw={this.props.record}/>
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">

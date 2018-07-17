@@ -55,6 +55,13 @@ export default {
       token: req.session._csrf
     });
   },
+  citationguide: function(req, res) {
+    res.render('citationguide', {
+      activemenu: 'publishers',
+      user: req.user,
+      token: req.session._csrf
+    });
+  },
   stats: function(req, res) {
     var usage = {};
     var ingest = {};

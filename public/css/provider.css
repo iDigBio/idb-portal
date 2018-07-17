@@ -17,6 +17,7 @@
 }
 #contacts table.contact td.name {
   font-weight: bold;
+  width: 60px;
 }
 #contacts table.contact td i {
   color: #999;

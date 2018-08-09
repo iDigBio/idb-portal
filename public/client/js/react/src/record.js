@@ -243,7 +243,14 @@ var Citation = React.createClass({
                 <h2 className="title">Citation</h2>    
                 <SuppliedCitation data={this.props.data.data} />
                 <div>This is the constructed <a href="https://www.idigbio.org/content/citation-guidelines">iDigBio Citation Format</a> using information supplied by the data provider.</div>
-                <div id="citationText" className="citationtext">{this.props.data.data['dwc:occurrenceID']}. {this.props.data.data['dwc:catalogNumber']}. {this.props.data.data['dwc:datasetName']}. <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>Publisher Link</a>. <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}>http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>. Accessed on {moment().format("LL")}.</div>
+                <div id="citationText" className="citationtext">
+                    {_.has(this.props.data.data, 'dwc:occurrenceID') && this.props.data.data['dwc:occurrenceID'] + '. '}
+                    {_.has(this.props.data.data, 'dwc:catalogNumber') && this.props.data.data['dwc:catalogNumber'] + '. '}
+                    {_.has(this.props.data.attribution, 'name') && this.props.data.attribution['name'] + '. '}
+                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>Publisher Link</a>. 
+                    <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>. 
+                    Accessed on {moment().format("LL")}.
+                </div>
             </div>
         )
     }

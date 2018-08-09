@@ -73,7 +73,6 @@ module.exports = React.createClass({
                 </table>
             );
         }     
-        //console.log(this.props.data)
         var data = this.props.data;
         var title = null, description = null, link = null, desc = null, logo = null;
         

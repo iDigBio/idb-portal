@@ -2,6 +2,7 @@
 var React = require('react')
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
+var moment = require('moment');
 var fields = require('../../lib/fields');
 var dqFlags = require('../../lib/dq_flags');
 var idbapi = require('../../lib/idbapi');
@@ -220,12 +221,47 @@ var Map = React.createClass({
 var Provider = require('./shared/provider');
 var Title = require('./shared/title');
 
+var SuppliedCitation = React.createClass({
+    render: function(){
+        if(_.has(this.props.data,'dcterms:bibliographicCitation')){
+            return (
+                <div id="citation" className="clearfix scrollspy section">       
+                    <div>The provider has specified the following citation for use with this data.</div>
+                    <div id="citationText" className="citationtext">{this.props.data['dcterms:bibliographicCitation']}</div>
+                </div> 
+            )
+        }else{
+            return(null);
+        }
+    }
+});
+
+var Citation = React.createClass({
+    render: function(){
+        return(
+            <div id="citation" className="clearfix scrollspy section">
+                <h2 className="title">Citation</h2>    
+                <SuppliedCitation data={this.props.data.data} />
+                <div>This is the constructed <a href="https://www.idigbio.org/content/citation-guidelines">iDigBio Citation Format</a> using information supplied by the data provider.</div>
+                <div id="citationText" className="citationtext">
+                    {_.has(this.props.data.data, 'dwc:occurrenceID') && this.props.data.data['dwc:occurrenceID'] + '. '}
+                    {_.has(this.props.data.data, 'dwc:catalogNumber') && this.props.data.data['dwc:catalogNumber'] + '. '}
+                    {_.has(this.props.data.attribution, 'name') && this.props.data.attribution['name'] + '. '}
+                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>Publisher Link</a>. 
+                    <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>. 
+                    Accessed on {moment().format("LL")}.
+                </div>
+            </div>
+        )
+    }
+});
+
 module.exports = React.createClass({
     navList: function(){
 
         var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
         var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
-
+        
         return(
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
@@ -233,6 +269,7 @@ module.exports = React.createClass({
                 {map}
                 {media}
                 <li><a href="#attribution">Attribution</a></li>
+                <li><a href="#citation">Citation</a></li>
                 <li><a href="#data">All Data</a></li>
             </ul>            
         )
@@ -372,6 +409,7 @@ module.exports = React.createClass({
                         <Map data={index} />
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
+                        <Citation data={this.props.record} />
                         <Record record={record} raw={this.props.record}/>
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">

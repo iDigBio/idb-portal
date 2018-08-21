@@ -1,4 +1,3 @@
-
 var React = require('react')
 var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
@@ -6,7 +5,6 @@ var moment = require('moment');
 var fields = require('../../lib/fields');
 var dqFlags = require('../../lib/dq_flags');
 var idbapi = require('../../lib/idbapi');
-
 
 var Row = React.createClass({
     render: function(){
@@ -237,6 +235,7 @@ var SuppliedCitation = React.createClass({
 });
 
 var Citation = React.createClass({
+
     render: function(){
         return(
             <div id="citation" className="clearfix scrollspy section">
@@ -247,7 +246,7 @@ var Citation = React.createClass({
                     {_.has(this.props.data.data, 'dwc:occurrenceID') && this.props.data.data['dwc:occurrenceID'] + '. '}
                     {_.has(this.props.data.data, 'dwc:catalogNumber') && this.props.data.data['dwc:catalogNumber'] + '. '}
                     {_.has(this.props.data.attribution, 'name') && this.props.data.attribution['name'] + '. '}
-                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>Publisher Link</a>. 
+                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>{this.props.pubname}</a>. 
                     <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>. 
                     Accessed on {moment().format("LL")}.
                 </div>
@@ -409,7 +408,7 @@ module.exports = React.createClass({
                         <Map data={index} />
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
-                        <Citation data={this.props.record} />
+                        <Citation data={this.props.record} pubname={this.props.pubname} />
                         <Record record={record} raw={this.props.record}/>
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">

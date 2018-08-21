@@ -3,15 +3,32 @@ var ReactDOM = require('react-dom');
 var React = require('react');
 //var Map = require('./search/views/mapbox');
 //window.queryBuilder = require('./search/lib/querybuilder');
+var async = require('async');
+var idbapi = require('./lib/idbapi');
 var L = require('leaflet');
 require('leaflet-sleep');
 //provides order for sections
 var RecordPage = require('./react/src/record');
 
-ReactDOM.render(
-    <RecordPage record={record} />,
-    document.getElementById('react-wrapper')
-) 
+
+var pubname = '';
+
+async.parallel([
+    function(callback){
+        idbapi.publishers({"pq":{"uuid":record.attribution.publisher}},function(resp){
+            resp.items.forEach(function(item){
+            pubname = item.data.name;
+            })
+            callback();
+        });
+    }
+],function(error){
+    ReactDOM.render(
+        <RecordPage record={record} pubname={pubname}/>,
+        document.getElementById('react-wrapper')
+    );
+})
+
 //$('.tabs .tab:first-child').trigger('click'); 
 //make map if geopoint
 

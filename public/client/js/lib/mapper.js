@@ -578,6 +578,7 @@ module.exports = function(elid, options){
     var mapDefaults = {
         center: [0,0],
         zoom: 2,
+        maxZoom: 17,
         layers: [base],
         scrollWheelZoom: true,
         boxZoom: true,

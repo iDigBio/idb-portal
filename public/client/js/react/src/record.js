@@ -408,7 +408,11 @@ module.exports = React.createClass({
                         <Map data={index} />
                         <Gallery data={index} /> 
                         <Provider data={this.props.record.attribution} />                       
+<<<<<<< HEAD
                         {/* <Citation data={this.props.record} pubname={this.props.pubname} /> */}
+=======
+                        <Citation data={this.props.record} pubname={this.props.pubname} /> 
+>>>>>>> citations
                         <Record record={record} raw={this.props.record}/>
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">

@@ -36,7 +36,7 @@ var config = {
           {url: "/portal/publishers", label: 'Publishers'},
           {url: "/portal/collections", label: 'Collections'},
           {url: "/portal/portalstats", label: 'Portal Stats'},
-          // {url: "https://www.idigbio.org/content/citation-guidelines", label: 'Citation Guide'},
+          {url: "https://docs.google.com/document/d/16kC0J6hSGPGhPVlH89nt98Yr547I9O2TRyqXw__TeLQ/edit", label: 'Citation Guide'},
           {url: "https://www.idigbio.org/wiki/index.php/IDigBio_API", label: 'iDigBio API'}
         ]
       },

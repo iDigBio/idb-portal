@@ -33,6 +33,9 @@ var Results = module.exports =  React.createClass({
             //constant passing of props forces many unncessary requests. This cheap method checks
             //see if there truely is a new query to run
 
+            console.log(searchState, '<- searchState');
+            console.log(query, '<- query');
+
             if(JSON.stringify(query) !== self.lastQueryStringed){
                 //setting results to empty array forces
                 //spinner to show for new searches

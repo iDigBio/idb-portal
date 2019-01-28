@@ -20,53 +20,7 @@ var Results = module.exports =  React.createClass({
             return false;
         }
     },
-    componentWillMount(){
-        var self=this;
-        this.lastQueryTime = 0;
-        /*this results getter attempts to minimize excessive results queries with lots of key strokes
-        and ensures that the last key press results in the proper set of results as responses can be out of 
-        order*/
-        this.getResults = function(){
-         
-            var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
-            var now = d.getTime();
-            //constant passing of props forces many unncessary requests. This cheap method checks
-            //see if there truely is a new query to run
 
-            console.log(searchState, '<- searchState');
-            console.log(query, '<- query');
-
-            if(JSON.stringify(query) !== self.lastQueryStringed){
-                //setting results to empty array forces
-                //spinner to show for new searches
-                //THESE state change tricks should not happen anywhere else
-                if(searchState.from === 0){
-                    self.setState({results: [], loading: true})
-                }
-                self.lastQueryTime = now;
-                idbapi.search(query,function(response){
-                    if(now>= self.lastQueryTime){
-                        var res, more=false;
-                        if(searchState.from > 0){
-                            res = self.state.results.concat(response.items);
-                        }else{
-                            res = response.items;
-                        }
-                        if(response.itemCount > (searchState.from+searchState.size)){
-                            more=true;
-                        }
-                        searchState.from = query.offset;
-                        self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
-                            self.forceUpdate();
-                        });
-                    }
-                })
-            }
-            
-            self.lastQueryStringed = JSON.stringify(query);
-
-        }
-    },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
         this.getResults(this.props.search);
@@ -82,6 +36,44 @@ var Results = module.exports =  React.createClass({
                 this.getResults(this.state.search); 
             });
        //}
+    },
+    getResults(){
+        var self = this;
+         
+        var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
+        var now = d.getTime();
+        //constant passing of props forces many unncessary requests. This cheap method checks
+        //see if there truely is a new query to run
+
+        if(JSON.stringify(query) !== self.lastQueryStringed){
+            //setting results to empty array forces
+            //spinner to show for new searches
+            //THESE state change tricks should not happen anywhere else
+            if(searchState.from === 0){
+                self.setState({results: [], loading: true})
+            }
+            self.lastQueryTime = now;
+            idbapi.search(query,function(response){
+                if(now>= self.lastQueryTime){
+                    var res, more=false;
+                    if(searchState.from > 0){
+                        res = self.state.results.concat(response.items);
+                    }else{
+                        res = response.items;
+                    }
+                    if(response.itemCount > (searchState.from+searchState.size)){
+                        more=true;
+                    }
+                    searchState.from = query.offset;
+                    self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
+                        self.forceUpdate();
+                    });
+                }
+            })
+        }
+        
+        self.lastQueryStringed = JSON.stringify(query);
+
     },
     viewChange: function(event){
         event.preventDefault();

@@ -85,7 +85,8 @@ var Results = module.exports =  React.createClass({
     resultsScroll: function(e){
         var search = _.cloneDeep(this.state.search);
         if(this.state.total > search.from + search.size){
-            if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
+            // When we scroll to the bottom of the page, there are more results to show, and we're not currently getting results - get more results
+            if(($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!this.state.loading)){
                 search.from += search.size;
                 this.updateResults(search);
             }

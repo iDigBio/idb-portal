@@ -20,13 +20,13 @@ var Results = module.exports =  React.createClass({
             return false;
         }
     },
-    componentWillMount: function(){
+    componentWillMount(){
         var self=this;
         this.lastQueryTime = 0;
         /*this results getter attempts to minimize excessive results queries with lots of key strokes
         and ensures that the last key press results in the proper set of results as responses can be out of 
         order*/
-        this.getResults = _.debounce(function(){
+        this.getResults = function(){
          
             var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
             var now = d.getTime();
@@ -65,8 +65,7 @@ var Results = module.exports =  React.createClass({
             
             self.lastQueryStringed = JSON.stringify(query);
 
-
-        },1000,{leading: false, trailing: true});
+        }
     },
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;

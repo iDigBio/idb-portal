@@ -20,22 +20,9 @@ var Results = module.exports =  React.createClass({
             return false;
         }
     },
-
     componentDidMount: function(){
         window.onscroll = this.resultsScroll;
         this.getResults(this.props.search);
-    },
-    componentWillReceiveProps: function(nextProps){
-        //component should only recieve search as props
-        //debugger
-        //var isNewSearch =  _.isEqual(this.props.search, nextProps.search);
-       
-       //if(!_.isEqual(nextProps.search,this.props.search)){
-            this.setState({search: _.cloneDeep(nextProps.search)},function(){
-                this.forceUpdate();
-                this.getResults(this.state.search); 
-            });
-       //}
     },
     getResults(){
         var self = this;
@@ -80,16 +67,27 @@ var Results = module.exports =  React.createClass({
         var view = event.currentTarget.attributes['data-value'].value;
         this.props.viewChange('resultsTab', view);
     },
+    componentWillReceiveProps: function(nextProps){
+        //component should only recieve search as props
+        //componentWillReceiveProps will soon be depricated
+            this.setState({search: _.cloneDeep(nextProps.search)},function(){
+                this.forceUpdate();
+                this.getResults(this.state.search); 
+            });
+    },
+    updateResults(search){
+        this.setState({search: search, loading: true},function(){
+            this.forceUpdate();
+            this.getResults(); 
+        });
+    },
     //this is not a synthentic event
     resultsScroll: function(e){
         var search = _.cloneDeep(this.state.search);
         if(this.state.total > search.from + search.size){
             if($(window).scrollTop() + 40 >= $(document).height() - $(window).height()){
                 search.from += search.size;
-                this.setState({search: search, loading: true},function(){
-                   this.forceUpdate();
-                   this.getResults(); 
-                }); 
+                this.updateResults(search);
             }
         }
     },

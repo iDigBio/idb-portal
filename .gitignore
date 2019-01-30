@@ -5,3 +5,4 @@ public/client/js/react/build/
 *~
 .nide
 public/js/*
+yarn-error.log

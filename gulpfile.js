@@ -35,23 +35,20 @@ function transformChain(b) {
                 //
                 var prefix = 'node_modules/';
                 if(_.startsWith(relativePath, prefix)) {
-                    if(fse.existsSync(relativePath)) {
+                    if(fse.pathExistsSync(relativePath)) {
                       var vendorPath = 'vendor/' + relativePath.substring(prefix.length);
-                      var source = path.join(rootDir, relativePath);
+                      var sourcepath = path.join(rootDir, relativePath);
                       var target = path.join(rootDir, "public/", vendorPath);
 
-                      log.info('Copying file from ' + JSON.stringify(source) + ' to ' + JSON.stringify(target));
-                      fse.copySync(source, target);
+                      log.info('Copying file from ' + JSON.stringify(sourcepath) + ' to ' + JSON.stringify(target));
+                      fse.copySync(sourcepath, target);
 
                       // Returns a new path string with original query string and hash fragments
                       return path.join("/portal/", vendorPath + queryStringAndHash);
                     } else {
                       log.error("Missing file" + JSON.stringify(relativePath));
                     }
-                } else {
-                  log.error("Out of scope" + JSON.stringify(relativePath));
                 }
-
                 return relativeUrl;
             }
         }
@@ -139,7 +136,7 @@ gulp.task('client', function() {
   // set up the browserify instance on a task basis
   var b = transformChain(browserify({
     entries: './public/client/js/main.js',
-    debug: true,
+    debug: true
   }));
 
   return b.bundle()
@@ -171,5 +168,4 @@ gulp.task('leaflet-extra', function() {
 
 });
 
-gulp.task('default', ["buildLess", "client", "mapper", "libs", "leaflet-extra"], function() {
-});
+gulp.task('default', ["buildLess", "client", "mapper", "libs", "leaflet-extra"]);

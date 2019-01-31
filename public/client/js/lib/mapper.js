@@ -584,8 +584,10 @@ module.exports = function(elid, options){
         boxZoom: true,
         zoomControl: false,
         worldCopyJump: true,
-        sleepOpacity:.9,
-        sleepTime: 5
+        sleepOpacity:1,
+        sleepTime: 700,
+        wakeTime: 2000,
+        wakeMessage: 'Enter search criteria before using this map.'
     };
 
     this.map = new L.Map(elid,mapDefaults);

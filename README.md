@@ -6,16 +6,33 @@ idb-portal
 Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 
 
+## Install these Dependecies
+- nodejs (tested up to v8.12.0)
+- redis-server (tested up to 5.0.3)
+- yarn (tested up to 1.12.3)
+- gulp (tested up to 3.9.1)
+other dependecies will be acquired via Yarn
+
 ## Installing
-- install Nodejs with npm preferably from package 
 - git clone this repo
-- cd to project root 'idb-portal/' and run commands
+- in project root 'idb-portal/' run these commands
+
+To get / update node package dependencies:
 ```bash
-$ sudo -H npm install -g gulp bower babel-cli
-$ bower install
-$ npm install
-$ node app.js NODE_ENV=prod [with credential keys]
+$ yarn
 ```
+1st build / update source changes
+```bash
+$ gulp
+```
+
+## Run website
+```bash
+$ yarn start
+```
+
+## View Website
+In your favorite browser, ``localhost:3000``
 
 ## Gulp Tasks for Development
 

@@ -63,10 +63,6 @@ task: buildLess
 
 The /util directory contains various ruby and shell scripts maintaining and releasing the code.
 
-### Release Scripts
-Two release script files exists for beta and prod release.
-- /util/release-beta.sh   /util/release-prod.sh 
-
 ### Darwin Core Fields 
 
 The ordering and readable labels for Darwin Core fields are maintained in a Google Docs spreadsheet. If this spreadsheet is updated the code for the dwc field dictionary needs to be updated for the client-side js.

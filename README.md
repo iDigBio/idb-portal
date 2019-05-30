@@ -6,16 +6,22 @@ idb-portal
 Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 
 
-## Install these Dependecies
+## Install these Dependencies
 - nodejs (tested up to v8.12.0)
 - redis-server (tested up to 5.0.3)
 - yarn (tested up to 1.12.3)
 - gulp (tested up to 3.9.1)
 other dependecies will be acquired via Yarn
 
+On some popular Linux distributions, the default repos include a package named "yarn" that conflicts
+with the nodejs "yarn" package that is required here. cmdtest is the wrong package.
+
+See: https://yarnpkg.com/en/docs/install#debian-stable
+
+
 ## Installing
 - git clone this repo
-- in project root 'idb-portal/' run these commands
+- change directory into the project root 'idb-portal/' and run these commands
 
 To get / update node package dependencies:
 ```bash
@@ -39,7 +45,7 @@ In your favorite browser, ``localhost:3000``
 command: gulp
 
 task: default
--  Default task for running development with a live-reload server. Builds all compiled files for both client and server every time a file is saved. The live reload requires the live reload plugin for Chrome. Chrome reloads on any file saves. 
+-  Default task for running development with a live-reload server. Builds all compiled files for both client and server every time a file is saved. The live reload requires the live reload plugin for Chrome. Chrome reloads on any file saves.
 
 
 command: gulp libs
@@ -51,7 +57,7 @@ task: libs
 command: gulp mapper
 
 task: mapper
-- The standalone Mapper module requires the  'gulp mapper' command to update the idbmap.js file in the /public/js directory. It's source file is /public/client/idbmap.js. This command is no longer necessary since the map is also built during a release process and since it's module is included in client.js requires tree it gets updated for the client when its saved by the 'default' task. 
+- The standalone Mapper module requires the  'gulp mapper' command to update the idbmap.js file in the /public/js directory. It's source file is /public/client/idbmap.js. This command is no longer necessary since the map is also built during a release process and since it's module is included in client.js requires tree it gets updated for the client when its saved by the 'default' task.
 
 
 command: gulp buildLess
@@ -63,27 +69,27 @@ task: buildLess
 
 The /util directory contains various ruby and shell scripts maintaining and releasing the code.
 
-### Darwin Core Fields 
+### Darwin Core Fields
 
 The ordering and readable labels for Darwin Core fields are maintained in a Google Docs spreadsheet. If this spreadsheet is updated the code for the dwc field dictionary needs to be updated for the client-side js.
 - use /util/fields-generator.rb  to update the dictionary in /public/client/js/lib/dwc_fields.js
 
 ### Data Quality Flags
 
-The data quality flag names and descriptions are maintained in a Google Docs spreadsheet. 
+The data quality flag names and descriptions are maintained in a Google Docs spreadsheet.
 - use /util/dq-flags-generator.rb to update the dictionary in /public/client/js/lib/dq_flags.js when the spreadsheet is updated
 
 ## General Code Layout/Architecture
 The iDigBio portal is mostly a front-side rendered app that takes advantage of Reacts' server-side rendering to allow proper search engine crawling of content pages like Record, MediaRecord and Recordset.
 
--There is a template in the /app/views directory for each type of page: 
+-There is a template in the /app/views directory for each type of page:
   * home.html, search.html, record.html, media.html, publishers.html, recordset.html, collections.html, collection.html, tutorial.html
 
-- Each page has a corresponding JavaScript file in the /public/client/js directory. 
+- Each page has a corresponding JavaScript file in the /public/client/js directory.
 
 - All the client side JS is compiled into two files  /public/js/client.js   -> src file is /public/client/js/main.js  .    /public/js/libs.js -> src file is /public/client/libs.js
 
-- All pages except Home and Tutorial have corresponding React components in /public/client/js/react/src. 
+- All pages except Home and Tutorial have corresponding React components in /public/client/js/react/src.
 
 - React components like record, media, recordset avoid using libraries like jQuery which do not work on the server side so they can be properly prerendered by the server. As such any jQuery tools used (which are only necessary for interactivity) are initialized in the their top level modules in the /public/client/js directory
 after the React component has rendered in the browser. Also, these page work by requesting the API data on the server and rendering the React component to the page before its sent to the browser. The data is also rendered to the head of these pages so that the browser will do its own React component rendering once the page has loaded.
@@ -91,29 +97,29 @@ after the React component has rendered in the browser. Also, these page work by 
 - (specimen) record pages are discovered by Google through the '/list' endpoint. This is a special endpoint not intended for public display so there are no links in the portal to it. /list pages contain links to all record objects in the iDigBio API.
 
 - Each page has a corresponding LESS file in the /public/client/less directory. All LESS files are compiled to individual CSS files in /public/css. Each page view template contains a link to its CSS file. The CSS IS NOT compiled into one large client file like the JS code is for the entire portal.
-- Each one of the corresponding page LESS files will include one or more sub files for reusable display components. 
+- Each one of the corresponding page LESS files will include one or more sub files for reusable display components.
 
 ### Search Page Architecture
 The Search page React component is split in various subcomponent React files kept in
 /public/client/js/react/src/search/ directory that are loaded in the main React search.js file.
 
-Any changes to the search state are communicated through the searchChange function in the search.js parent component. The searchChange function is passed to all subcomponents as a property if that subcomponent has to communicate changes to the search. This changing of search state allows the page be reactive to all input changes on the search page since changing the search state triggers a render in React. 
+Any changes to the search state are communicated through the searchChange function in the search.js parent component. The searchChange function is passed to all subcomponents as a property if that subcomponent has to communicate changes to the search. This changing of search state allows the page be reactive to all input changes on the search page since changing the search state triggers a render in React.
 
 See the Search.js   statics.defaultSearch for an example of what a search state structure looks like.
 
 History is maintained by the searchHistory object using the localStorage API through the client/js/libs/history.js file. The searchChange function pushes changes to history through this object.
 
-Results view tab and the advanced search features tab are kept track of in localStorage API and are maintained through the viewChange function in the search.js page component. 
+Results view tab and the advanced search features tab are kept track of in localStorage API and are maintained through the viewChange function in the search.js page component.
 
 ## Stand-alone Map module Use
 
-The specimen map used in the portal search page is available freely for public use as a stand-alone map module in JavaScript. 
+The specimen map used in the portal search page is available freely for public use as a stand-alone map module in JavaScript.
 
-Embedding the specimen map in a website is easy. The following is an example HTML code for simply adding the map to a web page. 
+Embedding the specimen map in a website is easy. The following is an example HTML code for simply adding the map to a web page.
 
-The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery. 
+The following code assumes you know basic HTML structure and how to use the JavaScript library jQuery.
 In this example the map is initialized with the element ID of an HTML DIV tag that will contain the map.
-The map is then queried for all specimens (that have a geopoint) with genus "carex" using the same query format as designed for the [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki/Query-Format). 
+The map is then queried for all specimens (that have a geopoint) with genus "carex" using the same query format as designed for the [iDigBio Search API Query Format](https://github.com/idigbio/idigbio-search-api/wiki/Query-Format).
 
 ```html
 <html>

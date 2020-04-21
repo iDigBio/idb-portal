@@ -164,6 +164,15 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     }
 })
 
+function stripHtml(html){
+    // Create a new div element
+    var temporalDivElement = document.createElement("div");
+    // Set the HTML content with the providen
+    temporalDivElement.innerHTML = html;
+    // Retrieve the text property of the element (cross-browser support)
+    return temporalDivElement.textContent || temporalDivElement.innerText || "";
+}
+
 var TextFilter = React.createClass({
     componentWillMount: function(){
         var self = this;
@@ -277,7 +286,7 @@ var TextFilter = React.createClass({
                         url: '/portal/eol_api/search/1.0.json?page=1&q='+val, //'http://eol.org/api/search/1.0.json?page=1&q='+val,
                         type: 'GET',
                         crossDomain: true,
-                        dataType: 'jsonp',
+                        //dataType: 'jsonp',
                         success: function(resp) { 
                            
                             if(resp.results.length > 0){
@@ -286,7 +295,7 @@ var TextFilter = React.createClass({
                                     if(!_.isUndefined(resp.results[i])){
                                         var res = resp.results[i].content.split(';');
                                         res.forEach(function(it,ind){
-                                            var syn = helpers.strip(it.toLowerCase());
+                                            var syn = helpers.strip(stripHtml(it.toLowerCase()));
                                             if(text.indexOf(syn)=== -1){
                                                 output.push(syn);
                                             }

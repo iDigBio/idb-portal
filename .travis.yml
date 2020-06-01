@@ -3,8 +3,6 @@ services:
 - docker
 install:
 - docker build -t $BUILDING .
-script:
-- docker run --rm -it $BUILDING npm test
 after_success:
 - docker login --username="$DOCKER_USERNAME" --password="$DOCKER_PASSWORD"
 - |

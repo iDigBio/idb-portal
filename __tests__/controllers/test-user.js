@@ -10,7 +10,7 @@ describe('User', function() {
   });
   afterAll(() => server.close());
 
-  describe('login', function() {
+  describe.skip('login', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/login")

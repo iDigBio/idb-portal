@@ -10,7 +10,7 @@ describe('Publishers', function() {
   });
   afterAll(() => server.close());
 
-  describe('publishers', function() {
+  describe.skip('publishers', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/publishers")
@@ -20,7 +20,7 @@ describe('Publishers', function() {
 
   });
 
-  describe('recordset', function() {
+  describe.skip('recordset', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/recordsets/137ed4cd-5172-45a5-acdb-8e1de9a64e32")
@@ -29,7 +29,7 @@ describe('Publishers', function() {
     });
 
   });
-  describe('collections', function() {
+  describe.skip('collections', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/collections/")
@@ -38,7 +38,7 @@ describe('Publishers', function() {
     });
 
   });
-  describe('collection', function() {
+  describe.skip('collection', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/collections/7b7fa352-b307-11e4-b3ee-002315492bbc")

@@ -10,7 +10,7 @@ describe('Search', function() {
   });
   afterAll(() => server.close());
 
-  describe('search', function() {
+  describe.skip('search', function() {
     it('should return html', async function() {
       const response = await request(server)
             .get("/search")

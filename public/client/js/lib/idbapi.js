@@ -9,7 +9,7 @@ module.exports = {
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
             return window.idbapi.host;
         } else{
-            return 'https://search.idigbio.org/v2/';
+            return 'http://search.idigbio.org/v2/';
         }
     }).call(),
     media_host: (function(){

@@ -130,7 +130,9 @@ app.get('/eol_api/*', function(req, res) {
         url: url
     }, function(error, response, body) {
         res.setHeader("Content-Type", "application/json");
-        res.send(response.body);
+        if (typeof response != "undefined") {
+          res.send(response.body);
+        }
     });
 });
 

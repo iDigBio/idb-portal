@@ -16,10 +16,13 @@ describe('records', function() {
   });
   afterAll(() => server.close());
 
+/*
+ * This function is deprecated
   it('should return json', async function() {
     const response = await request(server)
           .get("/eol_api/search/1.0.json?page=1&q=aphis")
           .expect('Content-Type', /json/)
           .expect(200);
   });
+  */
 });

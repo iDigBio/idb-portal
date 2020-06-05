@@ -119,6 +119,7 @@ app.all('*', function(req, res, next) {
   next();
 });
 
+/*
 app.get('/eol_api/*', function(req, res) {
     var url = "";
     if(req.originalUrl.slice(0, 7) === "/portal") {
@@ -133,8 +134,13 @@ app.get('/eol_api/*', function(req, res) {
         if (typeof response != "undefined") {
           res.send(response.body);
         }
+        else {
+          var temp = { header: "empty" };
+          res.send(temp);
+        }
     });
 });
+*/
 
 app.get('/', home.index);
 app.get('/search*', search.searchBackbone);

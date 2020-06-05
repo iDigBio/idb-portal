@@ -4,7 +4,7 @@ var _ = require('lodash');
 var config = {
   env: process.env.NODE_ENV,
   api: 'http://search.idigbio.org/v2/',
-  media: 'https://api.idigbio.org/',
+  media: 'http://api.idigbio.org/',
   secret: process.env.IDB_SECRET || "imnotsecret",
   root: path.normalize(path.join(__dirname, '..')),
   app: {

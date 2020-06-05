@@ -6,6 +6,7 @@ import app from 'app/app';
 describe('Publishers', function() {
   let server = null;
   beforeAll(async function() {
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
     server = app.listen();
   });
   afterAll(() => server.close());

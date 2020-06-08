@@ -1,4 +1,4 @@
-FROM node:8.12-alpine
+FROM node:10.21-alpine
 
 RUN adduser -S www-data
 

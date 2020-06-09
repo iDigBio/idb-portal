@@ -4,6 +4,8 @@ RUN adduser -S www-data
 
 RUN apk add --no-cache make gcc g++ python bash git curl ca-certificates
 RUN sed 's|mozilla\/AddTrust_External_Root.crt|#mozilla\/AddTrust_External_Root.crt|g' -i /etc/ca-certificates.conf
+RUN rm -f /usr/share/ca-certificates/mozilla/AddTrust_External_Root.crt
+
 RUN update-ca-certificates -f -v
 
 WORKDIR /var/www

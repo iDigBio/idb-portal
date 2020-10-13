@@ -10,24 +10,75 @@ var ReactDOMServer = require('react-dom/server');
 import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
 
+const collectionDefaultValues = {
+  'institution': '',
+  'collection': '',
+  'recordsets': '',
+  'recordsetQuery': '',
+  'institution_code': '', // there is no longer an <IH> postfix on IH entries
+  'collection_code': '',
+  'collection_uuid': '',
+  'collection_lsid': '',
+  'collection_url': '',
+  'collection_catalog_url': '',
+  'description': '',
+  'descriptionForSpecialists': '', // not in GBIF, used 10 times in iDigBio
+  'cataloguedSpecimens': null,
+  'knownToContainTypes': null, // not in GBIF, used 84 times in iDigBio
+  'taxonCoverage': '',
+  'geographic_range': '',
+  'collectionExtent': '', // not in GBIF, when used in iDigBio then the value is often the same or used in same way as 'cataloguedSpecimens'
+  'contact': '', // GBIF have multiple contacts for a collection. Currently the first is in the response.
+  'contact_role': '',
+  'contact_email': '',
+  'mailing_address': '',
+  'mailing_city': '',
+  'mailing_state': '',
+  'mailing_zip': '',
+  'physical_address': '',
+  'physical_city': '',
+  'physical_state': '',
+  'physical_zip': '',
+  'UniqueNameUUID': '',
+  'attributionLogoURL': '', // the logo of the institution is used - this field has never been filled in iDigBio data
+  'providerManagedID': '', // not in GBIF and currently no info in iDigBio either
+  'derivedFrom': '', // not in GBIF and currently no info in iDigBio either
+  'sameAs': '',
+  'flags': '', // not in GBIF and currently no info in iDigBio either
+  'portalDisplay': '', // not in GBIF and currently no info in iDigBio either
+  'lat': null, // the location if the institution is used
+  'lon': null // the location if the institution is used
+}
+
+function transformCollection(record) {
+  // No mapping required, the GBIF endpoint currently provides a response that maps to iDigBio
+  // All we need to do it to add empty values, the iDigBio portal currently has that in the response.
+
+  // The GBIF response contains internal keys. Strip those for now. It might be useful for linking at some point.
+  delete record.collectionKey;
+  delete record.institutionKey;
+  return Object.assign({}, collectionDefaultValues, record);
+}
+
 // var RecordsetPage = require(appDir+'/public/react/build/recordset');
 export default {
   collections: function(req, res) {
 
-    request.get({"url": 'http://idigbio.github.io/idb-us-collections/collections.json', "json": true}, function(err, resp, body) {
+    request.get({"url": config.gbifApi + 'external/idigbio/collections', "json": true}, function(err, resp, body) {
       if(err) {
         logger.error(err);
       }
+      const collections = body.map(transformCollection);
       res.render('collections', {
         activemenu: 'publishers',
         user: req.user,
         token: req.session._csrf,
-        data: JSON.stringify(body)
+        data: JSON.stringify(collections)
       });
     });
   },
   collection: function(req, res) {
-    request.get({"url": 'http://idigbio.github.io/idb-us-collections/collections/' + req.params.id, "json": true}, function(err, resp, body) {
+    request.get({"url": config.gbifApi + 'external/idigbio/collections/' + req.params.id, "json": true}, function(err, resp, body) {
       if(err) {
         logger.error(err);
       } else if(resp.statusCode === 404) {
@@ -39,11 +90,12 @@ export default {
           id: req.params.id
         });
       } else {
+        const collection = transformCollection(body);
         res.render('collection', {
           activemenu: 'publishers',
           user: req.user,
           token: req.session._csrf,
-          data: JSON.stringify(body)
+          data: JSON.stringify(collection)
         });
       }
     });

@@ -5,6 +5,7 @@
 <script type="text/javascript">
  {% autoescape false %}
   var collections={{ data }}
+  var count = Object.keys(collections).length;
  {% endautoescape %}
 </script>
 
@@ -14,7 +15,8 @@
     <div class="row">
         <div id="collections-table" class="col-lg-10 col-lg-offset-1">
             <h3>Collections</h3>
-            <p>This is intended to be a comprehensive list of all natural history collections in the United States of America in partnership with <a href="http://www.gbif.org/" target="_blank">GBIF</a>.
+            <p>
+            This catalogue, developed in partnership with <a href="http://www.gbif.org/" target="_blank">GBIF</a>, is intended to provide a comprehensive list of <span id='spnTheCount'></span>natural history collections registered in the United States of America.
             </p>
             <a href="#" id="mapScroll" style="margin-bottom:20px;display:inline-block;">Show Map of Collections</a>
             <div id="datatable"></div>
@@ -29,4 +31,7 @@
         </div>
     </div>
 </div>   
+<script type="text/javascript">
+document.getElementById('spnTheCount').innerHTML = "the " + count.toLocaleString() + " ";
+</script>
 {% endblock %}

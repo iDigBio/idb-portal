@@ -1,7 +1,7 @@
 idb-portal
 ==========
 
-[![Build Status](https://travis-ci.org/iDigBio/idb-portal.svg?branch=master)](https://travis-ci.org/iDigBio/idb-portal)
+[![Build Status](https://travis-ci.com/iDigBio/idb-portal.svg?branch=master)](https://travis-ci.com/iDigBio/idb-portal)
 
 Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 

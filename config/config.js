@@ -5,7 +5,7 @@ var config = {
   env: process.env.NODE_ENV,
   api: 'https://search.idigbio.org/v2/',
   media: 'https://api.idigbio.org/',
-  gbifApi: 'https://api.gbif-uat.org/v1/', // TODO - currently pointing to UAT test env.
+  gbifApi: 'https://api.gbif.org/v1/',
   secret: process.env.IDB_SECRET || "imnotsecret",
   root: path.normalize(path.join(__dirname, '..')),
   app: {

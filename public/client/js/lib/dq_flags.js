@@ -3,7 +3,7 @@ module.exports = {
     "dwc_acceptednameusageid_added": "Accepted Name Usage ID (dwc:acceptedNameUsageID) added where none was provided.",
     "dwc_basisofrecord_invalid": "Darwin Core Basis of Record (dwc:basisOfRecord) not in controlled vocabulary.",
     "dwc_basisofrecord_paleo_conflict": "Darwin Core Basis of Record (dwc:basisOfRecord) is not FossilSpecimen but the record contains paleo context terms",
-    "dwc_basisofrecord_removed": "Darin Core Basis of Record (dwc:basisOfRecord) removed because of invalid value.",
+    "dwc_basisofrecord_removed": "Darwin Core Basis of Record (dwc:basisOfRecord) removed because of invalid value.",
     "dwc_class_added": "Darwin Core Class (dwc:class) added where none was provided.",
     "dwc_class_replaced": "Darwin Core Class (dwc:class) replaced with a standardized value from GBIF Backbone Taxonomy.",
     "dwc_continent_added": "Darwin Core Continent (dwc:continent) added where none was provided.",

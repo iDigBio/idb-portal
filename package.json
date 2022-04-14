@@ -27,7 +27,7 @@
     "@bower_components/leaflet-utfgrid": "danzel/Leaflet.utfgrid",
     "@bower_components/leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "@elastic/filesaver": "^1.1.2",
-    "async": "^2.0.0",
+    "async": "^3.2.2",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-remove-strict-mode": "^0.0.2",
     "body-parser": "^1.16.1",

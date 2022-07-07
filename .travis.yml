@@ -21,6 +21,7 @@ env:
   global:
   - DOCKER_IMAGE=idigbio/idb-portal
   - BUILDING=$DOCKER_IMAGE:$TRAVIS_COMMIT
+  - NODE_OPTIONS=--use-openssl-ca
 notifications:
   slack:
     secure: "GtBJAjus4ixSGXTM63eRnm5OFnMJZ96svCe5luLyDH0D5uTvjkUMs+7ag5oATj6erDB4U0TChfpXCqlpn4a/c3obVYpJd3Z7WAiZeGgGvCJtoDxWGdX0LzVcLD/x49WZ5JfxaWDVAWc/Mb8+y/rpqbFmeZpaIDdsMSMLUq84LNtMrahnDsShKIy3pL5w+O3SxoEQ3ZlgAEPpMLg7uauA9nVgZKFjk+VFk3pPHg1nBvEp8xLsj2mc3qj/4i03B3caVpTTEgqkiCIw4tzhWZSEMFu2OI62PlHAVdwlze5p65Wal2KS9jHc2CLOQ63DlrvrUjTnD3oY5o2v9zGT6+6x+Al/TAL2uEQowdzpUmQVCp43wYbW2ofWdWvO96Uk+NN1nzv9Scn/aOCBAbKbI/Ukftifp4lYdP4rp0S1owBT+Wa3HtNUahWpETL1c6qhYZc72ezf2onrVg7ZSJic38+AaTRljyoYzTCwcJ+sQHIE3MDx4nw6uH6f9vBXXPRdoyRKt/qypifv0aU+AG1unmc9mX4q6orFcAGz4PsmS0X9GNe9/foUsNTbH1kFyuTt/98pT4IZ3cGdFOmC+nG4Lz3AzXLFNlY1nZMvOdmAMhz+ECelzzh1m1VRobIwbiG2J+nGNzBQYS8PiJjG9erEsqhoPHYqHAmBKJdQ/bI6rWGNeok="

@@ -18,7 +18,7 @@
     }
   ],
   "scripts": {
-    "start": "node index.js",
+    "start": "node --use-openssl-ca index.js",
     "postinstall": "./postinstall.sh",
     "test": "NODE_ENV=test BLUEBIRD_DEBUG=1 jest"
   },

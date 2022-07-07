@@ -4,7 +4,7 @@ ENV NODE_OPTIONS=--use-openssl-ca
 
 RUN adduser -S www-data
 
-RUN apk add --no-cache make gcc g++ python bash git curl ca-certificates
+RUN apk add --no-cache make gcc g++ python bash git curl openssl ca-certificates
 RUN update-ca-certificates -f -v
 
 WORKDIR /var/www

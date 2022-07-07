@@ -1,12 +1,13 @@
-FROM node:8.12-alpine
+FROM ubuntu:18.04
 
 ENV NODE_OPTIONS=--use-openssl-ca
 
-RUN adduser -S www-data
+RUN apt-get update
+RUN apt-get -y install make gcc g++ python bash git curl openssl nodejs npm
 
-RUN apk add --no-cache make gcc g++ python bash git curl openssl ca-certificates
-RUN curl https://crt.sh/?d=9314791 -o /usr/local/share/ca-certificates/9314791.crt
-RUN update-ca-certificates -f -v
+RUN npm i -g yarn
+RUN npm install -g n
+RUN n 8.12.0
 
 WORKDIR /var/www
 ADD . .

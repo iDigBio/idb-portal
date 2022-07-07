@@ -20,7 +20,7 @@
   "scripts": {
     "start": "node --use-openssl-ca index.js",
     "postinstall": "./postinstall.sh",
-    "test": "NODE_ENV=test BLUEBIRD_DEBUG=1 jest"
+    "test": "NODE_ENV=test NODE_OPTIONS=--use-openssl-ca BLUEBIRD_DEBUG=1 jest"
   },
   "dependencies": {
     "@bower_components/leaflet-loading": "ebrelsford/Leaflet.loading",

@@ -42,7 +42,7 @@
     "datauri": "^1.0.5",
     "elasticsearchclient": "~0.5.3",
     "es5-shim": "^4.5.9",
-    "express": "^4.14.1",
+    "express": "^4.17.3",
     "express-expose": "^0.3.4",
     "express-session": "^1.15.1",
     "geopoint": "^1.0.1",

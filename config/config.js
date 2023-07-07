@@ -11,7 +11,7 @@ var config = {
   app: {
     name: 'iDigBio Portal'
   },
-  port: 3000,
+  port: 19199,
   menus: {
     public: {
       home: {
@@ -27,7 +27,7 @@ var config = {
         label: "Search Records"
             },
       learning: {
-        url: "//www.idigbio.org/content/learning-center",
+        url: "https://www.idigbio.org/content/learning-center",
         label: "Learning Center"
       },
       publishers: {

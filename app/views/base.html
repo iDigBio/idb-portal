@@ -140,7 +140,7 @@
 
         </div>
         <div class="sixteen columns" id="footnote">
-            <p>iDigBio is funded by grants from the National Science Foundation [DBI-1115210 (2011-2018), DBI-1547229 (2016-2022), & DBI-2027654 (2021-2026)]. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. © 2011-2021 iDigBio</p>
+            <p>iDigBio is funded by grants from the National Science Foundation [DBI-1115210 (2011-2018), DBI-1547229 (2016-2022), & DBI-2027654 (2021-2026)]. Any opinions, findings, and conclusions or recommendations expressed in this material are those of the author(s) and do not necessarily reflect the views of the National Science Foundation. © 2011-2023 iDigBio</p>
         </div>
   
     </footer>
@@ -176,14 +176,14 @@
 <!--     {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
     <script src="https://www.idigbio.org/login/server/script?type=portal&t={{ user.random }}"></script>
     {%- endif %} -->
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-NZY6105TCK"></script>
     <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
 
-      ga('create', 'UA-32912865-1', 'idigbio.org');
-      ga('send', 'pageview');
+      gtag('config', 'G-NZY6105TCK');
     </script>
     {% block scriptblock %}
     {% endblock %}

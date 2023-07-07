@@ -16,7 +16,7 @@ module.exports = {
         if(typeof window.idbapi == 'object' && typeof window.idbapi.media_host == 'string'){
             return window.idbapi.media_host;
         } else if(process.env.NODE_ENV == "beta"){
-            return 'https://beta-api.idigbio.org/';
+            return 'https://api.idigbio.org/';
         } else {
             return 'https://api.idigbio.org/';
         }

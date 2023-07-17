@@ -68,7 +68,7 @@ export default {
       if(err) {
         logger.error(err);
       }
-      const collections = body.map(transformCollection);
+      const collections = Array.isArray(body) ? body.map(transformCollection) : [];	    
       res.render('collections', {
         activemenu: 'publishers',
         user: req.user,

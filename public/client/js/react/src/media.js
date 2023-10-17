@@ -4,11 +4,11 @@ var dwc = require('../../lib/dwc_fields');
 var _ = require('lodash');
 var idbapi = require('../../lib/idbapi');
 
-var Media = React.createClass({
-    errorImage: function(e){
+class Media extends React.Component{
+    errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
-    },
-    render: function(){
+    }
+    render(){
         var link='';
         if(_.has(this.props.data,'ac:accessURI')){
             link = this.props.data['ac:accessURI'];
@@ -35,17 +35,24 @@ var Media = React.createClass({
             </div>
         );
 
-    },
-    componentDidMount: function(){
+    }
+    componentDidMount(){
         
     }
-});
+};
 
-var Table = React.createClass({
-    getInitialState: function(){
-        return {active: 'record'};
-    },
-    formatJSON: function(json){
+class Table extends React.Component{
+    // getInitialState(){
+    //     return {active: 'record'};
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: 'record'
+        }
+    }
+    
+    formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -66,12 +73,12 @@ var Table = React.createClass({
             }
             return '<span class="' + cls + '">' + match + '</span>';
         });
-    },
-    tabClick: function(e){
+    }
+    tabClick(e){
         e.preventDefault();
         this.setState({active: e.target.attributes['data-tab'].value});
-    },
-    render: function(){
+    }
+    render(){
         var order=[],rows=[],self=this;
 
         //make ordered name keys
@@ -137,13 +144,13 @@ var Table = React.createClass({
             </div>
         );
     }
-});
+};
 
-var Group = React.createClass({
-    errorImage: function(e){
+class Group extends React.Component{
+    errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
-    },
-    render: function(){
+    }
+    render(){
         if( _.has(this.props.record,'indexTerms') && _.has(this.props.record.indexTerms,'mediarecords') && this.props.record.indexTerms.mediarecords.length > 1){
             var imgs = [];
             var media = this.props.record.indexTerms.mediarecords;
@@ -168,14 +175,14 @@ var Group = React.createClass({
             return null;
         }
     }
-});
+};
 
 var Provider = require('./shared/provider');
 var Raw = require('./shared/raw');
 var Title = require('./shared/title');
 
-module.exports = React.createClass({
-    taxaBreadCrumbs: function(){
+class mediaModExports extends React.Component{
+    taxaBreadCrumbs(){
         var order = [], values = [], self = this;
         
         ['kingdom','phylum','class','order','family'].forEach(function(item){
@@ -206,8 +213,8 @@ module.exports = React.createClass({
         });
 
         return output;
-    },
-    navList: function(){
+    }
+    navList(){
 
         var othermedia = null;
         //var med = this.props.indexTerms.mediarecords
@@ -225,8 +232,8 @@ module.exports = React.createClass({
                 <li><a href="#data-table">All Data</a></li>
             </ul>  
         )
-    },
-    render: function(){
+    }
+    render(){
         var source = this.props.mediarecord;
         var info=[];
         
@@ -251,4 +258,5 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
+module.exports = mediaModExports

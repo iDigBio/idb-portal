@@ -2,37 +2,37 @@ var React = require('react')
 var RCTgroup = require('react-addons-css-transition-group');
 var PureRender = require('react-addons-pure-render-mixin');
 
-var Sort = module.exports = React.createClass({
+export default class Sorting extends React.Component{
     //mixins: [PureRender],
-    statics: {
-        defaultSorts: function(){
-            return [
-                {name: 'genus', order: 'asc'},
-                {name: 'specificepithet', order: 'asc'},
-                {name: 'datecollected', order: 'asc'}
-            ]
-        } 
-    },
-    getSortNames: function(){
+    
+    static defaultSorts(){
+        return [
+            {name: 'genus', order: 'asc'},
+            {name: 'specificepithet', order: 'asc'},
+            {name: 'datecollected', order: 'asc'}
+        ]
+    } 
+    
+    getSortNames(){
         var list=[];
         this.props.sorting.forEach(function(item){
             list.push(item.name);
         });
         return list;
-    },
-    addClick: function(event){
+    }
+    addClick(event){
         var s = _.cloneDeep(this.props.sorting);
         s.push({name: false, order:'asc'});
         //this.setState({sorting: s});
         this.props.searchChange('sorting',s)
-    },
-    removeClick: function(event){
+    }
+    removeClick(event){
         var s = _.cloneDeep(this.props.sorting);
         s.splice(parseInt(event.currentTarget.attributes['data-index'].value),1);
         //this.setState({sorting: s});
         this.props.searchChange('sorting',s);
-    },
-    sortChange: function(event){
+    }
+    sortChange(event){
         var ind = parseInt(event.currentTarget.attributes['data-index'].value);
         var sorting = this.props.sorting, sort=sorting[ind];
         if(event.currentTarget.value==='0'){
@@ -44,14 +44,14 @@ var Sort = module.exports = React.createClass({
         sorting[ind]=sort;
         //this.setState({sorting: sorting});
         this.props.searchChange('sorting',sorting);
-    },
-    scrollSorts: function(e){
+    }
+    scrollSorts(e){
         e.preventDefault();
         $('#sort-group').animate({
             scrollTop: $('#sort-group').height()
         });
-    },
-    render: function(){
+    }
+    render(){
         var sorts=[],self=this,disabled=false;
         var options = [], names=this.getSortNames();
         
@@ -136,5 +136,7 @@ var Sort = module.exports = React.createClass({
             </div>
         )
     }
-});
+};
 //&darr; Scroll To Bottom &darr;
+
+// export default Sorting;

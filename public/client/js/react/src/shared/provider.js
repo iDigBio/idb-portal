@@ -2,11 +2,11 @@
 var React = require('react');
 var _ = require('lodash');
 
-module.exports = React.createClass({
-    noLogo: function(event){
+export class Provider extends React.Component{
+    noLogo(event){
         $(event.currentTarget).remove();
-    },
-    check: function (val, prefix, postfix) {
+    }
+    check(val, prefix, postfix) {
         var acc = [];
         if(_.isArray(val)){
             _.each(val,function(v){
@@ -33,8 +33,8 @@ module.exports = React.createClass({
             val = val + postfix;
         } 
         return val;
-    },
-    render: function(){
+    }
+    render(){
 
         var display = ['collection_name','collection_description','institution_web_address'];
         var rows = [], contacts=[];
@@ -133,4 +133,4 @@ module.exports = React.createClass({
         );
     }
 
-})
+}

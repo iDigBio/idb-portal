@@ -2,8 +2,8 @@ var React = require('react');
 
 var Charts = require('./shared/stats_charts');
 
-var Stats = React.createClass({
-    navList: function(){
+class Stats extends React.Component{
+    navList(){
         return (
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
@@ -15,8 +15,8 @@ var Stats = React.createClass({
                 <li><a href="#google-analytics">Google Analytics Data</a></li>
             </ul>  
         );
-    },
-    render: function(){
+    }
+    render(){
         return (
             <div className="container-fluid">
                 <div className="row">
@@ -34,6 +34,6 @@ var Stats = React.createClass({
             </div>
         );
     }
-});
+};
 
 module.exports = Stats;

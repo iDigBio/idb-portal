@@ -1,33 +1,39 @@
 
 var React = require('react');
 //var PureRender = require('react/addons').addons.PureRenderMixin;
-module.exports = React.createClass({
+export default class Mapping extends React.Component{
     //mixins: [PureRender],
-    getInitialState: function(){
-        return {type: this.props.mapping.type};
-    },
-    defaultMappingProps: function(type){
+    // getInitialState(){
+    //     return {type: this.props.mapping.type};
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            type: props.mapping.type
+        }
+    }
+    defaultMappingProps(type){
         if(type=='box'){
             return Box.defaultBounds();
         }else if(type=='radius'){
             return Radius.defaultBounds();
         }
-    },
-    resetBounds: function(){
+    }
+    resetBounds(){
         var t = this.state.type
         this.props.searchChange('mapping',{type: t, bounds: this.defaultMappingProps(t)});
-    },
+    }
 
-    mappingType: function(e){
+    mappingType(e){
         var t = e.target.value;
         this.setState({type: t});       
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
         if(nextProps.mapping.type !== this.state.type){
             this.setState({type: nextProps.mapping.type});
         }
-    },
-    render: function(){
+    }
+    render(){
         var mapping = this.props.mapping, type;
         switch(this.state.type){
             case 'box':
@@ -57,24 +63,24 @@ module.exports = React.createClass({
             </div>
         )
     }
-})
+}
 
-var Box = React.createClass({
-    statics: {
-        defaultBounds: function(){
-            return {
-                top_left: {
-                    lat: false,
-                    lon: false
-                },
-                bottom_right: {
-                    lat: false,
-                    lon: false
-                }
+class Box extends React.Component{
+    
+    static defaultBounds(){
+        return {
+            top_left: {
+                lat: false,
+                lon: false
+            },
+            bottom_right: {
+                lat: false,
+                lon: false
             }
         }
-    },
-    currentBounds: function(){
+    }
+    
+    currentBounds(){
         //use this function instead of calling this.props.bounds so 
         //we always pass a new object when updating bound changes
         
@@ -93,8 +99,8 @@ var Box = React.createClass({
         }else{
             return Box.defaultBounds();
         }
-    },
-    degreeChange: function(event){
+    }
+    degreeChange(event){
         var bounds = this.currentBounds();
         var val = event.currentTarget.value;
         if(_.isEmpty(helpers.strip(val))){
@@ -102,8 +108,8 @@ var Box = React.createClass({
         }
         bounds[event.currentTarget.attributes['data-corner'].value][event.currentTarget.attributes['data-name'].value]=val;
         this.props.searchChange('mapping',{type: "box", bounds: bounds});
-    },
-    render: function(){
+    }
+    render(){
         var bounds = this.currentBounds();
         return (
             <div>
@@ -156,19 +162,19 @@ var Box = React.createClass({
             </div>
         )
     }
-});
+};
 
-var Radius = React.createClass({
-    statics: {
-        defaultBounds: function(){
+class Radius extends React.Component{
+    
+        static defaultBounds(){
             return {
                 distance: false,
                 lat:false,
                 lon:false
             }
         }
-    },
-    currentBounds: function(){
+    
+    currentBounds(){
         if(this.props.mapping.type=='radius'){
             var bounds = this.props.mapping.bounds;
             return {
@@ -179,9 +185,9 @@ var Radius = React.createClass({
         }else{
             return Radius.defaultBounds();
         }
-    },
+    }
 
-    boundsChange: function(e){
+    boundsChange(e){
         var b = this.currentBounds();
         var val = _.isEmpty(e.target.value) ?  false : e.target.value;
         switch(e.target.name){
@@ -198,8 +204,8 @@ var Radius = React.createClass({
         //if(b.distance && b.lat && b.lon){
         this.props.searchChange('mapping',{type:'radius',bounds: b});
         //}
-    },
-    render: function(){
+    }
+    render(){
         var bounds = this.currentBounds();
         return(
             <div>
@@ -235,4 +241,4 @@ var Radius = React.createClass({
             </div>
         ) 
     }
-})
+}

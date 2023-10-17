@@ -5,12 +5,12 @@
 var React = require('react');
 var _ = require('lodash');
 
-module.exports = React.createClass({
-    click: function(e){
+export class Title extends React.Component{
+    click(e){
         window.lodation
         window.location="/portal/records/"+this.props.data.uuid
-    },
-    taxaBreadCrumb: function(){
+    }
+    taxaBreadCrumb(){
 
 
         /*['kingdom','phylum','class','order','family'].forEach(function(item){
@@ -23,8 +23,8 @@ module.exports = React.createClass({
         var output = [];
         
         return output;
-    },
-    render: function(){
+    }
+    render(){
         if(_.has(this.props.data,'indexTerms')){
             var title = '',info=[], taxonomy=['kingdom','phylum','class','order','family'];
             //build title
@@ -97,4 +97,4 @@ module.exports = React.createClass({
         }
       
     }
-});
+};

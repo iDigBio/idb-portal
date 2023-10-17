@@ -1,9 +1,9 @@
-
+import { createFactory } from '../createFactory.js';
 var request = require('request');
 var React = require('react');
 var ReactDOMServer = require('react-dom/server');
-var RecordPage = React.createFactory(require('public/client/js/react/build/record'));
-var MediaPage = React.createFactory(require('public/client/js/react/build/media'));
+var RecordPage = createFactory(require('public/client/js/react/build/record'));
+var MediaPage = createFactory(require('public/client/js/react/build/media'));
 var _ = require('lodash');
 
 import config from 'config/config'; // eslint-disable-line no-unused-vars
@@ -34,6 +34,8 @@ export default {
       }
       if(body.uuid) {
         var record = body;
+        console.log(record)
+        console.log(ReactDOMServer.renderToString(RecordPage({record: record})))
         var Page = ReactDOMServer.renderToString(RecordPage({record: record}));
         //
 

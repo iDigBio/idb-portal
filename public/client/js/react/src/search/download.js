@@ -1,10 +1,10 @@
 
 var React = require('react');
 var idbapi = require('../../../lib/idbapi');
-
-var Downloads = module.exports = React.createClass({
-    statics: {
-        queryToSentence: function(query){
+var Downloads
+export default class Download extends React.Component{
+    
+        static queryToSentence(query){
             var q = query;
             var parts = [], sort = '';
             if(!_.isEmpty(q.fulltext)){
@@ -98,24 +98,24 @@ var Downloads = module.exports = React.createClass({
                 return parts.join(' ') + ' ' + sort;  
             }
         }
-    },
+    
 
-    historySelect: function(e){
+    historySelect(e){
         var val = e.currentTarget.value;
         var q = searchHistory.history[val];
         this.props.searchChange(q);
-    },
-    clearHistory: function(){
+    }
+    clearHistory(){
         searchHistory.clear();
         this.forceUpdate();
-    },
-    render: function(){
+    }
+    render(){
         var options = [],self=this, time='';
 
         //get count 
         searchHistory.history.forEach(function(item,ind){
             options.push(
-                <option key={'download-'+ind} value={ind}>{Downloads.queryToSentence(item)}</option>
+                <option key={'download-'+ind} value={ind}>{Download.queryToSentence(item)}</option>
             )
         })
         return (
@@ -135,10 +135,22 @@ var Downloads = module.exports = React.createClass({
             </div>
         )
     }
-});
-
-var Downloader = React.createClass({
-    getInitialState: function(){
+};
+Downloads = Download
+class Downloader extends React.Component{
+    // getInitialState(){
+    //     var downloads=[];
+    //     if(localStorage){
+    //         if(localStorage.downloads){
+    //             downloads = JSON.parse(localStorage.getItem('downloads')).downloads;
+    //         }else{
+    //             localStorage.setItem('downloads', JSON.stringify({downloads: downloads}));
+    //         }
+    //     }
+    //     return {time: 'calculating', disabled: false, downloads: downloads};
+    // }
+    constructor(props) {
+        super(props)
         var downloads=[];
         if(localStorage){
             if(localStorage.downloads){
@@ -147,9 +159,13 @@ var Downloader = React.createClass({
                 localStorage.setItem('downloads', JSON.stringify({downloads: downloads}));
             }
         }
-        return {time: 'calculating', disabled: false, downloads: downloads};
-    },
-    componentWillMount: function(){
+        this.state = {
+            time: 'calculating',
+            disabled: false,
+            downloads: downloads
+        }
+    }
+    componentWillMount(){
 
         var self=this;
 
@@ -186,29 +202,29 @@ var Downloader = React.createClass({
                 }
             })
         }   
-    },
-    componentDidMount: function(){
+    }
+    componentDidMount(){
         this.setDownloadTime(this.props.search);
         this.checkDownloadStatus();
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
         this.setDownloadTime(nextProps.search);
-    },
-    getId: function(status_url){
+    }
+    getId(status_url){
         var item = status_url.split('/');
         return item[item.length-1];
-    },
-    getDownloadIds: function(){
+    }
+    getDownloadIds(){
         var self = this;
         return _.map(this.state.downloads,function(item){
             return self.getId(item.status_url);
         });
-    },
-    addDownload: function(obj,search){
+    }
+    addDownload(obj,search){
         var downloads = this.state.downloads;
         var ids = this.getDownloadIds();
         if(ids.indexOf(this.getId(obj.status_url))===-1){
-            obj.sentence = Downloads.queryToSentence(search);
+            obj.sentence = Download.queryToSentence(search);
             downloads.unshift(obj);
             this.setState({downloads: downloads});
             if(localStorage){
@@ -216,8 +232,8 @@ var Downloader = React.createClass({
             }
             this.checkDownloadStatus();            
         }
-    },
-    updateDownload: function(obj){
+    }
+    updateDownload(obj){
         var downloads = this.state.downloads;
         var ids = this.getDownloadIds();
         //obj.sentence = downloads[update.indexOf(obj.query_hash)]
@@ -227,8 +243,8 @@ var Downloader = React.createClass({
             localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
         }
         //this.checkDownloadStatus();         
-    },
-    removeDownload: function(obj){
+    }
+    removeDownload(obj){
         var downloads = this.state.downloads;
         var ids = this.getDownloadIds()
         downloads.splice(ids.indexOf(this.getId(obj.status_url)),1);
@@ -236,8 +252,8 @@ var Downloader = React.createClass({
         if(localStorage){
             localStorage.setItem('downloads',JSON.stringify({downloads: downloads}));
         }
-    },
-    setDownloadTime: function(search){
+    }
+    setDownloadTime(search){
         var self=this;
         idbapi.countRecords({rq: queryBuilder.buildQueryShim(search)},function(resp){
                 var state;
@@ -254,8 +270,8 @@ var Downloader = React.createClass({
                 self.setState(state);      
             }
         )
-    },
-    startDownload: function(){
+    }
+    startDownload(){
         var self=this;
         self.dlstatus = true;
         var email = $('#email').val();
@@ -285,8 +301,8 @@ var Downloader = React.createClass({
             }
             req();
         }        
-    },
-    render: function(){
+    }
+    render(){
         var key=0;
         var downloads = _.map(this.state.downloads,function(item){
             var sentence = item.sentence ? item.sentence : 'no label';
@@ -333,4 +349,6 @@ var Downloader = React.createClass({
             </div>
         )
     }
-})
+}
+// export default Download;
+//TEST COMMENT. 

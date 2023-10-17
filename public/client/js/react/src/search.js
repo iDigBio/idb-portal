@@ -1,78 +1,98 @@
 
-var React = require('react');
-var Filters = require('./search/filters');
-var Sorting = require('./search/sorting');
-var Mapping = require('./search/mapping');
-var Results = require('./search/results');
-var Download = require('./search/download');
-var Map = require('./search/map');
+import React from 'react';
+import Filters from './search/filters'
+import Sorting from './search/sorting'
+import Mapping from './search/mapping'
+import Results from './search/results'
+import Download from './search/download'
+import Map from './search/map'
 
-var paramsParser = require('./search/lib/params_parser');
 
-var Main = module.exports =  React.createClass({
+import paramsParser from './search/lib/params_parser'
 
-    statics: {
-        defaultSearch: function(){
-            return {
-                filters: Filters.defaultFilters(),
-                fulltext:'',
-                image:false,
-                geopoint:false,
-                sorting: Sorting.defaultSorts(),
-                from: 0,
-                size: 100,
-                mapping: {
-                    type: "box",
-                    bounds:{
-                        top_left:{
-                            lat: false,
-                            lon: false
-                        },
-                        bottom_right:{
-                            lat: false,
-                            lon: false
-                        }
-                    }   
-                }
-            };
-        }
-    },
-    getInitialState: function(){
-        //set results view
-        var state={optionsTab:'filters',resultsTab:'list'};
-        if(url('?view')){
-            var types =['list','labels','media','recordsets'], view = url('?view');
-            if(types.indexOf(view) > -1){
-                localStorage.setItem('resultsTab', view);
-                state['resultsTab']=view;
-            }else{
-                state['resultsTab']='list';
+export default class Search extends React.Component{
+    static defaultSearch(){
+        return {
+            filters: Filters.defaultFilters(),
+            fulltext:'',
+            image:false,
+            geopoint:false,
+            sorting: Sorting.defaultSorts(),
+            from: 0,
+            size: 100,
+            mapping: {
+                type: "box",
+                bounds:{
+                    top_left:{
+                        lat: false,
+                        lon: false
+                    },
+                    bottom_right:{
+                        lat: false,
+                        lon: false
+                    }
+                }   
             }
-        }/*else if(localStorage.getItem('resultsTab')){
+        };
+    }
 
-            state['resultsTab']=localStorage.getItem('resultsTab');
+    constructor(props) {
+        super(props);
+        // this.defaultSearch = this.defaultSearch.bind(this)
+        // Initialize the state in the constructor
+        this.state = {
+            optionsTab: 'filters',
+            resultsTab: 'list',
+            search: Search.defaultSearch(),
+        };
+
+        this.searchChange = this.searchChange.bind(this);
+        this.viewChange = this.viewChange.bind(this);
+        // Rest of your constructor code can go here
+        // ...
+
+        // set results view
+        if (url('?view')) {
+            const types = ['list', 'labels', 'media', 'recordsets'];
+            const view = url('?view');
+            if (types.indexOf(view) > -1) {
+                localStorage.setItem('resultsTab', view);
+                this.setState({ resultsTab: view });
+            } else {
+                this.setState({ resultsTab: 'list' });
+            }
+
+            // You might want to handle 'optionsTab' here as well, as it's not clear from your code.
+
+            // var optionsTab = localStorage.getItem('optionsTab');
+            // if (optionsTab) {
+            //     this.setState({ optionsTab });
+            // }
         }
-        if(localStorage.getItem('optionsTab')){
-            state['optionsTab']=localStorage.getItem('optionsTab');
-        }*/
-        var search = Main.defaultSearch();
-        //set current search
-        if(url('?rq') || url('?sort')){
-            paramsParser(search);//mutates search object filters
-            _.each(_.difference(_.map(Filters.defaultFilters(), 'name'), _.map(search.filters, 'name')),function(filter){
-                search.filters.push(Filters.newFilterProps(filter));
-            });
-        }else if(searchHistory.history.length > 0){
-            search.filters = _.map(searchHistory.history[0].filters, function(filter){
+
+        // set current search
+        const search = Search.defaultSearch();
+        if (url('?rq') || url('?sort')) {
+            paramsParser(search); // mutates search object filters
+            _.each(
+                _.difference(_.map(Filters.defaultFilters(), 'name'), _.map(search.filters, 'name')),
+                function (filter) {
+                    search.filters.push(Filters.newFilterProps(filter));
+                }
+            );
+        } else if (searchHistory.history.length > 0) {
+            search.filters = _.map(searchHistory.history[0].filters, function (filter) {
                 return Filters.newFilterProps(filter.name);
             });
         }
-        window.history.replaceState({},'search',url('path'));
+        window.history.replaceState({}, 'search', url('path'));
         searchHistory.push(search);
-        state['search']=search;
-        return state;
-    },
-    searchChange: function(key,val){
+
+        // Update the state with 'search'
+        this.setState({ search: search });
+    }
+    
+    searchChange(key,val){
         var search = _.cloneDeep(this.state.search);
         if(typeof key == 'string'){
             search[key]=val;
@@ -83,8 +103,10 @@ var Main = module.exports =  React.createClass({
         }
         this.setState({search: search});
         searchHistory.push(search);
-    },
-    viewChange: function(view,option){
+        console.log(search)
+    }
+
+    viewChange(view,option){
         //currently only supports options panel and results tabs
         if(view=='optionsTab'||view=='resultsTab'){
             localStorage.setItem(view, option);
@@ -92,8 +114,8 @@ var Main = module.exports =  React.createClass({
             ch[view]=option;
             this.setState(ch);
         }
-    },
-    render: function(){
+    }
+    render(){
         return(
             <div id='react-wrapper'>
                 <div id="top" className="clearfix">
@@ -107,23 +129,33 @@ var Main = module.exports =  React.createClass({
             </div>
         )
     }
-});
+};
+// var Main = new Search()
+class SearchAny extends React.Component{
+    openHelp(){
 
-var SearchAny = React.createClass({
-    openHelp: function(){
+    }
 
-    },
-    checkClick: function(event){
+    constructor(props) {
+        super(props)
+        this.textType = this.textType.bind(this)
+        this.checkClick = this.checkClick.bind(this)
+        this.resetSearch = this.resetSearch.bind(this)
+    }
+     
+    checkClick(event){
         this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
-    },
-    textType: function(event){
+    }
+    textType(event){
+        // console.log('CURRENT VALUE: ' + event.currentTarget.value)
+        // console.log(this.props)
         this.props.searchChange('fulltext',event.currentTarget.value);
-    },
-    resetSearch: function(){
-        this.props.searchChange(Main.defaultSearch());
-    },
-    render: function(){
+    }
+    resetSearch(){ 
+        this.props.searchChange(Search.defaultSearch());
+    }
+    render(){
 
         return(
             <div id="search-any" className="clearfix">
@@ -191,16 +223,22 @@ var SearchAny = React.createClass({
             </div>
         )
     }
-})
+}
 
-var OptionsPanel = React.createClass({
+class OptionsPanel extends React.Component{
     /*getInitialState: function(){
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
         }
         return {panels: localStorage.getItem('panels')}
     },*/
-    showPanel: function(event){
+    constructor(props) {
+        super(props)
+        this.optionPanel = this.optionPanel.bind(this)
+        this.showPanel = this.showPanel.bind(this)
+    }
+
+    showPanel(event){
         event.preventDefault();
         event.stopPropagation();
         var val = event.currentTarget.attributes['data-panel'].value;
@@ -208,8 +246,8 @@ var OptionsPanel = React.createClass({
             localStorage.setItem('panels',val);
         })*/
         this.props.viewChange('optionsTab',val);
-    },
-    optionPanel: function(name){
+    }
+    optionPanel(name){
         switch(name){
             case 'filters':
                 return <Filters searchChange={this.props.searchChange} search={this.props.search} filters={this.props.search.filters} active="active"/>;
@@ -224,8 +262,8 @@ var OptionsPanel = React.createClass({
                 return <Download search={this.props.search} searchChange={this.props.searchChange} active="active"/>;
                 break;
         }
-    },
-    render: function(){
+    }
+    render(){
     
         var menu = [],self=this,panels={filters: '', mapping: '',sorting: '', download:''},panel;
 
@@ -252,4 +290,5 @@ var OptionsPanel = React.createClass({
             </div>
         )
     }
-})
+}
+// export default Search;

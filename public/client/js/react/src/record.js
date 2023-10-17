@@ -6,8 +6,8 @@ var fields = require('../../lib/fields');
 var dqFlags = require('../../lib/dq_flags');
 var idbapi = require('../../lib/idbapi');
 
-var Row = React.createClass({
-    render: function(){
+class Row extends React.Component{
+    render(){
         var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
         var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
         var str = this.props.data.replace(regex, function(match){
@@ -22,10 +22,10 @@ var Row = React.createClass({
             </tr>
         );   
     }
-});
+};
 
-var Section = React.createClass({
-    render: function(){
+class Section extends React.Component{
+    render(){
         var rows = [],self=this;
         var data = this.props.data;
 
@@ -63,10 +63,10 @@ var Section = React.createClass({
             </div>
         );
     }
-});
+};
 
-var Flags = React.createClass({
-    render: function(){
+class Flags extends React.Component{
+    render(){
         var rows = _.map(this.props.flags, function(flag){
             return (
                 <tr key={'flag-'+flag}><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
@@ -86,10 +86,10 @@ var Flags = React.createClass({
             </div>
         )
     }
-});
+};
 
-var Record = React.createClass({
-    formatJSON: function(json){
+class Record extends React.Component{
+    formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -110,15 +110,21 @@ var Record = React.createClass({
             }
             return '<span class="' + cls + '">' + match + '</span>';
         });
-    },
-    getInitialState: function(){
-        return {active: "record"};
-    },
-    tabClick: function(e){
+    }
+    // getInitialState(){
+    //     return {active: "record"};
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: "record"
+        }
+    }
+    tabClick(e){
         e.preventDefault();
         this.setState({active: e.target.attributes['data-tab'].value});
-    },
-    render: function(){
+    }
+    render(){
         var has = [];
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
         var record = [], tabs = [], self = this, flags = null, flagsTab = null;
@@ -160,23 +166,23 @@ var Record = React.createClass({
             </div>
         );
     }
-});
+};
 
-var Img = React.createClass({
-    error: function(event){
+class Img extends React.Component{
+    error(event){
         $(event.currentTarget).attr('src','/portal/img/missing.svg');
-    },
-    render: function(){
+    }
+    render(){
         return (
             <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
                 <img className="gallery-image" onError={this.error} src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} /> 
             </a>
         );
     }
-});
+};
 
-var Gallery = React.createClass({
-    render: function(){
+ class Gallery extends React.Component{
+    render(){
         if(_.has(this.props.data,'mediarecords')){
             
             var imgs = [];
@@ -197,10 +203,10 @@ var Gallery = React.createClass({
             return <span/>
         }
     }
-});
+};
 
-var Map = React.createClass({
-    render: function(){
+class Map extends React.Component{
+    render(){
         if(_.has(this.props.data,'geopoint')){
             return (
                 <div id="map" className="clearfix scrollspy section">
@@ -214,13 +220,13 @@ var Map = React.createClass({
             return <span/>
         }
     }
-});
+};
 
 var Provider = require('./shared/provider');
 var Title = require('./shared/title');
 
-var SuppliedCitation = React.createClass({
-    render: function(){
+class SuppliedCitation extends React.Component{
+    render(){
         if(_.has(this.props.data,'dcterms:bibliographicCitation')){
             return (
                 <div id="citation" className="clearfix scrollspy section">       
@@ -232,11 +238,11 @@ var SuppliedCitation = React.createClass({
             return(null);
         }
     }
-});
+};
 
-var Citation = React.createClass({
+class Citation extends React.Component{
 
-    render: function(){
+    render(){
         return(
             <div id="citation" className="clearfix scrollspy section">
                 <h2 className="title">Citation</h2>    
@@ -253,10 +259,10 @@ var Citation = React.createClass({
             </div>
         )
     }
-});
+};
 
-module.exports = React.createClass({
-    navList: function(){
+module.exports = class recordModExports extends React.Component{
+    navList(){
 
         var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
         var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
@@ -272,8 +278,8 @@ module.exports = React.createClass({
                 <li><a href="#data">All Data</a></li>
             </ul>            
         )
-    },
-    taxaBreadCrumbs: function(){
+    }
+    taxaBreadCrumbs(){
         var order = [], values = [], self = this;
         
         ['kingdom','phylum','class','order','family'].forEach(function(item){
@@ -299,13 +305,13 @@ module.exports = React.createClass({
                 >{_.capitalize(values[index])}</a>
             );
             if((order.length-1) > index){
-                output.push(<span key={'arrow'+index}>&nbsp;>&nbsp;</span>);
+                output.push(<span key={'arrow'+index}>&nbsp;{'>'}&nbsp;</span>);
             }
         });
 
         return output;
-    },
-    namedTableRows: function(data, list, dic){
+    }
+    namedTableRows(data, list, dic){
         var values=[];
         _.each(list, function(item){
             if(_.has(data,item)){
@@ -317,8 +323,8 @@ module.exports = React.createClass({
             }
         });
         return values;
-    },
-    render: function(){
+    }
+    render(){
         var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
         var has = [], canonical = {};
         var record = {};
@@ -421,4 +427,6 @@ module.exports = React.createClass({
         )
     }
 
-})
+}
+
+// module.exports = recordModExports

@@ -1,8 +1,8 @@
 
 var React = require('react');
 
-module.exports = React.createClass({
-    render: function(){
+export class Raw extends React.Component{
+    render(){
 
         function formatJSON(json) {
             if (typeof json != 'string') {
@@ -46,5 +46,5 @@ module.exports = React.createClass({
             </div> 
         )
     }
-})             
+}             
 

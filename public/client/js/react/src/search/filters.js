@@ -3,38 +3,40 @@ var RCTgroup = require('react-addons-css-transition-group');
 var PureRender = require('react-addons-pure-render-mixin');
 var idbapi = require('../../../lib/idbapi');
 
-var Filters = module.exports = React.createClass({
-    mixins: [PureRender],
-    statics: {
-        newFilterProps: function(term){
-            var type = fields.byTerm[term].type;
-            switch(type){
-                case 'text':
-                    return {name: term, type: type, text:'', exists: false, missing: false};
-                case 'daterange':
-                    return {name: term, type: type, range:{gte: '', lte: ''}, exists: false, missing: false};
-                case 'numericrange':
-                    return {name: term, type: type, range:{gte: false, lte: false}, exists: false, missing: false};
-            }
-        },
-        defaultFilters: function(){
-            var filters=[],self=this;
-            ['scientificname','datecollected','country'].forEach(function(item){
-                filters.push(Filters.newFilterProps(item));
-            });   
-            return filters;
-        }      
-    }, 
-    filterPropsChange: function(filterObj){
+export default class Filters extends React.Component{
+    // mixins: [PureRender],
+    
+    static newFilterProps(term){
+        var type = fields.byTerm[term].type;
+        switch(type){
+            case 'text':
+                return {name: term, type: type, text:'', exists: false, missing: false};
+            case 'daterange':
+                return {name: term, type: type, range:{gte: '', lte: ''}, exists: false, missing: false};
+            case 'numericrange':
+                return {name: term, type: type, range:{gte: false, lte: false}, exists: false, missing: false};
+        }
+    }
+    static defaultFilters(){
+        var filters=[],self=this;
+        ['scientificname','datecollected','country'].forEach(function(item){
+            filters.push(Filters.newFilterProps(item));
+        });   
+        return filters;
+    }      
+    
+
+    filterPropsChange(filterObj){
         var list = this.filters(),self=this;
         var filters = this.props.filters;
         filters[list.indexOf(filterObj.name)] = filterObj;
         //this.setState({filters: filters},function(){
         //_.defer(this.props.searchChange,'filters',filters);
         this.props.searchChange('filters',filters);
-    },
+    }
 
-    makeFilter: function(filter){
+
+    makeFilter(filter){
         //var type = fltrObj.type, name = fltrObj.name;
         //var type = 'text';
         var key= filter.name;// + Date.now();
@@ -52,9 +54,9 @@ var Filters = module.exports = React.createClass({
                     <NumericRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
                 );  
         }
-    },
+    }
 
-    clearFilters: function(){
+    clearFilters(){
         var filters=[],self=this;
         this.props.filters.forEach(function(item){
             filters.push(Filters.newFilterProps(item.name));
@@ -64,8 +66,8 @@ var Filters = module.exports = React.createClass({
                 'filters': filters
             });
         //})
-    },
-    addFilter: function(event){
+    }
+    addFilter(event){
         //var flist = this.filters();
         event.preventDefault();
         var cur = this.props.filters;
@@ -73,8 +75,8 @@ var Filters = module.exports = React.createClass({
         //this.setState({filters: cur});
         this.props.searchChange('filters',cur);
         return false;
-    },
-    removeFilter: function(event){
+    }
+    removeFilter(event){
         event.preventDefault();
         var term = event.currentTarget.attributes['data-remove'].value;
         var cur = this.props.filters, filters=this.filters();
@@ -82,22 +84,22 @@ var Filters = module.exports = React.createClass({
         //this.setState({filters: cur});
         this.props.searchChange('filters',cur);
         return false;
-    },
-    filters: function(){
+    }
+    filters(){
         var list = [];
 
         _.each(this.props.filters,function(item){
             list.push(item.name);
         });
         return list;
-    },
-    scrollFilters: function(){
+    }
+    scrollFilters(){
         $('#filters-holder').animate({
             scrollTop: $('#filters-holder').height()
         });
         return false;
-    },
-    render: function(){
+    }
+    render(){
         var self=this;
        
         var fgroups =[];
@@ -154,7 +156,10 @@ var Filters = module.exports = React.createClass({
             </div>
         );
     }
-});
+};
+// module.exports = Filters
+
+
 //custom autocomplete for add all feature
 $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     _renderItem: function(ul, item){
@@ -164,18 +169,24 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     }
 })
 
-var TextFilter = React.createClass({
-    componentWillMount: function(){
+class TextFilter extends React.Component{
+    componentWillMount(){
         var self = this;
         //function for limiting execution of consecutive key strokes
         this.debouncedTextType = _.debounce(function(){
             self.props.changeFilter(self.props.filter); 
         },700,{leading: false, trailing: true});
-    },
-    getInitialState: function(){
-        return {text: this.props.filter.text}
-    },
-    presenceClick: function(event){
+    }
+    // getInitialState(){
+    //     return {text: this.props.filter.text}
+    // }
+    constructor(props) {
+        super(props);
+        this.state = {
+            text: props.filter.text
+        }
+    }
+    presenceClick(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
@@ -190,8 +201,8 @@ var TextFilter = React.createClass({
             filter.missing = false;
         }
         this.props.changeFilter(filter);
-    },
-    textType: function(event){
+    }
+    textType(event){
         var text = event.currentTarget.value, self=this;
         var filter = this.props.filter;//, filter=filters[ind];   
         filter.text = text;
@@ -200,13 +211,13 @@ var TextFilter = React.createClass({
         })
         //
         //this.props.changeFilter(filter);
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
   
         this.setState({text: nextProps.filter.text});
-    },
-    setAutocomplete: function(event){
-        var self=this,name;
+    }
+    setAutocomplete(event){
+        var self=this.name;
         var options = {
             source: function(searchString, respCallback) {
                 name = this.element[0].name;//$(event.currentTarget).attr('data-name');
@@ -260,8 +271,9 @@ var TextFilter = React.createClass({
                 }
             }
         }
-    },
-    getSynonyms: function(event){
+    }
+
+    getSynonyms(event){
         event.preventDefault();
         var text = this.props.filter.text.split('\n'),self=this;
         //dont run search for blank text
@@ -313,8 +325,9 @@ var TextFilter = React.createClass({
                 //$(event.currentTarget).removeAttr('disabled');
             });            
         }        
-    },
-    render: function(){
+    }
+
+    render(){
         var filter = this.props.filter,disabled=false,textval;
         var name = filter.name, label = fields.byTerm[name].name;
         var syn = <span/>,cl='text';
@@ -363,16 +376,17 @@ var TextFilter = React.createClass({
             </div>
         )
     }
-});
+};
 
-var DateRangeFilter = React.createClass({
-    dateChange: function(event){
+class DateRangeFilter extends React.Component{ 
+    dateChange(event){
         var date = event.currentTarget.value;
         var filter = this.props.filter;//, filter=filters[ind];   
         filter.range[event.currentTarget.name] = date;
         this.props.changeFilter(filter);     
-    },
-    presenceClick: function(event){
+    }
+
+    presenceClick(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
@@ -387,8 +401,8 @@ var DateRangeFilter = React.createClass({
             filter.missing = false;
         }
         this.props.changeFilter(filter);
-    },
-    render: function(){
+    }
+    render(){
         var filter = this.props.filter;
         var name = filter.name;
         var label = fields.byTerm[name].name;
@@ -447,10 +461,10 @@ var DateRangeFilter = React.createClass({
             </div>
         ) 
     }
-})
+}
 
-var NumericRangeFilter = React.createClass({
-    presenceClick: function(event){
+class NumericRangeFilter extends React.Component{
+    presenceClick(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
@@ -465,8 +479,8 @@ var NumericRangeFilter = React.createClass({
             filter.missing = false;
         }
         this.props.changeFilter(filter);
-    },
-    valueChange: function(event){
+    }
+    valueChange(event){
         var filter = this.props.filter;
         var val = event.target.value;
         if(_.isEmpty(val) || !_.isFinite(parseInt(val))){
@@ -475,8 +489,8 @@ var NumericRangeFilter = React.createClass({
         filter.range[event.currentTarget.name] = parseInt(val);
         
         this.props.changeFilter(filter);
-    },
-    render: function(){
+    }
+    render(){
         var filter = this.props.filter;
         var name = filter.name;
         var label = fields.byTerm[name].name;
@@ -536,4 +550,4 @@ var NumericRangeFilter = React.createClass({
             </div> 
         )
     }
-})
+}

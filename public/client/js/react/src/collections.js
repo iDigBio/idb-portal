@@ -7,8 +7,8 @@ import '@bower_components/leaflet.fullscreen/Control.FullScreen.css';
 import '../../../../css/collections.css';
 
 var openMapPopup;
-module.exports = React.createClass({
-    render: function(){
+class modExports extends React.Component{
+    render(){
         openMapPopup=this.props.openMapPopup;
         var columnMeta=[{
                 "columnName": "collection_url",
@@ -90,10 +90,11 @@ module.exports = React.createClass({
                 useFixedHeader={true} />
         )
     }
-});
+};
+module.exports = modExports
 
-var LinkCell = React.createClass({
-    render: function(){
+class LinkCell extends React.Component{
+    render() {
         var d = this.props.data;
         if(_.isEmpty(d) || d.toLowerCase() == 'na'){
             return <span/>
@@ -109,10 +110,10 @@ var LinkCell = React.createClass({
             )            
         }
     }
-});
+};
 
-var LinkName = React.createClass({
-    render: function(){
+class LinkName extends React.Component{
+    render(){
         var d = this.props.data;
         if(d == null || d.toLowerCase() == 'na' ){
             return <span/>
@@ -123,10 +124,10 @@ var LinkName = React.createClass({
             )            
         }
     }
-});
+};
 
-var Email = React.createClass({
-    render: function(){
+class Email extends React.Component{
+    render(){
         var d = this.props.data;
         
         if(helpers.testEmail(d)){
@@ -135,10 +136,10 @@ var Email = React.createClass({
             return <span/>
         }
     }
-});
+};
 
-var Recordsets = React.createClass({
-    render: function(){
+class Recordsets extends React.Component{
+    render(){
         var d = this.props.data;
         
         if(_.isString(d) && !_.isEmpty(d)){
@@ -160,13 +161,13 @@ var Recordsets = React.createClass({
             return <span/>
         }
     }
-});
+};
 
-var UpdateLink = React.createClass({
+class UpdateLink extends React.Component{
     /*  This process creates a url to a google doc. 
         Encoded in the url is the information from the current record, prepopulating the form with existing data.
         This enables the new entry to appear as an update to the end user.*/
-    render: function(){
+    render(){
         var d=this.props.rowData;
 
         var url = 'https://docs.google.com/forms/d/1slWOvxuLpuPdvDihSibLQq9BPsOqPzK8Hh93zCW3dRI/viewform?';
@@ -195,14 +196,14 @@ var UpdateLink = React.createClass({
 
         return <a href={url} target="_new">Update/Add Information</a>
     }
-});
+};
 
-var MapLink = React.createClass({
-    openClick: function(e){
+class MapLink extends React.Component{
+    openClick(e) {
         e.preventDefault()
         openMapPopup(e.target.attributes.href.value);
-    },
-    render: function(){
+    }
+    render(){
         var d=this.props.data;
        
         if(_.isNull(this.props.rowData.lat) || _.isNull(this.props.rowData.lon)){
@@ -211,7 +212,7 @@ var MapLink = React.createClass({
             return <a href={d} target="_new" onClick={this.openClick} >Show On Map</a>
         }
     }
-});
+};
 
 function GoogleFormQS(entryID, querypart) {
     var result;

@@ -1,9 +1,9 @@
 var React = require('react');
 var helpers = require('../../lib/helpers');
 
-var Collection = React.createClass({
+class Collection extends React.Component{
 
-    render: function(){
+    render() {
         var self=this;
         var regex = /(((ftp|https?):\/\/|www)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
 
@@ -72,7 +72,7 @@ var Collection = React.createClass({
             </div>
         )
     }
-});
+};
 
 module.exports = Collection;
 

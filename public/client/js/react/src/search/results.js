@@ -4,26 +4,44 @@ var queryBuilder = require('../../../lib/querybuilder');
 var PureRender = require('react-addons-pure-render-mixin');
 var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
 
-var Results = module.exports =  React.createClass({
+export default class Results extends React.Component{
     //mixins: [PureRender],
-    lastQueryStringed: '',
-    getInitialState: function(){
-        //this.getResults();
+    // lastQueryStringed = ''
 
-        return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
-    },
-    shouldComponentUpdate: function(nextProps, nextState){
+    constructor(props) {
+        super(props);
+        this.state = {
+            lastQueryStringed: '',
+            results: [],
+            attribution: [],
+            total: 0,
+            search: props.search,
+            hasMore: false,
+            loading: true,
+        }
+        this.resultsScroll = this.resultsScroll.bind(this)
+        this.viewChange = this.viewChange.bind(this)
+        this.getResults = this.getResults.bind(this)
+        this.updateResults = this.updateResults.bind(this)
+    }
+
+    // getInitialState(){
+    //     //this.getResults();
+
+    //     return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
+    // }
+    shouldComponentUpdate(nextProps, nextState){
 
         if(nextProps.view !== this.props.view){
             return true;
         }else{
             return false;
         }
-    },
-    componentDidMount: function(){
+    }
+    componentDidMount(){
         window.onscroll = this.resultsScroll;
         this.getResults(this.props.search);
-    },
+    }
     getResults(){
         var self = this;
          
@@ -61,28 +79,28 @@ var Results = module.exports =  React.createClass({
         
         self.lastQueryStringed = JSON.stringify(query);
 
-    },
-    viewChange: function(event){
+    }
+    viewChange(event){
         event.preventDefault();
         var view = event.currentTarget.attributes['data-value'].value;
         this.props.viewChange('resultsTab', view);
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
         //component should only recieve search as props
         //componentWillReceiveProps will soon be depricated
             this.setState({search: _.cloneDeep(nextProps.search)},function(){
                 this.forceUpdate();
                 this.getResults(this.state.search); 
             });
-    },
+    }
     updateResults(search){
         this.setState({search: search, loading: true},function(){
             this.forceUpdate();
             this.getResults(); 
         });
-    },
+    }
     //this is not a synthentic event
-    resultsScroll: function(e){
+    resultsScroll(e){
         var search = _.cloneDeep(this.state.search);
         if(this.state.total > search.from + search.size){
             // When we scroll to the bottom of the page, there are more results to show, and we're not currently getting results - get more results
@@ -91,8 +109,8 @@ var Results = module.exports =  React.createClass({
                 this.updateResults(search);
             }
         }
-    },
-    render: function(){
+    }
+    render(){
         var search = this.props.search, self=this, li=[], results = null;
         switch(this.props.view){
             case 'list':
@@ -133,35 +151,49 @@ var Results = module.exports =  React.createClass({
             </div>
         )
     }
-});
+};
 
 var sortClick=false;
-var ResultsList = React.createClass({
-    mixins: [PureRender],
-    getInitialState: function(){
+class ResultsList extends React.Component{
+    // mixins: [PureRender],
+    // getInitialState(){
+    //     if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
+    //         var cols = this.defaultColumns();
+    //         localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
+    //         return {columns: cols};
+    //     }else{
+    //         return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
+    //     }
+    // }
+    constructor(props) {
+        super(props)
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
             var cols = this.defaultColumns();
             localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
-            return {columns: cols};
+            this.state = {
+                columns: cols
+            }
         }else{
-            return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
+            this.state = {
+                columns: JSON.parse(localStorage.getItem('viewColumns')).columns
+            }
         }
-    },
-    resetColumns: function(){
+    }
+    resetColumns(){
             this.setColumns(this.defaultColumns());
-    },
-    defaultColumns: function(){
+    }
+    defaultColumns(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
-    },
-    setColumns: function(columns){
+    }
+    setColumns(columns){
         this.setState({columns: columns},function(){
             this.forceUpdate();
             if(localStorage){
                 localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
             }
         });
-    },
-    columnCheckboxClick: function(e){
+    }
+    columnCheckboxClick(e){
         var columns = _.cloneDeep(this.state.columns);
         if(e.currentTarget.checked===true){
             columns.push(e.currentTarget.name);
@@ -169,8 +201,8 @@ var ResultsList = React.createClass({
             columns.splice(columns.indexOf(e.currentTarget.name),1);
         }
         this.setColumns(columns);
-    },
-    addColumn: function(e){
+    }
+    addColumn(e){
         e.preventDefault();
         var self = this;
         var col = _.find(_.keys(fields.byTerm),function(name){
@@ -179,8 +211,8 @@ var ResultsList = React.createClass({
         var cols = this.state.columns;
         cols.unshift(col);
         this.setColumns(cols);
-    },
-    sortColumn: function(e){
+    }
+    sortColumn(e){
         e.preventDefault();
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
@@ -207,8 +239,8 @@ var ResultsList = React.createClass({
         }
         sortClick=true;
         this.props.searchChange('sorting',sorting);
-    },
-    openRecord: function(e){
+    }
+    openRecord(e){
         e.preventDefault();
         e.stopPropagation();
         //to prevent opening if hiliting text
@@ -217,8 +249,8 @@ var ResultsList = React.createClass({
            window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id); 
         }
         
-    },
-    render: function(){
+    }
+    render(){
         var columns = this.state.columns,self=this;
      
        //['scientificname','genus','collectioncode','specificepithet','commonname'];
@@ -374,18 +406,24 @@ var ResultsList = React.createClass({
         )
         //<ResultListColumnSelector columns={this.state.columns} setColumns={this.setColumns} />
     }
-});
+};
 
-var ResultListColumnSelector = React.createClass({
-    getInitialState: function(){
-        return {columns: this.props.columns};
-    },
-    addColumn: function(){
+class ResultListColumnSelector extends React.Component{
+    // getInitialState(){
+    //     return {columns: this.props.columns};
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            columns: props.columns
+        }
+    }
+    addColumn(){
         var cols = this.state.columns;
         cols.push('none');
         this.setState({columns: cols});
-    },
-    moveColumn: function(e){
+    }
+    moveColumn(e){
         e.preventDefault();
         var cols = this.state.columns;
         var name = e.target.attributes['data-column'].value;
@@ -400,19 +438,19 @@ var ResultListColumnSelector = React.createClass({
         this.setState({columns: cols},function(){
             this.setColumns();
         })
-    },
-    setColumns: function(){
+    }
+    setColumns(){
         this.props.setColumns(_.without(this.state.columns,'none'));
-    },
-    resetColumns: function(){
+    }
+    resetColumns(){
         this.setState({columns: this.defaultColumns()},function(){
             this.setColumns();
         })
-    },
-    defaultColumns: function(){
+    }
+    defaultColumns(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
-    },
-    removeColumn: function(e){
+    }
+    removeColumn(e){
         e.preventDefault();
         var name = e.currentTarget.attributes['data-column'].value;
         var cols = this.props.columns;
@@ -422,19 +460,19 @@ var ResultListColumnSelector = React.createClass({
                 this.setColumns();
             });
         }
-    },
-    selectChange: function(e){
+    }
+    selectChange(e){
         e.preventDefault();
         var cols = this.state.columns;
         cols[parseInt(e.target.attributes['data-index'].value)] = e.target.value;
         this.setState({columns: cols},function(){
             this.setColumns();
         })
-    },
-    componentWillMount: function(){
+    }
+    componentWillMount(){
         this.colCount = this.props.columns.length;
-    },
-    render: function(){
+    }
+    render(){
 
         var self = this, selects = [];
 
@@ -512,11 +550,11 @@ var ResultListColumnSelector = React.createClass({
             </div>
         );
     }
-});
+};
 
-var ResultsLabels = React.createClass({
-    mixins: [PureRender],
-    makeLabel: function(result,id){
+class ResultsLabels extends React.Component{
+    // mixins: [PureRender],
+    makeLabel(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
         var content = [], middle = [];
@@ -632,20 +670,20 @@ var ResultsLabels = React.createClass({
                 </p>
             </div>
         )
-    },
-    errorImage: function(e){
+    }
+    errorImage(e){
         //debugger
         e.target.attributes['src'].value='/portal/img/missing.svg';
-    },
-    openMedia: function(e){
+    }
+    openMedia(e){
         e.preventDefault();
         window.open('/portal/mediarecords/'+e.currentTarget.id,'_blank');
-    },
-    openRecord: function(e){
+    }
+    openRecord(e){
         e.preventDefault();
         window.open('/portal/records/'+e.currentTarget.id,'_blank');
-    },
-    render: function(){
+    }
+    render(){
         var labels = [],self=this;
         this.props.results.forEach(function(result,ind){
             labels.push(self.makeLabel(result,result.uuid));
@@ -671,11 +709,11 @@ var ResultsLabels = React.createClass({
             </div>
         )
     }
-});
+};
 
-var ResultsImages = React.createClass({
-    mixins: [PureRender],
-    getImageOnlyResults: function(search){
+class ResultsImages extends React.Component{
+    // mixins: [PureRender],
+    getImageOnlyResults(search){
 
         var d = new Date, self=this, searchState = _.cloneDeep(search);
         searchState.image=true;
@@ -698,29 +736,35 @@ var ResultsImages = React.createClass({
                 });
             }
         });
-    },
-    getInitialState: function(){
-        return {results: this.props.results, loading: false};
-    },
-    errorImage: function(e){
+    }
+    // getInitialState(){
+    //     return {results: this.props.results, loading: false};
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            results: props.results, loading: false
+        }
+    }
+    errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
-    },
-    componentWillMount: function(){
+    }
+    componentWillMount(){
         if(!this.props.search.image){
             this.getImageOnlyResults(this.props.search);
         }
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
         if(nextProps.search.image){
             this.setState({results: nextProps.results, loading: false})
         }else{
             this.getImageOnlyResults(nextProps.search);
         }
-    },
-    makeImageText: function(data){
+    }
+    makeImageText(data){
 
-    },
-    makeImage: function(uuid,record){
+    }
+    makeImage(uuid,record){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
         var name=[], specimen = record.data, index=record.indexTerms;
         if(typeof index.scientificname == 'string') { 
@@ -747,8 +791,8 @@ var ResultsImages = React.createClass({
                 </div>
             </a>
         )
-    },
-    render: function(){
+    }
+    render(){
         var images=[],self=this,key=0;
         this.state.results.forEach(function(record,index){
             if(_.isArray(record.indexTerms.mediarecords)){
@@ -780,10 +824,10 @@ var ResultsImages = React.createClass({
             </div>
         )
     }
-});
+};
 
-var Providers = React.createClass({
-    render: function(){
+class Providers extends React.Component{
+    render(){
 
         var list = _.map(this.props.attribution, function(item){
             return (
@@ -808,4 +852,5 @@ var Providers = React.createClass({
             </div>
         )
     }
-})
+}
+// export default Results;

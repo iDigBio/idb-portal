@@ -25,23 +25,23 @@ var formatNum = function(num){
     }
 }
 
-var Total = React.createClass({
-    render: function(){
+class Total extends React.Component{
+    render(){
         return (
             <span>{formatNum(this.props.total)}</span>
         )
     }
-});
+};
 
-var Flagrow = React.createClass({
-    checkVal: function(val){
+class Flagrow extends React.Component{
+    checkVal(val){
         if(_.isNaN(val)||val==='NaN'){
             return '-';
         }else{
             return val;
         }
-    },
-    render: function(){
+    }
+    render(){
         var style = {'width': (this.props.value-2)+'px'};
         var sty2 = {'width': '170px'};
         return (
@@ -68,10 +68,10 @@ var Flagrow = React.createClass({
             </tr>
         );
     }
-});
+};
 
-var FlagsTable = React.createClass({
-    render: function(){
+class FlagsTable extends React.Component{
+    render(){
         var self = this;
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
             var perc = Number(((100/self.props.stotal) * self.props.flags[flag].itemCount).toFixed(3));
@@ -106,10 +106,10 @@ var FlagsTable = React.createClass({
             </div>
         );
     }
-});
+};
 
-var UseTable = React.createClass({
-    render: function(){
+class UseTable extends React.Component{
+    render(){
         var rows=[], uuid=this.props.uuid;
 
         if(_.isEmpty(this.props.use.dates) === false){
@@ -157,10 +157,10 @@ var UseTable = React.createClass({
             </div>
         )
     }
-});
+};
 
-var RawView = React.createClass({
-    formatJSON: function(json){
+class RawView extends React.Component{
+    formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -180,8 +180,8 @@ var RawView = React.createClass({
             }
             return '<span class="' + cls + '">' + match + '</span>';
         });
-    },
-    render: function(){
+    }
+    render(){
         return (
             <div id="raw" style={{display: (this.props.active ? 'block' : 'none' )}} className="stat-table clearfix">
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
@@ -189,17 +189,23 @@ var RawView = React.createClass({
             </div> 
         )
     }
-});
+};
 
-var StatsTables = React.createClass({
-    click: function(e){
+class StatsTables extends React.Component{
+    click(e){
         e.preventDefault();
         this.setState({active: e.currentTarget.attributes['data-active'].value})
-    },
-    getInitialState: function(){
-        return {active: 'flags' };
-    },
-    render: function(){
+    }
+    // getInitialState(){
+    //     return {active: 'flags' };
+    // }
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: 'flags'
+        }
+    }
+    render(){
         return (
             <div id="stats-tables" className="clearfix scrollspy">
                 <ul className="tabs" id="stats-tabs">
@@ -213,22 +219,22 @@ var StatsTables = React.createClass({
             </div>
         )
     }
-});
+};
 
-var Title = React.createClass({
-    render: function(){
+class Title extends React.Component{
+    render(){
         return(
             <h1 id="title">{this.props.keyid}</h1>
         );
     }
-});
+};
 
-var Description = React.createClass({
-    errorImage: function(e){
+class Description extends React.Component{
+    errorImage(e){
         e.target.attributes['src'].value = '';
-    },
+    }
 
-    render: function(){
+    render(){
         var logo = '';
         if(_.has(this.props.data, 'logo_url') && !_.isEmpty(this.props.data.logo_url)){
             logo = <img className="logo" src={this.props.data.logo_url} onError={this.errorImage} />
@@ -246,20 +252,20 @@ var Description = React.createClass({
             </div>
         )
     }
-});
+};
 
-var Last = React.createClass({
-    render: function(){
+class Last extends React.Component{
+    render(){
        return(<span>{this.props.keyid}</span>);
     }
-});
+};
 
 var Contacts = require('./shared/contacts');
 
 var Raw = require('./shared/raw');
 
-module.exports = React.createClass({
-    navList: function(){
+class recordsetModExports extends React.Component{
+    navList(){
 
         //var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
         //var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
@@ -272,8 +278,8 @@ module.exports = React.createClass({
                 <li><a href="#stats-tables">All Data</a></li>
             </ul>            
         );
-    },
-    render: function(){
+    }
+    render(){
         var raw = this.props.recordset;
         var data = raw.data;
         var id = raw.uuid;
@@ -330,4 +336,5 @@ module.exports = React.createClass({
         )
     }
 
-});
+};
+module.exports = recordsetModExports 

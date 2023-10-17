@@ -4,10 +4,17 @@ var IDBMap = require('../../../lib/mapper');
 var helpers = require('../../../lib/helpers');
 
 var map; 
-module.exports = React.createClass({
-    currentQuery: '',
+export default class Map extends React.Component{
+    // currentQuery = '';
 
-    componentDidMount: function(){
+    constructor(props) {
+        super(props);
+        this.state = {
+            currentQuery: '',
+        }
+    }
+
+    componentDidMount(){
         var self=this;
         map = new IDBMap('map',{
             queryChange: function(query){
@@ -42,11 +49,11 @@ module.exports = React.createClass({
 
         var query = queryBuilder.buildQueryShim(this.props.search);
         map.query(query)
-    },
-    shouldComponentUpdate: function(){
+    }
+    shouldComponentUpdate(){
         return false;
-    },
-    componentWillReceiveProps: function(nextProps){
+    }
+    componentWillReceiveProps(nextProps){
         var q = queryBuilder.buildQueryShim(nextProps.search);
         var next=JSON.stringify(q);
         //debugger
@@ -54,12 +61,12 @@ module.exports = React.createClass({
             this.currentQuery=next;
             map.query(q);
         }
-    },
-    render: function(){
+    }
+    render(){
         return (
             <div id="map-wrapper">
                 <div id="map"></div>
             </div>
         )
     }
-})
+}

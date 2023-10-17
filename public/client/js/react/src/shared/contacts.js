@@ -32,8 +32,8 @@ var phDisplay = function(phone){
     }
 };
 
-module.exports = React.createClass({
-    makeContact: function(contact){
+export class Contacts extends React.Component{
+    makeContact(contact){
             var name = defOrNone(contact, ['first_name', 'last_name']);
             var email = defOrNone(contact, 'email');
             email = _.isString(email) ? <a href={'mailto: '+email}>{email}</a> : email;
@@ -50,8 +50,8 @@ module.exports = React.createClass({
                     </tbody>
                 </table>
             );   
-    },
-    render: function(){
+    }
+    render(){
         if(_.has(this.props.data, 'contacts') && _.isArray(this.props.data.contacts)){
             var contacts = _.map(this.props.data.contacts,this.makeContact)
             return (
@@ -64,4 +64,4 @@ module.exports = React.createClass({
             return null;
         }   
     }
-})
+}

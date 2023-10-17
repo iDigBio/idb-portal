@@ -23,8 +23,8 @@ function getQueryParams(qs) {
 
     return params;
 }
-var StatsTable = React.createClass({
-  render: function(){        
+class StatsTable extends React.Component{
+  render(){        
       return (
           <div>
               <table className="table table-bordered table-condensed" id="statstable">
@@ -55,16 +55,16 @@ var StatsTable = React.createClass({
           </div>
       )
   }
-});
+};
 
-var Publishers = React.createClass({
-  clickScroll: function(event) {
+class Publishers extends React.Component{
+  clickScroll(event) {
 
     event.preventDefault();
     $('html,body').animate({scrollTop: $("#"+event.target.attributes['data-id'].value).offset().top},'slow');
     return false
-  },
-  render: function(){
+  }
+  render(){
     var self=this;
     var prows = _.map(pubs,function(val,key){
       var ar=0,am=0,dr=0,dm=0,ir=0,im=0;
@@ -140,10 +140,10 @@ var Publishers = React.createClass({
       </table>
     )
   }
-});
+};
 
-var Recordsets = React.createClass({
-  render: function(){
+class Recordsets extends React.Component{
+  render(){
     var rows = _.map(this.props.recordsets,function(name,uuid){
       if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
         //rsets[uuid]=defsets();
@@ -202,10 +202,10 @@ var Recordsets = React.createClass({
       </div>
     )
   }
-});
+};
 
-var Page = React.createClass({
-  render: function(){
+class Page extends React.Component{
+  render(){
     var recordsets = _.map(pubs,function(val,key){
       return <Recordsets recordsets={val.recordsets} key={key+'_recordsets'} uuid={key} name={val.name}/>
     });
@@ -219,7 +219,7 @@ var Page = React.createClass({
       </div>
     )
   }
-})
+}
 
 
 var pubs={},rsets={};

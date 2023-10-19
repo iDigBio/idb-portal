@@ -53,6 +53,17 @@ export default class Map extends React.Component{
     shouldComponentUpdate(){
         return false;
     }
+
+    componentDidUpdate(nextProps) {
+        var q = queryBuilder.buildQueryShim(nextProps.search);
+        var next=JSON.stringify(q);
+        //debugger
+        if(next!==this.currentQuery){
+            this.currentQuery=next;
+            map.query(q);
+        }
+    }
+
     componentWillReceiveProps(nextProps){
         var q = queryBuilder.buildQueryShim(nextProps.search);
         var next=JSON.stringify(q);

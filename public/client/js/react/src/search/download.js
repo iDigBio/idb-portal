@@ -3,7 +3,11 @@ var React = require('react');
 var idbapi = require('../../../lib/idbapi');
 var Downloads
 export default class Download extends React.Component{
-    
+        constructor(props) {
+            super(props)
+            this.historySelect = this.historySelect.bind(this)
+            this.clearHistory = this.clearHistory.bind(this)
+        }
         static queryToSentence(query){
             var q = query;
             var parts = [], sort = '';
@@ -138,17 +142,6 @@ export default class Download extends React.Component{
 };
 Downloads = Download
 class Downloader extends React.Component{
-    // getInitialState(){
-    //     var downloads=[];
-    //     if(localStorage){
-    //         if(localStorage.downloads){
-    //             downloads = JSON.parse(localStorage.getItem('downloads')).downloads;
-    //         }else{
-    //             localStorage.setItem('downloads', JSON.stringify({downloads: downloads}));
-    //         }
-    //     }
-    //     return {time: 'calculating', disabled: false, downloads: downloads};
-    // }
     constructor(props) {
         super(props)
         var downloads=[];
@@ -164,13 +157,17 @@ class Downloader extends React.Component{
             disabled: false,
             downloads: downloads
         }
+        this.getId = this.getId.bind(this)
+        this.getDownloadIds = this.getDownloadIds.bind(this)
+        this.addDownload = this.addDownload.bind(this)
+        this.updateDownload = this.updateDownload.bind(this)
+        this.removeDownload = this.removeDownload.bind(this)
+        this.setDownloadTime = this.setDownloadTime.bind(this)
+        this.startDownload = this.startDownload.bind(this)
     }
-    componentWillMount(){
-
+    componentDidMount(){
         var self=this;
-
         this.checkDownloadStatus = function(){
-
             var update = self.state.downloads, pendings=false;
             async.each(self.state.downloads,function(item,callback){
               
@@ -201,13 +198,11 @@ class Downloader extends React.Component{
                     },5000)
                 }
             })
-        }   
-    }
-    componentDidMount(){
+        }
         this.setDownloadTime(this.props.search);
         this.checkDownloadStatus();
     }
-    componentWillReceiveProps(nextProps){
+    static componentWillReceiveProps(nextProps) {
         this.setDownloadTime(nextProps.search);
     }
     getId(status_url){

@@ -27,7 +27,7 @@ export default class Search extends React.Component{
                         lat: false,
                         lon: false
                     },
-                    bottom_right:{
+                    bottom_right: {
                         lat: false,
                         lon: false
                     }

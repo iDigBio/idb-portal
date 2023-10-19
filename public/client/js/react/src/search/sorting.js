@@ -4,7 +4,14 @@ var PureRender = require('react-addons-pure-render-mixin');
 
 export default class Sorting extends React.Component{
     //mixins: [PureRender],
-    
+    constructor(props) {
+        super(props);
+        this.getSortNames = this.getSortNames.bind(this)
+        this.addClick = this.addClick.bind(this)
+        this.removeClick = this.removeClick.bind(this)
+        this.sortChange = this.sortChange.bind(this)
+        this.scrollSorts = this.scrollSorts.bind(this)
+    }
     static defaultSorts(){
         return [
             {name: 'genus', order: 'asc'},

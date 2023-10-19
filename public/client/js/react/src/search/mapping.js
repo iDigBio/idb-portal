@@ -11,6 +11,10 @@ export default class Mapping extends React.Component{
         this.state = {
             type: props.mapping.type
         }
+        this.defaultMappingProps = this.defaultMappingProps.bind(this)
+        this.resetBounds = this.resetBounds.bind(this)
+        this.mappingType = this.mappingType.bind(this)
+
     }
     defaultMappingProps(type){
         if(type=='box'){
@@ -28,6 +32,11 @@ export default class Mapping extends React.Component{
         var t = e.target.value;
         this.setState({type: t});       
     }
+    // static getDerivedStateFromProps(nextProps) {
+    //     if(nextProps.mapping.type !== this.state.type){
+    //         return {type: nextProps.mapping.type}
+    //     }
+    // }
     componentWillReceiveProps(nextProps){
         if(nextProps.mapping.type !== this.state.type){
             this.setState({type: nextProps.mapping.type});
@@ -66,7 +75,11 @@ export default class Mapping extends React.Component{
 }
 
 class Box extends React.Component{
-    
+    constructor(props) {
+        super(props)
+        this.currentBounds = this.currentBounds.bind(this)
+        this.degreeChange = this.degreeChange.bind(this)
+    }
     static defaultBounds(){
         return {
             top_left: {
@@ -165,7 +178,11 @@ class Box extends React.Component{
 };
 
 class Radius extends React.Component{
-    
+        constructor(props) {
+            super(props)
+            this.currentBounds = this.currentBounds.bind(this)
+            this.boundsChange = this.boundsChange.bind(this)
+        }
         static defaultBounds(){
             return {
                 distance: false,

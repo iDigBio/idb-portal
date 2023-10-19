@@ -5,7 +5,16 @@ var idbapi = require('../../../lib/idbapi');
 
 export default class Filters extends React.Component{
     // mixins: [PureRender],
-    
+    constructor(props) {
+        super(props);
+        this.filterPropsChange = this.filterPropsChange.bind(this)
+        this.makeFilter = this.makeFilter.bind(this)
+        this.clearFilters = this.clearFilters.bind(this)
+        this.addFilter = this.addFilter.bind(this)
+        this.removeFilter = this.removeFilter.bind(this)
+        this.filters = this.filters.bind(this)
+        this.scrollFilters = this.scrollFilters.bind(this)
+    }
     static newFilterProps(term){
         var type = fields.byTerm[term].type;
         switch(type){
@@ -170,13 +179,21 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
 })
 
 class TextFilter extends React.Component{
-    componentWillMount(){
+    // componentWillMount(){
+    //     var self = this;
+    //     //function for limiting execution of consecutive key strokes
+    //     this.debouncedTextType = _.debounce(function(){
+    //         self.props.changeFilter(self.props.filter);
+    //     },700,{leading: false, trailing: true});
+    // }
+    componentDidMount() {
         var self = this;
         //function for limiting execution of consecutive key strokes
         this.debouncedTextType = _.debounce(function(){
-            self.props.changeFilter(self.props.filter); 
+            self.props.changeFilter(self.props.filter);
         },700,{leading: false, trailing: true});
     }
+
     // getInitialState(){
     //     return {text: this.props.filter.text}
     // }
@@ -185,6 +202,10 @@ class TextFilter extends React.Component{
         this.state = {
             text: props.filter.text
         }
+        this.presenceClick = this.presenceClick.bind(this)
+        this.textType = this.textType.bind(this)
+        this.setAutocomplete = this.setAutocomplete.bind(this)
+        this.getSynonyms = this.getSynonyms.bind(this)
     }
     presenceClick(event){
         var filter = this.props.filter;
@@ -378,7 +399,12 @@ class TextFilter extends React.Component{
     }
 };
 
-class DateRangeFilter extends React.Component{ 
+class DateRangeFilter extends React.Component{
+    constructor(props) {
+        super(props);
+        this.dateChange = this.dateChange.bind(this)
+        this.presenceClick = this.presenceClick.bind(this)
+    }
     dateChange(event){
         var date = event.currentTarget.value;
         var filter = this.props.filter;//, filter=filters[ind];   
@@ -464,6 +490,11 @@ class DateRangeFilter extends React.Component{
 }
 
 class NumericRangeFilter extends React.Component{
+    constructor(props) {
+        super(props);
+        this.presenceClick = this.presenceClick.bind(this)
+        this.valueChange = this.valueChange.bind(this)
+    }
     presenceClick(event){
         var filter = this.props.filter;
         if(event.currentTarget.checked){

@@ -59,22 +59,25 @@ export default class Results extends React.Component{
             }
             self.lastQueryTime = now;
             idbapi.search(query,function(response){
-                if(now>= self.lastQueryTime){
-                    var res, more=false;
-                    if(searchState.from > 0){
-                        res = self.state.results.concat(response.items);
-                    }else{
-                        res = response.items;
+                if (response.error !== 'Internal Server Error') {
+                    if(now>= self.lastQueryTime){
+                        var res, more=false;
+                        if(searchState.from > 0){
+                            res = self.state.results.concat(response.items);
+                        }else{
+                            res = response.items;
+                        }
+                        if(response.itemCount > (searchState.from+searchState.size)){
+                            more=true;
+                        }
+                        searchState.from = query.offset;
+                        self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
+                            self.forceUpdate();
+                        });
                     }
-                    if(response.itemCount > (searchState.from+searchState.size)){
-                        more=true;
-                    }
-                    searchState.from = query.offset;
-                    self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
-                        self.forceUpdate();
-                    });
                 }
             })
+
         }
         
         self.lastQueryStringed = JSON.stringify(query);
@@ -90,13 +93,13 @@ export default class Results extends React.Component{
         //componentWillReceiveProps will soon be depricated
             this.setState({search: _.cloneDeep(nextProps.search)},function(){
                 this.forceUpdate();
-                this.getResults(this.state.search); 
+                this.getResults(this.state.search);
             });
     }
     updateResults(search){
         this.setState({search: search, loading: true},function(){
             this.forceUpdate();
-            this.getResults(); 
+            this.getResults();
         });
     }
     //this is not a synthentic event
@@ -178,6 +181,13 @@ class ResultsList extends React.Component{
                 columns: JSON.parse(localStorage.getItem('viewColumns')).columns
             }
         }
+        this.resetColumns = this.resetColumns.bind(this)
+        this.defaultColumns = this.defaultColumns.bind(this)
+        this.setColumns = this.setColumns.bind(this)
+        this.columnCheckboxClick = this.columnCheckboxClick.bind(this)
+        this.addColumn = this.addColumn.bind(this)
+        this.sortColumn = this.sortColumn.bind(this)
+        this.openRecord = this.openRecord.bind(this)
     }
     resetColumns(){
             this.setColumns(this.defaultColumns());
@@ -554,6 +564,13 @@ class ResultListColumnSelector extends React.Component{
 
 class ResultsLabels extends React.Component{
     // mixins: [PureRender],
+    constructor(props) {
+        super(props);
+        this.makeLabel = this.makeLabel.bind(this)
+        this.errorImage = this.errorImage.bind(this)
+        this.openMedia = this.openMedia.bind(this)
+        this.openRecord = this.openRecord.bind(this)
+    }
     makeLabel(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
@@ -713,6 +730,16 @@ class ResultsLabels extends React.Component{
 
 class ResultsImages extends React.Component{
     // mixins: [PureRender],
+    constructor(props) {
+        super(props)
+        this.state = {
+            results: props.results, loading: false
+        }
+        this.getImageOnlyResults = this.getImageOnlyResults.bind(this)
+        this.errorImage = this.errorImage.bind(this)
+        this.makeImage = this.makeImage.bind(this)
+
+    }
     getImageOnlyResults(search){
 
         var d = new Date, self=this, searchState = _.cloneDeep(search);
@@ -737,19 +764,10 @@ class ResultsImages extends React.Component{
             }
         });
     }
-    // getInitialState(){
-    //     return {results: this.props.results, loading: false};
-    // }
-    constructor(props) {
-        super(props)
-        this.state = {
-            results: props.results, loading: false
-        }
-    }
     errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
-    componentWillMount(){
+    componentDidMount(){
         if(!this.props.search.image){
             this.getImageOnlyResults(this.props.search);
         }
@@ -827,6 +845,9 @@ class ResultsImages extends React.Component{
 };
 
 class Providers extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
 
         var list = _.map(this.props.attribution, function(item){

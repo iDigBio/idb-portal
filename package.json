@@ -46,7 +46,7 @@
     "express-expose": "^0.3.4",
     "express-session": "^1.15.1",
     "geopoint": "^1.0.1",
-    "griddle-react": "^0.6.1",
+    "griddle-react": "^0.8.1",
     "hamljs": "^0.6.2",
     "hiredis": "^0.5.0",
     "http-proxy": "~1.8.1",

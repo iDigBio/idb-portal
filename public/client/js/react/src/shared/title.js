@@ -1,11 +1,16 @@
 /*
 *Title : component expects props [data] = api record with data and indexTerms dictionary
 ****/
+import React from 'react'
+import _ from 'lodash'
 
-var React = require('react');
-var _ = require('lodash');
 
-export class Title extends React.Component{
+export default class Title extends React.Component{
+    constructor(props) {
+        super(props);
+        this.click = this.click.bind(this)
+        this.taxaBreadCrumb = this.taxaBreadCrumb.bind(this)
+    }
     click(e){
         window.lodation
         window.location="/portal/records/"+this.props.data.uuid

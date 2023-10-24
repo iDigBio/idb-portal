@@ -32,7 +32,11 @@ var phDisplay = function(phone){
     }
 };
 
-export class Contacts extends React.Component{
+export default class Contacts extends React.Component{
+    constructor(props) {
+        super(props);
+        this.makeContact = this.makeContact.bind(this)
+    }
     makeContact(contact){
             var name = defOrNone(contact, ['first_name', 'last_name']);
             var email = defOrNone(contact, 'email');

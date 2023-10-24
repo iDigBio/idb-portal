@@ -1,15 +1,10 @@
-
-var ReactDOM = require('react-dom');
-var React = require('react');
-//var Map = require('./search/views/mapbox');
-//window.queryBuilder = require('./search/lib/querybuilder');
-var async = require('async');
-var idbapi = require('./lib/idbapi');
-var L = require('leaflet');
-require('leaflet-sleep');
-//provides order for sections
-var RecordPage = require('./react/src/record');
-
+import ReactDOM from 'react-dom';
+import React from 'react';
+import async from 'async';
+import idbapi from './lib/idbapi';
+import L from 'leaflet';
+import 'leaflet-sleep';
+import RecordPage from './react/src/record'
 
 var pubname = '';
 
@@ -46,10 +41,10 @@ $('#side-nav-list').affix({
 
 if(_.has(record.indexTerms,'geopoint')){
     $('#map').css('display','block');
-   
+
     var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
         attribution: 'Map data © OpenStreetMap contributors',
-        minZoom: 0, 
+        minZoom: 0,
         maxZoom: 18,
         reuseTiles: true
     });

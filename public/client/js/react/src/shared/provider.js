@@ -1,8 +1,8 @@
 
-var React = require('react');
-var _ = require('lodash');
-
-export class Provider extends React.Component{
+import React from 'react'
+import _ from 'lodash'
+import Cont from './contacts'
+export default class Provider extends React.Component{
     noLogo(event){
         $(event.currentTarget).remove();
     }
@@ -17,7 +17,7 @@ export class Provider extends React.Component{
             if(_.isString(prefix)){
                 val = acc.join(prefix);
             }else{
-                val = acc.join(' ');                
+                val = acc.join(' ');
             }
         }else if(_.isNumber(val)){
             val = val.toString();
@@ -31,7 +31,7 @@ export class Provider extends React.Component{
         }
         if(!_.isEmpty(val) && _.isString(postfix)){
             val = val + postfix;
-        } 
+        }
         return val;
     }
     render(){
@@ -72,10 +72,10 @@ export class Provider extends React.Component{
                     </tbody>
                 </table>
             );
-        }     
+        }
         var data = this.props.data;
         var title = null, description = null, link = null, desc = null, logo = null;
-        
+
         if(_.has(data,'name')){
             title = (
                 <div key="title" className="title">
@@ -83,11 +83,11 @@ export class Provider extends React.Component{
                 </div>
             );
         }
-        
+
         if(_.has(data,'description')){
             desc = (
-                <span 
-                    className="justify" 
+                <span
+                    className="justify"
                     dangerouslySetInnerHTML={{__html: _.unescape(data.description)}}>
                 </span>
             );
@@ -96,7 +96,7 @@ export class Provider extends React.Component{
         if(_.has(data,'logo') && !_.isEmpty(data.logo)){
             logo = (<img key="logo" className="logo" src={data.logo} onError={this.noLogo} />)
         }
-        
+
         description = (
             <p id="description" className="clearfix">
                 {logo}
@@ -114,7 +114,7 @@ export class Provider extends React.Component{
 
 
         var con = null;
-        var Cont = require('./contacts');
+        // var Cont = require('./contacts');
 
         if(_.has(data,'contacts') && data.contacts.length > 0){
             con = <Cont data={data} />;

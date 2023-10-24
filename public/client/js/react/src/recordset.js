@@ -1,18 +1,10 @@
-
-/*
-* Recordset View page.
-****/
-var React = require('react')
-var fields = require('../../lib/fields');
-var _ = require('lodash');
-var dqFlags = require('../../lib/dq_flags');
-//var helpers = require('./search/lib/helpers');
-//var Map = require('./search/views/mapbox');
-//window.queryBuilder = require('./search/lib/querybuilder');
-var keys=Object.keys(fields.byDataTerm);
-//add terms which aren't in data terms
-//keys.push('idigbio:recordId');
-
+import React from 'react'
+import fields from '../../lib/fields'
+import _ from 'lodash'
+import dqFlags from '../../lib/dq_flags'
+const keys = Object.keys(fields.byDataTerm);
+import Contacts from "./shared/contacts";
+import Raw from "./shared/raw"
 import 'tablesorter/dist/css/theme.blue.min.css'
 
 var missing={};
@@ -26,6 +18,9 @@ var formatNum = function(num){
 }
 
 class Total extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
         return (
             <span>{formatNum(this.props.total)}</span>
@@ -34,6 +29,10 @@ class Total extends React.Component{
 };
 
 class Flagrow extends React.Component{
+    constructor(props) {
+        super(props);
+        this.checkVal = this.checkVal.bind(this)
+    }
     checkVal(val){
         if(_.isNaN(val)||val==='NaN'){
             return '-';
@@ -71,6 +70,9 @@ class Flagrow extends React.Component{
 };
 
 class FlagsTable extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
         var self = this;
         var flagrows = _.map(Object.keys(this.props.flags),function(flag){
@@ -109,6 +111,9 @@ class FlagsTable extends React.Component{
 };
 
 class UseTable extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
         var rows=[], uuid=this.props.uuid;
 
@@ -160,6 +165,10 @@ class UseTable extends React.Component{
 };
 
 class RawView extends React.Component{
+    constructor(props) {
+        super(props);
+        this.formatJSON = this.formatJSON.bind(this)
+    }
     formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
@@ -192,6 +201,13 @@ class RawView extends React.Component{
 };
 
 class StatsTables extends React.Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: 'flags'
+        }
+        this.click = this.click.bind(this)
+    }
     click(e){
         e.preventDefault();
         this.setState({active: e.currentTarget.attributes['data-active'].value})
@@ -199,12 +215,7 @@ class StatsTables extends React.Component{
     // getInitialState(){
     //     return {active: 'flags' };
     // }
-    constructor(props) {
-        super(props)
-        this.state = {
-            active: 'flags'
-        }
-    }
+
     render(){
         return (
             <div id="stats-tables" className="clearfix scrollspy">
@@ -222,6 +233,9 @@ class StatsTables extends React.Component{
 };
 
 class Title extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
         return(
             <h1 id="title">{this.props.keyid}</h1>
@@ -230,6 +244,10 @@ class Title extends React.Component{
 };
 
 class Description extends React.Component{
+    constructor(props) {
+        super(props);
+        this.errorImage = this.errorImage.bind(this)
+    }
     errorImage(e){
         e.target.attributes['src'].value = '';
     }
@@ -255,16 +273,21 @@ class Description extends React.Component{
 };
 
 class Last extends React.Component{
+    constructor(props) {
+        super(props);
+    }
     render(){
        return(<span>{this.props.keyid}</span>);
     }
 };
 
-var Contacts = require('./shared/contacts');
 
-var Raw = require('./shared/raw');
 
-class recordsetModExports extends React.Component{
+export default class RecordsetModExports extends React.Component{
+    constructor(props) {
+        super(props);
+        this.navList = this.navList.bind(this)
+    }
     navList(){
 
         //var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
@@ -337,4 +360,3 @@ class recordsetModExports extends React.Component{
     }
 
 };
-module.exports = recordsetModExports 

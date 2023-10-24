@@ -1,10 +1,14 @@
-var React = require('react')
-var dwc = require('../../lib/dwc_fields');
-var _ = require('lodash');
-var moment = require('moment');
-var fields = require('../../lib/fields');
-var dqFlags = require('../../lib/dq_flags');
-var idbapi = require('../../lib/idbapi');
+import React from 'react';
+import Provider from './shared/provider';
+import Title from './shared/title';
+import dwc from '../../lib/dwc_fields';
+import _ from 'lodash';
+import moment from 'moment';
+import fields from '../../lib/fields';
+import dqFlags from '../../lib/dq_flags';
+import idbapi from '../../lib/idbapi';
+
+
 
 class Row extends React.Component{
     render(){
@@ -13,18 +17,21 @@ class Row extends React.Component{
         var str = this.props.data.replace(regex, function(match){
             var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
             return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
-           
+
         });
         return (
             <tr className="data-rows">
                 <td className="field-name" style={{width:'50%'}}>{name}</td>
                 <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
             </tr>
-        );   
+        );
     }
 };
 
 class Section extends React.Component{
+    constructor(props) {
+        super(props)
+    }
     render(){
         var rows = [],self=this;
         var data = this.props.data;
@@ -33,23 +40,8 @@ class Section extends React.Component{
             var key = Object.keys(fld)[0];
             if(_.isString(fld[key])){
                 rows.push(<Row key={key} keyid={key} data={fld[key]}/>);
-            } 
-        });        
-        /*_.each(data, function(fld){
-            var key = Object.keys(fld)[0];
-            var name = _.isUndefined(dwc.names[key]) ? key : dwc.names[key];
-            var regex = /(https?:\/\/(\S|\w)+)/;
-            var val = fld[key];
-            if(_.isString(val)){
-               val = val.replace(regex, "<a target=\"_outlink\" href=\"$1\">$1</a>");
             }
-            rows.push( 
-                <Row keyid={key} key={key} className="data-row">
-                    <td className="field-name">{name}</td>
-                    <td className="field-value" dangerouslySetInnerHTML={{__html: val}}></td>
-                </tr>
-            ); 
-        });*/
+        });
         var cl = "section visible-print-block";
         if(this.props.active){
             cl="section";
@@ -89,11 +81,19 @@ class Flags extends React.Component{
 };
 
 class Record extends React.Component{
+    constructor(props) {
+        super(props)
+        this.state = {
+            active: "record"
+        }
+        this.formatJSON = this.formatJSON.bind(this)
+        this.tabClick = this.tabClick.bind(this)
+    }
     formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
-        
+
         json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
         return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g, function (match) {
             var cls = 'number';
@@ -114,12 +114,6 @@ class Record extends React.Component{
     // getInitialState(){
     //     return {active: "record"};
     // }
-    constructor(props) {
-        super(props)
-        this.state = {
-            active: "record"
-        }
-    }
     tabClick(e){
         e.preventDefault();
         this.setState({active: e.target.attributes['data-tab'].value});
@@ -129,7 +123,7 @@ class Record extends React.Component{
         var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
         var record = [], tabs = [], self = this, flags = null, flagsTab = null;
         var cnt = 0;
-        
+
         sorder.forEach(function(sec,index){
             if(_.has(self.props.record,sec)){
                 var active=true;
@@ -139,7 +133,7 @@ class Record extends React.Component{
                 //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
                 record.push(<Section key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
                 cnt++;
-            } 
+            }
         });
 
         if(this.props.raw.indexTerms.flags){
@@ -149,7 +143,7 @@ class Record extends React.Component{
 
         return (
             <div id="data" className="scrollspy section">
-                
+
                 <ul className="tabs" onClick={this.tabClick}>
                     <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
                     {flagsTab}
@@ -161,8 +155,8 @@ class Record extends React.Component{
                 {flags}
                 <div id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>
                     <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
-                    </p>  
-                </div>  
+                    </p>
+                </div>
             </div>
         );
     }
@@ -175,7 +169,7 @@ class Img extends React.Component{
     render(){
         return (
             <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
-                <img className="gallery-image" onError={this.error} src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} /> 
+                <img className="gallery-image" onError={this.error} src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} />
             </a>
         );
     }
@@ -184,15 +178,15 @@ class Img extends React.Component{
  class Gallery extends React.Component{
     render(){
         if(_.has(this.props.data,'mediarecords')){
-            
+
             var imgs = [];
 
             _.each(this.props.data.mediarecords,function(item){
                 imgs.push(<Img key={item} keyid={item} />);
             })
-        
+
             return (
-                <div id="media" className="scrollspy section">       
+                <div id="media" className="scrollspy section">
                     <h4 className="title">Media</h4>
                     <div id="gallery">
                         {imgs}
@@ -210,7 +204,7 @@ class Map extends React.Component{
         if(_.has(this.props.data,'geopoint')){
             return (
                 <div id="map" className="clearfix scrollspy section">
-                    
+
                     <div id="map-wrapper">
                         <div id="map-box"></div>
                     </div>
@@ -222,17 +216,15 @@ class Map extends React.Component{
     }
 };
 
-var Provider = require('./shared/provider');
-var Title = require('./shared/title');
 
 class SuppliedCitation extends React.Component{
     render(){
         if(_.has(this.props.data,'dcterms:bibliographicCitation')){
             return (
-                <div id="citation" className="clearfix scrollspy section">       
+                <div id="citation" className="clearfix scrollspy section">
                     <div>The provider has specified the following citation for use with this data.</div>
                     <div id="citationText" className="citationtext">{this.props.data['dcterms:bibliographicCitation']}</div>
-                </div> 
+                </div>
             )
         }else{
             return(null);
@@ -245,15 +237,15 @@ class Citation extends React.Component{
     render(){
         return(
             <div id="citation" className="clearfix scrollspy section">
-                <h2 className="title">Citation</h2>    
+                <h2 className="title">Citation</h2>
                 <SuppliedCitation data={this.props.data.data} />
                 <div>This is the constructed <a href="https://www.idigbio.org/content/citation-guidelines">iDigBio Citation Format</a> using information supplied by the data provider.</div>
                 <div id="citationText" className="citationtext">
                     {_.has(this.props.data.data, 'dwc:occurrenceID') && this.props.data.data['dwc:occurrenceID'] + '. '}
                     {_.has(this.props.data.data, 'dwc:catalogNumber') && this.props.data.data['dwc:catalogNumber'] + '. '}
                     {_.has(this.props.data.attribution, 'name') && this.props.data.attribution['name'] + '. '}
-                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>{this.props.pubname}</a>. 
-                    <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>. 
+                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>{this.props.pubname}</a>.
+                    <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>.
                     Accessed on {moment().format("LL")}.
                 </div>
             </div>
@@ -261,12 +253,20 @@ class Citation extends React.Component{
     }
 };
 
-module.exports = class recordModExports extends React.Component{
+class RecordPage extends React.Component{
+    constructor(props) {
+        super(props);
+        this.navList = this.navList.bind(this)
+        this.taxaBreadCrumbs = this.taxaBreadCrumbs.bind(this)
+        this.namedTableRows = this.namedTableRows.bind(this)
+
+    }
+
     navList(){
 
         var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
         var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
-        
+
         return(
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
@@ -276,12 +276,12 @@ module.exports = class recordModExports extends React.Component{
                 <li><a href="#attribution">Attribution</a></li>
                 <li><a href="#citation">Citation</a></li>
                 <li><a href="#data">All Data</a></li>
-            </ul>            
+            </ul>
         )
     }
     taxaBreadCrumbs(){
         var order = [], values = [], self = this;
-        
+
         ['kingdom','phylum','class','order','family'].forEach(function(item){
             if(_.has(self.props.record.indexTerms,item)){
                 order.push(item);
@@ -290,7 +290,7 @@ module.exports = class recordModExports extends React.Component{
         });
 
         var output = [];
-        
+
         order.forEach(function(item,index){
             var search = [], title = [];
             for(var i = 0; i <= index; i++){
@@ -298,8 +298,8 @@ module.exports = class recordModExports extends React.Component{
                 title.push(order[i]+': '+values[i]);
             }
             output.push(
-                <a 
-                    key={'bread-'+item} 
+                <a
+                    key={'bread-'+item}
                     href={'/portal/search?rq={'+search.join(',')+'}'}
                     title={'SEARCH '+title.join(', ')}
                 >{_.capitalize(values[index])}</a>
@@ -340,7 +340,7 @@ module.exports = class recordModExports extends React.Component{
                     canonical[dt] = data[dt];
                 }else{
                     canonical[dt] = v;
-                }   
+                }
             }
         })
         //then add raw data that isn't supplied by indexTerms
@@ -351,7 +351,7 @@ module.exports = class recordModExports extends React.Component{
                 if(_.has(canonical,fld)){
                     if(_.has(record,key) === false){
                         record[key] = [];
-                    } 
+                    }
                     var datum = {};
                     datum[fld] = canonical[fld];
                     record[key].push(datum);
@@ -365,9 +365,9 @@ module.exports = class recordModExports extends React.Component{
             if(item.indexOf('idigbio:') === -1){
                 if(_.isUndefined(record['other'])){
                     record['other'] = [];
-                }     
+                }
                 var datum = {};
-                datum[item] = canonical[item];       
+                datum[item] = canonical[item];
                 record['other'].push(datum);
             }
         });
@@ -376,7 +376,7 @@ module.exports = class recordModExports extends React.Component{
         if(index.datecollected){
             var d = new Date(index.datecollected)
             // Most of the stored dates don't have a Time Zone, so are treated as UTC. Increment the time by the timezone offset, otherwise most displayed values would be displayed as one day early
-            d.setTime(d.getTime() + d.getTimezoneOffset() * 60000) 
+            d.setTime(d.getTime() + d.getTimezoneOffset() * 60000)
             var formatedDC = d.getFullYear() + '-' + ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : d.getMonth() + 1 ) + '-' + ((d.getDate() < 10) ? '0' + d.getDate() : d.getDate());
             eventdate = <tr className="name"><td>Date Collected</td><td className="val">{formatedDC}</td></tr>;
         }
@@ -388,8 +388,8 @@ module.exports = class recordModExports extends React.Component{
         return (
             <div className="container-fluid">
                 <div className="row">
-                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10"> 
-                        <h1 id="banner">Specimen Record</h1> 
+                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10">
+                        <h1 id="banner">Specimen Record</h1>
                         <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
                         <Title data={this.props.record}  attribution={this.props.record.attribution}/>
                         <div id="summary-info" className="clearfix">
@@ -412,8 +412,8 @@ module.exports = class recordModExports extends React.Component{
                             </div>
                         </div>
                         <Map data={index} />
-                        <Gallery data={index} /> 
-                        <Provider data={this.props.record.attribution} />                       
+                        <Gallery data={index} />
+                        <Provider data={this.props.record.attribution} />
                         {/*<Citation data={this.props.record} pubname={this.props.pubname} /> */}
                         <Record record={record} raw={this.props.record}/>
                     </div>
@@ -421,12 +421,12 @@ module.exports = class recordModExports extends React.Component{
                         <div id="side-nav">
                             {this.navList()}
                         </div>
-                    </div>                   
+                    </div>
                 </div>
             </div>
         )
     }
 
 }
+export default RecordPage;
 
-// module.exports = recordModExports

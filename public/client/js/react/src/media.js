@@ -1,10 +1,20 @@
 
-var React = require('react');
-var dwc = require('../../lib/dwc_fields');
-var _ = require('lodash');
-var idbapi = require('../../lib/idbapi');
+import React from 'react';
+import dwc from '../../lib/dwc_fields';
+import _ from 'lodash';
+import idbapi from '../../lib/idbapi';
+import Provider from './shared/provider';
+import Raw from './shared/raw';
+import Title from './shared/title';
+
+
+
 
 class Media extends React.Component{
+    constructor(props) {
+        super(props);
+        this.errorImage = this.errorImage.bind(this)
+    }
     errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
@@ -50,6 +60,8 @@ class Table extends React.Component{
         this.state = {
             active: 'record'
         }
+        this.formatJSON =this.formatJSON.bind(this)
+        this.tabClick = this.tabClick.bind(this)
     }
     
     formatJSON(json){
@@ -147,6 +159,10 @@ class Table extends React.Component{
 };
 
 class Group extends React.Component{
+    constructor(props) {
+        super(props);
+        this.errorImage = this.errorImage.bind(this)
+    }
     errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
@@ -177,11 +193,14 @@ class Group extends React.Component{
     }
 };
 
-var Provider = require('./shared/provider');
-var Raw = require('./shared/raw');
-var Title = require('./shared/title');
 
-class mediaModExports extends React.Component{
+
+export default class MediaModExports extends React.Component{
+    constructor(props) {
+        super(props);
+        this.taxaBreadCrumbs = this.taxaBreadCrumbs.bind(this)
+        this.navList = this.navList.bind(this)
+    }
     taxaBreadCrumbs(){
         var order = [], values = [], self = this;
         
@@ -259,4 +278,4 @@ class mediaModExports extends React.Component{
         )
     }
 }
-module.exports = mediaModExports
+

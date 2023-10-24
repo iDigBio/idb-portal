@@ -1,8 +1,12 @@
-var React = require('react');
+import React from 'react'
+import Charts from './shared/stats_charts'
 
-var Charts = require('./shared/stats_charts');
 
-class Stats extends React.Component{
+export default class Stats extends React.Component{
+    constructor(props) {
+        super(props);
+        this.navList = this.navList.bind(this)
+    }
     navList(){
         return (
             <ul id="side-nav-list">
@@ -36,4 +40,4 @@ class Stats extends React.Component{
     }
 };
 
-module.exports = Stats;
+

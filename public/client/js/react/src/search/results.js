@@ -88,7 +88,7 @@ export default class Results extends React.Component{
         var view = event.currentTarget.attributes['data-value'].value;
         this.props.viewChange('resultsTab', view);
     }
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         //component should only recieve search as props
         //componentWillReceiveProps will soon be depricated
             this.setState({search: _.cloneDeep(nextProps.search)},function(){
@@ -479,7 +479,7 @@ class ResultListColumnSelector extends React.Component{
             this.setColumns();
         })
     }
-    componentWillMount(){
+    UNSAFE_componentWillMount(){
         this.colCount = this.props.columns.length;
     }
     render(){
@@ -772,7 +772,7 @@ class ResultsImages extends React.Component{
             this.getImageOnlyResults(this.props.search);
         }
     }
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         if(nextProps.search.image){
             this.setState({results: nextProps.results, loading: false})
         }else{

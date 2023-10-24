@@ -233,7 +233,7 @@ class TextFilter extends React.Component{
         //
         //this.props.changeFilter(filter);
     }
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
   
         this.setState({text: nextProps.filter.text});
     }

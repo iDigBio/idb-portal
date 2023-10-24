@@ -202,7 +202,7 @@ class Downloader extends React.Component{
         this.setDownloadTime(this.props.search);
         this.checkDownloadStatus();
     }
-    static componentWillReceiveProps(nextProps) {
+    static UNSAFE_componentWillReceiveProps(nextProps) {
         this.setDownloadTime(nextProps.search);
     }
     getId(status_url){

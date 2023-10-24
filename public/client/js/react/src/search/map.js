@@ -64,7 +64,7 @@ export default class Map extends React.Component{
         }
     }
 
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         var q = queryBuilder.buildQueryShim(nextProps.search);
         var next=JSON.stringify(q);
         //debugger

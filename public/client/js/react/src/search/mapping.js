@@ -37,7 +37,7 @@ export default class Mapping extends React.Component{
     //         return {type: nextProps.mapping.type}
     //     }
     // }
-    componentWillReceiveProps(nextProps){
+    UNSAFE_componentWillReceiveProps(nextProps){
         if(nextProps.mapping.type !== this.state.type){
             this.setState({type: nextProps.mapping.type});
         }

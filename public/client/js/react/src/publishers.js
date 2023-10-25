@@ -1,6 +1,6 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
-var idbapi = require('../../lib/idbapi');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import idbapi from '../../lib/idbapi'
 
 import 'tablesorter/dist/css/theme.blue.min.css'
 

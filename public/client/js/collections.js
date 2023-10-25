@@ -3,11 +3,11 @@
 * Collections init page:  'var collections' data is defined/embeded at top of collections.html template.
 ***/
 
-var ReactDOM = require('react-dom');
-var React = require('react');
-var CollectionsPage = require('./react/src/collections');
+import ReactDOM from 'react-dom'
+import React from 'react'
+import CollectionsPage from './react/src/collections'
 
-var L= require('leaflet');
+import L from 'leaflet'
 require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
 require('leaflet-sleep');
 var triggerPopup = function(id){

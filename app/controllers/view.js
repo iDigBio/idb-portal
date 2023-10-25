@@ -1,10 +1,10 @@
 import {createFactory} from '../createFactory.js'
-var request = require('request');
-var React = require('react');
-var ReactDOMServer = require('react-dom/server');
+import request from 'request'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 import createRecordPage from 'public/client/js/react/build/record'
 import createMediaPage from 'public/client/js/react/build/media'
-var _ = require('lodash');
+import _ from 'lodash'
 // var RecordPage = createFactory(require('public/client/js/react/build/record'));
 // var MediaPage = createFactory(require('public/client/js/react/build/media'));
 import config from 'config/config'; // eslint-disable-line no-unused-vars

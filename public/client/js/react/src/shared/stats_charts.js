@@ -1,8 +1,8 @@
-var React = require('react');
-var moment = require('moment')
-var Datetime = require('react-datetime');
-var _ = require('lodash');
-var idbapi = require('../../../lib/idbapi');
+import React from 'react'
+import moment from 'moment'
+import Datetime from 'react-datetime'
+import _ from 'lodash'
+import idbapi from '../../../lib/idbapi'
 
 import C3Chart from 'react-c3js';
 import 'c3/c3.css';
@@ -339,7 +339,7 @@ class StatsCharts extends React.Component {
 };
 
 
-class Charts extends React.Component {
+export default class Charts extends React.Component {
     constructor(props) {
         super(props);
     }
@@ -358,4 +358,4 @@ class Charts extends React.Component {
 
 Charts.defaultProps = {ingest: {dates:{}}, ingestCumulative: {dates:{}}, usage: {dates:{}}, collected:{dates:{}}, taxon:{records:{}, mediarecords:{}}, flags: {}}
 
-module.exports = Charts
+// module.exports = Charts

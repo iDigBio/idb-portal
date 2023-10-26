@@ -3,9 +3,9 @@
 * Supports iDigBio API params  (rq,sort) 
 *
 ****/
-var Filters = require('../filters');
+import Filters from '../filters'
 
-module.exports = function(search){
+export default function(search){
     if(url('?rq')){
         try{
             var rq = JSON.parse(decodeURIComponent(url('?rq')));

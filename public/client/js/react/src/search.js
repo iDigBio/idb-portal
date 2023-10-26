@@ -89,7 +89,7 @@ export default class Search extends React.Component{
         searchHistory.push(search);
 
         // Update the state with 'search'
-        this.setState({ search: search });
+        this.state.search = search
     }
     
     searchChange(key,val){
@@ -103,7 +103,6 @@ export default class Search extends React.Component{
         }
         this.setState({search: search});
         searchHistory.push(search);
-        console.log(search)
     }
 
     viewChange(view,option){
@@ -148,8 +147,6 @@ class SearchAny extends React.Component{
         return true;
     }
     textType(event){
-        // console.log('CURRENT VALUE: ' + event.currentTarget.value)
-        // console.log(this.props)
         this.props.searchChange('fulltext',event.currentTarget.value);
     }
     resetSearch(){ 

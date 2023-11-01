@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Filters from './search/filters'
 import Sorting from './search/sorting'
 import Mapping from './search/mapping'
@@ -8,10 +8,14 @@ import Download from './search/download'
 import Map from './search/map'
 
 
+
 import paramsParser from './search/lib/params_parser'
 
-export default class Search extends React.Component{
-    static defaultSearch(){
+const Search = () => {
+    const [optionsTab, setOptionsTab] = useState('filters')
+    const [resultsTab, setResultsTab] = useState('list')
+    const [search, setSearch] = useState(defaultSearch())
+    function defaultSearch(){
         return {
             filters: Filters.defaultFilters(),
             fulltext:'',
@@ -36,98 +40,67 @@ export default class Search extends React.Component{
         };
     }
 
-    constructor(props) {
-        super(props);
-        // this.defaultSearch = this.defaultSearch.bind(this)
-        // Initialize the state in the constructor
-        this.state = {
-            optionsTab: 'filters',
-            resultsTab: 'list',
-            search: Search.defaultSearch(),
-        };
-
-        this.searchChange = this.searchChange.bind(this);
-        this.viewChange = this.viewChange.bind(this);
-        // Rest of your constructor code can go here
-        // ...
-
-        // set results view
-        if (url('?view')) {
-            const types = ['list', 'labels', 'media', 'recordsets'];
-            const view = url('?view');
-            if (types.indexOf(view) > -1) {
-                localStorage.setItem('resultsTab', view);
-                this.setState({ resultsTab: view });
-            } else {
-                this.setState({ resultsTab: 'list' });
-            }
-
-            // You might want to handle 'optionsTab' here as well, as it's not clear from your code.
-
-            // var optionsTab = localStorage.getItem('optionsTab');
-            // if (optionsTab) {
-            //     this.setState({ optionsTab });
-            // }
-        }
-
-        // set current search
-        const search = Search.defaultSearch();
+    useEffect(() => {
+        const currentSearch = defaultSearch()
         if (url('?rq') || url('?sort')) {
-            paramsParser(search); // mutates search object filters
+
+            paramsParser(currentSearch); // mutates search object filters
             _.each(
-                _.difference(_.map(Filters.defaultFilters(), 'name'), _.map(search.filters, 'name')),
+                _.difference(_.map(Filters.defaultFilters(), 'name'), _.map(currentSearch.filters, 'name')),
                 function (filter) {
-                    search.filters.push(Filters.newFilterProps(filter));
+                    currentSearch.filters.push(Filters.newFilterProps(filter));
                 }
             );
-        } else if (searchHistory.history.length > 0) {
-            search.filters = _.map(searchHistory.history[0].filters, function (filter) {
+        } else if (searchHistory.length > 0) {
+            currentSearch.filters = _.map(searchHistory.history[0].filters, function (filter) {
                 return Filters.newFilterProps(filter.name);
             });
         }
         window.history.replaceState({}, 'search', url('path'));
-        searchHistory.push(search);
-
+        // setHistory([...history, currentSearch])
+        searchHistory.push(currentSearch);
         // Update the state with 'search'
-        this.state.search = search
-    }
+        setSearch(currentSearch)
+    }, []);
     
-    searchChange(key,val){
-        var search = _.cloneDeep(this.state.search);
+    function searchChange(key,val){
+        var newSearch = _.cloneDeep(search);
         if(typeof key == 'string'){
-            search[key]=val;
+            newSearch[key]=val;
         }else if(typeof key == 'object'){
             _.each(key,function(v,k){
-                search[k]=v;
+                newSearch[k]=v;
             });
         }
-        this.setState({search: search});
-        searchHistory.push(search);
+        setSearch(newSearch)
+        // setHistory([...history, search])
+        searchHistory.push(newSearch);
     }
 
-    viewChange(view,option){
+    function viewChange(view,option){
         //currently only supports options panel and results tabs
-        if(view=='optionsTab'||view=='resultsTab'){
+        if(view=='optionsTab'){
             localStorage.setItem(view, option);
-            var ch={};
-            ch[view]=option;
-            this.setState(ch);
+            setOptionsTab(option)
+        } else if (view=='resultsTab') {
+            localStorage.setItem(view, option);
+            setResultsTab(option)
         }
     }
-    render(){
-        return(
-            <div id='react-wrapper'>
-                <div id="top" className="clearfix">
-                    <div id="search" className="clearfix">
-                        <SearchAny search={this.state.search} searchChange={this.searchChange} />
-                        <OptionsPanel search={this.state.search} searchChange={this.searchChange} view={this.state.optionsTab} viewChange={this.viewChange}/>
-                    </div>
-                    <Map search={this.state.search} searchChange={this.searchChange} viewChange={this.viewChange}/>
+
+    return(
+        <div id='react-wrapper'>
+            <div id="top" className="clearfix">
+                <div id="search" className="clearfix">
+                    <SearchAny search={search} searchChange={searchChange} />
+                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
                 </div>
-                <Results search={this.state.search} searchChange={this.searchChange} view={this.state.resultsTab} viewChange={this.viewChange}/>
+                <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
             </div>
-        )
-    }
+            <Results search={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
+        </div>
+    )
+
 };
 // var Main = new Search()
 class SearchAny extends React.Component{
@@ -288,4 +261,4 @@ class OptionsPanel extends React.Component{
         )
     }
 }
-// export default Search;
+export default Search;

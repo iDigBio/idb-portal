@@ -153,7 +153,7 @@ const Table = ({record}) => {
 
 };
 
-const Group = ({record}) => {
+const Group = ({record, keyid}) => {
     // constructor(props) {
     //     super(props);
     //     this.errorImage = this.errorImage.bind(this)

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import Provider from './shared/provider';
 import Title from './shared/title';
 import dwc from '../../lib/dwc_fields';
@@ -10,86 +10,78 @@ import idbapi from '../../lib/idbapi';
 
 
 
-class Row extends React.Component{
-    render(){
-        var name = _.isUndefined(dwc.names[this.props.keyid]) ? this.props.keyid : dwc.names[this.props.keyid];
-        var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
-        var str = this.props.data.replace(regex, function(match){
-            var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
-            return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+const Row = ({keyid, data}) => {
 
-        });
-        return (
-            <tr className="data-rows">
-                <td className="field-name" style={{width:'50%'}}>{name}</td>
-                <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
-            </tr>
-        );
-    }
+    var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+    var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+    var str = data.replace(regex, function(match){
+        var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
+        return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+
+    });
+    return (
+        <tr className="data-rows">
+            <td className="field-name" style={{width:'50%'}}>{name}</td>
+            <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
+        </tr>
+    );
+
 };
 
-class Section extends React.Component{
-    constructor(props) {
-        super(props)
-    }
-    render(){
-        var rows = [],self=this;
-        var data = this.props.data;
+const Section = ({name, data, active}) => {
 
-        _.each(data,function(fld){
-            var key = Object.keys(fld)[0];
-            if(_.isString(fld[key])){
-                rows.push(<Row key={key} keyid={key} data={fld[key]}/>);
-            }
-        });
-        var cl = "section visible-print-block";
-        if(this.props.active){
-            cl="section";
+    var rows = [],self=this;
+    var data = data;
+
+    _.each(data,function(fld){
+        var key = Object.keys(fld)[0];
+        if(_.isString(fld[key])){
+            rows.push(<Row key={key} keyid={key} data={fld[key]} />);
         }
-        return (
-            <div id={this.props.name} className={cl} >
-                <h5>{dwc.names[this.props.name]}</h5>
-                <table className="table table-striped table-condensed table-bordered">
-                    <tbody>{rows}</tbody>
-                </table>
-            </div>
-        );
+    });
+    var cl = "section visible-print-block";
+    if(active){
+        cl="section";
     }
+    return (
+        <div id={name} className={cl} >
+            <h5>{dwc.names[name]}</h5>
+            <table className="table table-striped table-condensed table-bordered">
+                <tbody>{rows}</tbody>
+            </table>
+        </div>
+    );
+
 };
 
-class Flags extends React.Component{
-    render(){
-        var rows = _.map(this.props.flags, function(flag){
-            return (
-                <tr key={'flag-'+flag}><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
-            )
-        })
+const Flags = ({flags, active}) => {
 
+    var rows = _.map(flags, function(flag){
         return (
-            <div id="flags" style={{display: (this.props.active ? 'block' : 'none' )}}>
-                <table className="table table-striped table-bordered table-condensed">
-                    <thead>
-                        <tr><th>Type</th><th>Description</th></tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
-            </div>
+            <tr key={'flag-'+flag}><td>{flag}</td><td>{dqFlags[flag]}</td></tr>
         )
-    }
+    })
+
+    return (
+        <div id="flags" style={{display: (active ? 'block' : 'none' )}}>
+            <table className="table table-striped table-bordered table-condensed">
+                <thead>
+                    <tr><th>Type</th><th>Description</th></tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+        </div>
+    )
+
 };
 
-class Record extends React.Component{
-    constructor(props) {
-        super(props)
-        this.state = {
-            active: "record"
-        }
-        this.formatJSON = this.formatJSON.bind(this)
-        this.tabClick = this.tabClick.bind(this)
-    }
-    formatJSON(json){
+const Record = ({record, raw }) => {
+    const [active, setActive] = useState("record")
+    const [nonPropsRecord, setNonPropsRecord] = useState([])
+
+    function formatJSON(json){
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -111,92 +103,93 @@ class Record extends React.Component{
             return '<span class="' + cls + '">' + match + '</span>';
         });
     }
-    // getInitialState(){
-    //     return {active: "record"};
-    // }
-    tabClick(e){
+
+    function tabClick(e){
         e.preventDefault();
-        this.setState({active: e.target.attributes['data-tab'].value});
+        // this.setState({active: e.target.attributes['data-tab'].value});
+        setActive(e.target.attributes['data-tab'].value)
     }
-    render(){
-        var has = [];
-        var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
-        var record = [], tabs = [], self = this, flags = null, flagsTab = null;
-        var cnt = 0;
 
-        sorder.forEach(function(sec,index){
-            if(_.has(self.props.record,sec)){
-                var active=true;
-                if(cnt===0){
-                    active=true;
+    useEffect(() => {
+
+            var has = [];
+            var non_props_record = []
+            var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
+            var tabs = [], self = this
+            var cnt = 0;
+
+            sorder.forEach(function(sec,index){
+                if(_.has(record,sec)){
+                    var active=true;
+                    if(cnt===0){
+                        active=true;
+                    }
+                    //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
+                    non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
+                    cnt++;
                 }
-                //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
-                record.push(<Section key={'sec-'+sec} name={sec} data={self.props.record[sec]} active={active} />);
-                cnt++;
-            }
-        });
+            });
+            setNonPropsRecord([...nonPropsRecord, non_props_record])
 
-        if(this.props.raw.indexTerms.flags){
-            flags = <Flags flags={this.props.raw.indexTerms.flags} active={this.state.active == 'flags'} />;
-            flagsTab = <li className={this.state.active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li>;
-        }
+
+    }, []);
+
+    return (
+        <div id="data" className="scrollspy section">
+
+            <ul className="tabs" onClick={tabClick}>
+                <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
+                {raw.indexTerms.flags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
+                <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+            </ul>
+            <div id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
+                {nonPropsRecord}
+            </div>
+            {raw.indexTerms.flags ? <Flags flags={raw.indexTerms.flags} active={active == 'flags'} /> : ''}
+            <div id="raw" style={{display: (active == 'raw' ? 'block' : 'none' )}}>
+                <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(raw)}}>
+                </p>
+            </div>
+        </div>
+    );
+
+};
+
+const Img = ({keyid}) => {
+    function error(event){
+        $(event.currentTarget).attr('src','/portal/img/missing.svg');
+    }
+
+    return (
+        <a href={'/portal/mediarecords/'+keyid} title="click to open media record">
+            <img className="gallery-image" onError={error} src={idbapi.media_host + 'v2/media/'+keyid+'?size=webview'} />
+        </a>
+    );
+
+};
+
+const Gallery = ({data}) => {
+
+    if(_.has(data,'mediarecords')){
+
+        var imgs = [];
+
+        _.each(data.mediarecords,function(item){
+            imgs.push(<Img key={item} keyid={item} />);
+        })
 
         return (
-            <div id="data" className="scrollspy section">
-
-                <ul className="tabs" onClick={this.tabClick}>
-                    <li className={this.state.active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                    {flagsTab}
-                    <li className={this.state.active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
-                </ul>
-                <div id="record" className="clearfix" style={{display: (this.state.active == 'record' ? 'block' : 'none' )}}>
-                    {record}
-                </div>
-                {flags}
-                <div id="raw" style={{display: (this.state.active == 'raw' ? 'block' : 'none' )}}>
-                    <p id="raw-body" dangerouslySetInnerHTML={{__html: this.formatJSON(this.props.raw)}}>
-                    </p>
+            <div id="media" className="scrollspy section">
+                <h4 className="title">Media</h4>
+                <div id="gallery">
+                    {imgs}
                 </div>
             </div>
         );
+    }else{
+        return <span/>
     }
-};
 
-class Img extends React.Component{
-    error(event){
-        $(event.currentTarget).attr('src','/portal/img/missing.svg');
-    }
-    render(){
-        return (
-            <a href={'/portal/mediarecords/'+this.props.keyid} title="click to open media record">
-                <img className="gallery-image" onError={this.error} src={idbapi.media_host + 'v2/media/'+this.props.keyid+'?size=webview'} />
-            </a>
-        );
-    }
-};
-
- class Gallery extends React.Component{
-    render(){
-        if(_.has(this.props.data,'mediarecords')){
-
-            var imgs = [];
-
-            _.each(this.props.data.mediarecords,function(item){
-                imgs.push(<Img key={item} keyid={item} />);
-            })
-
-            return (
-                <div id="media" className="scrollspy section">
-                    <h4 className="title">Media</h4>
-                    <div id="gallery">
-                        {imgs}
-                    </div>
-                </div>
-            );
-        }else{
-            return <span/>
-        }
-    }
 };
 
 class Map extends React.Component{
@@ -211,7 +204,7 @@ class Map extends React.Component{
                 </div>
             )
         }else{
-            return <span/>
+            return <span />
         }
     }
 };
@@ -386,6 +379,7 @@ class RecordPage extends React.Component{
             lon = <tr className="name"><td>Longitude</td><td className="val">{index.geopoint.lon}</td></tr>;
         }
         return (
+
             <div className="container-fluid">
                 <div className="row">
                     <div id="content" className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10">
@@ -411,11 +405,10 @@ class RecordPage extends React.Component{
                                 </table>
                             </div>
                         </div>
-                        <Map data={index} />
+                        <Map data={index} suppressHydrationWarning={true} />
                         <Gallery data={index} />
                         <Provider data={this.props.record.attribution} />
-                        {/*<Citation data={this.props.record} pubname={this.props.pubname} /> */}
-                        <Record record={record} raw={this.props.record}/>
+                        <Record record={record} raw={this.props.record} suppressHydrationWarning={true} />
                     </div>
                     <div className="col-lg-2 col-md-2 col-sm-2">
                         <div id="side-nav">
@@ -424,6 +417,7 @@ class RecordPage extends React.Component{
                     </div>
                 </div>
             </div>
+
         )
     }
 

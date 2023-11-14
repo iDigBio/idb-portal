@@ -92,7 +92,7 @@ const Search = () => {
         <div id='react-wrapper'>
             <div id="top" className="clearfix">
                 <div id="search" className="clearfix">
-                    <SearchAny search={search} searchChange={searchChange} />
+                    <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
                     <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
                 </div>
                 <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
@@ -103,162 +103,164 @@ const Search = () => {
 
 };
 // var Main = new Search()
-class SearchAny extends React.Component{
-    openHelp(){
-
-    }
-
-    constructor(props) {
-        super(props)
-        this.textType = this.textType.bind(this)
-        this.checkClick = this.checkClick.bind(this)
-        this.resetSearch = this.resetSearch.bind(this)
-    }
+const SearchAny = ({searchChange, search, defaultSearch}) => {
+    // constructor(props) {
+    //     super(props)
+    //     this.textType = this.textType.bind(this)
+    //     this.checkClick = this.checkClick.bind(this)
+    //     this.resetSearch = this.resetSearch.bind(this)
+    // }
      
-    checkClick(event){
-        this.props.searchChange(event.currentTarget.name, event.currentTarget.checked);
+    function checkClick(event){
+        searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;
     }
-    textType(event){
-        this.props.searchChange('fulltext',event.currentTarget.value);
+    function textType(event){
+        searchChange('fulltext',event.currentTarget.value);
     }
-    resetSearch(){ 
-        this.props.searchChange(Search.defaultSearch());
+    function resetSearch(){
+        searchChange(defaultSearch());
     }
-    render(){
 
-        return(
-            <div id="search-any" className="clearfix">
-                <h3>
-                    Search Records
+    return(
+        <div id="search-any" className="clearfix">
+            <h3>
+                Search Records
 
-                    <a className="btn pull-right" id="reset-button" onClick={this.resetSearch} title="reset search form">Reset</a>
-                    <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>
-                </h3>
-                <div >
-                    <input type="text" className="form-control" placeholder="search all fields" onChange={this.textType} value={this.props.search.fulltext}/>
-                </div>
-                <div className="checkbox">
-                    <label>
-                        <input type="checkbox" name="image" onChange={this.checkClick} checked={this.props.search.image}/>
-                        Must have media
-                    </label>
-                </div>
-                <div className="checkbox">
-                    <label>
-                        <input type="checkbox" name="geopoint" onChange={this.checkClick} checked={this.props.search.geopoint}/>
-                        Must have map point
-                    </label>
-                </div>
-                <div id="search-help" className="modal fade">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <button type="button" className="close pull-right" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                                <h3>Search Help</h3>
-                            </div>
-                            <div className="modal-body">
-                                <ul>
-                                    <li>
-                                        This search page is reactive to input and will execute a search the moment you interact with the form inputs.
-                                    </li>
-                                    <li>
-                                        Full text searches across all data fields can be executed with the "search all fields" box at the top of the search form.
-                                    </li>
-                                    <li>
-                                        Check the <b>Must have media</b> and <b>Must have map point</b> checkboxes to only show records with media and/or mapping data respectively.
-                                    </li>
-                                    <li> 
-                                        Use the field <em>Filters</em> tab to add exact match terms on a per field basis to your search.
-                                        A filter can also be used to simply select the presence or absence of a field in a record with
-                                        the <b>Present</b> and <b>Missing</b> checkboxes.
-                                    </li>
-                                    <li>
-                                        Use the <em>Sorting</em> tab to add multiple sort values to the search.
-                                    </li>
-                                    <li>
-                                        Use the <em>Mapping</em> tab to add geographic bounding coordinates to your search.
-                                    </li>
-                                    <li>
-                                        Use the <em>Download</em> tab to access your search history and to download the current search results.
-                                    </li>
-                                </ul>
-                            </div>
-
+                <a className="btn pull-right" id="reset-button" onClick={resetSearch} title="reset search form">Reset</a>
+                <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>
+            </h3>
+            <div >
+                <input type="text" className="form-control" placeholder="search all fields" onChange={textType} value={search.fulltext}/>
+            </div>
+            <div className="checkbox">
+                <label>
+                    <input type="checkbox" name="image" onChange={checkClick} checked={search.image}/>
+                    Must have media
+                </label>
+            </div>
+            <div className="checkbox">
+                <label>
+                    <input type="checkbox" name="geopoint" onChange={checkClick} checked={search.geopoint}/>
+                    Must have map point
+                </label>
+            </div>
+            <div id="search-help" className="modal fade">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <button type="button" className="close pull-right" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <h3>Search Help</h3>
                         </div>
+                        <div className="modal-body">
+                            <ul>
+                                <li>
+                                    This search page is reactive to input and will execute a search the moment you interact with the form inputs.
+                                </li>
+                                <li>
+                                    Full text searches across all data fields can be executed with the "search all fields" box at the top of the search form.
+                                </li>
+                                <li>
+                                    Check the <b>Must have media</b> and <b>Must have map point</b> checkboxes to only show records with media and/or mapping data respectively.
+                                </li>
+                                <li>
+                                    Use the field <em>Filters</em> tab to add exact match terms on a per field basis to your search.
+                                    A filter can also be used to simply select the presence or absence of a field in a record with
+                                    the <b>Present</b> and <b>Missing</b> checkboxes.
+                                </li>
+                                <li>
+                                    Use the <em>Sorting</em> tab to add multiple sort values to the search.
+                                </li>
+                                <li>
+                                    Use the <em>Mapping</em> tab to add geographic bounding coordinates to your search.
+                                </li>
+                                <li>
+                                    Use the <em>Download</em> tab to access your search history and to download the current search results.
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
+
 }
 
-class OptionsPanel extends React.Component{
+const OptionsPanel = ({view, viewChange, search, searchChange}) => {
     /*getInitialState: function(){
         if(localStorage && typeof localStorage.panels ==='undefined'){
             localStorage.setItem('panels','filters');
         }
         return {panels: localStorage.getItem('panels')}
     },*/
-    constructor(props) {
-        super(props)
-        this.optionPanel = this.optionPanel.bind(this)
-        this.showPanel = this.showPanel.bind(this)
-    }
+    // constructor(props) {
+    //     super(props)
+    //     this.optionPanel = this.optionPanel.bind(this)
+    //     this.showPanel = this.showPanel.bind(this)
+    // }
 
-    showPanel(event){
+    const [menu, setMenu] = useState()
+    const [panel, setPanel] = useState()
+
+    function showPanel(event){
         event.preventDefault();
         event.stopPropagation();
         var val = event.currentTarget.attributes['data-panel'].value;
         /*this.setState({panels: val},function(){
             localStorage.setItem('panels',val);
         })*/
-        this.props.viewChange('optionsTab',val);
+        viewChange('optionsTab',val);
     }
-    optionPanel(name){
+    function optionPanel(name){
         switch(name){
             case 'filters':
-                return <Filters searchChange={this.props.searchChange} search={this.props.search} filters={this.props.search.filters} active="active"/>;
+                return <Filters searchChange={searchChange} search={search} filters={search.filters} active="active"/>;
                 break;
             case 'sorting':
-                return <Sorting searchChange={this.props.searchChange} sorting={this.props.search.sorting} active="active"/>;
+                return <Sorting searchChange={searchChange} sorting={search.sorting} active="active"/>;
                 break;
             case 'mapping':
-                return <Mapping searchChange={this.props.searchChange} mapping={this.props.search.mapping} active="active"/>;
+                return <Mapping searchChange={searchChange} mapping={search.mapping} active="active"/>;
                 break;
             case 'download':
-                return <Download search={this.props.search} searchChange={this.props.searchChange} active="active"/>;
+                return <Download search={search} searchChange={searchChange} active="active"/>;
                 break;
         }
     }
-    render(){
-    
-        var menu = [],self=this,panels={filters: '', mapping: '',sorting: '', download:''},panel;
 
+    useEffect(() => {
+        var panels={filters: '', mapping: '',sorting: '', download:''};
+        let tempMenu= []
         Object.keys(panels).forEach(function(item,ind){
-            if(item==self.props.view){
+            if(item==view){
                 panels[item]='active';
-                panel = self.optionPanel(item);
+                setPanel(optionPanel(item))
             }else{
                 panels[item]='';
             }
-            menu.push(
+            tempMenu.push(
                 <li key={ind} className="tab">
-                    <a className={panels[item]} href="#" onClick={self.showPanel} data-panel={item}>{helpers.firstToUpper(item)}</a>
+                    <a className={panels[item]} href="#" onClick={showPanel} data-panel={item}>{helpers.firstToUpper(item)}</a>
                 </li>
             )
         })
-        //var filters = React.createFactory(Filters);
-        return (
-            <div id="options" className="clearfix">
-                <ul id="options-menu" >
-                    {menu}
-                </ul>
-                {panel}
-            </div>
-        )
-    }
+        setMenu(tempMenu)
+    }, [view]);
+
+
+    //var filters = React.createFactory(Filters);
+    return (
+        <div id="options" className="clearfix">
+            <ul id="options-menu" >
+                {menu}
+            </ul>
+            {panel}
+        </div>
+    )
+
 }
 export default Search;

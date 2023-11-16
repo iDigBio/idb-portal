@@ -61,6 +61,9 @@ var config = {
     login: "https://www.idigbio.org/login",
     logout: "/logout",
     registerOrg: "https://www.idigbio.org/login/accounts/new",
+  },
+  redis: {
+    password: process.env.IDB_REDIS_AUTH
   }
 };
 

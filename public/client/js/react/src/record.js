@@ -192,75 +192,66 @@ const Gallery = ({data}) => {
 
 };
 
-class Map extends React.Component{
-    render(){
-        if(_.has(this.props.data,'geopoint')){
-            return (
-                <div id="map" className="clearfix scrollspy section">
+const Map = ({data}) => {
 
-                    <div id="map-wrapper">
-                        <div id="map-box"></div>
-                    </div>
-                </div>
-            )
-        }else{
-            return <span />
-        }
-    }
-};
+    if(_.has(data,'geopoint')){
+        return (
+            <div id="map" className="clearfix scrollspy section">
 
-
-class SuppliedCitation extends React.Component{
-    render(){
-        if(_.has(this.props.data,'dcterms:bibliographicCitation')){
-            return (
-                <div id="citation" className="clearfix scrollspy section">
-                    <div>The provider has specified the following citation for use with this data.</div>
-                    <div id="citationText" className="citationtext">{this.props.data['dcterms:bibliographicCitation']}</div>
-                </div>
-            )
-        }else{
-            return(null);
-        }
-    }
-};
-
-class Citation extends React.Component{
-
-    render(){
-        return(
-            <div id="citation" className="clearfix scrollspy section">
-                <h2 className="title">Citation</h2>
-                <SuppliedCitation data={this.props.data.data} />
-                <div>This is the constructed <a href="https://www.idigbio.org/content/citation-guidelines">iDigBio Citation Format</a> using information supplied by the data provider.</div>
-                <div id="citationText" className="citationtext">
-                    {_.has(this.props.data.data, 'dwc:occurrenceID') && this.props.data.data['dwc:occurrenceID'] + '. '}
-                    {_.has(this.props.data.data, 'dwc:catalogNumber') && this.props.data.data['dwc:catalogNumber'] + '. '}
-                    {_.has(this.props.data.attribution, 'name') && this.props.data.attribution['name'] + '. '}
-                    <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+this.props.data.attribution['publisher']+"%22}"}>{this.props.pubname}</a>.
-                    <a href={"/portal/recordsets/"+this.props.data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{this.props.data.attribution.uuid}</a>.
-                    Accessed on {moment().format("LL")}.
+                <div id="map-wrapper">
+                    <div id="map-box"></div>
                 </div>
             </div>
         )
+    }else{
+        return <span />
     }
+
 };
 
-class RecordPage extends React.Component{
-    constructor(props) {
-        super(props);
-        this.navList = this.navList.bind(this)
-        this.taxaBreadCrumbs = this.taxaBreadCrumbs.bind(this)
-        this.namedTableRows = this.namedTableRows.bind(this)
 
+const SuppliedCitation = ({data}) => {
+
+    if(_.has(data,'dcterms:bibliographicCitation')){
+        return (
+            <div id="citation" className="clearfix scrollspy section">
+                <div>The provider has specified the following citation for use with this data.</div>
+                <div id="citationText" className="citationtext">{data['dcterms:bibliographicCitation']}</div>
+            </div>
+        )
+    }else{
+        return(null);
     }
 
-    navList(){
+};
 
-        var map = this.props.record.indexTerms.geopoint ?  <li><a href="#map">Map</a></li> : null;
-        var media = this.props.record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
+const Citation = ({data, pubname}) => {
 
-        return(
+
+    return(
+        <div id="citation" className="clearfix scrollspy section">
+            <h2 className="title">Citation</h2>
+            <SuppliedCitation data={data.data} />
+            <div>This is the constructed <a href="https://www.idigbio.org/content/citation-guidelines">iDigBio Citation Format</a> using information supplied by the data provider.</div>
+            <div id="citationText" className="citationtext">
+                {_.has(data.data, 'dwc:occurrenceID') && data.data['dwc:occurrenceID'] + '. '}
+                {_.has(data.data, 'dwc:catalogNumber') && data.data['dwc:catalogNumber'] + '. '}
+                {_.has(data.attribution, 'name') && data.attribution['name'] + '. '}
+                <a href={"https://search.idigbio.org/v2/search/publishers?pq={%22uuid%22:%22"+data.attribution['publisher']+"%22}"}>{pubname}</a>.
+                <a href={"/portal/recordsets/"+data.attribution.uuid}> http://portal.idigbio.org/portal/recordsets/{data.attribution.uuid}</a>.
+                Accessed on {moment().format("LL")}.
+            </div>
+        </div>
+    )
+
+};
+
+const RecordPage = ({ record }) => {
+    const navList = () => {
+        const map = record.indexTerms.geopoint ? <li><a href="#map">Map</a></li> : null;
+        const media = record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
+
+        return (
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
                 <li><a href="#summary">Summary</a></li>
@@ -270,157 +261,143 @@ class RecordPage extends React.Component{
                 <li><a href="#citation">Citation</a></li>
                 <li><a href="#data">All Data</a></li>
             </ul>
-        )
-    }
-    taxaBreadCrumbs(){
-        var order = [], values = [], self = this;
+        );
+    };
 
-        ['kingdom','phylum','class','order','family'].forEach(function(item){
-            if(_.has(self.props.record.indexTerms,item)){
+    const taxaBreadCrumbs = () => {
+        const order = [], values = [];
+
+        ['kingdom', 'phylum', 'class', 'order', 'family'].forEach(item => {
+            if (_.has(record.indexTerms, item)) {
                 order.push(item);
-                values.push(self.props.record.indexTerms[item]);
+                values.push(record.indexTerms[item]);
             }
         });
 
-        var output = [];
+        const output = [];
 
-        order.forEach(function(item,index){
-            var search = [], title = [];
-            for(var i = 0; i <= index; i++){
-                search.push('"'+order[i]+'":'+'"'+values[i]+'"');
-                title.push(order[i]+': '+values[i]);
+        order.forEach((item, index) => {
+            const search = [], title = [];
+            for (let i = 0; i <= index; i++) {
+                search.push('"' + order[i] + '":' + '"' + values[i] + '"');
+                title.push(order[i] + ': ' + values[i]);
             }
             output.push(
                 <a
-                    key={'bread-'+item}
-                    href={'/portal/search?rq={'+search.join(',')+'}'}
-                    title={'SEARCH '+title.join(', ')}
+                    key={'bread-' + item}
+                    href={'/portal/search?rq={' + search.join(',') + '}'}
+                    title={'SEARCH ' + title.join(', ')}
                 >{_.capitalize(values[index])}</a>
             );
-            if((order.length-1) > index){
-                output.push(<span key={'arrow'+index}>&nbsp;{'>'}&nbsp;</span>);
+            if ((order.length - 1) > index) {
+                output.push(<span key={'arrow' + index}>&nbsp;{'>'}&nbsp;</span>);
             }
         });
 
         return output;
-    }
-    namedTableRows(data, list, dic){
-        var values=[];
-        _.each(list, function(item){
-            if(_.has(data,item)){
-                var vals = _.map(_.words(data[item], /[^ ]+/g),function(i){
-                    return _.capitalize(i);
-                }).join(' ');
-                values.push(<tr key={'named-'+item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
-                //values.push();
+    };
+
+    const namedTableRows = (data, list, dic) => {
+        const values = [];
+        _.each(list, item => {
+            if (_.has(data, item)) {
+                const vals = _.map(_.words(data[item], /[^ ]+/g), i => _.capitalize(i)).join(' ');
+                values.push(<tr key={'named-' + item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
             }
         });
         return values;
+    };
+
+    const data = record.data, index = record.indexTerms;
+    const has = [], canonical = {};
+    let eventdate = null, lat = null, lon = null;
+
+    _.forOwn(index, function (v, k) {
+        if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
+            const dt = fields.byTerm[k].dataterm;
+            canonical[dt] = _.has(data, dt) ? data[dt] : v;
+        }
+    });
+
+    _.defaults(canonical, data);
+
+    _.each(dwc.order, function (val, key) {
+        _.each(dwc.order[key], function (fld) {
+            if (_.has(canonical, fld)) {
+                if (!_.has(record, key)) {
+                    record[key] = [];
+                }
+                const datum = {};
+                datum[fld] = canonical[fld];
+                record[key].push(datum);
+                has.push(fld);
+            }
+        });
+    });
+
+    const dif = _.difference(Object.keys(canonical), has);
+    _.each(dif, function (item) {
+        if (item.indexOf('idigbio:') === -1) {
+            if (_.isUndefined(record['other'])) {
+                record['other'] = [];
+            }
+            const datum = {};
+            datum[item] = canonical[item];
+            record['other'].push(datum);
+        }
+    });
+
+    if (index.datecollected) {
+        const d = new Date(index.datecollected);
+        d.setTime(d.getTime() + d.getTimezoneOffset() * 60000);
+        const formatedDC = `${d.getFullYear()}-${d.getMonth() < 9 ? '0' : ''}${d.getMonth() + 1}-${d.getDate() < 10 ? '0' : ''}${d.getDate()}`;
+        eventdate = <tr className="name"><td>Date Collected</td><td className="val">{formatedDC}</td></tr>;
     }
-    render(){
-        var data = this.props.record.data, index = this.props.record.indexTerms;//resp._source.data['idigbio:data'];
-        var has = [], canonical = {};
-        var record = {};
 
-        //build canonical dictionary
-        //first adding indexTerms which can contain corrected/added data not in the raw data
-        _.forOwn(index,function(v,k){
-            if(_.has(fields.byTerm,k) && _.has(fields.byTerm[k],'dataterm')){
-                var dt = fields.byTerm[k].dataterm;
-                //use data dictionary term if it is exists because its not corrected data
-                //and contains the orginal text caseing.
-                if(_.has(data,dt)){
-                    canonical[dt] = data[dt];
-                }else{
-                    canonical[dt] = v;
-                }
-            }
-        })
-        //then add raw data that isn't supplied by indexTerms
-        _.defaults(canonical,data);
+    if (index.geopoint) {
+        lat = <tr className="name"><td>Latitude</td><td className="val">{index.geopoint.lat}</td></tr>;
+        lon = <tr className="name"><td>Longitude</td><td className="val">{index.geopoint.lon}</td></tr>;
+    }
 
-        _.each(dwc.order,function(val,key){
-            _.each(dwc.order[key],function(fld){
-                if(_.has(canonical,fld)){
-                    if(_.has(record,key) === false){
-                        record[key] = [];
-                    }
-                    var datum = {};
-                    datum[fld] = canonical[fld];
-                    record[key].push(datum);
-                    has.push(fld);
-                }
-            });
-        });
-        //add unidentified values to other section
-        var dif = _.difference(Object.keys(canonical), has);
-        _.each(dif,function(item){
-            if(item.indexOf('idigbio:') === -1){
-                if(_.isUndefined(record['other'])){
-                    record['other'] = [];
-                }
-                var datum = {};
-                datum[item] = canonical[item];
-                record['other'].push(datum);
-            }
-        });
-
-        var eventdate=null;
-        if(index.datecollected){
-            var d = new Date(index.datecollected)
-            // Most of the stored dates don't have a Time Zone, so are treated as UTC. Increment the time by the timezone offset, otherwise most displayed values would be displayed as one day early
-            d.setTime(d.getTime() + d.getTimezoneOffset() * 60000)
-            var formatedDC = d.getFullYear() + '-' + ((d.getMonth() < 9) ? '0' + (d.getMonth() + 1) : d.getMonth() + 1 ) + '-' + ((d.getDate() < 10) ? '0' + d.getDate() : d.getDate());
-            eventdate = <tr className="name"><td>Date Collected</td><td className="val">{formatedDC}</td></tr>;
-        }
-        var lat = null, lon = null;
-        if(index.geopoint){
-            lat = <tr className="name"><td>Latitude</td><td className="val">{index.geopoint.lat}</td></tr>;
-            lon = <tr className="name"><td>Longitude</td><td className="val">{index.geopoint.lon}</td></tr>;
-        }
-        return (
-
-            <div className="container-fluid">
-                <div className="row">
-                    <div id="content" className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10">
-                        <h1 id="banner">Specimen Record</h1>
-                        <div id="summary" className="section scrollspy">{this.taxaBreadCrumbs()}</div>
-                        <Title data={this.props.record}  attribution={this.props.record.attribution}/>
-                        <div id="summary-info" className="clearfix">
-                            <div className="pull-left sec">
-                                <table>
-                                  <tbody>
-                                    {this.namedTableRows(index, ['continent','country','stateprovince','county','city','locality'], fields.byTerm)}
-                                    {lat}
-                                    {lon}
-                                  </tbody>
-                                </table>
-                            </div>
-                            <div className="pull-left sec collection">
-                                <table>
-                                  <tbody>
-                                    {this.namedTableRows(data, ['dwc:institutionCode','dwc:collectionCode','dwc:catalogNumber','dwc:recordedBy'], fields.byDataTerm)}
-                                    {eventdate}
-                                  </tbody>
-                                </table>
-                            </div>
+    return (
+        <div className="container-fluid">
+            <div className="row">
+                <div id="content" className="col-lg-7 col-lg-offset-2 col-md-9 col-md-offset-1 col-sm-10">
+                    <h1 id="banner">Specimen Record</h1>
+                    <div id="summary" className="section scrollspy">{taxaBreadCrumbs()}</div>
+                    <Title data={record} attribution={record.attribution} />
+                    <div id="summary-info" className="clearfix">
+                        <div className="pull-left sec">
+                            <table>
+                                <tbody>
+                                {namedTableRows(index, ['continent', 'country', 'stateprovince', 'county', 'city', 'locality'], fields.byTerm)}
+                                {lat}
+                                {lon}
+                                </tbody>
+                            </table>
                         </div>
-                        <Map data={index} suppressHydrationWarning={true} />
-                        <Gallery data={index} />
-                        <Provider data={this.props.record.attribution} />
-                        <Record record={record} raw={this.props.record} suppressHydrationWarning={true} />
+                        <div className="pull-left sec collection">
+                            <table>
+                                <tbody>
+                                {namedTableRows(data, ['dwc:institutionCode', 'dwc:collectionCode', 'dwc:catalogNumber', 'dwc:recordedBy'], fields.byDataTerm)}
+                                {eventdate}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                    <div className="col-lg-2 col-md-2 col-sm-2">
-                        <div id="side-nav">
-                            {this.navList()}
-                        </div>
+                    <Map data={index} suppressHydrationWarning={true} />
+                    <Gallery data={index} />
+                    <Provider data={record.attribution} />
+                    <Record record={record} raw={record} suppressHydrationWarning={true} />
+                </div>
+                <div className="col-lg-2 col-md-2 col-sm-2">
+                    <div id="side-nav">
+                        {navList()}
                     </div>
                 </div>
             </div>
-
-        )
-    }
-
-}
+        </div>
+    );
+};
 export default RecordPage;
 

@@ -3,26 +3,39 @@ import React from 'react';
 import async from 'async';
 import idbapi from './lib/idbapi';
 import L from 'leaflet';
-import 'leaflet-sleep';
+require('leaflet-sleep');
 import RecordPage from './react/src/record'
+import MediaPage from "./react/src/media";
 
 var pubname = '';
-
-async.parallel([
-    function(callback){
-        idbapi.publishers({"pq":{"uuid":record.attribution.publisher}},function(resp){
-            resp.items.forEach(function(item){
-            pubname = item.data.name;
-            })
-            callback();
-        });
-    }
-],function(error){
-    ReactDOM.render(
-        <RecordPage record={record} pubname={pubname}/>,
-        document.getElementById('react-wrapper')
-    );
-})
+//Converted to csr due to ssr mismatch + ssr is not really needed here anyway.
+ReactDOM.render(
+    <RecordPage record={record} pubname={pubname}/>,
+    document.getElementById('react-wrapper')
+);
+// async.parallel([
+//     function(callback){
+//         idbapi.publishers({"pq":{"uuid":record.attribution.publisher}},function(resp){
+//             resp.items.forEach(function(item){
+//             pubname = item.data.name;
+//             })
+//             callback();
+//         });
+//     }
+// ],function(error){
+//     setTimeout(() => {
+//         ReactDOM.hydrate(
+//             <RecordPage record={record} pubname={pubname}/>,
+//             document.getElementById('react-wrapper')
+//         );
+//     }, [2000])
+//     ReactDOM.render(
+//         <RecordPage record={record} pubname={pubname}/>,
+//         document.getElementById('react-wrapper')
+//     );
+//
+//
+// })
 
 //$('.tabs .tab:first-child').trigger('click'); 
 //make map if geopoint

@@ -1,6 +1,6 @@
 //
-var React = require('react');
-var _ = require('lodash');
+import React from 'react'
+import _ from 'lodash'
 
 var defOrNone = function(obj,key){
     if(_.isArray(key)){
@@ -32,12 +32,8 @@ var phDisplay = function(phone){
     }
 };
 
-export default class Contacts extends React.Component{
-    constructor(props) {
-        super(props);
-        this.makeContact = this.makeContact.bind(this)
-    }
-    makeContact(contact){
+const Contacts = ({data}) => {
+    function makeContact(contact){
             var name = defOrNone(contact, ['first_name', 'last_name']);
             var email = defOrNone(contact, 'email');
             email = _.isString(email) ? <a href={'mailto: '+email}>{email}</a> : email;
@@ -55,17 +51,19 @@ export default class Contacts extends React.Component{
                 </table>
             );   
     }
-    render(){
-        if(_.has(this.props.data, 'contacts') && _.isArray(this.props.data.contacts)){
-            var contacts = _.map(this.props.data.contacts,this.makeContact)
-            return (
-                <div id="contacts" className="clearfix scrollspy">
-                    <h2 className="title">Contacts</h2>
-                    {contacts}
-                </div>
-            )           
-        }else{
-            return null;
-        }   
+
+    if(_.has(data, 'contacts') && _.isArray(data.contacts)){
+        var contacts = _.map(data.contacts,makeContact)
+        return (
+            <div id="contacts" className="clearfix scrollspy">
+                <h2 className="title">Contacts</h2>
+                {contacts}
+            </div>
+        )
+    }else{
+        return null;
     }
+
 }
+
+export default Contacts;

@@ -190,77 +190,55 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
 
 }
 
-const OptionsPanel = ({view, viewChange, search, searchChange}) => {
-    /*getInitialState: function(){
-        if(localStorage && typeof localStorage.panels ==='undefined'){
-            localStorage.setItem('panels','filters');
-        }
-        return {panels: localStorage.getItem('panels')}
-    },*/
-    // constructor(props) {
-    //     super(props)
-    //     this.optionPanel = this.optionPanel.bind(this)
-    //     this.showPanel = this.showPanel.bind(this)
-    // }
+const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
 
-    const [menu, setMenu] = useState()
-    const [panel, setPanel] = useState()
-
-    function showPanel(event){
+    const showPanel = (event) => {
         event.preventDefault();
         event.stopPropagation();
-        var val = event.currentTarget.attributes['data-panel'].value;
-        /*this.setState({panels: val},function(){
-            localStorage.setItem('panels',val);
-        })*/
-        viewChange('optionsTab',val);
-    }
-    function optionPanel(name){
-        switch(name){
+        const val = event.currentTarget.getAttribute('data-panel');
+        viewChange('optionsTab', val);
+    };
+
+    const optionPanel = (name) => {
+        switch (name) {
             case 'filters':
-                return <Filters searchChange={searchChange} search={search} filters={search.filters} active="active"/>;
-                break;
+                return <Filters searchChange={searchChange} search={search} filters={search.filters} active="active" />;
             case 'sorting':
-                return <Sorting searchChange={searchChange} sorting={search.sorting} active="active"/>;
-                break;
+                return <Sorting searchChange={searchChange} sorting={search.sorting} active="active" />;
             case 'mapping':
-                return <Mapping searchChange={searchChange} mapping={search.mapping} active="active"/>;
-                break;
+                return <Mapping searchChange={searchChange} mapping={search.mapping} active="active" />;
             case 'download':
-                return <Download search={search} searchChange={searchChange} active="active"/>;
-                break;
+                return <Download search={search} searchChange={searchChange} active="active" />;
+            default:
+                return null;
         }
-    }
+    };
 
-    useEffect(() => {
-        var panels={filters: '', mapping: '',sorting: '', download:''};
-        let tempMenu= []
-        Object.keys(panels).forEach(function(item,ind){
-            if(item==view){
-                panels[item]='active';
-                setPanel(optionPanel(item))
-            }else{
-                panels[item]='';
-            }
-            tempMenu.push(
-                <li key={ind} className="tab">
-                    <a className={panels[item]} href="#" onClick={showPanel} data-panel={item}>{helpers.firstToUpper(item)}</a>
-                </li>
-            )
-        })
-        setMenu(tempMenu)
-    }, [view]);
+    const panels = { filters: '', mapping: '', sorting: '', download: '' };
+    let panel;
+    const menu = Object.keys(panels).map((item, ind) => {
+        if (item === view) {
+            panels[item] = 'active';
+            panel = optionPanel(item);
+        } else {
+            panels[item] = '';
+        }
+        return (
+            <li key={ind} className="tab">
+                <a className={panels[item]} href="#" onClick={showPanel} data-panel={item}>
+                    {helpers.firstToUpper(item)}
+                </a>
+            </li>
+        );
+    });
 
-
-    //var filters = React.createFactory(Filters);
     return (
         <div id="options" className="clearfix">
-            <ul id="options-menu" >
+            <ul id="options-menu">
                 {menu}
             </ul>
             {panel}
         </div>
-    )
-
-}
+    );
+};
 export default Search;

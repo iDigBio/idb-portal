@@ -1,6 +1,6 @@
 
 import React, {useEffect, useState} from 'react';
-import Filters from './search/filters'
+import Filters, {defaultFilters, newFilterProps} from './search/filters'
 import Sorting from './search/sorting'
 import Mapping from './search/mapping'
 import Results from './search/results'
@@ -17,7 +17,7 @@ const Search = () => {
     const [search, setSearch] = useState(defaultSearch())
     function defaultSearch(){
         return {
-            filters: Filters.defaultFilters(),
+            filters: defaultFilters(),
             fulltext:'',
             image:false,
             geopoint:false,
@@ -46,14 +46,14 @@ const Search = () => {
 
             paramsParser(currentSearch); // mutates search object filters
             _.each(
-                _.difference(_.map(Filters.defaultFilters(), 'name'), _.map(currentSearch.filters, 'name')),
+                _.difference(_.map(defaultFilters(), 'name'), _.map(currentSearch.filters, 'name')),
                 function (filter) {
-                    currentSearch.filters.push(Filters.newFilterProps(filter));
+                    currentSearch.filters.push(newFilterProps(filter));
                 }
             );
         } else if (searchHistory.length > 0) {
             currentSearch.filters = _.map(searchHistory.history[0].filters, function (filter) {
-                return Filters.newFilterProps(filter.name);
+                return newFilterProps(filter.name);
             });
         }
         window.history.replaceState({}, 'search', url('path'));
@@ -191,7 +191,6 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
 }
 
 const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
-
     const showPanel = (event) => {
         event.preventDefault();
         event.stopPropagation();

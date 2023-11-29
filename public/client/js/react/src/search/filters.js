@@ -1,173 +1,141 @@
+import {useEffect, useState} from "react";
+
 var React = require('react');
 var RCTgroup = require('react-addons-css-transition-group');
 var PureRender = require('react-addons-pure-render-mixin');
 var idbapi = require('../../../lib/idbapi');
 
-export default class Filters extends React.Component{
-    // mixins: [PureRender],
-    constructor(props) {
-        super(props);
-        this.filterPropsChange = this.filterPropsChange.bind(this)
-        this.makeFilter = this.makeFilter.bind(this)
-        this.clearFilters = this.clearFilters.bind(this)
-        this.addFilter = this.addFilter.bind(this)
-        this.removeFilter = this.removeFilter.bind(this)
-        this.filters = this.filters.bind(this)
-        this.scrollFilters = this.scrollFilters.bind(this)
+
+export function newFilterProps(term){
+    const type = fields.byTerm[term].type;
+    switch (type) {
+        case 'text':
+            return { name: term, type: type, text: '', exists: false, missing: false };
+        case 'daterange':
+            return { name: term, type: type, range: { gte: '', lte: '' }, exists: false, missing: false };
+        case 'numericrange':
+            return { name: term, type: type, range: { gte: false, lte: false }, exists: false, missing: false };
+        default:
+            return null;
     }
-    static newFilterProps(term){
-        var type = fields.byTerm[term].type;
-        switch(type){
+};
+
+export function defaultFilters() {
+    let filters = [];
+    ['scientificname', 'datecollected', 'country'].forEach(item => {
+        filters.push(newFilterProps(item));
+    });
+    return filters;
+}
+const Filters = ({filters, search, searchChange, active}) => {
+
+    function filterPropsChange(filterObj){
+        const list = filters.map(item => item.name);
+        const updatedFilters = [...filters];
+        updatedFilters[list.indexOf(filterObj.name)] = filterObj;
+        searchChange('filters', updatedFilters);
+    }
+
+    function makeFilter(filter) {
+        switch (filter.type) {
             case 'text':
-                return {name: term, type: type, text:'', exists: false, missing: false};
+                return <TextFilter key={filter.name} filter={filter} removeFilter={removeFilter} search={search} changeFilter={filterPropsChange} />;
             case 'daterange':
-                return {name: term, type: type, range:{gte: '', lte: ''}, exists: false, missing: false};
+                return <DateRangeFilter key={filter.name} filter={filter} removeFilter={removeFilter} changeFilter={filterPropsChange} />;
             case 'numericrange':
-                return {name: term, type: type, range:{gte: false, lte: false}, exists: false, missing: false};
-        }
-    }
-    static defaultFilters(){
-        var filters=[],self=this;
-        ['scientificname','datecollected','country'].forEach(function(item){
-            filters.push(Filters.newFilterProps(item));
-        });   
-        return filters;
-    }      
-    
-
-    filterPropsChange(filterObj){
-        var list = this.filters(),self=this;
-        var filters = this.props.filters;
-        filters[list.indexOf(filterObj.name)] = filterObj;
-        //this.setState({filters: filters},function(){
-        //_.defer(this.props.searchChange,'filters',filters);
-        this.props.searchChange('filters',filters);
-    }
-
-
-    makeFilter(filter){
-        //var type = fltrObj.type, name = fltrObj.name;
-        //var type = 'text';
-        var key= filter.name;// + Date.now();
-        switch(filter.type){
-            case 'text':         
-                return(
-                    <TextFilter key={key} filter={filter} removeFilter={this.removeFilter} search={this.props.search} changeFilter={this.filterPropsChange}/>
-                ); 
-            case 'daterange':
-                return (
-                    <DateRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
-                );  
-            case 'numericrange':
-                return (
-                    <NumericRangeFilter key={key} filter={filter} removeFilter={this.removeFilter} changeFilter={this.filterPropsChange}/>
-                );  
+                return <NumericRangeFilter key={filter.name} filter={filter} removeFilter={removeFilter} changeFilter={filterPropsChange} />;
+            default:
+                return null;
         }
     }
 
-    clearFilters(){
-        var filters=[],self=this;
-        this.props.filters.forEach(function(item){
-            filters.push(Filters.newFilterProps(item.name));
-        });
-        //this.setState({filters: filters},function(){
-            this.props.searchChange({
-                'filters': filters
-            });
-        //})
+    function clearFilters(){
+        const updatedFilters = filters.map(item => newFilterProps(item.name));
+        searchChange({ 'filters': updatedFilters });
     }
-    addFilter(event){
-        //var flist = this.filters();
+
+    function addFilter(event){
         event.preventDefault();
-        var cur = this.props.filters;
-        cur.unshift(Filters.newFilterProps(event.currentTarget.value));
-        //this.setState({filters: cur});
-        this.props.searchChange('filters',cur);
-        return false;
+        const updatedFilters = [newFilterProps(event.currentTarget.value), ...filters];
+        searchChange('filters', updatedFilters);
     }
-    removeFilter(event){
+
+    function removeFilter(event){
         event.preventDefault();
-        var term = event.currentTarget.attributes['data-remove'].value;
-        var cur = this.props.filters, filters=this.filters();
-        cur.splice(filters.indexOf(term),1);
-        //this.setState({filters: cur});
-        this.props.searchChange('filters',cur);
-        return false;
+        const term = event.currentTarget.getAttribute('data-remove');
+        const updatedFilters = filters.filter(item => item.name !== term);
+        searchChange('filters', updatedFilters);
     }
-    filters(){
+
+    function getFilters(){
         var list = [];
 
-        _.each(this.props.filters,function(item){
+        _.each(filters,function(item){
             list.push(item.name);
         });
         return list;
     }
-    scrollFilters(){
+
+    function scrollFilters() {
         $('#filters-holder').animate({
             scrollTop: $('#filters-holder').height()
         });
-        return false;
-    }
-    render(){
-        var self=this;
-       
-        var fgroups =[];
-        var flist = self.filters();
-        //filter select list 
-        _.each(fields.searchGroups,function(val){
-            var fltrs = [];
-            _.each(fields.byGroup[val],function(field){
-                if(field.hidden){
-                    //noop
-                }else{
-                    var disabled = flist.indexOf(field.term) === -1 ? '' : 'disabled';
-                    fltrs.push(
-                        <option disabled={disabled} value={field.term} key={field.term}>
-                            {field.name}
-                        </option>
-                    );
-                }
-            });
-            fgroups.push(
-              <optgroup key={val} label={fields.groupNames[val]}>
-                &nbsp;&nbsp;{fltrs}
-              </optgroup>
-            );
+    };
+
+    const flist = getFilters()
+    const fgroups = []
+    _.each(fields.searchGroups,function(val){
+        var fltrs = [];
+        _.each(fields.byGroup[val],function(field){
+            if(field.hidden){
+                //noop
+            }else{
+                var disabled = flist.indexOf(field.term) === -1 ? '' : 'disabled';
+                fltrs.push(
+                    <option disabled={disabled} value={field.term} key={field.term}>
+                        {field.name}
+                    </option>
+                );
+            }
         });
-        //filters
-        var filters = _.map(this.props.filters,function(item){
-            return self.makeFilter(item)
-        })
-
-        var scrollDisplay = 'none';
-        if(filters.length>3){
-            scrollDisplay='block';
-        }
-        return (
-            <div className={"section "+this.props.active} id="filters">
-                <div className="option-group" id="filter-select">
-                    <select className="form-control" value="0" placeholder="select to add" onChange={this.addFilter}>
-                        <option value="0" defaultValue className="default">Add a field</option>
-                        {fgroups}
-                    </select>
-                    <a className="btn" onClick={this.clearFilters} title="Clear all filter inputs">
-                        Clear
-                    </a>
-                </div>
-                <div id="filters-holder" className="options-holder">
-                    {filters}
-                </div>
-                <div id="filter-scroller"  onClick={this.scrollFilters}>
-                    <span style={{'display': scrollDisplay }}>
-                        &darr; Scroll To Bottom &darr;
-                    </span>
-                </div>
-            </div>
+        fgroups.push(
+            <optgroup key={val} label={fields.groupNames[val]}>
+                &nbsp;&nbsp;{fltrs}
+            </optgroup>
         );
-    }
-};
-// module.exports = Filters
+    });
 
+    var filtersElements = _.map(filters,function(item){
+        return makeFilter(item)
+    })
+
+    var scrollDisplay = 'none';
+    if(filters.length>3){
+        scrollDisplay='block';
+    }
+
+    return (
+        <div className={`section ${active}`} id="filters">
+            <div className="option-group" id="filter-select">
+                <select className="form-control" value="0" placeholder="select to add" onChange={addFilter}>
+                    <option value="0" defaultValue className="default">Add a field</option>
+                    {fgroups}
+                </select>
+                <a className="btn" onClick={clearFilters} title="Clear all filter inputs">
+                    Clear
+                </a>
+            </div>
+            <div id="filters-holder" className="options-holder">
+                {filtersElements}
+            </div>
+            <div id="filter-scroller" onClick={scrollFilters}>
+                <span style={{ 'display': scrollDisplay }}>
+                    &darr; Scroll To Bottom &darr;
+                </span>
+            </div>
+        </div>
+    );
+};
 
 //custom autocomplete for add all feature
 $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
@@ -178,73 +146,57 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     }
 })
 
-class TextFilter extends React.Component{
-    // componentWillMount(){
-    //     var self = this;
-    //     //function for limiting execution of consecutive key strokes
-    //     this.debouncedTextType = _.debounce(function(){
-    //         self.props.changeFilter(self.props.filter);
-    //     },700,{leading: false, trailing: true});
-    // }
-    componentDidMount() {
-        var self = this;
-        //function for limiting execution of consecutive key strokes
-        this.debouncedTextType = _.debounce(function(){
-            self.props.changeFilter(self.props.filter);
-        },700,{leading: false, trailing: true});
+const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
+    const [text, setText] = useState(filter.text)
+
+    useEffect(() => {
+        debounce(filter)
+    }, []);
+
+    useEffect(() => {
+        setText(filter.text)
+    }, [filter.text]);
+
+    const debouncedTextType = _.debounce(function(param){
+        changeFilter(param);
+    },700,{leading: false, trailing: true});
+
+    function debounce(param) {
+        debouncedTextType(param)
     }
 
-    // getInitialState(){
-    //     return {text: this.props.filter.text}
-    // }
-    constructor(props) {
-        super(props);
-        this.state = {
-            text: props.filter.text
-        }
-        this.presenceClick = this.presenceClick.bind(this)
-        this.textType = this.textType.bind(this)
-        this.setAutocomplete = this.setAutocomplete.bind(this)
-        this.getSynonyms = this.getSynonyms.bind(this)
-    }
-    presenceClick(event){
-        var filter = this.props.filter;
+    function presenceClick(event){
+        var localFilter = filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
-                filter.exists = true;
-                filter.missing = false;                
+                localFilter.exists = true;
+                localFilter.missing = false;
             }else if(event.currentTarget.value=='missing'){
-                filter.exists = false;
-                filter.missing = true;
+                localFilter.exists = false;
+                localFilter.missing = true;
             }
         }else{
-            filter.exists = false;
-            filter.missing = false;
+            localFilter.exists = false;
+            localFilter.missing = false;
         }
-        this.props.changeFilter(filter);
+        changeFilter(localFilter);
     }
-    textType(event){
-        var text = event.currentTarget.value, self=this;
-        var filter = this.props.filter;//, filter=filters[ind];   
-        filter.text = text;
-        this.setState({text: text},function(){
-            this.debouncedTextType();
-        })
-        //
-        //this.props.changeFilter(filter);
+    function textType(event){
+        var localText = event.currentTarget.value
+        var localFilter = filter;//, filter=filters[ind];
+        localFilter.text = localText;
+        setText(localText)
+        debounce(localFilter)
     }
-    UNSAFE_componentWillReceiveProps(nextProps){
-  
-        this.setState({text: nextProps.filter.text});
-    }
-    setAutocomplete(event){
-        var self=this.name;
+
+    function setAutocomplete(event){
+        // var self=this.name;
         var options = {
             source: function(searchString, respCallback) {
                 name = this.element[0].name;//$(event.currentTarget).attr('data-name');
                 var split = searchString.term.split('\n'),
                 last = split[split.length-1].toLowerCase(),
-                rq = queryBuilder.buildQueryShim(self.props.search);
+                rq = queryBuilder.buildQueryShim(search);
                 rq[name]={'type':'prefix', 'value': last};
                 var query = {rq: rq, count: 15, top_fields:[name]};
 
@@ -267,14 +219,14 @@ class TextFilter extends React.Component{
                 results: function() {}
             },
             select: function(event,ui){
-                var filter = self.props.filter;//, filter=filters[ind];   
-                var cont = filter.text.split('\n');
+                var localFilter = filter;//, filter=filters[ind];
+                var cont = localFilter.text.split('\n');
                 cont.pop();
                 //cont[cont.length-1] = ui.item.label;
                 var mozilla;
                 if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
                     //|| (!_.isUndefined(event.originalEvent.originalEvent.originalEvent.originalTarget.classList) && event.originalEvent.originalEvent.originalEvent.originalTarget.classList.contains('all'))){
-                    var rq = queryBuilder.buildQueryShim(self.props.search);;
+                    var rq = queryBuilder.buildQueryShim(search);
                     rq[name]={'type':'prefix', 'value': ui.item.label.trim()+' '};
                     var query = {rq: rq, count: 300, top_fields:[name]};
                     cont.push(ui.item.label);
@@ -282,27 +234,27 @@ class TextFilter extends React.Component{
                         _.each(resp[name], function(v,k){
                             cont.push(k);
                         })
-                        filter.text = cont.join('\n');
-                        self.props.changeFilter(filter);  
+                        localFilter.text = cont.join('\n');
+                        changeFilter(localFilter);
                     })
                 }else{
                     cont.push(ui.item.label);
-                    filter.text = cont.join('\n');
-                    self.props.changeFilter(filter);  
+                    localFilter.text = cont.join('\n');
+                    changeFilter(localFilter);
                 }
             }
         }
     }
 
-    getSynonyms(event){
+    function getSynonyms(event){
         event.preventDefault();
-        var text = this.props.filter.text.split('\n'),self=this;
+        var localText = filter.text.split('\n'),self=this;
         //dont run search for blank text
-        if(!_.isEmpty(text[0].trim())){
+        if(!_.isEmpty(localText[0].trim())){
             //$(event.currentTarget).attr('disabled','disabled');
             //$(event.currentTarget).find('.syn-loader').show();
             var output = [];
-            async.each(text,function(item,callback){
+            async.each(localText,function(item,callback){
                 var val = helpers.strip(item);
                 if(val.length > 0){
                     output.push(val);
@@ -320,7 +272,7 @@ class TextFilter extends React.Component{
                                         var res = resp.results[i].content.split(';');
                                         res.forEach(function(it,ind){
                                             var syn = helpers.strip(it.toLowerCase());
-                                            if(text.indexOf(syn)=== -1){
+                                            if(localText.indexOf(syn)=== -1){
                                                 output.push(syn);
                                             }
                                         });
@@ -338,247 +290,236 @@ class TextFilter extends React.Component{
                     callback();
                 }
             },function(err){
-                //ta.val(output.join('\n'));
-                var filter = self.props.filter;
-                filter.text = output.join('\n');
-                self.props.changeFilter(filter);
-                //$(event.currentTarget).find('.syn-loader').hide();
-                //$(event.currentTarget).removeAttr('disabled');
+                var localFilter = filter;
+                localFilter.text = output.join('\n');
+                changeFilter(localFilter);
             });            
         }        
     }
 
-    render(){
-        var filter = this.props.filter,disabled=false,textval;
-        var name = filter.name, label = fields.byTerm[name].name;
-        var syn = <span/>,cl='text';
-        if(fields.byTerm[name].synonyms){
-            syn=<a onClick={this.getSynonyms}>Add EOL Synonyms</a>;
-            cl+=' syn'
-        }
-        if(filter.exists || filter.missing){
-            disabled=true;
-            textval=fields.byTerm[name].dataterm;
-        }else{
-            textval=this.state.text;
-        }
-        return(
-            <div className="option-group filter" id={name+'-filter'} key={name}>
-                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
-                    <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
-                </a>
-                <label className="filter-name">{label}</label>
-                <div className={cl}>
-                {syn}
-                    <textarea className="form-control" name={name} data-name={name}
-                        placeholder={fields.byTerm[name].dataterm} 
-                        disabled={disabled} 
-                        onChange={this.textType} 
-                        onFocus={this.setAutocomplete}
-                        value={textval}
-                    >
-                    </textarea>
-                    
+    var localFilter = filter,disabled=false,textval;
+    var name = localFilter.name, label = fields.byTerm[name].name;
+    var syn = <span/>,cl='text';
+    if(fields.byTerm[name].synonyms){
+        syn=<a onClick={getSynonyms}>Add EOL Synonyms</a>;
+        cl+=' syn'
+    }
+    if(localFilter.exists || localFilter.missing){
+        disabled=true;
+        textval=fields.byTerm[name].dataterm;
+    }else{
+        textval=text;
+    }
+    return(
+        <div className="option-group filter" id={name+'-filter'} key={name}>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
+                <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+            </a>
+            <label className="filter-name">{label}</label>
+            <div className={cl}>
+            {syn}
+                <textarea className="form-control" name={name} data-name={name}
+                    placeholder={fields.byTerm[name].dataterm}
+                    disabled={disabled}
+                    onChange={textType}
+                    onFocus={setAutocomplete}
+                    value={textval}
+                >
+                </textarea>
+
+            </div>
+            <div className="presence">
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={localFilter.exists}/>
+                        Present
+                    </label>
                 </div>
-                <div className="presence">
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={filter.exists}/>
-                            Present
-                        </label>
-                    </div>
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={filter.missing}/>
-                            Missing
-                        </label>
-                    </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={localFilter.missing}/>
+                        Missing
+                    </label>
                 </div>
             </div>
-        )
-    }
+        </div>
+    )
+
 };
 
-class DateRangeFilter extends React.Component{
-    constructor(props) {
-        super(props);
-        this.dateChange = this.dateChange.bind(this)
-        this.presenceClick = this.presenceClick.bind(this)
-    }
-    dateChange(event){
+const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
+
+    function dateChange(event){
         var date = event.currentTarget.value;
-        var filter = this.props.filter;//, filter=filters[ind];   
-        filter.range[event.currentTarget.name] = date;
-        this.props.changeFilter(filter);     
+        var localFilter = filter;//, filter=filters[ind];
+        localFilter.range[event.currentTarget.name] = date;
+        changeFilter(localFilter);
     }
 
-    presenceClick(event){
-        var filter = this.props.filter;
+    function presenceClick(event){
+        var localFilter = filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
-                filter.exists = true;
-                filter.missing = false;                
+                localFilter.exists = true;
+                localFilter.missing = false;
             }else if(event.currentTarget.value=='missing'){
-                filter.exists = false;
-                filter.missing = true;
+                localFilter.exists = false;
+                localFilter.missing = true;
             }
         }else{
-            filter.exists = false;
-            filter.missing = false;
+            localFilter.exists = false;
+            localFilter.missing = false;
         }
-        this.props.changeFilter(filter);
+        changeFilter(localFilter);
     }
-    render(){
-        var filter = this.props.filter;
-        var name = filter.name;
-        var label = fields.byTerm[name].name;
-        var exists = filter.exists;
-        var missing = filter.missing;
-        var disabled = false;
-        if(exists || missing){
-            disabled=true;
-        }
-        return(
-            <div className="option-group filter" id={name+'-filter'} key={name}>
-                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
-                    <i className="glyphicon glyphicon-remove"   title="click to remove this filter"></i>
-                </a>
-                <label className="filter-name">{label}</label>
-                <div className="dates clearfix pull-right">
-                    <div className="pull-left">
-                        Start: 
-                        <input 
-                            name="gte"
-                            type="text" 
-                            className="form-control date"
-                            disabled={disabled} 
-                            onChange={this.dateChange} 
-                            value={filter.range.gte}
-                            placeholder="yyyy-mm-dd"
-                        />
-                    </div>
-                    <div className="pull-left">
-                        End: 
-                        <input 
-                            name="lte"
-                            type="text" 
-                            className="form-control date"
-                            disabled={disabled} 
-                            onChange={this.dateChange} 
-                            value={filter.range.lte}
-                            placeholder="yyyy-mm-dd"
-                        />
-                    </div>
+
+    var localFilter = filter;
+    var name = filter.name;
+    var label = fields.byTerm[name].name;
+    var exists = filter.exists;
+    var missing = filter.missing;
+    var disabled = false;
+    if(exists || missing){
+        disabled=true;
+    }
+    return(
+        <div className="option-group filter" id={name+'-filter'} key={name}>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
+                <i className="glyphicon glyphicon-remove"   title="click to remove this filter"></i>
+            </a>
+            <label className="filter-name">{label}</label>
+            <div className="dates clearfix pull-right">
+                <div className="pull-left">
+                    Start:
+                    <input
+                        name="gte"
+                        type="text"
+                        className="form-control date"
+                        disabled={disabled}
+                        onChange={dateChange}
+                        value={filter.range.gte}
+                        placeholder="yyyy-mm-dd"
+                    />
                 </div>
-                <div className="presence">
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={exists}/>
-                            Present
-                        </label>
-                    </div>
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={missing}/>
-                            Missing
-                        </label>
-                    </div>
+                <div className="pull-left">
+                    End:
+                    <input
+                        name="lte"
+                        type="text"
+                        className="form-control date"
+                        disabled={disabled}
+                        onChange={dateChange}
+                        value={filter.range.lte}
+                        placeholder="yyyy-mm-dd"
+                    />
                 </div>
             </div>
-        ) 
-    }
+            <div className="presence">
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={exists}/>
+                        Present
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={missing}/>
+                        Missing
+                    </label>
+                </div>
+            </div>
+        </div>
+    )
+
 }
 
-class NumericRangeFilter extends React.Component{
-    constructor(props) {
-        super(props);
-        this.presenceClick = this.presenceClick.bind(this)
-        this.valueChange = this.valueChange.bind(this)
-    }
-    presenceClick(event){
-        var filter = this.props.filter;
+const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
+
+    function presenceClick(event){
+        var localFilter = filter;
         if(event.currentTarget.checked){
             if(event.currentTarget.value=='exists'){
-                filter.exists = true;
-                filter.missing = false;                
+                localFilter.exists = true;
+                localFilter.missing = false;
             }else if(event.currentTarget.value=='missing'){
-                filter.exists = false;
-                filter.missing = true;
+                localFilter.exists = false;
+                localFilter.missing = true;
             }
         }else{
-            filter.exists = false;
-            filter.missing = false;
+            localFilter.exists = false;
+            localFilter.missing = false;
         }
-        this.props.changeFilter(filter);
+        changeFilter(localFilter);
     }
-    valueChange(event){
-        var filter = this.props.filter;
+    function valueChange(event){
+        var localFilter = filter;
         var val = event.target.value;
         if(_.isEmpty(val) || !_.isFinite(parseInt(val))){
             val = false;
         }
-        filter.range[event.currentTarget.name] = parseInt(val);
-        
-        this.props.changeFilter(filter);
+        localFilter.range[event.currentTarget.name] = parseInt(val);
+        changeFilter(localFilter);
     }
-    render(){
-        var filter = this.props.filter;
-        var name = filter.name;
-        var label = fields.byTerm[name].name;
-        var exists = filter.exists;
-        var missing = filter.missing;
-        var disabled = false;
-        if(exists || missing){
-            disabled=true;
-        }
-        return(
-            <div className="option-group filter" id={name+'-filter'} key={name}>
-                <a className="remove" href="#" onClick={this.props.removeFilter} data-remove={name}>
-                    <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
-                </a>
-                <label className="filter-name">{label}</label>
 
-                <div className="dates clearfix pull-right">
-                    <div className="pull-left">
-                        Min: 
-                        <input 
-                            name="gte"
-                            type="text" 
-                            className="form-control date"
-                            disabled={disabled} 
-                            onChange={this.valueChange} 
-                            value={filter.range.gte ?  filter.range.gte : ''}
-                            placeholder={fields.byTerm[name].dataterm}
-                        />
-                    </div>
-                    <div className="pull-left">
-                        Max: 
-                        <input 
-                            name="lte"
-                            type="text" 
-                            className="form-control date"
-                            disabled={disabled} 
-                            onChange={this.valueChange} 
-                            value={filter.range.lte ? filter.range.lte : ''}
-                            placeholder={fields.byTerm[name].dataterm}
-                        />
-                    </div>
-                </div>
-                <div className="presence">
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="exists" onChange={this.presenceClick} checked={exists}/>
-                            Present
-                        </label>
-                    </div>
-                    <div className="checkbox">
-                        <label>
-                            <input type="checkbox" name={name} value="missing" onChange={this.presenceClick} checked={missing}/>
-                            Missing
-                        </label>
-                    </div>
-                </div>
-            </div> 
-        )
+    var localFilter = filter;
+    var name = filter.name;
+    var label = fields.byTerm[name].name;
+    var exists = filter.exists;
+    var missing = filter.missing;
+    var disabled = false;
+    if(exists || missing){
+        disabled=true;
     }
+    return(
+        <div className="option-group filter" id={name+'-filter'} key={name}>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
+                <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+            </a>
+            <label className="filter-name">{label}</label>
+
+            <div className="dates clearfix pull-right">
+                <div className="pull-left">
+                    Min:
+                    <input
+                        name="gte"
+                        type="text"
+                        className="form-control date"
+                        disabled={disabled}
+                        onChange={valueChange}
+                        value={filter.range.gte ?  filter.range.gte : ''}
+                        placeholder={fields.byTerm[name].dataterm}
+                    />
+                </div>
+                <div className="pull-left">
+                    Max:
+                    <input
+                        name="lte"
+                        type="text"
+                        className="form-control date"
+                        disabled={disabled}
+                        onChange={valueChange}
+                        value={filter.range.lte ? filter.range.lte : ''}
+                        placeholder={fields.byTerm[name].dataterm}
+                    />
+                </div>
+            </div>
+            <div className="presence">
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={exists}/>
+                        Present
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={missing}/>
+                        Missing
+                    </label>
+                </div>
+            </div>
+        </div>
+    )
+
 }
+
+export default Filters;

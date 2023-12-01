@@ -1,7 +1,7 @@
 
 import React, {useEffect, useState} from 'react';
 import Filters, {defaultFilters, newFilterProps} from './search/filters'
-import Sorting from './search/sorting'
+import Sorting, {defaultSorts} from './search/sorting'
 import Mapping from './search/mapping'
 import Results from './search/results'
 import Download from './search/download'
@@ -21,7 +21,7 @@ const Search = () => {
             fulltext:'',
             image:false,
             geopoint:false,
-            sorting: Sorting.defaultSorts(),
+            sorting: defaultSorts(),
             from: 0,
             size: 100,
             mapping: {

@@ -1,10 +1,5 @@
-import {useEffect, useState} from "react";
-
-var React = require('react');
-var RCTgroup = require('react-addons-css-transition-group');
-var PureRender = require('react-addons-pure-render-mixin');
-var idbapi = require('../../../lib/idbapi');
-
+import React, {useEffect, useState} from "react";
+import idbapi from '../../../lib/idbapi';
 
 export function newFilterProps(term){
     const type = fields.byTerm[term].type;

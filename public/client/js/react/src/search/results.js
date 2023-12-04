@@ -1,233 +1,200 @@
-var React = require('react');
-var idbapi = require('../../../lib/idbapi');
-var queryBuilder = require('../../../lib/querybuilder');
-var PureRender = require('react-addons-pure-render-mixin');
-var ReactCSSTransitionGroup = require('react-addons-css-transition-group');
+import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import idbapi from '../../../lib/idbapi';
+import queryBuilder from '../../../lib/querybuilder';
 
-export default class Results extends React.Component{
-    //mixins: [PureRender],
-    // lastQueryStringed = ''
+const Results = React.memo(({searchProp, searchChange, view, viewChange}) => {
+    const [lastQueryStringed, setLastQueryStringed] = useState('');
+    const [results, setResults] = useState([]);
+    const [resultsComponent, setResultsComponent] = useState()
+    const [attribution, setAttribution] = useState([]);
+    const [total, setTotal] = useState(0);
+    const [search, setSearch] = useState(searchProp);
+    const [hasMore, setHasMore] = useState(false);
+    const [loading, setLoading] = useState(true);
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            lastQueryStringed: '',
-            results: [],
-            attribution: [],
-            total: 0,
-            search: props.search,
-            hasMore: false,
-            loading: true,
-        }
-        this.resultsScroll = this.resultsScroll.bind(this)
-        this.viewChange = this.viewChange.bind(this)
-        this.getResults = this.getResults.bind(this)
-        this.updateResults = this.updateResults.bind(this)
-    }
+    useEffect(() => {
+        window.onscroll = resultsScroll;
+    }, [total, loading])
 
-    // getInitialState(){
-    //     //this.getResults();
+    useEffect(() => {
+        getResults(searchProp);
+    }, []);
 
-    //     return {results: [], attribution: [], total: 0, search: this.props.search, hasMore: false, loading: true};
-    // }
-    shouldComponentUpdate(nextProps, nextState){
+    useEffect(() => {
+        setSearch(_.cloneDeep(searchProp))
+        // forceUpdate();
+        // getResults(search);
+    }, [searchProp])
 
-        if(nextProps.view !== this.props.view){
-            return true;
-        }else{
-            return false;
-        }
-    }
-    componentDidMount(){
-        window.onscroll = this.resultsScroll;
-        this.getResults(this.props.search);
-    }
-    getResults(){
+    useEffect(() => {
+        getResults(search);
+    }, [search]);
+
+    function getResults(){
         var self = this;
-         
-        var d = new Date, searchState = self.state.search, query = queryBuilder.makeSearchQuery(searchState);
+
+        var d = new Date, searchState = search, query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         //constant passing of props forces many unncessary requests. This cheap method checks
         //see if there truely is a new query to run
 
-        if(JSON.stringify(query) !== self.lastQueryStringed){
+        if (JSON.stringify(query) !== lastQueryStringed) {
             //setting results to empty array forces
             //spinner to show for new searches
             //THESE state change tricks should not happen anywhere else
-            if(searchState.from === 0){
-                self.setState({results: [], loading: true})
+            if (searchState.from === 0) {
+                setResults([])
+                setLoading(true)
             }
-            self.lastQueryTime = now;
-            idbapi.search(query,function(response){
+             let lastQueryTime = now;
+            idbapi.search(query, function (response) {
                 if (response.error !== 'Internal Server Error') {
-                    if(now>= self.lastQueryTime){
-                        var res, more=false;
-                        if(searchState.from > 0){
-                            res = self.state.results.concat(response.items);
-                        }else{
+                    if (now >= lastQueryTime) {
+                        var res, more = false;
+                        if (searchState.from > 0) {
+                            res = results.concat(response.items);
+                        } else {
                             res = response.items;
                         }
-                        if(response.itemCount > (searchState.from+searchState.size)){
-                            more=true;
+                        if (response.itemCount > (searchState.from + searchState.size)) {
+                            more = true;
                         }
                         searchState.from = query.offset;
-                        self.setState({search: searchState, results: res, attribution: response.attribution, total: response.itemCount, hasMore: more, loading: false},function(){
-                            self.forceUpdate();
-                        });
+                        // setSearch(searchState)
+                        setResults(res)
+                        setAttribution(response.attribution)
+                        setTotal(response.itemCount)
+                        setHasMore(more)
+                        setLoading(false)
+                        // forceUpdate()
                     }
                 }
             })
-
         }
-        
-        self.lastQueryStringed = JSON.stringify(query);
+
+        // self.lastQueryStringed = JSON.stringify(query);
+        setLastQueryStringed(JSON.stringify(query))
 
     }
-    viewChange(event){
+    function viewChangee(event){
         event.preventDefault();
-        var view = event.currentTarget.attributes['data-value'].value;
-        this.props.viewChange('resultsTab', view);
+        var localView = event.currentTarget.attributes['data-value'].value;
+        viewChange('resultsTab', localView);
     }
-    UNSAFE_componentWillReceiveProps(nextProps){
-        //component should only recieve search as props
-        //componentWillReceiveProps will soon be depricated
-            this.setState({search: _.cloneDeep(nextProps.search)},function(){
-                this.forceUpdate();
-                this.getResults(this.state.search);
-            });
-    }
-    updateResults(search){
-        this.setState({search: search, loading: true},function(){
-            this.forceUpdate();
-            this.getResults();
-        });
+
+    function updateResults(param){
+        setSearch(param)
+        setLoading(true)
+        // forceUpdate()
+        getResults()
     }
     //this is not a synthentic event
-    resultsScroll(e){
-        var search = _.cloneDeep(this.state.search);
-        if(this.state.total > search.from + search.size){
+    function resultsScroll(e)
+    {
+        var localSearch = _.cloneDeep(search);
+        if (total > localSearch.from + localSearch.size) {
             // When we scroll to the bottom of the page, there are more results to show, and we're not currently getting results - get more results
-            if(($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!this.state.loading)){
-                search.from += search.size;
-                this.updateResults(search);
+            if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
+                localSearch.from += localSearch.size;
+                updateResults(localSearch);
             }
         }
     }
-    render(){
-        var search = this.props.search, self=this, li=[], results = null;
-        switch(this.props.view){
-            case 'list':
-                results = <ResultsList 
-                            search={this.state.search} results={this.state.results} 
-                            searchChange={this.props.searchChange} loading={this.state.loading} />;
-                break;
-            case 'labels':
-                results = <ResultsLabels results={this.state.results} loading={this.state.loading} />;
-                break;
-            case 'media':
-                results = <ResultsImages search={this.state.search} results={this.state.results} loading={this.state.loading} />;
-                break;
-            case 'recordsets':
-                results = <Providers attribution={this.state.attribution} />;
-                break;
-        }
-        ['list','labels','media','recordsets'].forEach(function(item){
-            var cl = item == self.props.view ? 'active' : ''; 
-            li.push(
-                <li key={'tab-'+item} onClick={self.viewChange} data-value={item} className={cl}>{helpers.firstToUpper(item)}</li>
-            )
-        })
-        if(this.state.search.from + this.state.search.size < this.state.total){
-            $('footer').hide();
-        }else{
-            $('footer').show();
-        }        
-        return(
-            <div id="results" className="clearfix" onScroll={this.resultsScroll}>
-                <ul id="results-menu" className="pull-left">
-                    {li}
-                </ul> 
-                <div className="pull-right total">
-                    Total: {helpers.formatNum(parseInt(this.state.total))}
-                </div>
-                {results}
-            </div>
+    var localSearch = searchProp, self = this, li = [], local
+    switch (view) {
+        case 'list':
+            local = <ResultsList
+                search={search} results={results}
+                searchChange={searchChange} loading={loading}/>;
+            break;
+        case 'labels':
+            local = <ResultsLabels results={results} loading={loading}/>;
+            break;
+        case 'media':
+            local = <ResultsImages search={search} resultsProp={results}
+                                     loadingProp={loading}/>;
+            break;
+        case 'recordsets':
+            local = <Providers attribution={attribution}/>;
+            break;
+    }
+    ['list', 'labels', 'media', 'recordsets'].forEach(function (item) {
+        var cl = item == view ? 'active' : '';
+        li.push(
+            <li key={'tab-' + item} onClick={viewChangee} data-value={item}
+                className={cl}>{helpers.firstToUpper(item)}</li>
         )
+    })
+    if (search.from + search.size < total) {
+        $('footer').hide();
+    } else {
+        $('footer').show();
     }
-};
+    return (
+        <div id="results" className="clearfix" onScroll={resultsScroll}>
+            <ul id="results-menu" className="pull-left">
+                {li}
+            </ul>
+            <div className="pull-right total">
+                Total: {helpers.formatNum(parseInt(total))}
+            </div>
+            {local}
+        </div>
+    )
 
+}, (prevProps, nextProps) => {
+   return false
+})
 var sortClick=false;
-class ResultsList extends React.Component{
-    // mixins: [PureRender],
-    // getInitialState(){
-    //     if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
-    //         var cols = this.defaultColumns();
-    //         localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
-    //         return {columns: cols};
-    //     }else{
-    //         return {columns: JSON.parse(localStorage.getItem('viewColumns')).columns};
-    //     }
-    // }
-    constructor(props) {
-        super(props)
+const ResultsList = ({search, searchChange, results, loading}) => {
+    const [columns, setColumnsState] = useState(defaultColumns())
+
+    useEffect(() => {
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
-            var cols = this.defaultColumns();
+            var cols = defaultColumns();
             localStorage.setItem('viewColumns',JSON.stringify({'columns': cols}));
-            this.state = {
-                columns: cols
-            }
+            setColumns(cols)
         }else{
-            this.state = {
-                columns: JSON.parse(localStorage.getItem('viewColumns')).columns
-            }
+            setColumns(JSON.parse(localStorage.getItem('viewColumns')).columns)
         }
-        this.resetColumns = this.resetColumns.bind(this)
-        this.defaultColumns = this.defaultColumns.bind(this)
-        this.setColumns = this.setColumns.bind(this)
-        this.columnCheckboxClick = this.columnCheckboxClick.bind(this)
-        this.addColumn = this.addColumn.bind(this)
-        this.sortColumn = this.sortColumn.bind(this)
-        this.openRecord = this.openRecord.bind(this)
+    }, [])
+
+    function resetColumns(){
+            setColumns(defaultColumns());
     }
-    resetColumns(){
-            this.setColumns(this.defaultColumns());
-    }
-    defaultColumns(){
+    function defaultColumns(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
     }
-    setColumns(columns){
-        this.setState({columns: columns},function(){
-            this.forceUpdate();
-            if(localStorage){
-                localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
-            }
-        });
-    }
-    columnCheckboxClick(e){
-        var columns = _.cloneDeep(this.state.columns);
-        if(e.currentTarget.checked===true){
-            columns.push(e.currentTarget.name);
-        }else{
-            columns.splice(columns.indexOf(e.currentTarget.name),1);
+    function setColumns(columns){
+        setColumnsState(columns)
+        if(localStorage){
+            localStorage.setItem('viewColumns',JSON.stringify({'columns':columns}));
         }
-        this.setColumns(columns);
     }
-    addColumn(e){
+    function columnCheckboxClick(e){
+        var localColumns = _.cloneDeep(columns);
+        if(e.currentTarget.checked===true){
+            localColumns.push(e.currentTarget.name);
+        }else{
+            localColumns.splice(columns.indexOf(e.currentTarget.name),1);
+        }
+        setColumns(localColumns);
+    }
+    function addColumn(e){
         e.preventDefault();
-        var self = this;
         var col = _.find(_.keys(fields.byTerm),function(name){
-            return self.state.columns.indexOf(name)===-1 
+            return columns.indexOf(name)===-1
         });
-        var cols = this.state.columns;
+        var cols = columns;
         cols.unshift(col);
-        this.setColumns(cols);
+        setColumns(cols)
     }
-    sortColumn(e){
+    function sortColumn(e){
         e.preventDefault();
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
-        var dir, search = _.cloneDeep(this.props.search), name=e.currentTarget.attributes['data-term'].value,
-        sort={name: name}, sorting=search.sorting, curlength = sorting.length;
+        var dir, localSearch = _.cloneDeep(search), name=e.currentTarget.attributes['data-term'].value,
+        sort={name: name}, sorting=localSearch.sorting, curlength = sorting.length;
         if(_.isUndefined(e.currentTarget.attributes['data-sort'])){
             dir='asc';
         }else{
@@ -248,9 +215,9 @@ class ResultsList extends React.Component{
             sorting.pop();
         }
         sortClick=true;
-        this.props.searchChange('sorting',sorting);
+        searchChange('sorting',sorting);
     }
-    openRecord(e){
+    function openRecord(e){
         e.preventDefault();
         e.stopPropagation();
         //to prevent opening if hiliting text
@@ -260,162 +227,156 @@ class ResultsList extends React.Component{
         }
         
     }
-    render(){
-        var columns = this.state.columns,self=this;
-     
-       //['scientificname','genus','collectioncode','specificepithet','commonname'];
-        var rows=[];
-        var headers=[];
-        //results table
-        var sorted = _.isEmpty(self.props.search.sorting) ? {name: undefined} : self.props.search.sorting[0];
-        var style={width: (Math.floor(100/columns.length))+'%'};
-        columns.forEach(function(item){
-            if(sorted.name===item){
-                var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
-                //sort click spinner
-                var sym;
-                if(self.props.loading && sortClick){
-                    sym = <i className="spinner"></i>;
-                    sortClick=false;
-                }else{
-                    sym = <i className={"glyphicon "+icon}></i>;
-                }
-                headers.push(
-                    <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={self.sortColumn}>
-                        {fields.byTerm[item].name}
-                        {sym}
-                    </th>
-                ) 
+
+    var cols = columns,self=this;
+
+   //['scientificname','genus','collectioncode','specificepithet','commonname'];
+    var rows=[];
+    var headers=[];
+    //results table
+    var sorted = _.isEmpty(search.sorting) ? {name: undefined} : search.sorting[0];
+    var style={width: (Math.floor(100/cols.length))+'%'};
+    cols.forEach(function(item){
+        if(sorted.name===item){
+            var icon = sorted.order == 'asc' ? 'glyphicon-chevron-up' : 'glyphicon-chevron-down';
+            //sort click spinner
+            var sym;
+            if(loading && sortClick){
+                sym = <i className="spinner"></i>;
+                sortClick=false;
             }else{
-                headers.push(
-                    <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} onClick={self.sortColumn}>{fields.byTerm[item].name}</th>
-                ) 
+                sym = <i className={"glyphicon "+icon}></i>;
+            }
+            headers.push(
+                <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={sortColumn}>
+                    {fields.byTerm[item].name}
+                    {sym}
+                </th>
+            )
+        }else{
+            headers.push(
+                <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} onClick={sortColumn}>{fields.byTerm[item].name}</th>
+            )
+        }
+    });
+    //add column list button
+    headers.push(
+        <th key={'header-select'} style={{width: '80px', fontSize: '10px', textAlign: 'center'}}>
+            <button className="pull-left" data-toggle="modal" data-target="#column-list">
+                Columns
+            </button>
+        </th>
+    )
+    results.forEach(function(item,index){
+        var tds = [];
+        cols.forEach(function(name,ind){
+            var val;
+            if(_.isUndefined(fields.byTerm[name].dataterm)){
+                val = helpers.check(item.indexTerms[name]);
+            }else if( _.isUndefined(fields.byTerm[name].dataterm) === false && _.isUndefined(item.indexTerms[name]) === false && _.isUndefined(item.data[fields.byTerm[name].dataterm])){
+                val = helpers.check(item.indexTerms[name]);
+            }else{
+                val = helpers.check(item.data[fields.byTerm[name].dataterm]);
+            }
+
+            if(_.isEmpty(val)){
+                val = <span className="no-data">no data</span>;
+            }
+
+            tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
+        })
+        //add openrecord column
+        tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" id={item.uuid} onClick={openRecord} title="view full record">view</a></td>);
+        rows.push(
+            <tr key={'row-'+index}>
+                {tds}
+            </tr>
+        );
+    })
+    if(loading){
+        rows.push(
+            <tr key={'loading-row'} className="no-results-row">
+                <td colSpan={cols.length+1}>
+                    <i className="spinner" />
+                </td>
+            </tr>
+        );
+    }else if(rows.length===0){
+        rows.push(<tr key={'row-no-results'} className="no-results-row"><td colSpan={cols.length+1}>No Matching Records</td></tr>)
+    }
+
+    //column selection modal list
+    var list=[];
+    //sort list
+    //fgroups.push(<option value="0">select a field</option>);
+
+    _.each(fields.searchGroups,function(val){
+        var group = [];
+        group.push(
+            <tr key={val}><td className="bold">{fields.groupNames[val]}</td></tr>
+        )
+        _.each(fields.byGroup[val],function(field){
+            if(field.hidden && !field.results){
+                //noop
+            }else{
+                var disabled=false,checked=false;
+                if(cols.indexOf(field.term) > -1){
+                    checked=true;
+                    if(cols.length===1){
+                        disabled=true;
+                    }
+                }
+                group.push(
+                    <tr key={'column-select-'+field.term}>
+                        <td>
+                            <label>
+                                <input name={field.term} onChange={columnCheckboxClick} type="checkbox" checked={checked} disabled={disabled} /> {field.name}
+                            </label>
+                        </td>
+                    </tr>
+                )
             }
         });
-        //add column list button
-        headers.push(
-            <th key={'header-select'} style={{width: '80px', fontSize: '10px', textAlign: 'center'}}>
-                <button className="pull-left" data-toggle="modal" data-target="#column-list">
-                    Columns
-                </button>
-            </th>
-        )
-        this.props.results.forEach(function(item,index){
-            var tds = [];
-            columns.forEach(function(name,ind){
-                var val;
-                if(_.isUndefined(fields.byTerm[name].dataterm)){
-                    val = helpers.check(item.indexTerms[name]);
-                }else if( _.isUndefined(fields.byTerm[name].dataterm) === false && _.isUndefined(item.indexTerms[name]) === false && _.isUndefined(item.data[fields.byTerm[name].dataterm])){
-                    val = helpers.check(item.indexTerms[name]);
-                }else{
-                    val = helpers.check(item.data[fields.byTerm[name].dataterm]);
-                }
+        list.push(<table key={"group-"+val} className="group-table"><tbody>{group}</tbody></table>)
+    });
 
-                if(_.isEmpty(val)){
-                    val = <span className="no-data">no data</span>;
-                }
+    return(
+        <div id="result-list" className="panel">
+            <div id="column-list" className="modal fade">
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <label>List Results Columns</label>
+                            <button onClick={resetColumns} id="reset" className="">
+                                Reset
+                            </button>
+                            <button type="button" className="close pull-right" data-dismiss="modal">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div className="modal-body clearfix">
 
-                /*if(columns.length-1 === ind){
-                    tds.push(<td key={'row-'+index+'-cell-'+ind} colSpan="2">{val}</td>);
-                }else{
-                    tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
-                }*/
-                tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
-            })
-            //add openrecord column
-            tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" id={item.uuid} onClick={self.openRecord} title="view full record">view</a></td>);
-            rows.push(
-                <tr key={'row-'+index}>
-                    {tds}
-                </tr>
-            );
-        })
-        if(this.props.loading){
-            rows.push(
-                <tr key={'loading-row'} className="no-results-row">
-                    <td colSpan={columns.length+1}>
-                        <i className="spinner" />
-                    </td>
-                </tr>
-            );
-        }else if(rows.length===0){
-            rows.push(<tr key={'row-no-results'} className="no-results-row"><td colSpan={columns.length+1}>No Matching Records</td></tr>)
-        }
-        
-        //column selection modal list
-        var list=[];
-        //sort list
-        //fgroups.push(<option value="0">select a field</option>);
+                                {list}
 
-        _.each(fields.searchGroups,function(val){
-            var group = [];
-            group.push(
-                <tr key={val}><td className="bold">{fields.groupNames[val]}</td></tr>
-            )
-            _.each(fields.byGroup[val],function(field){
-                if(field.hidden && !field.results){
-                    //noop
-                }else{
-                    var disabled=false,checked=false;
-                    if(columns.indexOf(field.term) > -1){
-                        checked=true;
-                        if(columns.length===1){
-                            disabled=true;
-                        }
-                    }
-                    group.push(
-                        <tr key={'column-select-'+field.term}>
-                            <td>
-                                <label>
-                                    <input name={field.term} onChange={self.columnCheckboxClick} type="checkbox" checked={checked} disabled={disabled} /> {field.name}
-                                </label>
-                            </td>
-                        </tr>
-                    )
-                }
-            });
-            list.push(<table key={"group-"+val} className="group-table"><tbody>{group}</tbody></table>)
-        });
-        
-        return(
-            <div id="result-list" className="panel">
-                <div id="column-list" className="modal fade">
-                    <div className="modal-dialog">
-                        <div className="modal-content">
-                            <div className="modal-header">
-                                <label>List Results Columns</label>
-                                <button onClick={this.resetColumns} id="reset" className="">
-                                    Reset
-                                </button>
-                                <button type="button" className="close pull-right" data-dismiss="modal">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div className="modal-body clearfix">
-                                
-                                    {list}
-                                
-                            </div>
-                            
-                            <div className="modal-footer">
+                        </div>
 
-                            </div>
+                        <div className="modal-footer">
+
                         </div>
                     </div>
                 </div>
-                <table id="data-table" className="table table-condensed">
-                    <thead>
-                        <tr id="results-headers">{headers}</tr>
-                    </thead>
-                    <tbody>
-                        {rows}
-                    </tbody>
-                </table>
             </div>
-        )
-        //<ResultListColumnSelector columns={this.state.columns} setColumns={this.setColumns} />
-    }
+            <table id="data-table" className="table table-condensed">
+                <thead>
+                    <tr id="results-headers">{headers}</tr>
+                </thead>
+                <tbody>
+                    {rows}
+                </tbody>
+            </table>
+        </div>
+    )
+
 };
 
 class ResultListColumnSelector extends React.Component{
@@ -562,16 +523,9 @@ class ResultListColumnSelector extends React.Component{
     }
 };
 
-class ResultsLabels extends React.Component{
-    // mixins: [PureRender],
-    constructor(props) {
-        super(props);
-        this.makeLabel = this.makeLabel.bind(this)
-        this.errorImage = this.errorImage.bind(this)
-        this.openMedia = this.openMedia.bind(this)
-        this.openRecord = this.openRecord.bind(this)
-    }
-    makeLabel(result,id){
+const ResultsLabels = ({results, loading, stamp}) => {
+
+    function makeLabel(result,id){
         var data = result.indexTerms, raw = result.data;
         var txt = '';
         var content = [], middle = [];
@@ -662,14 +616,14 @@ class ResultsLabels extends React.Component{
           
             img = (
                 <span 
-                    key={'media-'+result.uuid+this.props.stamp} 
+                    key={'media-'+result.uuid+stamp}
                     className="image-wrapper" 
                     id={data.mediarecords[0]} 
-                    onClick={this.openMedia} 
+                    onClick={openMedia}
                     title="click to open media record" >
                     {imgcount}
                     <img
-                        onError={this.errorImage}  
+                        onError={errorImage}
                         className="pull-right label-image" 
                         alt={title} 
                         src={idbapi.media_host + "v2/media/"+data.mediarecords[0]+"?size=thumbnail"} /> 
@@ -688,101 +642,103 @@ class ResultsLabels extends React.Component{
             </div>
         )
     }
-    errorImage(e){
+    function errorImage(e){
         //debugger
         e.target.attributes['src'].value='/portal/img/missing.svg';
     }
-    openMedia(e){
+    function openMedia(e){
         e.preventDefault();
         window.open('/portal/mediarecords/'+e.currentTarget.id,'_blank');
     }
-    openRecord(e){
+    function openRecord(e){
         e.preventDefault();
         window.open('/portal/records/'+e.currentTarget.id,'_blank');
     }
-    render(){
-        var labels = [],self=this;
-        this.props.results.forEach(function(result,ind){
-            labels.push(self.makeLabel(result,result.uuid));
-        })
-        if(labels.length===0 && this.props.loading===false){
-            labels.push(                
-                <div key="no-records" className="no-records">
-                    <h4>No Matching Records</h4>
-                </div>
-            );
-        }
-        if(this.props.loading){
-            
-            labels.push(
-                <div key={'loading-div'} className="label-loading clearfix pull-left">
-                    <i className="spinner" />
-                </div>
-            )
-        }
-        return (
-            <div id="result-labels" className="panel">
-                {labels}
+
+    var labels = []
+    results.forEach(function(result,ind){
+        labels.push(makeLabel(result,result.uuid));
+    })
+    if(labels.length===0 && loading===false){
+        labels.push(
+            <div key="no-records" className="no-records">
+                <h4>No Matching Records</h4>
+            </div>
+        );
+    }
+    if(loading){
+
+        labels.push(
+            <div key={'loading-div'} className="label-loading clearfix pull-left">
+                <i className="spinner" />
             </div>
         )
     }
+    return (
+        <div id="result-labels" className="panel">
+            {labels}
+        </div>
+    )
+
 };
 
-class ResultsImages extends React.Component{
-    // mixins: [PureRender],
-    constructor(props) {
-        super(props)
-        this.state = {
-            results: props.results, loading: false
-        }
-        this.getImageOnlyResults = this.getImageOnlyResults.bind(this)
-        this.errorImage = this.errorImage.bind(this)
-        this.makeImage = this.makeImage.bind(this)
+const ResultsImages = ({loadingProp, resultsProp, search}) => {
+    const [results, setResults] = useState(resultsProp)
+    const [loading, setLoading] = useState(loadingProp)
 
-    }
-    getImageOnlyResults(search){
+    function getImageOnlyResults(search){
 
         var d = new Date, self=this, searchState = _.cloneDeep(search);
         searchState.image=true;
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
-        self.lastQueryTime = now;
-        self.setState({loading: true})
+        let lastQueryTime = now;
+        setLoading(true)
         idbapi.search(query,function(response){
             //make sure last query run is the last one that renders
             //as responses can be out of order
-            if(now>= self.lastQueryTime){
+            if(now>= lastQueryTime){
                 var res;
                 if(searchState.from > 0){
-                    res = self.state.results.concat(response.items);
+                    res = results.concat(response.items);
                 }else{
                     res = response.items;
                 }
-                self.setState({results: res, loading: false},function(){
-                    self.forceUpdate();
-                });
+                setResults(res)
+                setLoading(false)
+                // self.setState({results: res, loading: false},function(){
+                //     self.forceUpdate();
+                // });
             }
         });
     }
-    errorImage(e){
+    function errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
-    componentDidMount(){
-        if(!this.props.search.image){
-            this.getImageOnlyResults(this.props.search);
+    function componentDidMount(){
+        if(!search.image){
+            getImageOnlyResults(search);
         }
     }
-    UNSAFE_componentWillReceiveProps(nextProps){
-        if(nextProps.search.image){
-            this.setState({results: nextProps.results, loading: false})
-        }else{
-            this.getImageOnlyResults(nextProps.search);
+    useEffect(() => {
+        if(search.image) {
+            setResults(search.results);
+            setLoading(false);
+        } else {
+            getImageOnlyResults(search);
         }
-    }
-    makeImageText(data){
+    }, [search]);
+    // function UNSAFE_componentWillReceiveProps(nextProps){
+    //     if(nextProps.search.image){
+    //         this.setState({results: nextProps.results, loading: false})
+    //     }else{
+    //         this.getImageOnlyResults(nextProps.search);
+    //     }
+    // }
+    function makeImageText(data){
 
     }
-    makeImage(uuid,record){
+    function makeImage(uuid,record){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
         var name=[], specimen = record.data, index=record.indexTerms;
         if(typeof index.scientificname == 'string') { 
@@ -800,7 +756,7 @@ class ResultsImages extends React.Component{
                 <span className="img-count">{count}</span>
                 <img alt={name.join(' ')} 
                 src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
-                onError={this.errorImage}/>
+                onError={errorImage}/>
                 <div className="gallery-image-text">
                     <div className="image-text">
                         <span className="title">{_.capitalize(name.join(' '))}</span>
@@ -810,68 +766,64 @@ class ResultsImages extends React.Component{
             </a>
         )
     }
-    render(){
-        var images=[],self=this,key=0;
-        this.state.results.forEach(function(record,index){
-            if(_.isArray(record.indexTerms.mediarecords)){
-                record.indexTerms.mediarecords.forEach(function(uuid){
-                    images.push(self.makeImage(uuid,record));
-                    key++;
-                })
-            }
-        });
-        if(images.length === 0 && !self.state.loading){
-            images.push(
-                <div key="no-images" className="no-images">
-                    <h4>No Media Available</h4>
-                </div>
-            )
+
+    var images=[],self=this,key=0;
+    results.forEach(function(record,index){
+        if(_.isArray(record.indexTerms.mediarecords)){
+            record.indexTerms.mediarecords.forEach(function(uuid){
+                images.push(makeImage(uuid,record));
+                key++;
+            })
         }
-        if(self.state.loading){
-            images.push(
-                <div key="loading-images" id="loading-images" className="clearfix">
-                    <i className="spinner" />
-                </div>
-            )
-        }
-        return (
-            <div id="results-images" className="panel">
-                <div id="images-wrapper" className="clearfix">
-                    {images}
-                </div>
+    });
+    if(images.length === 0 && !loading){
+        images.push(
+            <div key="no-images" className="no-images">
+                <h4>No Media Available</h4>
             </div>
         )
     }
+    if(loading){
+        images.push(
+            <div key="loading-images" id="loading-images" className="clearfix">
+                <i className="spinner" />
+            </div>
+        )
+    }
+    return (
+        <div id="results-images" className="panel">
+            <div id="images-wrapper" className="clearfix">
+                {images}
+            </div>
+        </div>
+    )
+
 };
 
-class Providers extends React.Component{
-    constructor(props) {
-        super(props);
-    }
-    render(){
+const Providers = ({attribution}) => {
 
-        var list = _.map(this.props.attribution, function(item){
-            return (
-                <tr key={'record-'+item.uuid}>
-                    <td><a href={"/portal/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
-                    <td>{helpers.formatNum(item.itemCount)}</td>
-                    <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>
-                </tr>
-            );
-        });
-
+    var list = _.map(attribution, function(item){
         return (
-            <div id="provider-results" className="panel">
-                <table className="table table-condensed table-striped">
-                    <thead>
-                        <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
-                    </thead>
-                    <tbody>
-                        {list}
-                    </tbody>
-                </table>
-            </div>
-        )
-    }
+            <tr key={'record-'+item.uuid}>
+                <td><a href={"/portal/recordsets/"+item.uuid} target={'_'+item.uuid}>{item.name}</a></td>
+                <td>{helpers.formatNum(item.itemCount)}</td>
+                <td className="desc" dangerouslySetInnerHTML={{__html: item.description}}></td>
+            </tr>
+        );
+    });
+
+    return (
+        <div id="provider-results" className="panel">
+            <table className="table table-condensed table-striped">
+                <thead>
+                    <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
+                </thead>
+                <tbody>
+                    {list}
+                </tbody>
+            </table>
+        </div>
+    )
+
 }
-// export default Results;
+export default Results;

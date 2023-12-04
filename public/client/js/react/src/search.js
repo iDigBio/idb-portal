@@ -97,7 +97,7 @@ const Search = () => {
                 </div>
                 <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
             </div>
-            <Results search={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
+            <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
         </div>
     )
 

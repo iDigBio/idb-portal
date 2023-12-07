@@ -3,7 +3,7 @@
 * Supports iDigBio API params  (rq,sort) 
 *
 ****/
-import Filters from '../filters'
+import Filters, {newFilterProps} from '../filters'
 
 export default function(search){
     if(url('?rq')){
@@ -27,7 +27,7 @@ export default function(search){
                         search.geopoint = v.type === 'exists' ? true : false;
                     }
                 }else if(_.isObject(fields.byTerm[k])){
-                    filter = Filters.newFilterProps(k);
+                    filter = newFilterProps(k);
                     if(_.isObject(v) && _.isString(v.type)){
                         if(v.type === 'exists' || v.type === 'missing'){
                             filter[v.type] = true;

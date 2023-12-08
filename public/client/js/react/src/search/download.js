@@ -267,21 +267,10 @@ var Downloader = React.createClass({
             //this.setState('disabled', true);
             var req = function(){
                 setTimeout(function(){
-                    /*$.ajax({
-                        type: "POST",
-                        url: "https://beta-api.idigbio.org/v2/download",
-                        dataType: 'json',
-                        contentType: 'application/json',
-                        data: JSON.stringify({rq: q, email: email}),
-                        success: function(data, textStatus, jqXHR) {
-                            self.addDownload(data,self.props.search);
-                        }
-                    }).fail(req);
-                    */
-                    $.post("https://api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    $.post(idbapi.media_host + "v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
                         self.addDownload(data,self.props.search);
-                    }).fail(req);
-                }, 1000);           
+                    }, 'json').fail(req);
+                }, 1000);
             }
             req();
         }        

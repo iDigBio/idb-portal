@@ -1,150 +1,124 @@
-import React, {useState, useEffect, useMemo, useCallback} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
 import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
-const Results = React.memo(({searchProp, searchChange, view, viewChange}) => {
+
+const Results = ({ searchProp, searchChange, view, viewChange }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
-    const [resultsComponent, setResultsComponent] = useState()
     const [attribution, setAttribution] = useState([]);
     const [total, setTotal] = useState(0);
     const [search, setSearch] = useState(searchProp);
     const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
+    const lastQueryTimeRef = useRef();
 
-    useEffect(() => {
-        window.onscroll = resultsScroll;
-    }, [total, loading])
-
-    useEffect(() => {
-        getResults(searchProp);
-    }, []);
-
-    useEffect(() => {
-        setSearch(_.cloneDeep(searchProp))
-        // forceUpdate();
-        // getResults(search);
-    }, [searchProp])
-
-    useEffect(() => {
-        getResults(search);
-    }, [search]);
-
-    function getResults(){
-        var self = this;
-
-        var d = new Date, searchState = search, query = queryBuilder.makeSearchQuery(searchState);
-        var now = d.getTime();
-        //constant passing of props forces many unncessary requests. This cheap method checks
-        //see if there truely is a new query to run
-
+    const getResults = useCallback(() => {
+        let now = new Date().getTime();
+        let query = queryBuilder.makeSearchQuery(search);
         if (JSON.stringify(query) !== lastQueryStringed) {
-            //setting results to empty array forces
-            //spinner to show for new searches
-            //THESE state change tricks should not happen anywhere else
-            if (searchState.from === 0) {
-                setResults([])
-                setLoading(true)
+            if (search.from === 0) {
+                setLoading(true);
+                setResults([]);
             }
-             let lastQueryTime = now;
+
+            lastQueryTimeRef.current = now;
             idbapi.search(query, function (response) {
+                let searchState = search
                 if (response.error !== 'Internal Server Error') {
-                    if (now >= lastQueryTime) {
-                        var res, more = false;
-                        if (searchState.from > 0) {
-                            res = results.concat(response.items);
-                        } else {
-                            res = response.items;
-                        }
-                        if (response.itemCount > (searchState.from + searchState.size)) {
-                            more = true;
-                        }
+                    if (now >= lastQueryTimeRef.current) {
+                        let res = search.from > 0 ? results.concat(response.items) : response.items;
+                        let more = response.itemCount > (search.from + search.size);
                         searchState.from = query.offset;
-                        // setSearch(searchState)
-                        setResults(res)
-                        setAttribution(response.attribution)
-                        setTotal(response.itemCount)
-                        setHasMore(more)
-                        setLoading(false)
-                        // forceUpdate()
+                        setSearch(searchState)
+                        setResults(res);
+                        setAttribution(response.attribution);
+                        setTotal(response.itemCount);
+                        setHasMore(more);
+                        setLoading(false);
                     }
                 }
-            })
+            });
+
+            setLastQueryStringed(JSON.stringify(query));
         }
+    }, [search, results, lastQueryStringed]);
 
-        // self.lastQueryStringed = JSON.stringify(query);
-        setLastQueryStringed(JSON.stringify(query))
+    useEffect(() => {
+        if (searchProp!==search) {
+            setSearch(_.cloneDeep(searchProp));
+        }
+    }, [searchProp]);
 
-    }
-    function viewChangee(event){
-        event.preventDefault();
-        var localView = event.currentTarget.attributes['data-value'].value;
-        viewChange('resultsTab', localView);
-    }
+    useEffect(() => {
+        getResults();
+    }, [search]);
 
-    function updateResults(param){
-        setSearch(param)
-        setLoading(true)
-        // forceUpdate()
-        getResults()
-    }
-    //this is not a synthentic event
-    function resultsScroll(e)
-    {
-        var localSearch = _.cloneDeep(search);
-        if (total > localSearch.from + localSearch.size) {
-            // When we scroll to the bottom of the page, there are more results to show, and we're not currently getting results - get more results
-            if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
-                localSearch.from += localSearch.size;
-                updateResults(localSearch);
+    useEffect(() => {
+        const handleScroll = () => {
+            let newSearch = _.cloneDeep(search);
+            if (total > newSearch.from + newSearch.size) {
+                if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
+                    newSearch.from += newSearch.size;
+                    updateResults(newSearch);
+                }
             }
-        }
-    }
-    var localSearch = searchProp, self = this, li = [], local
+        };
+
+        window.onscroll = handleScroll;
+        return () => {
+            window.onscroll = null;
+        };
+    }, [total, loading]);
+
+    const viewChangeHandler = (event) => {
+        event.preventDefault();
+        let newView = event.currentTarget.attributes['data-value'].value;
+        viewChange('resultsTab', newView);
+    };
+
+    const updateResults = (newSearch) => {
+        setSearch(newSearch);
+        setLoading(true);
+        getResults();
+    };
+
+    // Render logic
+    let resultsComponent;
     switch (view) {
         case 'list':
-            local = <ResultsList
-                search={search} results={results}
-                searchChange={searchChange} loading={loading}/>;
+            resultsComponent = <ResultsList search={search} results={results} searchChange={searchChange} loading={loading} />;
             break;
         case 'labels':
-            local = <ResultsLabels results={results} loading={loading}/>;
+            resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            local = <ResultsImages search={search} resultsProp={results}
-                                     loadingProp={loading}/>;
+            resultsComponent = <ResultsImages search={search} resultsProp={results}
+                                   loadingProp={loading}/>;
             break;
         case 'recordsets':
-            local = <Providers attribution={attribution}/>;
+            resultsComponent = <Providers attribution={attribution}/>;
             break;
     }
-    ['list', 'labels', 'media', 'recordsets'].forEach(function (item) {
-        var cl = item == view ? 'active' : '';
-        li.push(
-            <li key={'tab-' + item} onClick={viewChangee} data-value={item}
-                className={cl}>{helpers.firstToUpper(item)}</li>
-        )
-    })
-    if (search.from + search.size < total) {
-        $('footer').hide();
-    } else {
-        $('footer').show();
-    }
+
+    let li = ['list', 'labels', 'media', 'recordsets'].map(item => (
+        <li key={'tab-' + item} onClick={viewChangeHandler} data-value={item} className={item === view ? 'active' : ''}>
+            {helpers.firstToUpper(item)}
+        </li>
+    ));
+
     return (
-        <div id="results" className="clearfix" onScroll={resultsScroll}>
+        <div id="results" className="clearfix">
             <ul id="results-menu" className="pull-left">
                 {li}
             </ul>
             <div className="pull-right total">
                 Total: {helpers.formatNum(parseInt(total))}
             </div>
-            {local}
+            {resultsComponent}
         </div>
-    )
-
-}, (prevProps, nextProps) => {
-   return false
-})
+    );
+}
 var sortClick=false;
 const ResultsList = ({search, searchChange, results, loading}) => {
     const [columns, setColumnsState] = useState(defaultColumns())
@@ -201,7 +175,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
             dir = e.currentTarget.attributes['data-sort'].value == 'asc' ?  'desc': 'asc';
         }
         sort.order = dir;
-     
+
         var list=[];
         _.each(sorting,function(item){
             list.push(item.name);
@@ -221,11 +195,11 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         e.preventDefault();
         e.stopPropagation();
         //to prevent opening if hiliting text
-        
+
         if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
-           window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id); 
+           window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
         }
-        
+
     }
 
     var cols = columns,self=this;
@@ -460,7 +434,7 @@ class ResultListColumnSelector extends React.Component{
                     if(field.hidden){
                         //noop
                     }else{
-                        
+
                         var selected = field.term == column ? true : false;
                         var disabled = (self.props.columns.indexOf(field.term) > -1 && selected == false) ? 'disabled' : '';
                         fltrs.push(
@@ -479,7 +453,7 @@ class ResultListColumnSelector extends React.Component{
             var updisabled = ( ind === 0 );
             var downdisabled = ( ind === self.state.columns.length-1 );
             selects.push(
-                <div key={column+'-'+ind} className="column-select-wrapper clearfix">            
+                <div key={column+'-'+ind} className="column-select-wrapper clearfix">
                         <div className="up-down">
                             <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
                             <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
@@ -491,10 +465,10 @@ class ResultListColumnSelector extends React.Component{
                             <i className="glyphicon glyphicon-minus"/>
                         </button>
                 </div>
-            );            
+            );
         });
-        
-        var trans; 
+
+        var trans;
         if(this.colCount !== this.props.columns.length){
             trans = true;
             this.colCount = this.props.columns.length;
@@ -532,7 +506,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
         var title = '', info = [];
         //build title
         //var index = this.props.data.indexTerms, data=this.props.data.data;
-        if(_.has(data,'scientificname')) { 
+        if(_.has(data,'scientificname')) {
             title = _.capitalize(data['scientificname']);
         }else if(_.has(data, 'genus')){
             title = _.capitalize(data['genus']);
@@ -542,7 +516,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
         }
         if(_.isEmpty(title)){
             title = <em>No Name</em>;
-        } 
+        }
         var auth='';
         if(_.has(raw, 'dwc:scientificNameAuthorship')){
             auth = <span key="author" className="author">{raw['dwc:scientificNameAuthorship']}</span>;
@@ -602,9 +576,9 @@ const ResultsLabels = ({results, loading, stamp}) => {
             content.push(<span key="higher" className="highertaxa">{taxa.join(', ')}</span>);
         }
 
-        if( data.hasImage ){ 
+        if( data.hasImage ){
             var imgcount,img;
-            if(data.mediarecords.length > 1){ 
+            if(data.mediarecords.length > 1){
                 imgcount = (
                     <span key="image-count" className="image-count">
                         {data.mediarecords.length}
@@ -612,32 +586,32 @@ const ResultsLabels = ({results, loading, stamp}) => {
                 )
             }else{
                 imgcount = <span/>;
-            } 
-          
+            }
+
             img = (
-                <span 
+                <span
                     key={'media-'+result.uuid+stamp}
-                    className="image-wrapper" 
-                    id={data.mediarecords[0]} 
+                    className="image-wrapper"
+                    id={data.mediarecords[0]}
                     onClick={openMedia}
                     title="click to open media record" >
                     {imgcount}
                     <img
                         onError={errorImage}
-                        className="pull-right label-image" 
-                        alt={title} 
-                        src={idbapi.media_host + "v2/media/"+data.mediarecords[0]+"?size=thumbnail"} /> 
-                </span>  
+                        className="pull-right label-image"
+                        alt={title}
+                        src={idbapi.media_host + "v2/media/"+data.mediarecords[0]+"?size=thumbnail"} />
+                </span>
             )
-        } 
-      
+        }
+
         return (
             <div key={'label-'+id}  className="pull-left result-item result-label" >
                 <h5 className="title" title="click to open record"><a href={'/portal/records/'+result.uuid} target={result.uuid}>{title}&nbsp;{auth}</a></h5>
                 <h5 className="family">{family}</h5>
                 {img}
                 <p className="content">
-                    {content}  
+                    {content}
                 </p>
             </div>
         )
@@ -741,20 +715,20 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
     function makeImage(uuid,record){
         var count = record.indexTerms.mediarecords.indexOf(uuid)+1 + ' of '+ record.indexTerms.mediarecords.length;
         var name=[], specimen = record.data, index=record.indexTerms;
-        if(typeof index.scientificname == 'string') { 
+        if(typeof index.scientificname == 'string') {
             name.push(index.scientificname);
-        }else{  
+        }else{
             name.push(index.genus);
             name.push(index.specificepithet);
-        } 
-        name.push(specimen["dwc:scientificnameauthorship"]); 
+        }
+        name.push(specimen["dwc:scientificnameauthorship"]);
         _.pull(name,undefined);
         var text=_.without([specimen['dwc:institutionCode'],specimen['dwc:collectionCode'],specimen['dwc:eventdate']],undefined);
 
         return (
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'a-'+uuid+_.random(999999)}>
                 <span className="img-count">{count}</span>
-                <img alt={name.join(' ')} 
+                <img alt={name.join(' ')}
                 src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
                 onError={errorImage}/>
                 <div className="gallery-image-text">
@@ -826,4 +800,5 @@ const Providers = ({attribution}) => {
     )
 
 }
+Results.displayName = 'Results';
 export default Results;

@@ -41,9 +41,18 @@ const Search = () => {
     }
 
     useEffect(() => {
+        if (url('?view')) {
+            const types = ['list', 'labels', 'media', 'recordsets'];
+            const view = url('?view');
+            if (types.indexOf(view) > -1) {
+                localStorage.setItem('resultsTab', view);
+                setResultsTab(view)
+            } else {
+                setResultsTab('list')
+            }
+        }
         const currentSearch = defaultSearch()
         if (url('?rq') || url('?sort')) {
-
             paramsParser(currentSearch); // mutates search object filters
             _.each(
                 _.difference(_.map(defaultFilters(), 'name'), _.map(currentSearch.filters, 'name')),
@@ -102,15 +111,8 @@ const Search = () => {
     )
 
 };
-// var Main = new Search()
+
 const SearchAny = ({searchChange, search, defaultSearch}) => {
-    // constructor(props) {
-    //     super(props)
-    //     this.textType = this.textType.bind(this)
-    //     this.checkClick = this.checkClick.bind(this)
-    //     this.resetSearch = this.resetSearch.bind(this)
-    // }
-     
     function checkClick(event){
         searchChange(event.currentTarget.name, event.currentTarget.checked);
         return true;

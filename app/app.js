@@ -142,6 +142,10 @@ app.get('/eol_api/*', function(req, res) {
 });
 */
 
+// app.use('/records/:id', function(req, res, next) {
+//     console.log(req)
+// })
+
 app.get('/', home.index);
 app.get('/search*', search.searchBackbone);
 app.post('/stats', search.sendStats);

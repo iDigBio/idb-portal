@@ -10,9 +10,9 @@ var keys=Object.keys(fields.byDataTerm);
 var missing={};
 var stotal=0,mtotal=0;
 */
-var Recordset = require('./react/src/recordset');
-var React = require('react');
-var ReactDOM = require('react-dom');
+import Recordset from './react/src/recordset'
+import React from 'react'
+import ReactDOM from 'react-dom'
 
 ReactDOM.render(<Recordset mtotal={mtotal} stotal={stotal} use={use} flags={flags} recordset={recordset} lastmodified={lastmodified} uuid={uuid}/>, document.getElementById('main'));
 var rs = $('#recordsetID').val();

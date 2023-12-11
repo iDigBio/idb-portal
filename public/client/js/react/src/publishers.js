@@ -1,6 +1,6 @@
-var React = require('react')
-var ReactDOM = require('react-dom')
-var idbapi = require('../../lib/idbapi');
+import React, {useEffect} from 'react'
+import ReactDOM from 'react-dom'
+import idbapi from '../../lib/idbapi'
 
 import 'tablesorter/dist/css/theme.blue.min.css'
 
@@ -23,50 +23,51 @@ function getQueryParams(qs) {
 
     return params;
 }
-var StatsTable = React.createClass({
-  render: function(){        
-      return (
-          <div>
-              <table className="table table-bordered table-condensed" id="statstable">
-                <tbody>
-                  <tr>
-                      <th>&nbsp;</th>
-                      <th className="statcol">Record Count</th>
-                      <th className="statcol">Media Record Count</th>
-                  </tr>
-                  <tr>
-                      <td>Total from Providers</td>
-                      <td className="valcol">{formatNum(totals.digestrecords)}</td>
-                      <td className="valcol">{formatNum(totals.digestmedia)}</td>
-                  </tr>    
-                  <tr>
-                      <td>Total in API</td>
-                      <td className="valcol">{formatNum(totals.apirecords)}</td>
-                      <td className="valcol">{formatNum(totals.apimedia)}</td>
-                  </tr>                                
-                  <tr>
-                      <td>Total Indexed (all data) *</td>
-                      <td className="valcol">{formatNum(totals.indexrecords)}</td>
-                      <td className="valcol">{formatNum(totals.indexmedia)}</td>
-                  </tr>
-                </tbody>  
-              </table>
-              <p>* Data that is marked deleted in iDigBio remains indexed until a cleanup is run.</p>
-          </div>
-      )
-  }
-});
+const StatsTable = () => {
 
-var Publishers = React.createClass({
-  clickScroll: function(event) {
+    return (
+        <div>
+            <table className="table table-bordered table-condensed" id="statstable">
+              <tbody>
+                <tr>
+                    <th>&nbsp;</th>
+                    <th className="statcol">Record Count</th>
+                    <th className="statcol">Media Record Count</th>
+                </tr>
+                <tr>
+                    <td>Total from Providers</td>
+                    <td className="valcol">{formatNum(totals.digestrecords)}</td>
+                    <td className="valcol">{formatNum(totals.digestmedia)}</td>
+                </tr>
+                <tr>
+                    <td>Total in API</td>
+                    <td className="valcol">{formatNum(totals.apirecords)}</td>
+                    <td className="valcol">{formatNum(totals.apimedia)}</td>
+                </tr>
+                <tr>
+                    <td>Total Indexed (all data) *</td>
+                    <td className="valcol">{formatNum(totals.indexrecords)}</td>
+                    <td className="valcol">{formatNum(totals.indexmedia)}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p>* Data that is marked deleted in iDigBio remains indexed until a cleanup is run.</p>
+        </div>
+    )
+
+};
+var prows
+const Publishers = () => {
+  function clickScroll(event) {
 
     event.preventDefault();
     $('html,body').animate({scrollTop: $("#"+event.target.attributes['data-id'].value).offset().top},'slow');
     return false
-  },
-  render: function(){
+  }
+
+  useEffect(() => {
     var self=this;
-    var prows = _.map(pubs,function(val,key){
+    prows = _.map(pubs,function(val,key){
       var ar=0,am=0,dr=0,dm=0,ir=0,im=0;
       _.each(val.recordsets,function(name,uuid){
         if(_.has(rsets,uuid)){
@@ -78,7 +79,7 @@ var Publishers = React.createClass({
           im+=rsets[uuid].indexmedia;
         }
       });
-    
+
       if(_.without([ar,am,dr,dm,ir,im],0).length === 0){
         return null;
       }else{
@@ -86,7 +87,7 @@ var Publishers = React.createClass({
         var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
         if (qp.merged && dr == ar && ar == ir) {
           rec_cols = (
-            <td className="valcol" colSpan="3">{formatNum(dr)}</td>
+              <td className="valcol" colSpan="3">{formatNum(dr)}</td>
           )
         } else {
           rec_cols1 = (<td className="valcol">{formatNum(dr)}</td>)
@@ -96,7 +97,7 @@ var Publishers = React.createClass({
 
         if (qp.merged && dm == am && am == im) {
           media_cols = (
-            <td className="valcol" colSpan="3">{formatNum(dm)}</td>
+              <td className="valcol" colSpan="3">{formatNum(dm)}</td>
           )
         } else {
           media_cols1 = (<td className="valcol">{formatNum(dm)}</td>)
@@ -105,20 +106,23 @@ var Publishers = React.createClass({
         }
 
         return (
-          <tr key={key}>
-            <td><a href={"#"} onClick={self.clickScroll} data-id={key}>{val.name}</a></td>
-            {rec_cols}
-            {rec_cols1}
-            {rec_cols2}
-            {rec_cols3}
-            {media_cols}
-            {media_cols1}
-            {media_cols2}
-            {media_cols3}
-          </tr>
-        );        
+            <tr key={key}>
+              <td><a href={"#"} onClick={clickScroll} data-id={key}>{val.name}</a></td>
+              {rec_cols}
+              {rec_cols1}
+              {rec_cols2}
+              {rec_cols3}
+              {media_cols}
+              {media_cols1}
+              {media_cols2}
+              {media_cols3}
+            </tr>
+        );
       }
     });
+  }, []);
+
+
   
     return (
       <table className="table table-bordered datatable table-condensed tablesorter-blue">
@@ -139,11 +143,11 @@ var Publishers = React.createClass({
         </tbody>
       </table>
     )
-  }
-});
 
-var Recordsets = React.createClass({
-  render: function(){
+};
+
+class Recordsets extends React.Component{
+  render(){
     var rows = _.map(this.props.recordsets,function(name,uuid){
       if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
         //rsets[uuid]=defsets();
@@ -202,10 +206,10 @@ var Recordsets = React.createClass({
       </div>
     )
   }
-});
+};
 
-var Page = React.createClass({
-  render: function(){
+class Page extends React.Component{
+  render(){
     var recordsets = _.map(pubs,function(val,key){
       return <Recordsets recordsets={val.recordsets} key={key+'_recordsets'} uuid={key} name={val.name}/>
     });
@@ -219,7 +223,7 @@ var Page = React.createClass({
       </div>
     )
   }
-})
+}
 
 
 var pubs={},rsets={};

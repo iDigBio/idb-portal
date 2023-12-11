@@ -161,40 +161,40 @@ const Downloader = ({search, queryToSentence}) => {
     }, []); //will run on initial render only
 
     // function runOnMount(){ //renamed from componentDidMount and called in useEffect
-        const checkDownloadStatus = function(){
-            var update = downloads, pendings=false;
-            async.each(downloads,function(item,callback){
-              
-                if(Date.now() > Date.parse(item.expires)){
-                    removeDownload(item);
-                    callback();
-                }else if(item.complete === false){
-                    var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
-                    
-                    var statusFunc = function() {
-                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
-                            if(data.complete) {
-                                updateDownload(data);
-                            }else{
-                                pendings = true;
-                            }
-                            callback();
-                        }).fail(statusFunc);
-                    }
-                    statusFunc();              
-                }else{
-                    callback();
+    const checkDownloadStatus = function(){
+        var update = downloads, pendings=false;
+        async.each(downloads,function(item,callback){
+
+            if(Date.now() > Date.parse(item.expires)){
+                removeDownload(item);
+                callback();
+            }else if(item.complete === false){
+                var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
+
+                var statusFunc = function() {
+                    $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                        if(data.complete) {
+                            updateDownload(data);
+                        }else{
+                            pendings = true;
+                        }
+                        callback();
+                    }).fail(statusFunc);
                 }
-            },function(err){
-                if(pendings){
-                    setTimeout(function(){
-                        checkDownloadStatus();
-                    },5000)
-                }
-            })
-        }
-        setDownloadTime(search);
-        checkDownloadStatus();
+                statusFunc();
+            }else{
+                callback();
+            }
+        },function(err){
+            if(pendings){
+                setTimeout(function(){
+                    checkDownloadStatus();
+                },5000)
+            }
+        })
+    }
+    setDownloadTime(search);
+    checkDownloadStatus();
     // }
 
     useEffect(() => {
@@ -302,24 +302,13 @@ const Downloader = ({search, queryToSentence}) => {
         } else {
             var req = function(){
                 setTimeout(function(){
-                    /*$.ajax({
-                        type: "POST",
-                        url: "https://beta-api.idigbio.org/v2/download",
-                        dataType: 'json',
-                        contentType: 'application/json',
-                        data: JSON.stringify({rq: q, email: email}),
-                        success: function(data, textStatus, jqXHR) {
-                            self.addDownload(data,self.props.search);
-                        }
-                    }).fail(req);
-                    */
-                    $.post("https://api.idigbio.org/v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
+                    $.post(idbapi.media_host + "v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
                         addDownload(data,search);
                     }).fail(req);
-                }, 1000);           
+                }, 1000);
             }
             req();
-        }        
+        }
     }
 
     useEffect(() => {
@@ -329,14 +318,14 @@ const Downloader = ({search, queryToSentence}) => {
             if(item.complete){
 
                 return (<tr key={sentence} className="dl-row" title={sentence}>
-                            <td className="title">{sentence}</td>
-                            <td className="status"><a href={item.download_url}>Click To Download</a></td>
-                        </tr>)
+                    <td className="title">{sentence}</td>
+                    <td className="status"><a href={item.download_url}>Click To Download</a></td>
+                </tr>)
             }else{
                 return (<tr key={sentence} className="dl-row" title={sentence}>
-                            <td className="title">{sentence}</td>
-                            <td className="status pending">pending</td>
-                        </tr>)
+                    <td className="title">{sentence}</td>
+                    <td className="status pending">pending</td>
+                </tr>)
             }
             key++;
         })
@@ -359,7 +348,7 @@ const Downloader = ({search, queryToSentence}) => {
                 <label>Downloads</label>
                 <table id="download-header">
                     <thead>
-                        <tr><th className="title">Search</th><th className="status">Status</th></tr>
+                    <tr><th className="title">Search</th><th className="status">Status</th></tr>
                     </thead>
                 </table>
                 <table id="downloads-available">

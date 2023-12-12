@@ -1,11 +1,11 @@
 {
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "node": "current"
       }
     }],
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": [
     [
@@ -18,8 +18,6 @@
       }
     ],
     "transform-promise-to-bluebird",
-    "transform-react-display-name",
-    "transform-class-properties",
-    "transform-es2015-classes"
+    "@babel/plugin-proposal-class-properties"
   ]
 }

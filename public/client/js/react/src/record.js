@@ -30,7 +30,7 @@ const Row = ({keyid, data}) => {
 
 const Section = ({name, data, active}) => {
 
-    var rows = [],self=this;
+    var rows = []
     var data = data;
 
     _.each(data,function(fld){
@@ -311,7 +311,7 @@ const RecordPage = ({ record }) => {
     const data = record.data, index = record.indexTerms;
     const has = [], canonical = {};
     let eventdate = null, lat = null, lon = null;
-
+    let localRecord = {}
     _.forOwn(index, function (v, k) {
         if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
             const dt = fields.byTerm[k].dataterm;
@@ -324,12 +324,12 @@ const RecordPage = ({ record }) => {
     _.each(dwc.order, function (val, key) {
         _.each(dwc.order[key], function (fld) {
             if (_.has(canonical, fld)) {
-                if (!_.has(record, key)) {
-                    record[key] = [];
+                if (!_.has(localRecord, key)) {
+                    localRecord[key] = [];
                 }
                 const datum = {};
                 datum[fld] = canonical[fld];
-                record[key].push(datum);
+                localRecord[key].push(datum);
                 has.push(fld);
             }
         });
@@ -339,11 +339,11 @@ const RecordPage = ({ record }) => {
     _.each(dif, function (item) {
         if (item.indexOf('idigbio:') === -1) {
             if (_.isUndefined(record['other'])) {
-                record['other'] = [];
+                localRecord['other'] = [];
             }
             const datum = {};
             datum[item] = canonical[item];
-            record['other'].push(datum);
+            localRecord['other'].push(datum);
         }
     });
 
@@ -388,7 +388,7 @@ const RecordPage = ({ record }) => {
                     <Map data={index} suppressHydrationWarning={true} />
                     <Gallery data={index} />
                     <Provider data={record.attribution} />
-                    <Record record={record} raw={record} suppressHydrationWarning={true} />
+                    <Record record={localRecord} raw={record} suppressHydrationWarning={true} />
                 </div>
                 <div className="col-lg-2 col-md-2 col-sm-2">
                     <div id="side-nav">

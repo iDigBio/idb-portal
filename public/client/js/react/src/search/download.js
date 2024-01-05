@@ -160,7 +160,7 @@ const Downloader = ({search, queryToSentence}) => {
         checkDownloadStatus()
     }, []); //will run on initial render only
 
-    // function runOnMount(){ //renamed from componentDidMount and called in useEffect
+
     const checkDownloadStatus = function(){
         var update = downloads, pendings=false;
         async.each(downloads,function(item,callback){
@@ -193,9 +193,7 @@ const Downloader = ({search, queryToSentence}) => {
             }
         })
     }
-    setDownloadTime(search);
     checkDownloadStatus();
-    // }
 
     useEffect(() => {
         setDownloadTime(search)

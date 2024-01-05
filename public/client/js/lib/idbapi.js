@@ -8,6 +8,8 @@ module.exports = {
     host: (function(){
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
             return window.idbapi.host;
+        } else if (process.env.NODE_ENV == "beta") {
+            return 'https://beta-search.idigbio.org/v2/'
         } else{
             return 'https://search.idigbio.org/v2/';
         }

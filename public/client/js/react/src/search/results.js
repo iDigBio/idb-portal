@@ -695,18 +695,19 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         }
     }
     useEffect(() => {
-        if(search.image) {
-            setResults(search.results);
-            setLoading(false);
-        } else {
+        // if(search.image) {
+        //     setResults(search.results);
+        //     setLoading(false);
+        // } else {
             getImageOnlyResults(search);
-        }
+        // }
     }, [search]);
     // function UNSAFE_componentWillReceiveProps(nextProps){
     //     if(nextProps.search.image){
-    //         this.setState({results: nextProps.results, loading: false})
+    //         setResults(nextProps.results)
+    //         setLoading(false)
     //     }else{
-    //         this.getImageOnlyResults(nextProps.search);
+    //         getImageOnlyResults(nextProps.search);
     //     }
     // }
     function makeImageText(data){

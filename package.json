@@ -46,7 +46,6 @@
     "geopoint": "^1.0.1",
     "griddle-react": "^0.8.1",
     "hamljs": "^0.6.2",
-    "hiredis": "^0.5.0",
     "http-proxy": "~1.8.1",
     "jquery": "~3.3.1",
     "jquery-ui": "^1.12.1",
@@ -61,6 +60,8 @@
     "moment": "^2.18.1",
     "morgan": "^1.8.1",
     "openid": "^2.0.1",
+    "openid-client": "^5.6.4",
+    "passport": "^0.7.0",
     "pg": "^4.5.6",
     "pouchdb": "^7.0.0",
     "prop-types": "^15.5",
@@ -119,6 +120,9 @@
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
+  },
+  "resolutions": {
+    "graceful-fs": "^4.2.11"
   },
   "keywords": [],
   "repository": "git://github.com/idigbio/idigbio-portal",

@@ -1,20 +1,20 @@
-
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Filters, {defaultFilters, newFilterProps} from './search/filters'
 import Sorting, {defaultSorts} from './search/sorting'
 import Mapping from './search/mapping'
 import Results from './search/results'
 import Download from './search/download'
 import Map from './search/map'
-
-
-
 import paramsParser from './search/lib/params_parser'
+import {AuthContext} from "../AuthProvider";
 
 const Search = () => {
     const [optionsTab, setOptionsTab] = useState('filters')
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
+    const { user } = useContext(AuthContext)
+
+    console.log(user)
     function defaultSearch(){
         return {
             filters: defaultFilters(),

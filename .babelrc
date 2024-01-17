@@ -18,6 +18,11 @@
       }
     ],
     "transform-promise-to-bluebird",
-    "@babel/plugin-proposal-class-properties"
+    "@babel/plugin-proposal-class-properties",
+    ["@babel/plugin-transform-runtime",
+      {
+        "regenerator": true
+      }
+    ]
   ]
 }

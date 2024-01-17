@@ -11,6 +11,35 @@
     <!--[if lt IE 9]>
       <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+    <script>
+        async function fetchUserData() {
+            try {
+                const response = await fetch('/api/session');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            } catch (error) {
+                console.error('Unable to fetch user data:', error);
+                return null;
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const userData = await fetchUserData();
+            console.log(userData)
+            const loginLink = document.getElementById('login-link');
+            const logoutLink = document.getElementById('logout-link');
+
+            if (userData) {
+                loginLink.style.display = 'none';
+                logoutLink.style.display = 'block';
+            } else {
+                loginLink.style.display = 'block';
+                logoutLink.style.display = 'none';
+            }
+        });
+    </script>
     {% block cssblock %}
     {% endblock %}
     <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
@@ -37,19 +66,12 @@
                 <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>
                 <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
             </ul>
-        
-<!--            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
-              {% if !user.is_authenticated -%} 
-              <li style="border:none;">
-               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
-                <span style="color:white;font-size:.8em;">|</span>
-                <a href="https://www.idigbio.org/login/accounts/new" style="color:white;font-size:.8em;">Sign Up</a>
-              </li>
-              {% else %}
-              <li style="border:none;"><a id="logout-link" href="/portal/logout" style="color:white;font-size:.8em;">Log Out</a></li>  
-              {%- endif %}
-            </div> -->
-        
+
+            <div id="auth-section" style="display: flex; justify-content: right; align-items: center; min-height: 100%">
+                <span style="color: white" id="greeting">Hello, <span style="color: #608cb8" id="username">Manny. </span>You are currently signed in.</span>
+                <a id="login-link" href="/login" style="display: block;">Log In</a>
+                <a id="logout-link" href="/logout" style="display: block;">Log Out</a>
+            </div>
         </div>
         <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
 

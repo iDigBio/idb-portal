@@ -23,6 +23,8 @@
     "test": "NODE_ENV=test NODE_OPTIONS=--use-openssl-ca BLUEBIRD_DEBUG=1 jest"
   },
   "dependencies": {
+    "@babel/plugin-transform-runtime": "^7.23.7",
+    "@babel/runtime": "^7.23.8",
     "@bower_components/leaflet-loading": "ebrelsford/Leaflet.loading",
     "@bower_components/leaflet-utfgrid": "danzel/Leaflet.utfgrid",
     "@bower_components/leaflet.fullscreen": "brunob/leaflet.fullscreen",
@@ -72,7 +74,7 @@
     "react-datetime": "^2.11.0",
     "react-dom": "^17.0",
     "reactify": "^1.1.1",
-    "redis": "^2.6.2",
+    "redis": "^4.6.12",
     "request": "^2.73.0",
     "serve-favicon": "^2.4.0",
     "serve-static": "^1.11.2",
@@ -87,6 +89,7 @@
     "@babel/cli": "^7.0.0",
     "@babel/core": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
+    "@babel/plugin-transform-async-to-generator": "^7.23.3",
     "@babel/preset-env": "^7.0.0",
     "@babel/preset-react": "^7.0.0",
     "@babel/register": "7.0.0",

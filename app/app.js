@@ -12,8 +12,9 @@ import cons from 'consolidate';
 import swig from 'swig';
 import session from 'express-session';
 const {createClient} = require('redis');
-import connectRedis from 'connect-redis';
-const RedisStore = connectRedis(session);
+// import connectRedis from 'connect-redis';
+// const RedisStore = connectRedis(session);
+import RedisStore from "connect-redis"
 import request from 'request';
 import config from 'config/config';
 import logger from 'app/logging';
@@ -79,17 +80,19 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
       secret: config.secret,
       resave: false,
       saveUninitialized: true,
-      cookie: {
-        maxAge: 7 * 24 * 60 * 60 * 1000
-      }
+      ttl: 24 * 60 * 60 // TTL in seconds (e.g., 24 hours)
     }));
   } else {
-    var store = new RedisStore(config.redis);
+    var store = new RedisStore({
+      host: 'localhost',
+      db: 2,
+      client: redisClient
+    });
     app.use(session({
       secret: config.secret,
       store: store,
       resave: false,
-      saveUninitialized: true,
+      saveUninitialized: false,
       cookie: {
         maxAge: 7 * 24 * 60 * 60 * 1000
       }
@@ -123,7 +126,7 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
 
   // Initialize passport and configure to use our previously defined session
   app.use(passport.initialize());
-  app.use(passport.authenticate('session'));
+  app.use(passport.session());
 
   // Tells passport to use OpenID Connect (OIDC) strategy with our previously defined OIDC client.
   passport.use('oidc', new Strategy({client}, (tokenSet, userinfo, done) => {
@@ -146,8 +149,20 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
   });
 
   async function getUserFromSession(sessionId, callback) {
-    console.log(redisClient)
-    const sessionData = await redisClient.get(`sess:${sessionId}`);
+    console.log(`sess:${sessionId}`)
+    // Keep in mind redis values are stored as strings - you must parse the JSON string back into an object.
+    const sessionDataString = await redisClient.get(`sess:${sessionId}`);
+    const sessionData = JSON.parse(sessionDataString)
+    return sessionData;
+
+    // await redisClient.keys('*', (err, keys) => {
+    //   if (err) throw err;
+    //
+    //   keys.forEach((key, i) => {
+    //     console.log(`Key ${i}: ${key}`);
+    //   });
+    // })
+
     // redisClient?.get(`sess:${sessionId}`, (err, sessionData) => {
     //   if (err) {
     //     return callback(err);
@@ -191,47 +206,33 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
 
   // Redirected to this endpoint after a successful logout on Keycloak
   app.get('/logout/callback', (req, res) => {
-    req.logout(function (err) {
+    const sessionId = req.session.id;
+    req.logout(async function (err) {
       if (err) {
         return next(err);
       }
       // Close sessions and clean up cookies
-      req.session.destroy();
-      res.clearCookie('connect.sid', {path: '/'});
+      await req.session.destroy();
+      await redisClient.del(`sess:${sessionId}`, (err) => {
+        if (err) {
+          console.log(err)
+        }
+        res.clearCookie('connect.sid', { path: '/' });
+      })
       res.redirect('/');
+      // res.clearCookie('connect.sid', {path: '/'});
+      // res.redirect('/');
     });
   });
 
   app.get('/api/session', async (req, res) => {
-    // getUserFromSession(req.user.sid, (err, user) => {
-    //   if (err) {
-    //     // Handle error
-    //   }
-    //   if (user) {
-    //     // User is authenticated and session is valid
-    //     res.json({ user: user });
-    //   } else {
-    //     // User is not authenticated or session is invalid
-    //     res.status(401).json({ user: null });
-    //   }
-    // });
-
     const sessionId = req.session.id;
-    const user = await getUserFromSession(sessionId);
-    if (user) {
-      res.json({user: user});
+    const user = await getUserFromSession(sessionId)
+    if (user?.passport?.user) {
+      res.json({user: user.passport.user});
     } else {
       res.status(401).json({user: null});
     }
-
-
-    // console.log(req.user)
-    // if (req.isAuthenticated()) {
-    //   // Assuming the user details are stored in req.user
-    //   res.json({ user: req.user });
-    // } else {
-    //   res.status(401).json({ user: null });
-    // }
   });
 
 

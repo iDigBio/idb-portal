@@ -32,8 +32,12 @@ var app = expose(express());
 // Discover the authentication provider (Keycloak), load the OIDC configuration from provider and create client
 Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssuer => {
   // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
+  const redisClient = await createClient({
+    url: "redis://localhost:6379/2"
+  })
 
-  const redisClient = await createClient(config.redis).on('connect', err => console.log('Redis client connected to Redis instance.')).connect();
+  await redisClient.on('connect', () => console.log('Redis client connected to Redis instance.')).connect();
+  redisClient.on('error', err => console.log(`Redis client encountered an error: ${err} `))
 
   const client = new keycloakIssuer.Client({
     client_id: 'portal',

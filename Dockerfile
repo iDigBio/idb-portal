@@ -7,7 +7,7 @@ RUN apt-get -y install make gcc g++ python bash git curl openssl nodejs npm
 
 RUN npm i -g yarn
 RUN npm install -g n
-RUN n 8.12.0
+RUN n 16.20.2
 
 WORKDIR /var/www
 ADD . .

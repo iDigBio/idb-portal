@@ -583,6 +583,19 @@ ul#logo-list {
   border-top: 1px solid #fff;
   z-index: 2000;
 }
+#auth-section {
+  margin-right: 5px;
+}
+#auth-section a {
+  display: block;
+  margin: 0px 10px;
+  padding: 1px 10px;
+  text-align: right;
+  font-size: 1em;
+  border-bottom: none;
+  border-right: none;
+  color: #6aaa51;
+}
 #snav li li.last {
   border-bottom: 1px solid #624e2e;
 }
@@ -699,6 +712,19 @@ outline: 0;
     font-size: 1em;
     border-bottom: 1px solid white;
     border-right: none;
+  }
+  #auth-section {
+    margin-right: 5px;
+  }
+  #auth-section a {
+    display: block;
+    margin: 0px 10px;
+    padding: 1px 10px;
+    text-align: right;
+    font-size: 1em;
+    border-right: none;
+    color: #6aaa51;
+    background-color: red;
   }
 }
 @media (max-width: 680px) {

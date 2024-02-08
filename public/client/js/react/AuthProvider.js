@@ -1,12 +1,8 @@
 import React, {createContext, useEffect, useState} from 'react';
 
 export const AuthContext = createContext(null);
-export const AuthProvider = ({ children }) => {
-    // Initialize user from localstorage if available, otherwise init as null.
-    const [user, setUser] = useState(() => {
-        const savedUser = localStorage.getItem('user');
-        return savedUser ? JSON.parse(savedUser) : null;
-    });
+export const AuthProvider = ({ children, initialUser  }) => {
+    const [user, setUser] = useState(initialUser)
 
     // Check if user has a valid session on the server, if yes the server will respond with data about the user's session.
     useEffect(() => {

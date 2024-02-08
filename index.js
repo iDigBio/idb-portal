@@ -52,6 +52,8 @@ function startThisProcess(app, id) {
 }
 
 var realapp = express();
+const path = require("path")
+realapp.use(express.static(path.join(__dirname, 'public')));
 
 var app = require('./app/app.js').default;
 

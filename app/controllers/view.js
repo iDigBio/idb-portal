@@ -2,15 +2,16 @@ import {createFactory} from '../createFactory.js'
 import request from 'request'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import createRecordPage from 'public/client/js/react/build/record'
+import RecordPage from 'public/client/js/react/build/record'
 import createMediaPage from 'public/client/js/react/build/media'
 import _ from 'lodash'
 // var RecordPage = createFactory(require('public/client/js/react/build/record'));
 // var MediaPage = createFactory(require('public/client/js/react/build/media'));
 import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
-const RecordPage = createFactory(createRecordPage);
+// const RecordPage = createFactory(createRecordPage);
 const MediaPage = createFactory(createMediaPage);
+// console.log(RecordPage)
 
 export default {
   person: function(req, res) {
@@ -29,21 +30,25 @@ export default {
   },
   record: function(req, res) {
     const id = req.params.id;
+    console.log(req.user)
     request.get({ url: `${config.api}view/records/${id}`, json: true }, function(err, resp, body) {
+
       if (err) {
         logger.error(err);
       }
       if (body.uuid) {
         const record = body;
-        let Page = ReactDOMServer.renderToString( <RecordPage record={record} /> );
+        // console.log(record)
+        // let Page = ReactDOMServer.renderToString( <RecordPage record={record} /> );
         res.render('record', {
           activemenu: 'search',
           id: req.params.id,
-          user: req.user,
+          // user: req.user,
           token: req.session._csrf,
           record: record,
+          user: req.user ? JSON.stringify(req.user) : 'null',
           data: JSON.stringify(record),
-          content: Page
+          // content: Page
         });
       } else {
         res.status(404).render('404', {

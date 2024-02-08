@@ -6,11 +6,20 @@ import L from 'leaflet';
 require('leaflet-sleep');
 import RecordPage from './react/src/record'
 import MediaPage from "./react/src/media";
-
+import {AuthProvider} from "./react/AuthProvider";
 var pubname = '';
+// const initialUser = window.user ? JSON.parse(window.user) : null;
+import { ChakraProvider, theme } from '@chakra-ui/react'
+
+
+delete theme.styles.global
 //Converted to csr due to ssr mismatch + ssr is not really needed here anyway.
 ReactDOM.render(
-    <RecordPage record={record} pubname={pubname}/>,
+    <ChakraProvider resetCSS={false} theme={theme}>
+        <AuthProvider initialUser={user}>
+            <RecordPage record={record} pubname={pubname}/>
+        </AuthProvider>
+    </ChakraProvider>,
     document.getElementById('react-wrapper')
 );
 // async.parallel([

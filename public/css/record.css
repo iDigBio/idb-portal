@@ -252,20 +252,24 @@ h1#banner {
   margin-top: 30px;
 }
 #data #record,
-#data #flags {
+#data #flags,
+#data #annotations {
   border-top: 1px solid #ccc;
   font-size: 13px;
   padding-top: 20px;
 }
 #data #record .field-name,
-#data #flags .field-name {
+#data #flags .field-name,
+#data #annotations .field-name {
   font-weight: normal;
   color: #555;
 }
 #data #record .field-value,
 #data #flags .field-value,
+#data #annotations .field-value,
 #data #record .field-value a,
-#data #flags .field-value a {
+#data #flags .field-value a,
+#data #annotations .field-value a {
   word-wrap: break-all;
   word-break: break-word;
   overflow: hidden;

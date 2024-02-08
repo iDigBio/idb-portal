@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Provider from './shared/provider';
 import Title from './shared/title';
 import dwc from '../../lib/dwc_fields';
@@ -7,8 +7,105 @@ import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
 import idbapi from '../../lib/idbapi';
+import {AuthContext} from "../AuthProvider";
+import {
+    Button,
+    Box,
+    Textarea,
+    Text,
+    Grid,
+    Heading,
+    Divider,
+    Popover,
+    PopoverTrigger,
+    PopoverContent,
+    PopoverArrow,
+    PopoverCloseButton,
+    PopoverHeader,
+    PopoverBody,
+    Center,
+} from '@chakra-ui/react'
 
 
+const mockAnnotations = [
+    {
+        name: "Annotation 1",
+        submitter: "John Doe",
+        submitted_date: "February 5th, 2024",
+        content: `In general - dwc:month and dwc:day should be related to the event date. There could definitely be typos, 
+                but overall you should see a trend. If you are finding they are not at all related, 
+                then there is either something wrong with the interpretation of eventDate or you are including "NA" 
+                month and days in this comparison.`
+    }, {
+        name: "Annotation 2",
+        submitter: "Manuel Luciano",
+        submitted_date: "February 5th, 2024",
+        content: `I agree. The future date thing should be part of the temporal normalization. 
+        The test code uses all five date fields within the record and compares the three implied dates with datecollected even if 
+        they're in the future. Our current full ingestion process takes over a week to run and this is also a major problem. 
+        We're working on replacing this and have started with taxonomic normalization. I'll include dates next.`
+    }
+]
+
+const Annotations = ({annotations}) => {
+    const [open, setOpen] = useState(false)
+    const [denied, setDenied] = useState(false)
+    const { user } = useContext(AuthContext) || null
+    const [fakeUser, setFakeUser] = useState(null)
+    console.log(user)
+    const handleClick = () => {
+        if (user) {
+            setOpen(true)
+        } else {
+            setDenied(true)
+        }
+    }
+
+    return (
+        <Grid pb={'20px'}>
+            <Grid gap={'10px'}>
+                {annotations.map((an) => (
+                    <Grid borderWidth={'1px'} borderColor={'#d3d3d3'} borderStyle={'solid'} p={5}>
+                        <Grid id="an-heading" mb={'15px'}>
+                            <Heading>{an.name}</Heading>
+                            <Grid display={'flex'} flexDirection={'column'} >
+                                <Text m={0} color={'#949494'}>{an.submitter}</Text>
+                                <Text m={0} color={'#949494'}>Submitted {an.submitted_date}</Text>
+                            </Grid>
+                            <Divider />
+                        </Grid>
+                        <Text>{an.content}</Text>
+                    </Grid>
+                ))}
+
+            </Grid>
+            {open ?
+                <Grid id="new-annotation" pt={'20px'}>
+                    <Text fontSize={'3xl'}>New annotation</Text>
+                    <Textarea
+                        resize={'vertical'}
+                        size={'lg'}
+                        sx={{fontSize: '15px'}}
+                    ></Textarea>
+                    <Grid display={'flex'} justifyContent={'right'} mt={'10px'}>
+                        <Button fontSize={'15px'} size={'lg'} height={'40px'} colorScheme="green">Add annotation</Button>
+                    </Grid>
+                </Grid> :
+                <Popover isOpen={denied}>
+
+                        <Grid display={'flex'} justifyContent={'right'}><PopoverTrigger><Button fontSize={'15px'} mt={'20px'} height={'40px'} onClick={() => handleClick()} colorScheme="green">Add new annotation</Button></PopoverTrigger></Grid>
+
+                    <PopoverContent>
+                        <PopoverArrow />
+                        <PopoverCloseButton onClick={() => setDenied(false)} />
+                        <PopoverHeader>Access Denied!</PopoverHeader>
+                        <PopoverBody>You must be signed in to leave a comment. <a href={'/auth/callback'}>Sign in</a></PopoverBody>
+                    </PopoverContent>
+                </Popover>
+            }
+        </Grid>
+    )
+}
 
 const Row = ({keyid, data}) => {
 
@@ -139,8 +236,10 @@ const Record = ({record, raw }) => {
 
             <ul className="tabs" onClick={tabClick}>
                 <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                {raw.indexTerms.flags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
+                {raw.indexTerms.flags ?
+                    <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
                 <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+                <li className={active == 'annotations' ? 'active' : ''} data-tab="annotations">Annotations</li>
             </ul>
             <div id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
                 {nonPropsRecord}
@@ -149,6 +248,9 @@ const Record = ({record, raw }) => {
             <div id="raw" style={{display: (active == 'raw' ? 'block' : 'none' )}}>
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(raw)}}>
                 </p>
+            </div>
+            <div id="annotations" style={{display: (active == 'annotations' ? 'block' : 'none')}}>
+                <Annotations annotations={mockAnnotations} />
             </div>
         </div>
     );
@@ -247,6 +349,11 @@ const Citation = ({data, pubname}) => {
 };
 
 const RecordPage = ({ record }) => {
+    // console.log(record)
+    const { user } = useContext(AuthContext) || {}
+
+    // console.log(user)
+
     const navList = () => {
         const map = record.indexTerms.geopoint ? <li><a href="#map">Map</a></li> : null;
         const media = record.indexTerms.hasImage ? <li><a href="#media">Media</a></li> : null;
@@ -389,6 +496,7 @@ const RecordPage = ({ record }) => {
                     <Gallery data={index} />
                     <Provider data={record.attribution} />
                     <Record record={localRecord} raw={record} suppressHydrationWarning={true} />
+                    {/*<Annotations annotations={mockAnnotations} />*/}
                 </div>
                 <div className="col-lg-2 col-md-2 col-sm-2">
                     <div id="side-nav">

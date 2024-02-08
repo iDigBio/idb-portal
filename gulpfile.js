@@ -166,4 +166,21 @@ gulp.task('leaflet-extra', function() {
 
 });
 
-gulp.task('default', ["buildLess", "client", "mapper", "libs", "leaflet-extra"]);
+gulp.task('react-app', function() {
+    var b = transformChain(browserify({
+        entries: './public/client/js/react/src/record.js', // Entry point of record
+        debug: true,
+    }));
+
+    return b.bundle()
+        .pipe(source('built_record.js')) // Output file name
+        .pipe(buffer())
+        .pipe(sourcemaps.init({loadMaps: true}))
+        // .pipe(uglify()) // Uncomment if you want to minify your JS
+        .on('error', log.error)
+        .pipe(sourcemaps.write('./'))
+        .pipe(gulp.dest('./public/js/')); // Output directory
+});
+
+
+gulp.task('default', ["buildLess", "client", "mapper", "libs", "leaflet-extra", "react-app"]);

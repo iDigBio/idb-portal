@@ -230,11 +230,15 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
   });
 
   app.get('/api/session', async (req, res) => {
-    const sessionId = req.session.id;
-    const user = await getUserFromSession(sessionId)
-    if (user?.passport?.user) {
-      res.json({user: user.passport.user});
-    } else {
+    try {
+      const sessionId = req.session.id;
+      const user = await getUserFromSession(sessionId)
+      if (user?.passport?.user) {
+        res.json({user: user.passport.user});
+      } else {
+        res.status(401).json({user: null});
+      }
+    } catch (error) {
       res.status(401).json({user: null});
     }
   });
@@ -253,7 +257,7 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
   app.get('/search*', checkAuthenticated, search.searchBackbone);
   app.post('/stats', checkAuthenticated, search.sendStats);
   app.get('/view/:type/:id', checkAuthenticated, view.type);
-  app.get('/records/:id', checkAuthenticated, view.record);
+  app.get('/records/:id', view.record);
   app.get('/mediarecords/:id', checkAuthenticated, view.media);
   app.get('/tutorial', checkAuthenticated, home.tutorial);
   app.get('/publishers', checkAuthenticated, publishers.publishers);

@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 {% block headblock %}
 <link rel="stylesheet" type="text/css" href="/portal/css/record.css">
-{% block cssblock %}
-{% endblock %}
+
 {% if record.indexTerms.mediarecords -%}
 <meta property="og:image" content="https://api.idigbio.org/v2/media/{{ record.indexTerms.mediarecords[0] }}?size=webview" />
 {% else %}
@@ -21,10 +20,17 @@
 {% endif %}
 <meta property="og:url" content="https://{{ user.host }}/portal/records/{{ id }}" />
 <script type="text/javascript">
-{% autoescape false %}
-  var record={{ data }};
-{% endautoescape %}
+    {% autoescape false %}
+    var record = {{ data }};
+    var user = {{ user }};
+    {% endautoescape %}
 </script>
+
+<!-- Babel standalone for in-browser JSX/ES6+ transpilation -->
+<!--<script src="https://unpkg.com/@babel/standalone@7.14.0/babel.min.js"></script>-->
+
+<!-- Your custom script with Babel transpilation -->
+<script src="/js/built_record.js"></script>
 
 {% endblock %} 
 

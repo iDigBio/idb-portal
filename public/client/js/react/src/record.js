@@ -8,7 +8,9 @@ import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
 import idbapi from '../../lib/idbapi';
 
-
+const
+    NO_DEMO_BGCOLOR = false,
+    DEMO_BGCOLOR = 'palegreen';
 
 const Row = ({keyid, data}) => {
 
@@ -20,7 +22,7 @@ const Row = ({keyid, data}) => {
 
     });
     return (
-        <tr className="data-rows">
+        <tr className="data-rows" style={!NO_DEMO_BGCOLOR && keyid == 'dwc:associatedOccurrences' ? {backgroundColor: DEMO_BGCOLOR} : {}}>
             <td className="field-name" style={{width:'50%'}}>{name}</td>
             <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
         </tr>
@@ -44,7 +46,7 @@ const Section = ({name, data, active}) => {
         cl="section";
     }
     return (
-        <div id={name} className={cl} >
+        <div id={name} className={cl} style={!NO_DEMO_BGCOLOR && name == 'extendedspecimen' ? {backgroundColor: DEMO_BGCOLOR} : {}} >
             <h5>{dwc.names[name]}</h5>
             <table className="table table-striped table-condensed table-bordered">
                 <tbody>{rows}</tbody>
@@ -114,7 +116,7 @@ const Record = ({record, raw }) => {
 
             var has = [];
             var non_props_record = []
-            var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
+            var sorder = ['extendedspecimen','taxonomy','specimen','collectionevent','locality','paleocontext','other'];
             var tabs = [], self = this
             var cnt = 0;
 

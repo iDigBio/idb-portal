@@ -21,6 +21,7 @@ module.exports = {
       "dwc:taxonRemarks"
     ],
     "specimen": [
+      "dwc:associatedOccurrences",
       "dwc:typeStatus",
       "dwc:identifiedBy",
       "dwc:dateIdentified",
@@ -122,6 +123,9 @@ module.exports = {
       "dwc:latestAgeOrHighestStage",
       "dwc:lowestBiostratigraphicZone",
       "dwc:lithostratigraphicTerms"
+    ],
+    "extendedspecimen": [
+      "dwc:associatedOccurrences"
     ],
     "other": [
       "dcterms:language",
@@ -476,6 +480,8 @@ module.exports = {
     "idigbio:institutionName": "Institution Name",
     "idigbio:collectionCategory": "Collection Category",
     "idigbio:collectionSize": "Collection Size",
-    "idigbio:importantHoldings": "Important Holdings"
+    "idigbio:importantHoldings": "Important Holdings",
+    "extendedspecimen": "Links DEMOLOCATION 01",
+    "dwc:associatedOccurrences": "Associated Occurrences"
   }
 }

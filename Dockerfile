@@ -1,9 +1,10 @@
-FROM ubuntu:22.04
+FROM ubuntu:20.04
 
 ENV NODE_OPTIONS=--use-openssl-ca
+ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update
-RUN apt-get -y install make gcc g++ python3 python-is-python3 bash git curl openssl nodejs npm
+RUN apt-get -y install make gcc g++ python3 bash git curl openssl nodejs npm
 
 RUN npm i -g yarn
 RUN npm install -g n

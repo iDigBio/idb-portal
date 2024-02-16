@@ -29,7 +29,7 @@ require('dotenv').config();
 
 var app = expose(express());
 
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 // Discover the authentication provider (Keycloak), load the OIDC configuration from provider and create client
 Issuer.discover('https://idb-keycloak01.acis.ufl.edu:8443/realms/iDigBio').then(async keycloakIssuer => {
   // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);

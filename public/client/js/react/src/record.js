@@ -66,14 +66,14 @@ const Annotations = ({annotations}) => {
             <Grid gap={'10px'}>
                 {annotations.map((an) => (
                     <Grid borderWidth={'1px'} borderColor={'#d3d3d3'} borderStyle={'solid'} p={5}>
-                        <Grid id="an-heading" mb={'15px'}>
-                            <Heading>{an.name}</Heading>
+                        {/*<Grid id="an-heading" mb={'15px'}>*/}
+                            {/*<Heading>{an.name}</Heading>*/}
                             <Grid display={'flex'} flexDirection={'column'} >
                                 <Text m={0} color={'#949494'}>{an.submitter}</Text>
                                 <Text m={0} color={'#949494'}>Submitted {an.submitted_date}</Text>
                             </Grid>
                             <Divider />
-                        </Grid>
+                        {/*</Grid>*/}
                         <Text>{an.content}</Text>
                     </Grid>
                 ))}

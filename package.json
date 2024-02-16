@@ -43,6 +43,7 @@
     "csurf": "^1.9.0",
     "d3-queue": "^3.0.3",
     "datauri": "^1.0.5",
+    "dotenv": "^16.4.4",
     "elasticsearchclient": "~0.5.3",
     "es5-shim": "^4.5.9",
     "express": "^4.14.1",

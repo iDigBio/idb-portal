@@ -25,25 +25,25 @@ import view from 'app/controllers/view';
 import publishers from 'app/controllers/publishers';
 import { Issuer, Strategy } from 'openid-client';
 import passport from 'passport';
+require('dotenv').config();
 
 var app = expose(express());
 
 
 // Discover the authentication provider (Keycloak), load the OIDC configuration from provider and create client
-Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssuer => {
+Issuer.discover('https://idb-keycloak01.acis.ufl.edu:8443/realms/iDigBio').then(async keycloakIssuer => {
   // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
   const redisClient = await createClient({
-    url: "redis://localhost:6379/2"
+    url: `redis://${config.redis.password}@${config.redis.host}:6379/2`,
   })
 
   await redisClient.on('connect', () => console.log('Redis client connected to Redis instance.')).connect();
   redisClient.on('error', err => console.log(`Redis client encountered an error: ${err} `))
-
   const client = new keycloakIssuer.Client({
     client_id: 'portal',
-    client_secret: 'HSKYhUZrCgBUFQkaPwxFguV3bbkGyRGS',
-    redirect_uris: ['http://localhost:3000/auth/callback'],
-    post_logout_redirect_uris: ['http://localhost:3000/logout/callback'],
+    client_secret: process.env.KC_SECRET,
+    redirect_uris: [`https://${config.hostname}/auth/callback`],
+    post_logout_redirect_uris: [`https://${config.hostname}/logout/callback`],
     response_types: ['code'],
   });
 
@@ -153,7 +153,6 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
   });
 
   async function getUserFromSession(sessionId, callback) {
-    console.log(`sess:${sessionId}`)
     // Keep in mind redis values are stored as strings - you must parse the JSON string back into an object.
     const sessionDataString = await redisClient.get(`sess:${sessionId}`);
     const sessionData = JSON.parse(sessionDataString)
@@ -254,7 +253,7 @@ Issuer.discover('http://localhost:8081/realms/iDigBio').then(async keycloakIssue
   }
 
   app.get('/', home.index);
-  app.get('/search*', checkAuthenticated, search.searchBackbone);
+  app.get('/search*', search.searchBackbone);
   app.post('/stats', checkAuthenticated, search.sendStats);
   app.get('/view/:type/:id', checkAuthenticated, view.type);
   app.get('/records/:id', view.record);

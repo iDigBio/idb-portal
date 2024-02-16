@@ -1,13 +1,13 @@
-FROM ubuntu:18.04
+FROM ubuntu:22.04
 
 ENV NODE_OPTIONS=--use-openssl-ca
 
 RUN apt-get update
-RUN apt-get -y install make gcc g++ python bash git curl openssl nodejs npm
+RUN apt-get -y install make gcc g++ python3 python-is-python3 bash git curl openssl nodejs npm
 
 RUN npm i -g yarn
 RUN npm install -g n
-RUN n 16.20.2
+RUN n 20.11.0
 
 WORKDIR /var/www
 ADD . .

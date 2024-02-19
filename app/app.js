@@ -34,7 +34,7 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
 Issuer.discover('https://idb-keycloak01.acis.ufl.edu:8443/realms/iDigBio').then(async keycloakIssuer => {
   // console.log('Discovered issuer %s %O', keycloakIssuer.issuer, keycloakIssuer.metadata);
   const redisClient = await createClient({
-    url: `redis://${config.redis.password}@${config.redis.host}:6379/2`,
+    url: `redis://:${config.redis.password}@${config.redis.host}:6379/2`,
   })
 
   await redisClient.on('connect', () => console.log('Redis client connected to Redis instance.')).connect();

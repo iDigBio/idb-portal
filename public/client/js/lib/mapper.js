@@ -633,7 +633,8 @@ module.exports = function(elid, options){
             draw:{
                 polygon: false,
                 marker: false,
-                polyline: false
+                polyline: false,
+                circlemarker: false
             }
         });
         this.map.addControl(drawControl);

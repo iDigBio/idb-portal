@@ -241,64 +241,9 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
         }
     }
 
-    function getSynonyms(event){
-        event.preventDefault();
-        var localText = filter.text.split('\n'),self=this;
-        //dont run search for blank text
-        if(!_.isEmpty(localText[0].trim())){
-            //$(event.currentTarget).attr('disabled','disabled');
-            //$(event.currentTarget).find('.syn-loader').show();
-            var output = [];
-            async.each(localText,function(item,callback){
-                var val = helpers.strip(item);
-                if(val.length > 0){
-                    output.push(val);
-                    $.ajax({
-                        url: '/portal/eol_api/search/1.0.json?page=1&q='+val, //'http://eol.org/api/search/1.0.json?page=1&q='+val,
-                        type: 'GET',
-                        crossDomain: true,
-                        dataType: 'jsonp',
-                        success: function(resp) { 
-                           
-                            if(resp.results.length > 0){
-                                var rd = 2; //results index depth to search
-                                for(var i=0;i<=rd;i++){
-                                    if(!_.isUndefined(resp.results[i])){
-                                        var res = resp.results[i].content.split(';');
-                                        res.forEach(function(it,ind){
-                                            var syn = helpers.strip(it.toLowerCase());
-                                            if(localText.indexOf(syn)=== -1){
-                                                output.push(syn);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                            callback();
-                        },
-                        error: function(e,f){
-                            console.log('synonym lookup failed'); 
-                            callback();
-                        }
-                    });                     
-                }else{
-                    callback();
-                }
-            },function(err){
-                var localFilter = filter;
-                localFilter.text = output.join('\n');
-                changeFilter(localFilter);
-            });            
-        }        
-    }
-
     var localFilter = filter,disabled=false,textval;
     var name = localFilter.name, label = fields.byTerm[name].name;
     var syn = <span/>,cl='text';
-    if(fields.byTerm[name].synonyms){
-        syn=<a onClick={getSynonyms}>Add EOL Synonyms</a>;
-        cl+=' syn'
-    }
     if(localFilter.exists || localFilter.missing){
         disabled=true;
         textval=fields.byTerm[name].dataterm;

@@ -127,6 +127,9 @@ module.exports = {
     "extendedspecimen": [
       "dwc:associatedOccurrences"
     ],
+    "idhistory": [
+      "dwc:Identification"
+    ],
     "other": [
       "dcterms:language",
       "dcterms:modified",
@@ -482,6 +485,11 @@ module.exports = {
     "idigbio:collectionSize": "Collection Size",
     "idigbio:importantHoldings": "Important Holdings",
     "extendedspecimen": "Links DEMOLOCATION 01",
-    "dwc:associatedOccurrences": "Associated Occurrences"
+    "dwc:associatedOccurrences": "Associated Occurrences",
+    "idhistory": "Identification History",
+    "dwc:identificationID": "Identification ID",
+    "dwc:verbatimIdentification": "Verbatim Identification",
+    "dwc:identifiedByID": "Identified By (ID)",
+    "dwc:identificationVerificationStatus": "Identification Verification Status"
   }
 }

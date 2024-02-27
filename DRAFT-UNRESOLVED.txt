@@ -1,0 +1,12 @@
+(Remove this file when resolved)
+
+Make the following corrections before use in production:
+/public/client/js/lib/dwc_fields.js::
+- "dwc:associatedOccurrences" is duplicated and will appear twice in
+  specimen record pages.
+- Value for $.names.extendedspecimen has an inappropriate value.
+/public/client/js/react/src/record.js::
+- New fields are given CSS property 'backgroundColor: palegreen'
+  for visibility. Find and remove all usages of 'DEMO_BGCOLOR'.
+- If not giving 'extendedspecimen' its own section, remove from array
+  assigned to `var sorder`

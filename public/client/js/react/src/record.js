@@ -30,25 +30,46 @@ const Row = ({keyid, data}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {string} props.name Section ID name, corresponding to dwc_fields.js.
+ *      If 'idhistory:<number>', {@link data} is handled differently.
+ * @param {object|object[]} props.data Field key-values specific to this section.
+ *      If {@link name} is 'idhistory:<number>', this will instead be expected to be an array.
+ * @param {boolean} props.active If `true`, assign CSS class to allow this section to be visible.
+ */
 const Section = ({name, data, active}) => {
 
     var rows = []
     var data = data;
 
-    _.each(data,function(fld){
-        var key = Object.keys(fld)[0];
-        if(_.isString(fld[key])){
-            rows.push(<Row key={key} keyid={key} data={fld[key]} />);
-        }
-    });
+    if(name.startsWith('idhistory')){
+        _.forIn(data,function(fieldValue, fieldKey){
+            if(_.isString(fieldValue)){
+                rows.push(<Row key={fieldKey} keyid={fieldKey} data={fieldValue} />);
+            }
+        })
+    }else{
+        _.each(data,function(fld){
+            var key = Object.keys(fld)[0];
+            if(_.isString(fld[key])){
+                rows.push(<Row key={key} keyid={key} data={fld[key]} />);
+            }
+        });
+    }
     var cl = "section visible-print-block";
     if(active){
         cl="section";
     }
+    let isDemoContent = !NO_DEMO_BGCOLOR && (['extendedspecimen'].includes(name) || name.startsWith('idhistory'));
+    /** @type {string} */
+    let sectionName = (name.startsWith('idhistory') && name.includes(':')
+        ? dwc.names['idhistory'] +' '+ name.split(':')[1]
+        : dwc.names[name]);
     return (
-        <div id={name} className={cl} style={!NO_DEMO_BGCOLOR && name == 'extendedspecimen' ? {backgroundColor: DEMO_BGCOLOR} : {}} >
-            <h5>{dwc.names[name]}</h5>
-            <table className="table table-striped table-condensed table-bordered">
+        <div id={name} className={cl} style={isDemoContent ? {backgroundColor: DEMO_BGCOLOR} : {}} >
+            <h5>{sectionName}</h5>
+            <table className={`table ${ isDemoContent ? '' : 'table-striped' } table-condensed table-bordered`} >
                 <tbody>{rows}</tbody>
             </table>
         </div>
@@ -79,6 +100,11 @@ const Flags = ({flags, active}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {object} props.record {@linkcode props.raw}, after processing through dwc_fields.js
+ * @param {object} props.raw Raw search API JSON response for a record
+ */
 const Record = ({record, raw }) => {
     const [active, setActive] = useState("record")
     const [nonPropsRecord, setNonPropsRecord] = useState([])
@@ -116,8 +142,7 @@ const Record = ({record, raw }) => {
 
             var has = [];
             var non_props_record = []
-            var sorder = ['extendedspecimen','taxonomy','specimen','collectionevent','locality','paleocontext','other'];
-            var tabs = [], self = this
+            var sorder = ['extendedspecimen','taxonomy','specimen','collectionevent','locality','paleocontext','idhistory','other'];
             var cnt = 0;
 
             sorder.forEach(function(sec,index){
@@ -126,8 +151,17 @@ const Record = ({record, raw }) => {
                     if(cnt===0){
                         active=true;
                     }
-                    //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
-                    non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
+                    if(sec==='idhistory'){
+                        if(!Array.isArray(record[sec])){
+                            console.error('error creating section \'idhistory\': not an array');
+                        }else{
+                            record[sec].forEach((iden,iiden)=>{
+                                non_props_record.push(<Section key={`sec-${sec}-${cnt}-${iiden}`} name={`${sec}:${iiden+1}`} data={iden} active={active} />);
+                            });
+                        }
+                    }else{
+                        non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
+                    }
                     cnt++;
                 }
             });
@@ -248,6 +282,10 @@ const Citation = ({data, pubname}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {object} props.record Raw search API JSON response for a record from /view/records/:id
+ */
 const RecordPage = ({ record }) => {
     const navList = () => {
         const map = record.indexTerms.geopoint ? <li><a href="#map">Map</a></li> : null;
@@ -324,17 +362,71 @@ const RecordPage = ({ record }) => {
     _.defaults(canonical, data);
 
     _.each(dwc.order, function (val, key) {
-        _.each(dwc.order[key], function (fld) {
+        if (key === 'idhistory') {
+            /* Requires special handling to flatten:
+             * Unlike other sections, this one is an array.
+             *
+             * We SHOULD get:
+             * localRecord: {
+             *   idhistory: [{
+             *     idfield1_1: ...,
+             *     idfield1_2: ...,
+             *     ...
+             *   },{
+             *     idfield2_1: ...,
+             *     idfield2_2: ...,
+             *     ...
+             *   },
+             *   ...
+             *   ]
+             * }
+             * Otherwise, with the original implementation under 'else',
+             * we end up with:
+             * localRecord: {
+             *   idhistory: [{
+             *     'dwc:Identification': [{
+             *       idfield1_1: ...,
+             *       idfield1_2: ...,
+             *       ...
+             *     },{
+             *       idfield2_1: ...,
+             *       idfield2_2: ...,
+             *       ...
+             *     },
+             *     ...
+             *     ]
+             *   }]
+             * }
+             */
+            const fld = 'dwc:Identification';
             if (_.has(canonical, fld)) {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];
                 }
-                const datum = {};
-                datum[fld] = canonical[fld];
-                localRecord[key].push(datum);
+                if (!_.isArray(canonical[fld]))
+                    console.error('error parsing field \'%s\': expected an array', fld);
+                _.forEach(canonical[fld], function (iden) {
+                    let datum = {};
+                    _.forIn(iden, function(idenFieldValue, idenFieldName) {
+                        datum[idenFieldName] = idenFieldValue;
+                    });
+                    localRecord[key].push(datum);
+                })
                 has.push(fld);
             }
-        });
+        } else {
+            _.each(dwc.order[key], function (fld) {
+                if (_.has(canonical, fld)) {
+                    if (!_.has(localRecord, key)) {
+                        localRecord[key] = [];
+                    }
+                    let datum = {};
+                    datum[fld] = canonical[fld];
+                    localRecord[key].push(datum);
+                    has.push(fld);
+                }
+            });
+        }
     });
 
     const dif = _.difference(Object.keys(canonical), has);

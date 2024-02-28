@@ -108,6 +108,7 @@ const Flags = ({flags, active}) => {
 const Record = ({record, raw }) => {
     const [active, setActive] = useState("record")
     const [nonPropsRecord, setNonPropsRecord] = useState([])
+    const [recordIdHistory, setRecordIdHistory] = useState([])
 
     function formatJSON(json){
         if (typeof json != 'string') {
@@ -141,10 +142,12 @@ const Record = ({record, raw }) => {
     useEffect(() => {
 
             var has = [];
-            var non_props_record = []
+            var non_props_record = [];
+            var record_id_history = [];
             var sorder = ['extendedspecimen','taxonomy','specimen','collectionevent','locality','paleocontext','idhistory','other'];
             var cnt = 0;
 
+            // Record tab rendering
             sorder.forEach(function(sec,index){
                 if(_.has(record,sec)){
                     var active=true;
@@ -152,6 +155,7 @@ const Record = ({record, raw }) => {
                         active=true;
                     }
                     if(sec==='idhistory'){
+                        //FIXME Implementation duplicated below (at "Render Identification History into its own tab")
                         if(!Array.isArray(record[sec])){
                             console.error('error creating section \'idhistory\': not an array');
                         }else{
@@ -167,21 +171,42 @@ const Record = ({record, raw }) => {
             });
             setNonPropsRecord([...nonPropsRecord, non_props_record])
 
-
+            // Render Identification History into its own tab, if applicable.
+            //
+            // Basically duplicate code from the 'idhistory' carve-out for Record tab rendering above
+            // (while indecisive about where we want to put this)
+            let sec = 'idhistory';
+            if(_.has(record,sec)){
+                var active=true;
+                if(!Array.isArray(record[sec])){
+                    console.error('error creating section \'idhistory\': not an array');
+                }else{
+                    record[sec].forEach((iden,iiden)=>{
+                        record_id_history.push(<Section key={`idhist-sec-${sec}-${iiden}`} name={`${sec}:${iiden+1}`} data={iden} active={active} />);
+                    });
+                }
+            }
+            setRecordIdHistory([...recordIdHistory, record_id_history])
     }, []);
+
+    let
+        doRenderIdHistory = !!raw.indexTerms?.indexData?.['dwc:Identification'],
+        doRenderFlags = !!raw.indexTerms.flags;
 
     return (
         <div id="data" className="scrollspy section">
 
             <ul className="tabs" onClick={tabClick}>
                 <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                {raw.indexTerms.flags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
+                {doRenderIdHistory ? <li className={active == 'idhistory' ? 'active' : ''} data-tab="idhistory" style={!NO_DEMO_BGCOLOR ? {backgroundColor: DEMO_BGCOLOR} : {}}>ID History</li> : ''}
+                {doRenderFlags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
                 <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
             </ul>
             <div id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
                 {nonPropsRecord}
             </div>
-            {raw.indexTerms.flags ? <Flags flags={raw.indexTerms.flags} active={active == 'flags'} /> : ''}
+            {doRenderIdHistory ? <div id="idhistory" className="clearfix" style={{display: (active == 'idhistory' ? 'block' : 'none' ), backgroundColor: (!NO_DEMO_BGCOLOR ? DEMO_BGCOLOR : '')}}>{recordIdHistory}</div> : ''}
+            {doRenderFlags ? <Flags flags={raw.indexTerms.flags} active={active == 'flags'} /> : ''}
             <div id="raw" style={{display: (active == 'raw' ? 'block' : 'none' )}}>
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(raw)}}>
                 </p>

@@ -68,7 +68,7 @@
         "group": "taxonomy",
         "dataterm": "dwc:higherClassification"
     },
-    "Common Name":{
+    "Vernacular Name":{
         "term": "commonname",
         "type": "text",
         "group": "taxonomy",
@@ -104,7 +104,7 @@
         "group": "locality",
         "dataterm": "dwc:stateProvince"
     },
-    "County/Parish": {
+    "County": {
         "term": "county",
         "type": "text",
         "group": "locality",
@@ -160,7 +160,7 @@
         "group": "specimen",
         "dataterm": "dwc:institutionCode"
     },
-    "Collected By": {
+    "Recorded By": {
         "term": "collector",
         "type": "text",
         "group": "collectionevent",
@@ -172,7 +172,7 @@
         "group": "collectionevent",
         "dataterm": "dwc:fieldNumber"
     },
-    "Collector Number": {
+    "Record Number": {
         "term": "recordnumber",
         "type": "text",
         "group": "collectionevent",
@@ -356,7 +356,7 @@
         "type": "text",
         "group": "other"
     },
-    "Sequences": {
+    "Associated Sequences": {
         "term": "associatedsequences",
         "type": "text",
         "group": "specimen",

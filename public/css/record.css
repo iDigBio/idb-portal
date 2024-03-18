@@ -248,6 +248,10 @@ h1#banner {
   text-align: left;
   padding-left: 8px;
 }
+#summary-info .sec .interpreted {
+  text-align: center;
+  padding-left: 10px;
+}
 #data {
   margin-top: 30px;
 }

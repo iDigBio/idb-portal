@@ -94,6 +94,7 @@ const extendedSpecimenOrder = {
         "chrono:chronometricAgeReferences": 6,
     },
 }
+import {Button, Tag, Grid, Flex} from 'antd'
 
 
 /**
@@ -113,13 +114,28 @@ function convertLinkText(text) {
     })}} />)
 }
 
+const Row = ({keyid, data, interpreted}) => {
+    let tag
+    if (interpreted) {
+        tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+    } else {
+        // tag = <Tag style={{marginLeft: '10px'}} color={'red'}>Original</Tag>
+        tag = <></>
+            }
 
-const Row = ({keyid, data}) => {
-    var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+            var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+    var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+    var str = data.replace(regex, function(match){
+        var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
+        return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+    });
+
+    console.log(data)
     return (
         <tr className="data-rows">
             <td className="field-name" style={{width:'50%'}}>{name}</td>
-            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}</td>
+            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}{tag}</td>
+            {/*<td style={{textAlign: "center"}}>{tag}</td>*/}
         </tr>
     );
 
@@ -139,7 +155,7 @@ const Section = ({name, data, active}) => {
     _.each(data,function(fld){
         var key = Object.keys(fld)[0];
         if(_.isString(fld[key])){
-            rows.push(<Row key={key} keyid={key} data={fld[key]} />);
+            rows.push(<Row key={key} keyid={key} data={fld[key]} interpreted={!!fld.interpreted} />);
         }
     });
     var cl = "section visible-print-block";
@@ -221,10 +237,10 @@ const Record = ({record, raw }) => {
     }
 
     /** Extracts keys from array of objects.
-     * 
+     *
      * {@link sec} is used for filtering out columns designated hidden
      * (see {@link extendedSpecimenOrder}).
-     * 
+     *
      * @param {object[]} arr Section data array
      * @param {string} sec Section name
      * @returns {string[]}
@@ -254,7 +270,7 @@ const Record = ({record, raw }) => {
      * Applies table data corrections prior to display:
      * - Instantiates missing keys to '' (empty string)
      * - Converts URLs within data values to hyperlinks
-     * 
+     *
      * @param {object[]} data - Section data array
      * @param {string[]} keys
      */
@@ -505,7 +521,18 @@ const RecordPage = ({ record }) => {
         _.each(list, item => {
             if (_.has(data, item)) {
                 const vals = _.map(_.words(data[item], /[^ ]+/g), i => _.capitalize(i)).join(' ');
-                values.push(<tr key={'named-' + item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
+                if (item.includes("dwc:")) {
+                    values.push(<tr key={'named-' + item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
+                } else {
+                    values.push(
+                        <tr key={'named-' + item} className="name">
+                            <td>{dic[item].name}</td>
+                            <td className="val">{vals}</td>
+                            <td className='interpreted'><Tag color={"green"}>Interpreted</Tag></td>
+                        </tr>
+                    );
+                }
+
             }
         });
         return values;
@@ -515,10 +542,16 @@ const RecordPage = ({ record }) => {
     const has = [], canonical = {};
     let eventdate = null, lat = null, lon = null;
     let localRecord = {}
+    let interpreted = new Set()
     _.forOwn(index, function (v, k) {
         if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
             const dt = fields.byTerm[k].dataterm;
-            canonical[dt] = _.has(data, dt) ? data[dt] : v;
+            if (_.has(data,dt)) {
+                canonical[dt] = data[dt]
+            } else {
+                canonical[dt] = v
+                interpreted.add(dt)
+            }
         }
     });
 
@@ -594,6 +627,20 @@ const RecordPage = ({ record }) => {
                 }
             });
         }
+        _.each(dwc.order[key], function (fld) {
+            if (_.has(canonical, fld)) {
+                if (!_.has(localRecord, key)) {
+                    localRecord[key] = [];
+                }
+                const datum = {};
+                datum[fld] = canonical[fld];
+                if (interpreted.has(fld)) {
+                    datum['interpreted'] = true
+                }
+                localRecord[key].push(datum);
+                has.push(fld);
+            }
+        });
     });
 
     const dif = _.difference(Object.keys(canonical), has);

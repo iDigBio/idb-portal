@@ -5,7 +5,7 @@ export function newFilterProps(term){
     const type = fields.byTerm[term].type;
     switch (type) {
         case 'text':
-            return { name: term, type: type, text: '', exists: false, missing: false };
+            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: true, or: false };
         case 'daterange':
             return { name: term, type: type, range: { gte: '', lte: '' }, exists: false, missing: false };
         case 'numericrange':
@@ -166,13 +166,40 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
             if(event.currentTarget.value=='exists'){
                 localFilter.exists = true;
                 localFilter.missing = false;
+                localFilter.exact = false
+                localFilter.fuzzy = false
+                localFilter.or = false
             }else if(event.currentTarget.value=='missing'){
                 localFilter.exists = false;
                 localFilter.missing = true;
+                localFilter.exact = false
+                localFilter.fuzzy = false
+                localFilter.or = false
+            } else if (event.currentTarget.value=='exact') {
+                localFilter.exact = true
+                localFilter.exists = false
+                localFilter.missing = false
+                localFilter.fuzzy = false
+                localFilter.or = false
+            } else if (event.currentTarget.value=='fuzzy') {
+                localFilter.fuzzy = !localFilter.fuzzy
+                localFilter.exact = false
+                localFilter.exists = false
+                localFilter.missing = false
+                // localFilter.or = false
+            } else if (event.currentTarget.value=='or') {
+                localFilter.or = true
+                localFilter.exact = false
+                localFilter.exists = false
+                localFilter.missing = false
+                // localFilter.fuzzy = false
             }
         }else{
             localFilter.exists = false;
             localFilter.missing = false;
+            localFilter.exact = false
+            if (event.currentTarget.value === 'fuzzy') {localFilter.fuzzy = false}
+            if (event.currentTarget.value === 'or') {localFilter.or = false}
         }
         changeFilter(localFilter);
     }
@@ -326,14 +353,37 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
             <div className="presence">
                 <div className="checkbox">
                     <label>
-                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={localFilter.exists}/>
+                        <input type="checkbox" name={name} value="exists" onChange={presenceClick}
+                               checked={localFilter.exists}/>
                         Present
                     </label>
                 </div>
                 <div className="checkbox">
                     <label>
-                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={localFilter.missing}/>
+                        <input type="checkbox" name={name} value="missing" onChange={presenceClick}
+                               checked={localFilter.missing}/>
                         Missing
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="exact" onChange={presenceClick}
+                               checked={localFilter.exact}/>
+                        Exact
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="fuzzy" onChange={presenceClick}
+                               checked={localFilter.fuzzy}/>
+                        Fuzzy
+                    </label>
+                </div>
+                <div className="checkbox">
+                    <label>
+                        <input type="checkbox" name={name} value="or" onChange={presenceClick}
+                               checked={localFilter.or}/>
+                        OR
                     </label>
                 </div>
             </div>

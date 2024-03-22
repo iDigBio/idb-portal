@@ -202,9 +202,18 @@ module.exports = (function(){
                 var term = item.name;//fields.byName[item.name].term;
                 if(item.exists){
                     idbq[term]={'type': 'exists'};
-                }else if(item.missing){
+                }
+                else if(item.missing){
                     idbq[term]={'type': 'missing'};
-                }else if(item.text && !_.isEmpty(item.text)){
+                }
+                else if (item.exact) {
+                    let text = item.text.split('\n');
+                    idbq[term] = {
+                        'type': 'exact',
+                        'text': text[0]
+                    }
+                }
+                else if(item.text && !_.isEmpty(item.text)){
                     var text = item.text.split('\n');
                     if(text.length>1){
                         idbq[term] = text;

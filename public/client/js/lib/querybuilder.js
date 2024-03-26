@@ -206,11 +206,17 @@ module.exports = (function(){
                 else if(item.missing){
                     idbq[term]={'type': 'missing'};
                 }
-                else if (item.exact) {
+                else if (item.exact && !_.isEmpty(item.text)) {
                     let text = item.text.split('\n'); // user delimits multiple terms with \n
                     idbq[term] = {
                         'type': 'exact',
-                        'text': text.length > 1 ? text : text[0] // array for multiple terms
+                        'text': text.length > 1 ? text : text[0] // single vs multiple term(s)
+                    }
+                } else if (item.fuzzy && !_.isEmpty(item.text)) {
+                    let text = item.text.split('\n');
+                    idbq[term] = {
+                        'type': 'fuzzy',
+                        'text': text.length > 1 ? text : text[0] // single vs multiple term(s)
                     }
                 }
                 else if(item.text && !_.isEmpty(item.text)){

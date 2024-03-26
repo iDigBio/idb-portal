@@ -5,7 +5,7 @@ export function newFilterProps(term){
     const type = fields.byTerm[term].type;
     switch (type) {
         case 'text':
-            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: true, or: false };
+            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: true };
         case 'daterange':
             return { name: term, type: type, range: { gte: '', lte: '' }, exists: false, missing: false };
         case 'numericrange':
@@ -168,38 +168,27 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
                 localFilter.missing = false;
                 localFilter.exact = false
                 localFilter.fuzzy = false
-                localFilter.or = false
             }else if(event.currentTarget.value=='missing'){
                 localFilter.exists = false;
                 localFilter.missing = true;
                 localFilter.exact = false
                 localFilter.fuzzy = false
-                localFilter.or = false
             } else if (event.currentTarget.value=='exact') {
                 localFilter.exact = true
                 localFilter.exists = false
                 localFilter.missing = false
                 localFilter.fuzzy = false
-                localFilter.or = false
             } else if (event.currentTarget.value=='fuzzy') {
                 localFilter.fuzzy = !localFilter.fuzzy
                 localFilter.exact = false
                 localFilter.exists = false
                 localFilter.missing = false
-                // localFilter.or = false
-            } else if (event.currentTarget.value=='or') {
-                localFilter.or = true
-                localFilter.exact = false
-                localFilter.exists = false
-                localFilter.missing = false
-                // localFilter.fuzzy = false
             }
         }else{
             localFilter.exists = false;
             localFilter.missing = false;
             localFilter.exact = false
             if (event.currentTarget.value === 'fuzzy') {localFilter.fuzzy = false}
-            if (event.currentTarget.value === 'or') {localFilter.or = false}
         }
         changeFilter(localFilter);
     }
@@ -209,6 +198,7 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
         localFilter.text = localText;
         setText(localText)
         debounce(localFilter)
+        console.log(text)
     }
 
     function setAutocomplete(event){
@@ -377,13 +367,6 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
                         <input type="checkbox" name={name} value="fuzzy" onChange={presenceClick}
                                checked={localFilter.fuzzy}/>
                         Fuzzy
-                    </label>
-                </div>
-                <div className="checkbox">
-                    <label>
-                        <input type="checkbox" name={name} value="or" onChange={presenceClick}
-                               checked={localFilter.or}/>
-                        OR
                     </label>
                 </div>
             </div>

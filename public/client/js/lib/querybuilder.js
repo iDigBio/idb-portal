@@ -207,10 +207,10 @@ module.exports = (function(){
                     idbq[term]={'type': 'missing'};
                 }
                 else if (item.exact) {
-                    let text = item.text.split('\n');
+                    let text = item.text.split('\n'); // user delimits multiple terms with \n
                     idbq[term] = {
                         'type': 'exact',
-                        'text': text[0]
+                        'text': text.length > 1 ? text : text[0] // array for multiple terms
                     }
                 }
                 else if(item.text && !_.isEmpty(item.text)){

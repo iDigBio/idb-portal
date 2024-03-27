@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from "react";
 import idbapi from '../../../lib/idbapi';
-
+import { AutoComplete, Input } from 'antd';
+const { TextArea } = Input;
 export function newFilterProps(term){
     const type = fields.byTerm[term].type;
     switch (type) {
@@ -22,7 +23,7 @@ export function defaultFilters() {
     });
     return filters;
 }
-const Filters = ({filters, search, searchChange, active}) => {
+const Filters = ({filters, search, searchChange, active, aggs}) => {
 
     function filterPropsChange(filterObj){
         const list = filters.map(item => item.name);
@@ -34,7 +35,7 @@ const Filters = ({filters, search, searchChange, active}) => {
     function makeFilter(filter) {
         switch (filter.type) {
             case 'text':
-                return <TextFilter key={filter.name} filter={filter} removeFilter={removeFilter} search={search} changeFilter={filterPropsChange} />;
+                return <TextFilter key={filter.name} filter={filter} removeFilter={removeFilter} search={search} changeFilter={filterPropsChange} aggs={aggs} />;
             case 'daterange':
                 return <DateRangeFilter key={filter.name} filter={filter} removeFilter={removeFilter} changeFilter={filterPropsChange} />;
             case 'numericrange':
@@ -141,9 +142,9 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     }
 })
 
-const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
+const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
     const [text, setText] = useState(filter.text)
-
+    const [dropdownOpen, setDropdownOpen] = useState(false)
     useEffect(() => {
         debounce(filter)
     }, []);
@@ -192,13 +193,13 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
         }
         changeFilter(localFilter);
     }
-    function textType(event){
-        var localText = event.currentTarget.value
+    function textType(value){
+        setDropdownOpen(value !== '')
+        var localText = value
         var localFilter = filter;//, filter=filters[ind];
         localFilter.text = localText;
         setText(localText)
         debounce(localFilter)
-        console.log(text)
     }
 
     function setAutocomplete(event){
@@ -312,16 +313,39 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
     var localFilter = filter,disabled=false,textval;
     var name = localFilter.name, label = fields.byTerm[name].name;
     var syn = <span/>,cl='text';
-    if(fields.byTerm[name].synonyms){
-        syn=<a onClick={getSynonyms}>Add EOL Synonyms</a>;
-        cl+=' syn'
-    }
+    // if(fields.byTerm[name].synonyms){
+    //     syn=<a onClick={getSynonyms}>Add EOL Synonyms</a>;
+    //     cl+=' syn'
+    // }
     if(localFilter.exists || localFilter.missing){
         disabled=true;
         textval=fields.byTerm[name].dataterm;
     }else{
         textval=text;
     }
+
+    const handleSelect = (value) => { // fires when a user selects an option from the dropdown
+        textType(value)
+        setDropdownOpen(false)
+    }
+
+    const renderItem = (count, name) => ({ // formats aggregation for rendering on dropdown
+        value: name,
+        label: (
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                }}
+            >
+                {name}
+                <span>
+                    {count}
+                </span>
+            </div>
+        ),
+    });
+
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
             <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
@@ -329,15 +353,37 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
             </a>
             <label className="filter-name">{label}</label>
             <div className={cl}>
-            {syn}
-                <textarea className="form-control" name={name} data-name={name}
-                    placeholder={fields.byTerm[name].dataterm}
+                <AutoComplete
+                    options={aggs.map((agg) => { //dropdown options
+                        return renderItem(agg.doc_count.toString(), agg.key)
+                    })}
+                    popupMatchSelectWidth={false} // Allows custom dropdown width
+                    dropdownStyle={{ width: 400 }} // Sets the dropdown width
+                    onSelect={handleSelect}
+                    onBlur={() => setDropdownOpen(false)}
+                    onFocus={() => setDropdownOpen(text !== '' )} //dont open dropdown when text is empty
+                    open={dropdownOpen}
                     disabled={disabled}
-                    onChange={textType}
-                    onFocus={setAutocomplete}
                     value={textval}
                 >
-                </textarea>
+                    <TextArea
+                        className="form-control"
+                        name={name} data-name={name}
+                        placeholder={fields.byTerm[name].dataterm}
+                        disabled={disabled}
+                        onChange={(e) => textType(e.currentTarget.value)}
+                        onPressEnter={() => setDropdownOpen(false)}
+                    />
+                </AutoComplete>
+
+                {/*<textarea className="form-control" name={name} data-name={name}*/}
+                {/*    placeholder={fields.byTerm[name].dataterm}*/}
+                {/*    disabled={disabled}*/}
+                {/*    onChange={textType}*/}
+                {/*    onFocus={setAutocomplete}*/}
+                {/*    value={textval}*/}
+                {/*>*/}
+                {/*</textarea>*/}
 
             </div>
             <div className="presence">

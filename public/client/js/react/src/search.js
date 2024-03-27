@@ -15,6 +15,7 @@ const Search = () => {
     const [optionsTab, setOptionsTab] = useState('filters')
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
+    const [aggs, setAggs] = useState([])
     function defaultSearch(){
         return {
             filters: defaultFilters(),
@@ -102,11 +103,11 @@ const Search = () => {
             <div id="top" className="clearfix">
                 <div id="search" className="clearfix">
                     <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
-                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
+                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} aggs={aggs} />
                 </div>
                 <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
             </div>
-            <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
+            <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange} setAggs={setAggs} />
         </div>
     )
 
@@ -192,7 +193,7 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
 
 }
 
-const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
+const OptionsPanel = ({ searchChange, search, view, viewChange, aggs }) => {
     const showPanel = (event) => {
         event.preventDefault();
         event.stopPropagation();
@@ -203,7 +204,7 @@ const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
     const optionPanel = (name) => {
         switch (name) {
             case 'filters':
-                return <Filters searchChange={searchChange} search={search} filters={search.filters} active="active" />;
+                return <Filters searchChange={searchChange} search={search} filters={search.filters} active="active" aggs={aggs} />;
             case 'sorting':
                 return <Sorting searchChange={searchChange} sorting={search.sorting} active="active" />;
             case 'mapping':

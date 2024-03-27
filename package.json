@@ -27,6 +27,7 @@
     "@bower_components/leaflet-utfgrid": "danzel/Leaflet.utfgrid",
     "@bower_components/leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "@elastic/filesaver": "^1.1.2",
+    "antd": "^5.15.4",
     "async": "^2.0.0",
     "body-parser": "^1.16.1",
     "bootstrap": "^3.3.6",

@@ -353,37 +353,37 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
             </a>
             <label className="filter-name">{label}</label>
             <div className={cl}>
-                <AutoComplete
-                    options={aggs.map((agg) => { //dropdown options
-                        return renderItem(agg.doc_count.toString(), agg.key)
-                    })}
-                    popupMatchSelectWidth={false} // Allows custom dropdown width
-                    dropdownStyle={{ width: 400 }} // Sets the dropdown width
-                    onSelect={handleSelect}
-                    onBlur={() => setDropdownOpen(false)}
-                    onFocus={() => setDropdownOpen(text !== '' )} //dont open dropdown when text is empty
-                    open={dropdownOpen}
-                    disabled={disabled}
-                    value={textval}
-                >
-                    <TextArea
-                        className="form-control"
-                        name={name} data-name={name}
-                        placeholder={fields.byTerm[name].dataterm}
+                {filter.name === 'scientificname' ? // only field with an aggregation for autocomplete
+                    <AutoComplete
+                        options={aggs.map((agg) => { //dropdown options
+                            return renderItem(agg.doc_count.toString(), agg.key)
+                        })}
+                        popupMatchSelectWidth={false} // Allows custom dropdown width
+                        dropdownStyle={{ width: 400 }} // Sets the dropdown width
+                        onSelect={handleSelect}
+                        onBlur={() => setDropdownOpen(false)}
+                        onFocus={() => setDropdownOpen(text !== '' )} //dont open dropdown when text is empty
+                        open={dropdownOpen}
                         disabled={disabled}
-                        onChange={(e) => textType(e.currentTarget.value)}
-                        onPressEnter={() => setDropdownOpen(false)}
-                    />
-                </AutoComplete>
-
-                {/*<textarea className="form-control" name={name} data-name={name}*/}
-                {/*    placeholder={fields.byTerm[name].dataterm}*/}
-                {/*    disabled={disabled}*/}
-                {/*    onChange={textType}*/}
-                {/*    onFocus={setAutocomplete}*/}
-                {/*    value={textval}*/}
-                {/*>*/}
-                {/*</textarea>*/}
+                        value={textval}
+                    >
+                        <TextArea
+                            className="form-control"
+                            name={name} data-name={name}
+                            placeholder={fields.byTerm[name].dataterm}
+                            disabled={disabled}
+                            onChange={(e) => textType(e.currentTarget.value)}
+                            onPressEnter={() => setDropdownOpen(false)}
+                        />
+                    </AutoComplete> : <AutoComplete><TextArea className="form-control" name={name} data-name={name} // all other fields use old textarea
+                                                  placeholder={fields.byTerm[name].dataterm}
+                                                  disabled={disabled}
+                                                  onChange={(e) => textType(e.currentTarget.value)}
+                                                  onFocus={setAutocomplete}
+                                                  value={textval}
+                                        >
+                                        </TextArea></AutoComplete>
+                }
 
             </div>
             <div className="presence">

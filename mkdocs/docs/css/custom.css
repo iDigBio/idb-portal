@@ -1,0 +1,15 @@
+/*.md-header__topic {*/
+/*    display: none;*/
+/*}*/
+.md-nav__item .md-nav__link--active,.md-nav__item .md-nav__link--active code {
+    color: green;
+}
+:root {
+    --md-primary-fg-color:        #272727;
+    --md-primary-fg-color--light: #272727;
+    --md-primary-fg-color--dark:  #272727;
+}
+
+.md-typeset a {
+    color: #4051b5;
+}

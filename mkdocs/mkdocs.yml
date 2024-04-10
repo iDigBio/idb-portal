@@ -1,7 +1,6 @@
 site_name: Official Documentation
 site_author: Manuel Luciano
 site_description: iDigBio User Documentation
-site_dir: ../docs
 theme:
   features:
     - navigation.tabs

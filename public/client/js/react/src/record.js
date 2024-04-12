@@ -7,6 +7,7 @@ import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
 import idbapi from '../../lib/idbapi';
+import { Table } from 'antd';
 
 const
     NO_DEMO_BGCOLOR = false,
@@ -139,31 +140,82 @@ const Record = ({record, raw }) => {
         setActive(e.target.attributes['data-tab'].value)
     }
 
+    function extractKeys(arr) { // extracts keys from array of objects
+        return arr.reduce((keys, obj) => {
+            Object.keys(obj).forEach(key => {
+                if (!keys.includes(key)) {
+                    keys.push(key);
+                }
+            });
+            return keys;
+        }, [])
+    }
+
+    function getAntdColumns(keys) { // takes a list of keys and formats them to be used as antd column headers
+        const sorted_keys = keys.sort((a, b) => {
+            if (a === 'dwc:scientificName') return -1;
+            if (b === 'dwc:scientificName') return 1;
+            return 0;
+        })
+        return sorted_keys.map(key => ({
+            title: _.isUndefined(dwc.names[key]) ? key : dwc.names[key],
+            dataIndex: key,
+            key: key,
+        }));
+    }
+
+    function completeData(data, keys) { // instantiates missing keys to ''
+        return data.map((item, index) => {
+            keys.forEach(key => {
+                if (!item.hasOwnProperty(key)) {
+                    item[key] = '';
+                }
+            });
+            return { ...item, key: index }
+        });
+    }
+
+    function getAntdTable(recordSection, sec) {
+        const allKeys = extractKeys(recordSection)
+        const columns = getAntdColumns(allKeys)
+        const rows = completeData(recordSection, allKeys)
+        return (<div>
+                    <h5>{dwc.names[sec]}</h5>
+                    <Table
+                        className={'custom-antd-table'}
+                        rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
+                        columns={columns}
+                        dataSource={rows}
+                        scroll={{x: 'max-content'}}
+                        pagination={false}
+                        size={"small"}
+                    />
+                </div>)
+    }
+
     useEffect(() => {
 
-            var has = [];
-            var non_props_record = [];
-            var record_id_history = [];
-            var sorder = ['extendedspecimen','taxonomy','specimen','collectionevent','locality','paleocontext','idhistory','other'];
-            var cnt = 0;
-
-            // Record tab rendering
-            sorder.forEach(function(sec,index){
-                if(_.has(record,sec)){
-                    var active=true;
-                    if(cnt===0){
-                        active=true;
-                    }
-                    if(sec==='idhistory'){
-                        //FIXME Implementation duplicated below (at "Render Identification History into its own tab")
+        var has = [];
+        var non_props_record = [];
+        var record_id_history = [];
+        var sorder = ['extendedspecimen', 'taxonomy', 'specimen', 'collectionevent', 'locality', 'paleocontext', 'idhistory', 'extendedmeasurementorfact', 'other'];
+        var cnt = 0;
+        // Record tab rendering
+        sorder.forEach(function (sec, index) {
+            if (_.has(record, sec)) {
+                var active = true;
+                if (cnt === 0) {
+                    active = true;
+                }
+                if (sec === 'idhistory' || sec === 'extendedmeasurementorfact') {
+                    //FIXME Implementation duplicated below (at "Render Identification History into its own tab")
                         if(!Array.isArray(record[sec])){
                             console.error('error creating section \'idhistory\': not an array');
                         }else{
-                            record[sec].forEach((iden,iiden)=>{
-                                non_props_record.push(<Section key={`sec-${sec}-${cnt}-${iiden}`} name={`${sec}:${iiden+1}`} data={iden} active={active} />);
-                            });
+                            non_props_record.push(getAntdTable(record[sec], sec))
                         }
-                    }else{
+                    }
+                    else{
                         non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
                     }
                     cnt++;
@@ -181,9 +233,7 @@ const Record = ({record, raw }) => {
                 if(!Array.isArray(record[sec])){
                     console.error('error creating section \'idhistory\': not an array');
                 }else{
-                    record[sec].forEach((iden,iiden)=>{
-                        record_id_history.push(<Section key={`idhist-sec-${sec}-${iiden}`} name={`${sec}:${iiden+1}`} data={iden} active={active} />);
-                    });
+                    record_id_history = getAntdTable(record[sec], sec)
                 }
             }
             setRecordIdHistory([...recordIdHistory, record_id_history])
@@ -197,17 +247,17 @@ const Record = ({record, raw }) => {
         <div id="data" className="scrollspy section">
 
             <ul className="tabs" onClick={tabClick}>
-                <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                {doRenderIdHistory ? <li className={active == 'idhistory' ? 'active' : ''} data-tab="idhistory" style={!NO_DEMO_BGCOLOR ? {backgroundColor: DEMO_BGCOLOR} : {}}>ID History</li> : ''}
-                {doRenderFlags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
-                <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+                <li className={active === 'record' ? 'active' : ''} data-tab="record">Data</li>
+                {doRenderIdHistory ? <li className={active === 'idhistory' ? 'active' : ''} data-tab="idhistory" style={!NO_DEMO_BGCOLOR ? {backgroundColor: DEMO_BGCOLOR} : {}}>ID History</li> : ''}
+                {doRenderFlags ? <li className={active === 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
+                <li className={active === 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
             </ul>
-            <div id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
+            <div id="record" className="clearfix" style={{display: (active === 'record' ? 'block' : 'none' )}}>
                 {nonPropsRecord}
             </div>
-            {doRenderIdHistory ? <div id="idhistory" className="clearfix" style={{display: (active == 'idhistory' ? 'block' : 'none' ), backgroundColor: (!NO_DEMO_BGCOLOR ? DEMO_BGCOLOR : '')}}>{recordIdHistory}</div> : ''}
-            {doRenderFlags ? <Flags flags={raw.indexTerms.flags} active={active == 'flags'} /> : ''}
-            <div id="raw" style={{display: (active == 'raw' ? 'block' : 'none' )}}>
+            {doRenderIdHistory ? <div id="idhistory" className="clearfix" style={{display: (active === 'idhistory' ? 'block' : 'none' )}}>{recordIdHistory}</div> : ''}
+            {doRenderFlags ? <Flags flags={raw.indexTerms.flags} active={active === 'flags'} /> : ''}
+            <div id="raw" style={{display: (active === 'raw' ? 'block' : 'none' )}}>
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(raw)}}>
                 </p>
             </div>
@@ -387,7 +437,7 @@ const RecordPage = ({ record }) => {
     _.defaults(canonical, data);
 
     _.each(dwc.order, function (val, key) {
-        if (key === 'idhistory') {
+        if (key === 'idhistory' || key === 'extendedmeasurementorfact') {
             /* Requires special handling to flatten:
              * Unlike other sections, this one is an array.
              *
@@ -423,7 +473,7 @@ const RecordPage = ({ record }) => {
              *   }]
              * }
              */
-            const fld = 'dwc:Identification';
+            const fld = key === 'idhistory' ? 'dwc:Identification' : 'obis:ExtendedMeasurementOrFact' ;
             if (_.has(canonical, fld)) {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];

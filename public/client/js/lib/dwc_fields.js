@@ -130,6 +130,9 @@ module.exports = {
     "idhistory": [
       "dwc:Identification"
     ],
+    "extendedmeasurementorfact": [
+        "obis:ExtendedMeasurementOrFact"
+    ],
     "other": [
       "dcterms:language",
       "dcterms:modified",
@@ -487,6 +490,7 @@ module.exports = {
     "extendedspecimen": "Links DEMOLOCATION 01",
     "dwc:associatedOccurrences": "Associated Occurrences",
     "idhistory": "Identification History",
+    "extendedmeasurementorfact": "Extended Measurement or Fact",
     "dwc:identificationID": "Identification ID",
     "dwc:verbatimIdentification": "Verbatim Identification",
     "dwc:identifiedByID": "Identified By (ID)",

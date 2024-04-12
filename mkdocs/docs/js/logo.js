@@ -24,8 +24,14 @@ document.addEventListener("DOMContentLoaded", function() {
 document.addEventListener('DOMContentLoaded', function () {
     var searchInput = document.querySelector('.md-search__input');
     if (searchInput) {
-        searchInput.placeholder = 'Search docs'; // Your custom placeholder text
+        searchInput.placeholder = 'Search docs';
     }
 });
 
-
+document.addEventListener('DOMContentLoaded', function () {
+    var title = document.querySelector('.md-ellipsis');
+    if (title) {
+        title.innerHTML = 'BETA DOCUMENTATION'
+        title.style = 'color: red;'
+    }
+});

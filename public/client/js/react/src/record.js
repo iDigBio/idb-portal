@@ -13,6 +13,27 @@ const
     NO_DEMO_BGCOLOR = false,
     DEMO_BGCOLOR = 'palegreen';
 
+const extendedSpecimenOrder = {
+    "idhistory" : {
+        "dwc:scientificName": 1,
+        "dwc:identifiedBy": 3,
+        "idigbio:recordID": 6,
+        "coreid": 4,
+        "dwc:scientificNameAuthorship": 5,
+        "dwc:dateIdentified": 2,
+        "dcterms:modified": 7,
+    },
+    "extendedmeasurementorfact": {
+        "dwc:measurementDeterminedDate": 1,
+        "dwc:measurementType": 2,
+        "coreid": 3,
+        "obis:measurementTypeID": 4,
+        "obis:measurementValueID": 5,
+        "dwc:measurementDeterminedBy": 6,
+        "dwc:measurementValue": 7
+    }
+}
+
 const Row = ({keyid, data}) => {
 
     var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
@@ -151,12 +172,8 @@ const Record = ({record, raw }) => {
         }, [])
     }
 
-    function getAntdColumns(keys) { // takes a list of keys and formats them to be used as antd column headers
-        const sorted_keys = keys.sort((a, b) => {
-            if (a === 'dwc:scientificName') return -1;
-            if (b === 'dwc:scientificName') return 1;
-            return 0;
-        })
+    function getAntdColumns(keys, sec) { // takes a list of keys and formats them to be used as antd column headers
+        const sorted_keys = keys.sort((a, b) => extendedSpecimenOrder[sec][a] - extendedSpecimenOrder[sec][b])
         return sorted_keys.map(key => ({
             title: _.isUndefined(dwc.names[key]) ? key : dwc.names[key],
             dataIndex: key,
@@ -177,7 +194,7 @@ const Record = ({record, raw }) => {
 
     function getAntdTable(recordSection, sec) {
         const allKeys = extractKeys(recordSection)
-        const columns = getAntdColumns(allKeys)
+        const columns = getAntdColumns(allKeys, sec)
         const rows = completeData(recordSection, allKeys)
         return (<div>
                     <h5>{dwc.names[sec]}</h5>
@@ -207,7 +224,7 @@ const Record = ({record, raw }) => {
                 if (cnt === 0) {
                     active = true;
                 }
-                if (sec === 'idhistory' || sec === 'extendedmeasurementorfact') {
+                if (sec in extendedSpecimenOrder) {
                     //FIXME Implementation duplicated below (at "Render Identification History into its own tab")
                         if(!Array.isArray(record[sec])){
                             console.error('error creating section \'idhistory\': not an array');

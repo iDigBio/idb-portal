@@ -13,12 +13,25 @@ const
     NO_DEMO_BGCOLOR = false,
     DEMO_BGCOLOR = 'palegreen';
 
+const ESO_HIDE_FIELD = -1;
+// Sections defined here will be given a table at the end of
+// the record page, data section.
+// For all fields defined within each section,
+// set an integer to denote column ordering,
+// where lower integers appear first/left-most.
+// Undefined fields will be appended to the last/right-most end of the table.
+// Fields set to ESO_HIDE_FIELD will not be displayed in the table.
+//
+//FIXME// Column sorting might not work properly.
+// Example: For specimen where 'occurrence ID' is http://n2t.net/ark:/65665/319944bac-6847-4105-bb85-0cd03f5efad3,
+// got column order: [..., Ratio of Absorbance (260/230 nm), Sample Designation, Ratio of Absorbance (260/280 nm)]
+// expected 'Sample Designation' to be last
 const extendedSpecimenOrder = {
     "idhistory" : {
         "dwc:scientificName": 1,
         "dwc:identifiedBy": 3,
         "idigbio:recordID": 6,
-        "coreid": 4,
+        "coreid": ESO_HIDE_FIELD,
         "dwc:scientificNameAuthorship": 5,
         "dwc:dateIdentified": 2,
         "dcterms:modified": 7,
@@ -26,7 +39,7 @@ const extendedSpecimenOrder = {
     "extendedmeasurementorfact": {
         "dwc:measurementDeterminedDate": 1,
         "dwc:measurementType": 2,
-        "coreid": 3,
+        "coreid": ESO_HIDE_FIELD,
         "obis:measurementTypeID": 4,
         "obis:measurementValueID": 5,
         "dwc:measurementDeterminedBy": 6,
@@ -161,10 +174,18 @@ const Record = ({record, raw }) => {
         setActive(e.target.attributes['data-tab'].value)
     }
 
-    function extractKeys(arr) { // extracts keys from array of objects
+    /** Extracts keys from array of objects.
+     * 
+     * {@link sec} is used for filtering out columns designated hidden
+     * (see {@link extendedSpecimenOrder}).
+     * 
+     * @param {object[]} arr Section data array
+     * @param {string} sec Section name
+     */
+    function extractKeys(arr, sec) {
         return arr.reduce((keys, obj) => {
             Object.keys(obj).forEach(key => {
-                if (!keys.includes(key)) {
+                if (!keys.includes(key) && extendedSpecimenOrder[sec][key] != ESO_HIDE_FIELD) {
                     keys.push(key);
                 }
             });
@@ -192,8 +213,13 @@ const Record = ({record, raw }) => {
         });
     }
 
+    /**
+     * @param {object[]} recordSection Section data array
+     * @param {string} sec Section name
+     * @returns Section HTML for the given parameters, including header title
+     */
     function getAntdTable(recordSection, sec) {
-        const allKeys = extractKeys(recordSection)
+        const allKeys = extractKeys(recordSection, sec)
         const columns = getAntdColumns(allKeys, sec)
         const rows = completeData(recordSection, allKeys)
         return (<div>
@@ -213,10 +239,13 @@ const Record = ({record, raw }) => {
     useEffect(() => {
 
         var has = [];
+        /** @type {React.JSX.Element[]} */
         var non_props_record = [];
+        /** @type {React.JSX.Element[]} */
         var record_id_history = [];
-        var sorder = ['extendedspecimen', 'taxonomy', 'specimen', 'collectionevent', 'locality', 'paleocontext', 'idhistory', 'extendedmeasurementorfact', 'other'];
+        var sorder = ['extendedspecimen', 'taxonomy', 'specimen', 'collectionevent', 'locality', 'paleocontext', ...Object.keys(extendedSpecimenOrder), 'other'];
         var cnt = 0;
+
         // Record tab rendering
         sorder.forEach(function (sec, index) {
             if (_.has(record, sec)) {
@@ -454,7 +483,7 @@ const RecordPage = ({ record }) => {
     _.defaults(canonical, data);
 
     _.each(dwc.order, function (val, key) {
-        if (key === 'idhistory' || key === 'extendedmeasurementorfact') {
+        if (key in extendedSpecimenOrder) {
             /* Requires special handling to flatten:
              * Unlike other sections, this one is an array.
              *
@@ -490,7 +519,11 @@ const RecordPage = ({ record }) => {
              *   }]
              * }
              */
-            const fld = key === 'idhistory' ? 'dwc:Identification' : 'obis:ExtendedMeasurementOrFact' ;
+            const fld = dwc.order[key][0];
+            if (dwc.order[key].length > 1) {
+                // If this soft assert fails, key might correspond to the incorrect DwC field
+                console.warn("More than one value for dwc_fields order key '%s'. Using first value '%s'.", key, fld);
+            }
             if (_.has(canonical, fld)) {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];

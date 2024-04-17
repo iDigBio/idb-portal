@@ -133,6 +133,12 @@ module.exports = {
     "extendedmeasurementorfact": [
         "obis:ExtendedMeasurementOrFact"
     ],
+    "materialsample": [
+      "ggbn:MaterialSample"
+    ],
+    "chronometricage": [
+      "chrono:ChronometricAge"
+    ],
     "other": [
       "dcterms:language",
       "dcterms:modified",
@@ -489,11 +495,35 @@ module.exports = {
     "idigbio:importantHoldings": "Important Holdings",
     "extendedspecimen": "Links DEMOLOCATION 01",
     "dwc:associatedOccurrences": "Associated Occurrences",
+
     "idhistory": "Identification History",
-    "extendedmeasurementorfact": "Extended Measurement or Fact",
     "dwc:identificationID": "Identification ID",
     "dwc:verbatimIdentification": "Verbatim Identification",
     "dwc:identifiedByID": "Identified By (ID)",
-    "dwc:identificationVerificationStatus": "Identification Verification Status"
+    "dwc:identificationVerificationStatus": "Identification Verification Status",
+
+    "extendedmeasurementorfact": "Extended Measurement or Fact",
+    "dwc:measurementDeterminedBy": "Measurement Determined By",
+    "dwc:measurementDeterminedDate": "Measurement Determined Date",
+    "dwc:measurementType": "Measurement Type",
+    "dwc:measurementValue": "Measurement Value",
+    "obis:measurementTypeID": "Measurement Type ID",
+    "obis:measurementValueID": "Measurement Value ID",
+
+    "materialsample": "Material Sample",
+    "ggbn:concentrationUnit": "Concentration Unit",
+    "ggbn:concentration": "Concentration",
+    "ggbn:materialSampleType": "Material Sample Type",
+    "ggbn:ratioOfAbsorbance260_230": "Ratio of Absorbance (260/230 nm)", //| For DNA samples only
+    "ggbn:ratioOfAbsorbance260_280": "Ratio of Absorbance (260/280 nm)", //|
+    "ggbn:sampleDesignation": "Sample Designation",
+
+    "chronometricage": "Chronometric Age",
+    "chrono:chronometricAgeReferences": "Chronometric Age References",
+    "chrono:chronometricAgeRemarks": "Chronometric Age Remarks",
+    "chrono:maximumChronometricAge": "Maximum Chronometric Age",
+    "chrono:maximumChronometricAgeReferenceSystem": "Maximum Chronometric Age Reference System",
+    "chrono:minimumChronometricAge": "Minimum Chronometric Age",
+    "chrono:minimumChronometricAgeReferenceSystem": "Minimum Chronometric Age Reference System",
   }
 }

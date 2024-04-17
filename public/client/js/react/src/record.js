@@ -37,14 +37,32 @@ const extendedSpecimenOrder = {
         "dcterms:modified": 7,
     },
     "extendedmeasurementorfact": {
-        "dwc:measurementDeterminedDate": 1,
-        "dwc:measurementType": 2,
         "coreid": ESO_HIDE_FIELD,
-        "obis:measurementTypeID": 4,
+        "dwc:measurementValue": 1,
+        "dwc:measurementType": 2,
+        "dwc:measurementDeterminedBy": 3,
+        "dwc:measurementDeterminedDate": 4,
         "obis:measurementValueID": 5,
-        "dwc:measurementDeterminedBy": 6,
-        "dwc:measurementValue": 7
-    }
+        "obis:measurementTypeID": 6,
+    },
+    "materialsample": {
+        "coreid": ESO_HIDE_FIELD,
+        "ggbn:materialSampleType": 1,
+        "ggbn:concentrationUnit": 2,
+        "ggbn:concentration": 3,
+        "ggbn:ratioOfAbsorbance260_230": 4,
+        "ggbn:ratioOfAbsorance260_280": 5,
+        "ggbn:sampleDesignation": 6,
+    },
+    "chronometricage": {
+        "coreid": ESO_HIDE_FIELD,
+        "chrono:minimumChronometricAge": 1,
+        "chrono:minimumChronometricAgeReferenceSystem": 2,
+        "chrono:maximumChronometricAge": 3,
+        "chrono:maximumChronometricAgeReferenceSystem": 4,
+        "chrono:chronometricAgeRemarks": 5,
+        "chrono:chronometricAgeReferences": 6,
+    },
 }
 
 const Row = ({keyid, data}) => {

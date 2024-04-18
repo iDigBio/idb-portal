@@ -124,9 +124,6 @@ module.exports = {
       "dwc:lowestBiostratigraphicZone",
       "dwc:lithostratigraphicTerms"
     ],
-    "extendedspecimen": [
-      "dwc:associatedOccurrences"
-    ],
     "idhistory": [
       "dwc:Identification"
     ],
@@ -493,7 +490,6 @@ module.exports = {
     "idigbio:collectionCategory": "Collection Category",
     "idigbio:collectionSize": "Collection Size",
     "idigbio:importantHoldings": "Important Holdings",
-    "extendedspecimen": "Links DEMOLOCATION 01",
     "dwc:associatedOccurrences": "Associated Occurrences",
 
     "idhistory": "Identification History",

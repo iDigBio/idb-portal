@@ -248,6 +248,45 @@ h1#banner {
   text-align: left;
   padding-left: 8px;
 }
+.custom-antd-table.ant-table-wrapper table {
+  margin-bottom: 20px;
+  border: 1px solid #ddd;
+  /* Solid gray border */
+  border-collapse: collapse;
+}
+.custom-antd-table [class^='ant-table'],
+.custom-antd-table [class*='ant-table'] {
+  font-size: 13px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+.custom-antd-table .ant-table-thead > tr > th {
+  padding: 5px;
+  border: 1px solid #ddd;
+  /* Solid gray border */
+}
+.custom-antd-table .ant-table-tbody > tr > td {
+  padding: 5px;
+  border: 1px solid #ddd;
+  /* Solid gray border */
+}
+.custom-antd-table .ant-table {
+  color: #555;
+}
+.custom-antd-table .ant-table-tbody > tr.oddRow > td {
+  background-color: #f9f9f9;
+  /* Light grey background for odd rows */
+}
+.custom-antd-table .ant-table-tbody > tr.evenRow > td {
+  background-color: #ffffff;
+  /* White background for even rows */
+}
+.custom-antd-table .ant-table-thead > tr > th {
+  border-radius: 0;
+  border-bottom-width: 2px;
+}
+.ant-table {
+  border-radius: 0 !important;
+}
 #data {
   margin-top: 30px;
 }

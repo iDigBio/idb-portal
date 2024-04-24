@@ -7,7 +7,7 @@ import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
 import idbapi from '../../lib/idbapi';
-import { Table } from 'antd';
+import { ConfigProvider, Table } from 'antd';
 
 const ESO_HIDE_FIELD = -1;
 // Sections defined here will be given a table at the end of
@@ -223,17 +223,23 @@ const Record = ({record, raw }) => {
         const allKeys = extractKeys(recordSection, sec)
         const columns = getAntdColumns(allKeys, sec)
         const rows = completeData(recordSection, allKeys)
-        return (<div>
+        return (<div id={sec} className='section'>
                     <h5>{dwc.names[sec]}</h5>
-                    <Table
-                        className={'custom-antd-table'}
-                        rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
-                        columns={columns}
-                        dataSource={rows}
-                        scroll={{x: 'max-content'}}
-                        pagination={false}
-                        size={"small"}
-                    />
+                    <ConfigProvider theme={{
+                        // antd provides default styles with a higher CSS specificity;
+                        // we don't want it overriding our styles
+
+                        hashed: false, // removes .css-dev-only-do-not-override-* classes
+                    }}>
+                        <Table
+                            className={'custom-antd-table'}
+                            rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
+                            columns={columns}
+                            dataSource={rows}
+                            scroll={{x: 'max-content'}}
+                            pagination={false}
+                        />
+                    </ConfigProvider>
                 </div>)
     }
 
@@ -244,8 +250,6 @@ const Record = ({record, raw }) => {
         var has = [];
         /** @type {React.JSX.Element[]} */
         var non_props_record = [];
-        /** @type {React.JSX.Element[]} */
-        var record_id_history = [];
         var sorder = ['taxonomy', 'specimen', 'collectionevent', 'locality', 'paleocontext', ...Object.keys(extendedSpecimenOrder), 'other'];
         var cnt = 0;
 

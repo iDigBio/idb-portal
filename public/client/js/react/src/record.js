@@ -7,8 +7,59 @@ import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
 import idbapi from '../../lib/idbapi';
+import { ConfigProvider, Table } from 'antd';
 
-
+const ESO_HIDE_FIELD = -1;
+// Sections defined here will be given a table at the end of
+// the record page, data section.
+// For all fields defined within each section,
+// set an integer to denote column ordering,
+// where lower integers appear first/left-most.
+// Undefined fields will be appended to the last/right-most end of the table.
+// Fields set to ESO_HIDE_FIELD will not be displayed in the table.
+//
+//FIXME// Column sorting might not work properly.
+// Example: For specimen where 'occurrence ID' is http://n2t.net/ark:/65665/319944bac-6847-4105-bb85-0cd03f5efad3,
+// got column order: [..., Ratio of Absorbance (260/230 nm), Sample Designation, Ratio of Absorbance (260/280 nm)]
+// expected 'Sample Designation' to be last
+const extendedSpecimenOrder = {
+    "idhistory" : {
+        "dwc:scientificName": 1,
+        "dwc:identifiedBy": 3,
+        "idigbio:recordID": 6,
+        "coreid": ESO_HIDE_FIELD,
+        "dwc:scientificNameAuthorship": 5,
+        "dwc:dateIdentified": 2,
+        "dcterms:modified": 7,
+    },
+    "extendedmeasurementorfact": {
+        "coreid": ESO_HIDE_FIELD,
+        "dwc:measurementValue": 1,
+        "dwc:measurementType": 2,
+        "dwc:measurementDeterminedBy": 3,
+        "dwc:measurementDeterminedDate": 4,
+        "obis:measurementValueID": 5,
+        "obis:measurementTypeID": 6,
+    },
+    "materialsample": {
+        "coreid": ESO_HIDE_FIELD,
+        "ggbn:materialSampleType": 1,
+        "ggbn:concentrationUnit": 2,
+        "ggbn:concentration": 3,
+        "ggbn:ratioOfAbsorbance260_230": 4,
+        "ggbn:ratioOfAbsorance260_280": 5,
+        "ggbn:sampleDesignation": 6,
+    },
+    "chronometricage": {
+        "coreid": ESO_HIDE_FIELD,
+        "chrono:minimumChronometricAge": 1,
+        "chrono:minimumChronometricAgeReferenceSystem": 2,
+        "chrono:maximumChronometricAge": 3,
+        "chrono:maximumChronometricAgeReferenceSystem": 4,
+        "chrono:chronometricAgeRemarks": 5,
+        "chrono:chronometricAgeReferences": 6,
+    },
+}
 
 const Row = ({keyid, data}) => {
 
@@ -28,6 +79,12 @@ const Row = ({keyid, data}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {string} props.name Section ID name, corresponding to dwc_fields.js.
+ * @param {object} props.data Field key-values specific to this section.
+ * @param {boolean} props.active If `true`, assign CSS class to allow this section to be visible.
+ */
 const Section = ({name, data, active}) => {
 
     var rows = []
@@ -43,10 +100,12 @@ const Section = ({name, data, active}) => {
     if(active){
         cl="section";
     }
+    /** @type {string} */
+    let sectionName = dwc.names[name];
     return (
-        <div id={name} className={cl} >
-            <h5>{dwc.names[name]}</h5>
-            <table className="table table-striped table-condensed table-bordered">
+        <div id={name} className={cl}>
+            <h5>{sectionName}</h5>
+            <table className={`table table-striped table-condensed table-bordered`} >
                 <tbody>{rows}</tbody>
             </table>
         </div>
@@ -77,6 +136,11 @@ const Flags = ({flags, active}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {object} props.record {@linkcode props.raw}, after processing through dwc_fields.js
+ * @param {object} props.raw Raw search API JSON response for a record
+ */
 const Record = ({record, raw }) => {
     const [active, setActive] = useState("record")
     const [nonPropsRecord, setNonPropsRecord] = useState([])
@@ -110,43 +174,122 @@ const Record = ({record, raw }) => {
         setActive(e.target.attributes['data-tab'].value)
     }
 
+    /** Extracts keys from array of objects.
+     * 
+     * {@link sec} is used for filtering out columns designated hidden
+     * (see {@link extendedSpecimenOrder}).
+     * 
+     * @param {object[]} arr Section data array
+     * @param {string} sec Section name
+     */
+    function extractKeys(arr, sec) {
+        return arr.reduce((keys, obj) => {
+            Object.keys(obj).forEach(key => {
+                if (!keys.includes(key) && extendedSpecimenOrder[sec][key] != ESO_HIDE_FIELD) {
+                    keys.push(key);
+                }
+            });
+            return keys;
+        }, [])
+    }
+
+    function getAntdColumns(keys, sec) { // takes a list of keys and formats them to be used as antd column headers
+        const sorted_keys = keys.sort((a, b) => extendedSpecimenOrder[sec][a] - extendedSpecimenOrder[sec][b])
+        return sorted_keys.map(key => ({
+            title: _.isUndefined(dwc.names[key]) ? key : dwc.names[key],
+            dataIndex: key,
+            key: key,
+        }));
+    }
+
+    function completeData(data, keys) { // instantiates missing keys to ''
+        return data.map((item, index) => {
+            keys.forEach(key => {
+                if (!item.hasOwnProperty(key)) {
+                    item[key] = '';
+                }
+            });
+            return { ...item, key: index }
+        });
+    }
+
+    /**
+     * @param {object[]} recordSection Section data array
+     * @param {string} sec Section name
+     * @returns Section HTML for the given parameters, including header title
+     */
+    function getAntdTable(recordSection, sec) {
+        const allKeys = extractKeys(recordSection, sec)
+        const columns = getAntdColumns(allKeys, sec)
+        const rows = completeData(recordSection, allKeys)
+        return (<div id={sec} className='section'>
+                    <h5>{dwc.names[sec]}</h5>
+                    <ConfigProvider theme={{
+                        // antd provides default styles with a higher CSS specificity;
+                        // we don't want it overriding our styles
+
+                        hashed: false, // removes .css-dev-only-do-not-override-* classes
+                    }}>
+                        <Table
+                            className={'custom-antd-table'}
+                            rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
+                            columns={columns}
+                            dataSource={rows}
+                            scroll={{x: 'max-content'}}
+                            pagination={false}
+                        />
+                    </ConfigProvider>
+                </div>)
+    }
+
     useEffect(() => {
+            console.log('record=', record);
+            console.log('raw=', raw);
 
-            var has = [];
-            var non_props_record = []
-            var sorder = ['taxonomy','specimen','collectionevent','locality','paleocontext','other'];
-            var tabs = [], self = this
-            var cnt = 0;
+        var has = [];
+        /** @type {React.JSX.Element[]} */
+        var non_props_record = [];
+        var sorder = ['taxonomy', 'specimen', 'collectionevent', 'locality', 'paleocontext', ...Object.keys(extendedSpecimenOrder), 'other'];
+        var cnt = 0;
 
-            sorder.forEach(function(sec,index){
-                if(_.has(record,sec)){
-                    var active=true;
-                    if(cnt===0){
-                        active=true;
+        // Record tab rendering
+        sorder.forEach(function (sec, index) {
+            if (_.has(record, sec)) {
+                var active = true;
+                if (cnt === 0) {
+                    active = true;
+                }
+                if (sec in extendedSpecimenOrder) {
+                        if(!Array.isArray(record[sec])){
+                            console.error('error creating section \'%s\': not an array', sec);
+                        }else{
+                            non_props_record.push(getAntdTable(record[sec], sec))
+                        }
                     }
-                    //tabs.push(<Tab key={'tab-'+sec} keyid={'tab-'+sec} name={sec} active={active} />)
-                    non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
+                    else{
+                        non_props_record.push(<Section key={'sec-'+sec} name={sec} data={record[sec]} active={active} />);
+                    }
                     cnt++;
                 }
             });
             setNonPropsRecord([...nonPropsRecord, non_props_record])
-
-
     }, []);
+
+    let doRenderFlags = !!raw.indexTerms.flags;
 
     return (
         <div id="data" className="scrollspy section">
 
             <ul className="tabs" onClick={tabClick}>
-                <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                {raw.indexTerms.flags ? <li className={active == 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
-                <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+                <li className={active === 'record' ? 'active' : ''} data-tab="record">Data</li>
+                {doRenderFlags ? <li className={active === 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
+                <li className={active === 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
             </ul>
-            <div id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
+            <div id="record" className="clearfix" style={{display: (active === 'record' ? 'block' : 'none' )}}>
                 {nonPropsRecord}
             </div>
-            {raw.indexTerms.flags ? <Flags flags={raw.indexTerms.flags} active={active == 'flags'} /> : ''}
-            <div id="raw" style={{display: (active == 'raw' ? 'block' : 'none' )}}>
+            {doRenderFlags ? <Flags flags={raw.indexTerms.flags} active={active === 'flags'} /> : ''}
+            <div id="raw" style={{display: (active === 'raw' ? 'block' : 'none' )}}>
                 <p id="raw-body" dangerouslySetInnerHTML={{__html: formatJSON(raw)}}>
                 </p>
             </div>
@@ -246,6 +389,10 @@ const Citation = ({data, pubname}) => {
 
 };
 
+/**
+ * @param {object} props
+ * @param {object} props.record Raw search API JSON response for a record from /view/records/:id
+ */
 const RecordPage = ({ record }) => {
     const navList = () => {
         const map = record.indexTerms.geopoint ? <li><a href="#map">Map</a></li> : null;
@@ -322,17 +469,75 @@ const RecordPage = ({ record }) => {
     _.defaults(canonical, data);
 
     _.each(dwc.order, function (val, key) {
-        _.each(dwc.order[key], function (fld) {
+        if (key in extendedSpecimenOrder) {
+            /* Requires special handling to flatten:
+             * Unlike other sections, this one is an array.
+             *
+             * We SHOULD get:
+             * localRecord: {
+             *   idhistory: [{
+             *     idfield1_1: ...,
+             *     idfield1_2: ...,
+             *     ...
+             *   },{
+             *     idfield2_1: ...,
+             *     idfield2_2: ...,
+             *     ...
+             *   },
+             *   ...
+             *   ]
+             * }
+             * Otherwise, with the original implementation under 'else',
+             * we end up with:
+             * localRecord: {
+             *   idhistory: [{
+             *     'dwc:Identification': [{
+             *       idfield1_1: ...,
+             *       idfield1_2: ...,
+             *       ...
+             *     },{
+             *       idfield2_1: ...,
+             *       idfield2_2: ...,
+             *       ...
+             *     },
+             *     ...
+             *     ]
+             *   }]
+             * }
+             */
+            const fld = dwc.order[key][0];
+            if (dwc.order[key].length > 1) {
+                // If this soft assert fails, key might correspond to the incorrect DwC field
+                console.warn("More than one value for dwc_fields order key '%s'. Using first value '%s'.", key, fld);
+            }
             if (_.has(canonical, fld)) {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];
                 }
-                const datum = {};
-                datum[fld] = canonical[fld];
-                localRecord[key].push(datum);
+                if (!_.isArray(canonical[fld]))
+                    console.error('error parsing field \'%s\': expected an array', fld);
+                _.forEach(canonical[fld], function (iden) {
+                    let datum = {};
+                    _.forIn(iden, function(idenFieldValue, idenFieldName) {
+                        datum[idenFieldName] = idenFieldValue;
+                    });
+                    localRecord[key].push(datum);
+                })
                 has.push(fld);
             }
-        });
+        } else {
+            _.each(dwc.order[key], function (fld) {
+                if (_.has(canonical, fld)) {
+                    if (!_.has(localRecord, key)) {
+                        localRecord[key] = [];
+                    }
+                    let datum = {};
+                    datum[fld] = canonical[fld];
+                    localRecord[key].push(datum);
+                    has.push(fld);
+                }
+            });
+        }
     });
 
     const dif = _.difference(Object.keys(canonical), has);

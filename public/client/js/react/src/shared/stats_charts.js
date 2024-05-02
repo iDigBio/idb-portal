@@ -286,7 +286,7 @@ class StatsCharts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            startDate: moment("2015-01-16", "YYYY-MM-DD"),
+            startDate: moment("2021-01-01", "YYYY-MM-DD"),
             endDate: moment().subtract(1,'months').endOf('month'),
             log: true,
             cumulative: true,

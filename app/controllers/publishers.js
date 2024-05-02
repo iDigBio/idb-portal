@@ -121,7 +121,7 @@ export default {
     var collected = {};
     var taxon = {};
     var flags = {};
-    var defaultMin = "2015-01-16";
+    var defaultMin = "2021-01-01";
     async.parallel([
       function(cback) {
         var params = {"dateInterval": "month", "minDate": defaultMin};
@@ -270,7 +270,7 @@ export default {
             });
           },
           function(cback) {
-            var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": "2015-01-15"};
+            var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": "2021-01-01"};
             request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
               use = a_body;
               cback(a_err, 'four');

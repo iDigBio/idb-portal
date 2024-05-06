@@ -1,7 +1,7 @@
 
 //var React = require('react');
 //var HomePage = React.createFactory(require('./react/build/home'));
-var idbapi = require('./lib/idbapi');
+import idbapi from './lib/idbapi'
 
 import 'c3/c3.css';
 

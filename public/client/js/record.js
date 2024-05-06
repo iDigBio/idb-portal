@@ -1,9 +1,8 @@
 import ReactDOM from 'react-dom';
 import React from 'react';
 import async from 'async';
-import idbapi from './lib/idbapi';
 import L from 'leaflet';
-require('leaflet-sleep');
+import 'leaflet-sleep';
 import RecordPage from './react/src/record'
 import MediaPage from "./react/src/media";
 

@@ -1,27 +1,28 @@
-var express = require('express');
-var expose = require("express-expose");
-var compression = require("compression");
-var bodyParser = require("body-parser");
-var cookieParser = require("cookie-parser");
-var csrf = require("csurf");
-var serveStatic = require("serve-static");
-var favicon = require("serve-favicon");
-var methodOverride = require("method-override");
-var morgan = require("morgan");
-var cons = require('consolidate');
-var swig = require('swig');
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
-var request = require('request');
+import express from 'express';
+import expose from 'express-expose';
+import compression from 'compression';
+import bodyParser from 'body-parser';
+import cookieParser from 'cookie-parser';
+import csrf from 'csurf';
+import serveStatic from 'serve-static';
+import favicon from 'serve-favicon';
+import methodOverride from 'method-override';
+import morgan from 'morgan';
+import cons from 'consolidate';
+import swig from 'swig';
+import session from 'express-session';
+import connectRedis from 'connect-redis'; // Import the connect-redis module normally
+const RedisStore = connectRedis(session); // Use it with session
 
-import config from 'config/config';
-import logger from 'app/logging';
 
-var home = require('app/controllers/home').default;
-var search = require('app/controllers/search').default;
-var user = require('app/controllers/user').default;
-var view = require('app/controllers/view').default;
-var publishers = require('app/controllers/publishers').default;
+import config from '../config/config';
+import logger from './logging';
+
+import home from './controllers/home';
+import search from './controllers/search';
+import user from './controllers/user';
+import view from './controllers/view';
+import publishers from './controllers/publishers.js';
 
 
 var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz';

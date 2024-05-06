@@ -2,8 +2,8 @@ import {createFactory} from '../createFactory.js'
 import request from 'request'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
-import createRecordPage from 'public/client/js/react/build/record'
-import createMediaPage from 'public/client/js/react/build/media'
+import createRecordPage from 'public/client/js/react/build/public/client/js/react/src/record'
+import createMediaPage from 'public/client/js/react/build/public/client/js/react/src/media'
 import _ from 'lodash'
 // var RecordPage = createFactory(require('public/client/js/react/build/record'));
 // var MediaPage = createFactory(require('public/client/js/react/build/media'));
@@ -11,6 +11,7 @@ import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
 const RecordPage = createFactory(createRecordPage);
 const MediaPage = createFactory(createMediaPage);
+
 
 export default {
   person: function(req, res) {
@@ -28,11 +29,14 @@ export default {
     }
   },
   record: function(req, res) {
+    console.log('At least here')
     const id = req.params.id;
     request.get({ url: `${config.api}view/records/${id}`, json: true }, function(err, resp, body) {
       if (err) {
+        console.log(error)
         logger.error(err);
       }
+      console.log(body)
       if (body.uuid) {
         const record = body;
         let Page = ReactDOMServer.renderToString( <RecordPage record={record} /> );

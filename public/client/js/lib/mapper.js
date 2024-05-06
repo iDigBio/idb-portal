@@ -12,29 +12,30 @@
 *      query internally to update the map.  This is useful for when the map is bound to some external system
 *      like React or Backbone for instance and query changes flow from external changes to the mappers public "query" instance method.
 ***/
-var $ = require('jquery');
-var _ = require('lodash');
-var GeoPoint = require('geopoint');
-var helpers = require('./helpers');
-var idbapi = require('./idbapi');
-var fields = require('./fields');
+import $ from 'jquery';
+import _ from 'lodash';
+import GeoPoint from 'geopoint';
+import * as helpers from './helpers';
+import idbapi from './idbapi';
+import * as fields from './fields';
 
-var L = require('leaflet');
-var leafletImage = require('leaflet-image');
-// FileSaver Still required for edge support shimming
-var FileSaver = require('@elastic/filesaver');
-//require('leaflet-sleep');
-require('@bower_components/leaflet-utfgrid/src/leaflet.utfgrid.js');
-require('@bower_components/leaflet-loading/src/Control.Loading.js');
-require('leaflet-draw');
-require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
+import L from 'leaflet';
+import leafletImage from 'leaflet-image';
+import FileSaver from '@elastic/filesaver';
+
+// The following imports are for side effects only, as they do not export anything
+import '@bower_components/leaflet-utfgrid/src/leaflet.utfgrid.js';
+import '@bower_components/leaflet-loading/src/Control.Loading.js';
+import 'leaflet-draw';
+import '@bower_components/leaflet.fullscreen/Control.FullScreen.js';
+
 
 
 Math.trunc = Math.trunc || function(x) {
   return x < 0 ? Math.ceil(x) : Math.floor(x);
 }
  
-module.exports = function(elid, options){
+const mapper = function(elid, options){
     var self=this;
     /*
     * Basic Options
@@ -207,8 +208,9 @@ module.exports = function(elid, options){
         _div: L.DomUtil.create('div','map-legend'),
         onAdd: function(map){
             var colors,control=this,header,def='',time=self.currentQueryTime;
-           
+            console.log(map.mapCode+'/style/'+map.getZoom())
             idbapi.mapping(map.mapCode+'/style/'+map.getZoom(),function(resp){
+                console.log(resp)
                 if(time >= self.currentQueryTime){
                     //control response
                     map.legend=resp;
@@ -711,3 +713,5 @@ module.exports = function(elid, options){
     })
 
 }
+
+export default mapper;

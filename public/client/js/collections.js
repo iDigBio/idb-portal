@@ -8,8 +8,8 @@ import React from 'react'
 import CollectionsPage from './react/src/collections'
 
 import L from 'leaflet'
-require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
-require('leaflet-sleep');
+import('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
+import('leaflet-sleep');
 var triggerPopup = function(id){
     scrollToMap();
     map.setView(ref[id]._latlng).setZoomAround(ref[id]._latlng,8)

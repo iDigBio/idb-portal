@@ -1,5 +1,3 @@
-var request = require('request');
-
 if(typeof window === "undefined") {
     var window = global;
 }
@@ -11,7 +9,7 @@ module.exports = {
         } else if (process.env.NODE_ENV == "beta") {
             return 'https://beta-search.idigbio.org/v2/'
         } else{
-            return 'https://search.idigbio.org/v2/';
+            return 'http://localhost:19196/v2/';
         }
     }).call(),
     media_host: (function(){
@@ -50,33 +48,32 @@ module.exports = {
     countRecords: function(query,callback){
         this.summary('count/records/',query,callback);
     },
-    _basic: function(method,arg1,arg2,arg3) {
-        var options = {
+    _basic: function (method, path, data, callback) {
+
+        const url = this.host + path;  // Proper URL construction
+        const headers = { 'Content-Type': 'application/json' };
+        const body = JSON.stringify(data);
+
+        fetch(url, {
             method: method,
-            uri: this.host,
-            json: true
-        };
-        var cb;
-        [arg1, arg2, arg3].forEach(function(arg) {
-            switch (typeof arg) {
-                case 'object':
-                    options.json = arg;
-                    break;
-                case 'string':
-                    options.uri += arg;
-                    break;
-                case 'function':
-                    cb = function(err, resp, body) {
-                        if(err) {
-                            console.log(err);
-                        }
-                        arg(body);
-                    };
-                    break;
-                default:
-                    break;
-            }
-        });
-        request(options, cb);
+            headers: headers,
+            body: method !== 'GET' ? body : undefined  // Correct use of body in fetch
+        }).then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok ' + response.statusText);
+                }
+                response.json().then((jsonresp) => {
+                    if (typeof data === 'function') {
+                        data(jsonresp)
+                    }
+                    else {
+                        callback(jsonresp)
+                    }
+
+                });
+
+            });
+
     }
+
 };

@@ -2,8 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import IDBMap from '../../../lib/mapper';
 import * as helpers from '../../../lib/helpers';
 
-let map; // Declare map variable
-
 const Map = (props) => {
     const [currentQuery, setCurrentQuery] = useState('');
     const mapRef = useRef(null); // To store the map instance without triggering re-renders

@@ -1,33 +1,35 @@
-require('@babel/register')({
-  "presets": [
-    ["@babel/preset-env", {
-      "targets": {
-        "node": "current"
-      }
-    }],
-    "@babel/preset-react"
-  ],
-  "plugins": [
-    [
-      "module-resolver",
-      {
-        "root": [
-          "./"
-        ],
-        "alias": {}
-      }
-    ],
-    "transform-promise-to-bluebird",
-    "@babel/plugin-proposal-class-properties"
-  ]
-});
+// require('@babel/register')({
+//   "presets": [
+//     ["@babel/preset-env", {
+//       "targets": {
+//         "node": "current"
+//       }
+//     }],
+//     "@babel/preset-react"
+//   ],
+//   "plugins": [
+//     [
+//       "module-resolver",
+//       {
+//         "root": [
+//           "./"
+//         ],
+//         "alias": {}
+//       }
+//     ],
+//     "transform-promise-to-bluebird",
+//     "@babel/plugin-proposal-class-properties"
+//   ]
+// });
 
 require.extensions['.css'] = () => {
   return;
 };
+import config from "config/config.js"
+import app from "./app/app.js"
+
 
 var express = require('express');
-var config = require('./config/config').default;
 
 function registerGracefulShutdown(signal, server, id) {
   process.on(signal, function() {
@@ -53,7 +55,6 @@ function startThisProcess(app, id) {
 
 var realapp = express();
 
-var app = require('./app/app.js').default;
 
 realapp.use("/portal",app);
 realapp.use("/",app);

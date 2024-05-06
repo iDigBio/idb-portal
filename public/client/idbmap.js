@@ -3,4 +3,5 @@
 * Release Date: 2/1/2015
 * License: Free for all just don't call
 ***/
-window.IDBMap = require('./js/lib/mapper');
+import mapper from "./js/lib/mapper"
+window.IDBMap = mapper

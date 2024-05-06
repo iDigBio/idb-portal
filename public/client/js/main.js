@@ -8,44 +8,49 @@ import 'leaflet/dist/leaflet.css';
 import 'jquery-ui/themes/base/all.css';
 
 
-function loadPage(){
+
+async function loadPage() {
     var path = url(1) == 'portal' ? url(2) : url(1);
-    
-    switch(path){
-        case '':
-            require('./home');
-            break;
-        case 'search':
-            require('./search')
-            break;
-        case 'tutorial':
-            require('./tutorial');
-            break;
-        case 'publishers':
-            require('./publishers');
-            break;
-        case 'portalstats':
-            require('./stats');
-            break;
-        case 'recordsets':
-            require('./recordset');
-            break;
-        case 'records':
-            require('./record');
-            break;
-        case 'mediarecords':
-            require('./media');
-            break;
-        case 'collections':
-            if(url(-1) !=='collections') {
-                require('./collection');
-            } else {
-                require('./collections');
-            }
-            break;
-        default:
-            require('./home');
-            break;
+
+    try {
+        switch(path) {
+            case '':
+                await import('./home');
+                break;
+            case 'search':
+                await import('./search');
+                break;
+            case 'tutorial':
+                await import('./tutorial');
+                break;
+            case 'publishers':
+                await import('./publishers');
+                break;
+            case 'portalstats':
+                await import('./stats');
+                break;
+            case 'recordsets':
+                await import('./recordset');
+                break;
+            case 'records':
+                await import('./record');
+                break;
+            case 'mediarecords':
+                await import('./media');
+                break;
+            case 'collections':
+                if(url(-1) !== 'collections') {
+                    await import('./collection');
+                } else {
+                    await import('./collections');
+                }
+                break;
+            default:
+                await import('./home');
+                break;
+        }
+    } catch (error) {
+        console.error("Error loading the module: ", error);
     }
 }
 

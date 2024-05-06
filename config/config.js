@@ -1,6 +1,7 @@
 /* eslint no-process-env: 0, strict: 0 */
 var path = require('path');
 var _ = require('lodash');
+console.log(process.env.NODE_ENV)
 var config = {
   env: process.env.NODE_ENV,
   api: 'https://search.idigbio.org/v2/',
@@ -98,12 +99,14 @@ if(process.env.NODE_ENV === "beta") {
     'redis': {
       'host': 'localhost',
       'db': 2
-    }
+    },
+    'api': 'http://localhost:19196/v2/',
   });
 } else {
   _.merge(config, {
     'port': 3000,
     'hostname': 'idb-api-dev.acis.ufl.edu',
+    'api': 'http://localhost:19196/v2/',
     'redis': {
       'host': 'localhost',
       'db': 2

@@ -18,15 +18,22 @@
     }
   ],
   "scripts": {
-    "start": "node --use-openssl-ca index.js",
+    "start": "bun util/copy-css.js && bun run build && ./postinstall.sh && bun index.js",
     "postinstall": "./postinstall.sh",
-    "test": "NODE_ENV=test NODE_OPTIONS=--use-openssl-ca BLUEBIRD_DEBUG=1 jest"
+    "test": "NODE_ENV=test NODE_OPTIONS=--use-openssl-ca BLUEBIRD_DEBUG=1 jest",
+    "build": "bun run build-react && bun run build-client && bun run build-mapper && bun run build-libs",
+    "build-react": "bun build --target browser ./public/client/js/react/src/{,*/}*.js --outdir ./public/client/js/react/build --source-maps --minify",
+    "build-libs": "bun build --target browser ./public/client/libs.js --outdir ./public/js/ --source-maps --minify",
+    "build-mapper": "bun build --target browser ./public/client/idbmap.js --outdir ./public/js/ --source-maps --minify",
+    "build-client": "bun build --target browser ./public/client/js/main.js --outdir ./public/js/ --source-maps --minify",
+    "watch": "bun build ./public/client/js/react/src/**/*.js --out-dir ./public/client/js/react/build --source-maps --watch"
   },
   "dependencies": {
     "@bower_components/leaflet-loading": "ebrelsford/Leaflet.loading",
     "@bower_components/leaflet-utfgrid": "danzel/Leaflet.utfgrid",
     "@bower_components/leaflet.fullscreen": "brunob/leaflet.fullscreen",
     "@elastic/filesaver": "^1.1.2",
+    "@websanova/url": "^2.6.3",
     "antd": "^5.15.4",
     "async": "^2.0.0",
     "body-parser": "^1.16.1",
@@ -40,12 +47,14 @@
     "d3-queue": "^3.0.3",
     "datauri": "^1.0.5",
     "elasticsearchclient": "~0.5.3",
-    "es5-shim": "^4.5.9",
     "express": "^4.14.1",
     "express-expose": "^0.3.4",
     "express-session": "^1.15.1",
     "geopoint": "^1.0.1",
+    "graceful-fs": "^4.2.11",
     "griddle-react": "^0.8.1",
+    "gulp": "^4.0.0",
+    "gulp-cli": "^3.0.0",
     "hamljs": "^0.6.2",
     "http-proxy": "~1.8.1",
     "jquery": "~3.3.1",
@@ -62,6 +71,10 @@
     "morgan": "^1.8.1",
     "openid": "^2.0.1",
     "pg": "^4.5.6",
+    "postcss": "^8.4.38",
+    "postcss-cli": "^11.0.0",
+    "postcss-import": "^16.1.0",
+    "postcss-url": "^10.1.3",
     "pouchdb": "^7.0.0",
     "prop-types": "^15.5",
     "react": "^17.0",
@@ -96,6 +109,7 @@
     "browserify": "^14.5.0",
     "browserify-css": "^0.14.0",
     "browserify-shim": "^3.8.14",
+    "bun-types": "latest",
     "envify": "^4.1.0",
     "es5-shim": "^4.5.9",
     "eslint": "^3.16.0",
@@ -103,7 +117,6 @@
     "eslint-plugin-import": "^2.2.0",
     "fancy-log": "^1.3.2",
     "fs-extra": "^7.0.1",
-    "gulp": "3.9.1",
     "gulp-babel": "^8.0.0",
     "gulp-less": "^3.3.2",
     "gulp-sourcemaps": "^2.6.1",
@@ -112,15 +125,15 @@
     "jest": "^24.0.0",
     "npm-shrinkwrap": "200.5.1",
     "react-test-renderer": "^15.5",
-    "reactify": "^1.1.1",
     "supertest": "^3.0.0",
     "uglify-js": "^3.2.1",
     "uglifyify": "^5.0.1",
-    "vinyl-buffer": "^1.0.0",
-    "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.7.0"
   },
   "resolutions": {
+    "graceful-fs": "^4.2.11"
+  },
+  "overrides": {
     "graceful-fs": "^4.2.11"
   },
   "keywords": [],
@@ -161,5 +174,10 @@
   "browserify-shim": {
     "jquery": "$",
     "tablesorter": "tablesorter"
+  },
+  "module": "index.js",
+  "type": "module",
+  "peerDependencies": {
+    "typescript": "^5.0.0"
   }
 }

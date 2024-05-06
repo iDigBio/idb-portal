@@ -12,10 +12,11 @@ const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) 
     const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
     const lastQueryTimeRef = useRef();
-
+    console.log(results)
     const getResults = useCallback(() => {
         let now = new Date().getTime();
         let query = queryBuilder.makeSearchQuery(search);
+
         if (JSON.stringify(query) !== lastQueryStringed) {
             if (search.from === 0) {
                 setLoading(true);
@@ -25,6 +26,7 @@ const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) 
             lastQueryTimeRef.current = now;
             idbapi.search(query, function (response) {
                 let searchState = search
+                console.log(response)
                 if (response.error !== 'Internal Server Error') {
                     if (now >= lastQueryTimeRef.current) {
                         let res = search.from > 0 ? results.concat(response.items) : response.items;
@@ -352,150 +354,6 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         </div>
     )
 
-};
-
-class ResultListColumnSelector extends React.Component{
-    // getInitialState(){
-    //     return {columns: this.props.columns};
-    // }
-    constructor(props) {
-        super(props)
-        this.state = {
-            columns: props.columns
-        }
-    }
-    addColumn(){
-        var cols = this.state.columns;
-        cols.push('none');
-        this.setState({columns: cols});
-    }
-    moveColumn(e){
-        e.preventDefault();
-        var cols = this.state.columns;
-        var name = e.target.attributes['data-column'].value;
-        var ind = parseInt(e.target.attributes['data-index'].value);
-        var mov = cols.splice(ind,1);
-        if(e.target.attributes['data-move'].value == 'up'){
-            ind--;
-        }else{
-            ind++;
-        }
-        cols.splice(ind,0,name);
-        this.setState({columns: cols},function(){
-            this.setColumns();
-        })
-    }
-    setColumns(){
-        this.props.setColumns(_.without(this.state.columns,'none'));
-    }
-    resetColumns(){
-        this.setState({columns: this.defaultColumns()},function(){
-            this.setColumns();
-        })
-    }
-    defaultColumns(){
-        return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
-    }
-    removeColumn(e){
-        e.preventDefault();
-        var name = e.currentTarget.attributes['data-column'].value;
-        var cols = this.props.columns;
-        if(cols.length > 1){
-            cols.splice(parseInt(e.currentTarget.attributes['data-index'].value),1);
-            this.setState({columns: cols},function(){
-                this.setColumns();
-            });
-        }
-    }
-    selectChange(e){
-        e.preventDefault();
-        var cols = this.state.columns;
-        cols[parseInt(e.target.attributes['data-index'].value)] = e.target.value;
-        this.setState({columns: cols},function(){
-            this.setColumns();
-        })
-    }
-    UNSAFE_componentWillMount(){
-        this.colCount = this.props.columns.length;
-    }
-    render(){
-
-        var self = this, selects = [];
-
-        _.each(self.state.columns, function(column,ind){
-            if(column==='none'){
-                var nonesel = true;
-            }else{
-                nonesel = false;
-            }
-            var fgroups = [<option key="none" value="none" data-index={ind}>Select a field</option>];
-            _.each(fields.searchGroups,function(val){
-                var fltrs = [];
-                _.each(fields.byGroup[val],function(field){
-                    if(field.hidden){
-                        //noop
-                    }else{
-
-                        var selected = field.term == column ? true : false;
-                        var disabled = (self.props.columns.indexOf(field.term) > -1 && selected == false) ? 'disabled' : '';
-                        fltrs.push(
-                            <option disabled={disabled} data-index={ind} value={field.term} key={field.term}>
-                                {field.name}
-                            </option>
-                        );
-                    }
-                });
-                fgroups.push(
-                  <optgroup key={val} label={fields.groupNames[val]}>
-                    &nbsp;&nbsp;{fltrs}
-                  </optgroup>
-                );
-            });
-            var updisabled = ( ind === 0 );
-            var downdisabled = ( ind === self.state.columns.length-1 );
-            selects.push(
-                <div key={column+'-'+ind} className="column-select-wrapper clearfix">
-                        <div className="up-down">
-                            <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
-                            <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
-                        </div>
-                        <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
-                            {fgroups}
-                        </select>
-                        <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
-                            <i className="glyphicon glyphicon-minus"/>
-                        </button>
-                </div>
-            );
-        });
-
-        var trans;
-        if(this.colCount !== this.props.columns.length){
-            trans = true;
-            this.colCount = this.props.columns.length;
-        }else{
-            trans = false
-        }
-
-        /*return(
-            <div className="modal-body clearfix" >
-                <ReactCSSTransitionGroup transitionEnter={trans} transitionLeave={trans} transitionName="column-select-trans">
-                {selects}
-                </ReactCSSTransitionGroup>
-            </div>
-        );*/
-        return(
-            <div className="modal-body clearfix" >
-                <button onClick={this.addColumn} id="reset" className="">
-                    Add <i className="glyphicon glyphicon-plus"/>
-                </button>
-                <button onClick={this.resetColumns} id="reset" className="">
-                    Reset
-                </button>
-                {selects}
-            </div>
-        );
-    }
 };
 
 const ResultsLabels = ({results, loading, stamp}) => {

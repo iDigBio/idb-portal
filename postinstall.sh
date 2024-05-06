@@ -8,7 +8,7 @@ if [ ! -d public/js ]; then
     mkdir public/js
 fi
 
-gulp build
+
 gulp
 
 echo "+++++++++++++ END POSTINSTALL +++++++++++++"

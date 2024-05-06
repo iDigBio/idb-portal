@@ -1,0 +1,8 @@
+[scripts]
+build = "bun run build-react && bun run build-libs && bun run build-mapper && bun run build-client && bun run build-css"
+build-react = "bun build ./public/client/js/react/src/**/*.js --out-dir ./public/client/js/react/build --source-maps --minify"
+build-libs = "bun build ./public/client/libs.js --out-file ./public/js/libs.js --source-maps --minify"
+build-mapper = "bun build ./public/client/idbmap.js --out-file ./public/js/idbmap.js --source-maps --minify"
+build-client = "bun build ./public/client/js/main.js --out-file ./public/js/client.js --source-maps --minify"
+watch = "bun build ./public/client/js/react/src/**/*.js --out-dir ./public/client/js/react/build --source-maps --watch"
+build-css = "bun build ./public/client/less/main.less --out-dir ./public/css"

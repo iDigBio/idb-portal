@@ -1,5 +1,5 @@
-import config from 'config/config'; // eslint-disable-line no-unused-vars
-import logger from 'app/logging'; // eslint-disable-line no-unused-vars
+import config from '../../config/config'; // eslint-disable-line no-unused-vars
+import logger from '../logging'; // eslint-disable-line no-unused-vars
 
 export default {
   index: function(req, res) {

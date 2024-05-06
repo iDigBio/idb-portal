@@ -146,83 +146,81 @@ const Publishers = () => {
 
 };
 
-class Recordsets extends React.Component{
-  render(){
-    var rows = _.map(this.props.recordsets,function(name,uuid){
-      if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
-        //rsets[uuid]=defsets();
-        return null;
-      }else{
-        var qp = getQueryParams(window.location.search);
-        var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
-        if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
-          rec_cols = (
-            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>
-          )
-        } else {
-          rec_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>)
-          rec_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>)
-          rec_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>)
-        }
-
-        if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
-          media_cols = (
-            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestmedia)}</td>
-          )
-        } else {
-          media_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>)
-          media_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>)
-          media_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>)
-        }
-
-        return (
-          <tr key={'publisher-'+uuid}>
-            <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
-            {rec_cols}
-            {rec_cols1}
-            {rec_cols2}
-            {rec_cols3}
-            {media_cols}
-            {media_cols1}
-            {media_cols2}
-            {media_cols3}
-          </tr>
+const Recordsets = ({uuid, name, recordsets, key}) => {
+  var rows = _.map(recordsets,function(name,uuid){
+    if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
+      //rsets[uuid]=defsets();
+      return null;
+    }else{
+      var qp = getQueryParams(window.location.search);
+      var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
+      if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
+        rec_cols = (
+          <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>
         )
+      } else {
+        rec_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>)
+        rec_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>)
+        rec_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>)
       }
-    });
 
-    return (
-      <div id={this.props.uuid}>
-        <h4>{this.props.name}</h4>
-        <table className="table table-bordered datatable table-condensed tablesorter-blue">
-          <thead>
-            <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
-            <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
-          </thead>
-          <tbody>
-            {_.without(rows,null)}
-          </tbody>
-        </table>
-      </div>
-    )
-  }
+      if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
+        media_cols = (
+          <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestmedia)}</td>
+        )
+      } else {
+        media_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>)
+        media_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>)
+        media_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>)
+      }
+
+      return (
+        <tr key={'publisher-'+uuid}>
+          <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
+          {rec_cols}
+          {rec_cols1}
+          {rec_cols2}
+          {rec_cols3}
+          {media_cols}
+          {media_cols1}
+          {media_cols2}
+          {media_cols3}
+        </tr>
+      )
+    }
+  });
+
+  return (
+    <div id={uuid}>
+      <h4>{name}</h4>
+      <table className="table table-bordered datatable table-condensed tablesorter-blue">
+        <thead>
+          <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
+          <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
+        </thead>
+        <tbody>
+          {_.without(rows,null)}
+        </tbody>
+      </table>
+    </div>
+  )
+
 };
 
-class Page extends React.Component{
-  render(){
-    var recordsets = _.map(pubs,function(val,key){
-      return <Recordsets recordsets={val.recordsets} key={key+'_recordsets'} uuid={key} name={val.name}/>
-    });
-    
-    return(
-      <div>
-        <StatsTable />
-        <h4>Publisher Summary</h4>
-        <Publishers />
-        {recordsets}
-      </div>
-    )
-  }
+const Page = () => {
+  var recordsets = _.map(pubs,function(val,key){
+    return <Recordsets recordsets={val.recordsets} key={key+'_recordsets'} uuid={key} name={val.name}/>
+  });
+
+  return(
+    <div>
+      <StatsTable />
+      <h4>Publisher Summary</h4>
+      <Publishers />
+      {recordsets}
+    </div>
+  )
+
 }
 
 

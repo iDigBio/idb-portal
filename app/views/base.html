@@ -15,6 +15,15 @@
     {% endblock %}
     <link rel="shortcut icon" href="https://www.idigbio.org/sites/default/files/idigbio-mark-128_0.png">
     <link rel="stylesheet" type="text/css" href="/portal/css/idigbio.css?v=1.0">
+    <link rel="stylesheet" href="/portal/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/portal/css/leaflet.css">
+    <link rel="stylesheet" href="/portal/css/all.css">
+
+      <script>
+          if (global === undefined) {
+              var global = window;
+          }
+      </script>
     <style>
       .logoimg {
         height: 51px;
@@ -170,7 +179,7 @@
     {% block appblock %}
         <script>L_PREFER_CANVAS = true;</script>
         <script src='/portal/js/libs.js'></script>
-        <script src='/portal/js/client.js'></script>
+        <script src='/portal/js/main.js'></script>
     {% endblock %}
     
 <!--     {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}

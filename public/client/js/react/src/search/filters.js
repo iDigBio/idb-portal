@@ -145,6 +145,16 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
 const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
     const [text, setText] = useState(filter.text)
     const [dropdownOpen, setDropdownOpen] = useState(false)
+    const [dropdownOptions, setDropdownOptions] = useState()
+
+    useEffect(() => {
+        const label = renderTitle('Suggestions')
+        const options = aggs.map((agg) => {
+            return renderItem(agg.doc_count.toString(), agg.key)
+        })
+        setDropdownOptions([{label, options}])
+    }, [aggs]);
+
     useEffect(() => {
         debounce(filter)
     }, []);
@@ -346,6 +356,22 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
         ),
     });
 
+    const renderTitle = (title) => (
+        <span>
+        {title}
+            <a
+                style={{
+                    float: 'right',
+                }}
+                href="https://idigbio.github.io/idb-portal/portal/suggestions/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+        How is this list populated?
+            </a>
+        </span>
+    );
+
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
             <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
@@ -355,9 +381,7 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
             <div className={cl}>
                 {filter.name === 'scientificname' ? // only field with an aggregation for autocomplete
                     <AutoComplete
-                        options={aggs.map((agg) => { //dropdown options
-                            return renderItem(agg.doc_count.toString(), agg.key)
-                        })}
+                        options={dropdownOptions}
                         popupMatchSelectWidth={false} // Allows custom dropdown width
                         dropdownStyle={{ width: 400 }} // Sets the dropdown width
                         onSelect={handleSelect}

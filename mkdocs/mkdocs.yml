@@ -28,6 +28,7 @@ nav:
       - 'Introduction': 'portal/index.md'
       - 'Search Records': 'portal/search.md'
       - 'Record Page': 'portal/recordpage.md'
+      - 'Suggestions': 'portal/suggestions.md'
   - API:
       - 'Introduction': 'api/index.md'
   - Blog:

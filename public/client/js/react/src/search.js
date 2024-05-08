@@ -15,6 +15,7 @@ const Search = () => {
     const [optionsTab, setOptionsTab] = useState('filters')
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
+    const [ready, setReady] = useState(false)
     function defaultSearch(){
         return {
             filters: defaultFilters(),
@@ -70,6 +71,7 @@ const Search = () => {
         searchHistory.push(currentSearch);
         // Update the state with 'search'
         setSearch(currentSearch)
+        setReady(true)
     }, []);
     
     function searchChange(key,val){
@@ -97,16 +99,21 @@ const Search = () => {
         }
     }
 
-    return(
+    return (
         <div id='react-wrapper'>
-            <div id="top" className="clearfix">
-                <div id="search" className="clearfix">
-                    <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
-                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
-                </div>
-                <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
-            </div>
-            <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
+            {ready && (
+                <>
+                    <div id="top" className="clearfix">
+                        <div id="search" className="clearfix">
+                            <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
+                            <OptionsPanel search={search} searchChange={searchChange} view={optionsTab}
+                                          viewChange={viewChange} />
+                        </div>
+                        <Map search={search} searchChange={searchChange} viewChange={viewChange} />
+                    </div>
+                    <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange} />
+                </>
+            )}
         </div>
     )
 

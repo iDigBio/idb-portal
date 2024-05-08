@@ -4,7 +4,7 @@ import async from 'async'
 import _ from 'lodash'
 import RecordsetPage from 'public/client/js/react/build/recordset'
 import StatsPage from 'public/client/js/react/build/stats'
-
+import moment from 'moment'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 

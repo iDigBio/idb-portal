@@ -296,7 +296,7 @@ const TaxonPies = ({data}) => {
 }
 
 const StatsCharts = (props) => {
-    const [startDate, setStartDate] = useState(moment("2015-01-16", "YYYY-MM-DD"));
+    const [startDate, setStartDate] = useState(moment().subtract(3,'years').startOf('month'));
     const [endDate, setEndDate] = useState(moment().subtract(1, 'months').endOf('month'));
     const [log, setLog] = useState(true);
     const [cumulative, setCumulative] = useState(true);

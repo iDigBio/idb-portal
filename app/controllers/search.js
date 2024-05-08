@@ -87,7 +87,7 @@ export default {
     if(typeof forward !== 'undefined' && forward.indexOf('10.244.19') !== 0  && ip !== '127.0.0.1') {
       var stats = {form: {type: req.body.type, search: req.body.search, results: req.body.results}};
       request.post(
-        'http://idb-redis-stats.acis.ufl.edu:3000',
+        'http://10.13.45.208:3000',
         stats
       );
     }

@@ -5,6 +5,8 @@ idb-portal
 
 Nodejs, Express, React, Leaflet, Lodash, jQuery, Browserify, Gulp
 
+## NCE Prod Branch
+This is the NCE Prod branch meaning that changes made for existing production hardware happen here.
 
 ## Install these Dependencies
 - nodejs (tested up to v8.12.0)

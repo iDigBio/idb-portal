@@ -11,7 +11,7 @@ var config = {
   app: {
     name: 'iDigBio Portal'
   },
-  port: 3000,
+  port: 19199,
   menus: {
     public: {
       home: {
@@ -27,7 +27,7 @@ var config = {
         label: "Search Records"
             },
       learning: {
-        url: "//www.idigbio.org/content/learning-center",
+        url: "https://www.idigbio.org/content/learning-center",
         label: "Learning Center"
       },
       publishers: {
@@ -61,6 +61,9 @@ var config = {
     login: "https://www.idigbio.org/login",
     logout: "/logout",
     registerOrg: "https://www.idigbio.org/login/accounts/new",
+  },
+  redis: {
+    password: process.env.IDB_REDIS_AUTH
   }
 };
 
@@ -73,7 +76,7 @@ if(process.env.NODE_ENV === "beta") {
     'port': 19199,
     'hostname': 'beta-portal.idigbio.org',
     'redis': {
-      'host': 'idb-redis10-beta.acis.ufl.edu',
+      'host': 'idb-redis11-beta.acis.ufl.edu',
       'db': 2
     },
     'api': 'https://beta-search.idigbio.org/v2/',

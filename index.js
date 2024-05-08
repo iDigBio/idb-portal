@@ -1,11 +1,11 @@
-require('babel-register')({
+require('@babel/register')({
   "presets": [
-    ["env", {
+    ["@babel/preset-env", {
       "targets": {
         "node": "current"
       }
     }],
-    "react"
+    "@babel/preset-react"
   ],
   "plugins": [
     [
@@ -18,9 +18,7 @@ require('babel-register')({
       }
     ],
     "transform-promise-to-bluebird",
-    "transform-react-display-name",
-    "transform-class-properties",
-    "transform-es2015-classes"
+    "@babel/plugin-proposal-class-properties"
   ]
 });
 
@@ -43,7 +41,7 @@ function registerGracefulShutdown(signal, server, id) {
 
 function startThisProcess(app, id) {
   return new Promise(function(resolve, reject) {
-  id = id || 'main';
+    id = id || 'main';
     const server = app.listen(config.port, function() {
       console.log(`Server(${id}) listening on port ${config.port}`);
     });

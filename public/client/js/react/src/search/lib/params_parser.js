@@ -3,9 +3,9 @@
 * Supports iDigBio API params  (rq,sort) 
 *
 ****/
-var Filters = require('../filters');
+import Filters, {newFilterProps} from '../filters'
 
-module.exports = function(search){
+export default function(search){
     if(url('?rq')){
         try{
             var rq = JSON.parse(decodeURIComponent(url('?rq')));
@@ -27,7 +27,7 @@ module.exports = function(search){
                         search.geopoint = v.type === 'exists' ? true : false;
                     }
                 }else if(_.isObject(fields.byTerm[k])){
-                    filter = Filters.newFilterProps(k);
+                    filter = newFilterProps(k);
                     if(_.isObject(v) && _.isString(v.type)){
                         if(v.type === 'exists' || v.type === 'missing'){
                             filter[v.type] = true;

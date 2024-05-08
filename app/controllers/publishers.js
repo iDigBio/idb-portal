@@ -1,11 +1,12 @@
-var request = require('request');
-var async = require('async');
-var _ = require('lodash');
-var RecordsetPage = require('public/client/js/react/build/recordset');
-var StatsPage = require('public/client/js/react/build/stats');
-var moment = require('moment');
-var React = require('react');
-var ReactDOMServer = require('react-dom/server');
+import {createFactory} from '../createFactory.js'
+import request from 'request'
+import async from 'async'
+import _ from 'lodash'
+import RecordsetPage from 'public/client/js/react/build/recordset'
+import StatsPage from 'public/client/js/react/build/stats'
+
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
 
 import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
@@ -68,7 +69,7 @@ export default {
       if(err) {
         logger.error(err);
       }
-      const collections = body.map(transformCollection);
+      const collections = Array.isArray(body) ? body.map(transformCollection) : [];	    
       res.render('collections', {
         activemenu: 'publishers',
         user: req.user,
@@ -292,7 +293,7 @@ export default {
           if(a_err) {
             logger.error(a_err); // This should probably actually be handled better.
           }
-          var rp = React.createFactory(RecordsetPage);
+          var rp = createFactory(RecordsetPage);
           var lastmodified = lastRecord >= lastMedia ? lastRecord : lastMedia;
           res.render('recordset', {
             activemenu: 'publishers',

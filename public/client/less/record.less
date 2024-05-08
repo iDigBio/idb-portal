@@ -86,7 +86,7 @@ h1#banner{
         }
     }
     .sec{
-        font-size: 13px;
+        font-size: @data-font-size;
         table{
             td{
                 padding: 1px 0px;  
@@ -106,11 +106,72 @@ h1#banner{
     }
 }
 
+// Overrides for antd default table styling
+.custom-antd-border() {
+    border: 1px solid #ddd; /* Solid gray border */
+}
+.custom-antd-cell-properties() {
+    //corresponds to: #bootstrap .table-condensed tr {th,td}
+    padding: 5px;
+
+    //corresponds to: #bootstrap .table-bordered tr {th,td}
+    .custom-antd-border();
+}
+.custom-antd-table {
+    &.ant-table-wrapper table {
+        //from: #bootstrap.table()
+        margin-bottom: 20px;
+
+        //corresponds to: #bootstrap.table-bordered();
+        .custom-antd-border();
+
+        //corresponds to: #bootstrap.table();
+        border-collapse: collapse;
+    }
+
+    [class^='ant-table'], [class*='ant-table'] {
+        font-size: @data-font-size;
+
+        //from: #bootstrap.body();
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .ant-table-thead > tr > th {
+        .custom-antd-cell-properties();
+    }
+    .ant-table-tbody > tr > td {
+        .custom-antd-cell-properties();
+    }
+
+    .ant-table {
+        color: @data-text-color;
+    }
+
+    .ant-table-tbody > tr.oddRow > td {
+        //corresponds to: #bootstrap > .table-striped > tbody > tr:nth-of-type(odd):
+        background-color: #f9f9f9; /* Light grey background for odd rows */
+    }
+
+    .ant-table-tbody > tr.evenRow > td {
+        background-color: #ffffff; /* White background for even rows */
+    }
+
+    .ant-table-thead > tr > th {
+        border-radius: 0;
+        border-bottom-width: 2px;
+    }
+}
+.ant-table {
+    border-radius: 0 !important;
+}
+
+@data-text-color: #555;
+@data-font-size: 13px;
 #data{
     margin-top:30px;
     #record, #flags{
         border-top:@brd;
-        font-size:13px;
+        font-size:@data-font-size;
         padding-top:20px;
         .field-name{
             font-weight:normal;
@@ -123,7 +184,7 @@ h1#banner{
             word-break:break-word;
             overflow:hidden;
             white-space: pre-line;
-            color:#555;
+            color:@data-text-color;
         }
     }
     @import 'tabs.less';

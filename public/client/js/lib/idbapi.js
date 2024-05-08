@@ -8,6 +8,8 @@ module.exports = {
     host: (function(){
         if(typeof window.idbapi == 'object' && typeof window.idbapi.host == 'string'){
             return window.idbapi.host;
+        } else if (process.env.NODE_ENV == "beta") {
+            return 'https://beta-search.idigbio.org/v2/'
         } else{
             return 'https://search.idigbio.org/v2/';
         }
@@ -16,7 +18,7 @@ module.exports = {
         if(typeof window.idbapi == 'object' && typeof window.idbapi.media_host == 'string'){
             return window.idbapi.media_host;
         } else if(process.env.NODE_ENV == "beta"){
-            return 'https://beta-api.idigbio.org/';
+            return 'https://api.idigbio.org/';
         } else {
             return 'https://api.idigbio.org/';
         }

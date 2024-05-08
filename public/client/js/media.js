@@ -1,6 +1,6 @@
-var React = require('react');
-var ReactDOM = require('react-dom');
-var MediaPage = require('./react/src/media');
+import React from 'react'
+import ReactDOM from 'react-dom'
+import MediaPage from './react/src/media'
 
 ReactDOM.render(
     <MediaPage mediarecord={data.mediarecord} record={data.record} />,

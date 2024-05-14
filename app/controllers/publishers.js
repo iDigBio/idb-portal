@@ -4,7 +4,7 @@ import async from 'async'
 import _ from 'lodash'
 import RecordsetPage from 'public/client/js/react/build/recordset'
 import StatsPage from 'public/client/js/react/build/stats'
-
+import moment from 'moment'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
 
@@ -122,7 +122,7 @@ export default {
     var collected = {};
     var taxon = {};
     var flags = {};
-    var defaultMin = "2015-01-16";
+    var defaultMin = moment().subtract(3,'years').startOf('month');
     async.parallel([
       function(cback) {
         var params = {"dateInterval": "month", "minDate": defaultMin};
@@ -271,7 +271,7 @@ export default {
             });
           },
           function(cback) {
-            var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": "2015-01-15"};
+            var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": moment().subtract(3,'years').startOf('month')};
             request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
               use = a_body;
               cback(a_err, 'four');

@@ -3,60 +3,54 @@ import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
 
-const Results = ({ searchProp, searchChange, view, viewChange }) => {
+const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
     const [attribution, setAttribution] = useState([]);
     const [total, setTotal] = useState(0);
-    const [search, setSearch] = useState(searchProp);
     const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
     const lastQueryTimeRef = useRef();
 
     const getResults = useCallback(() => {
         let now = new Date().getTime();
-        let query = queryBuilder.makeSearchQuery(search);
+        let query = queryBuilder.makeSearchQuery(searchProp);
         if (JSON.stringify(query) !== lastQueryStringed) {
-            if (search.from === 0) {
+            if (searchProp.from === 0) {
                 setLoading(true);
                 setResults([]);
             }
 
             lastQueryTimeRef.current = now;
             idbapi.search(query, function (response) {
-                let searchState = search
+                let searchState = searchProp
                 if (response.error !== 'Internal Server Error') {
                     if (now >= lastQueryTimeRef.current) {
                         let res = search.from > 0 ? results.concat(response.items) : response.items;
-                        let more = response.itemCount > (search.from + search.size);
+                        let more = response.itemCount > (searchProp.from + searchProp.size);
                         searchState.from = query.offset;
-                        setSearch(searchState)
+                        searchChange(searchState)
                         setResults(res);
                         setAttribution(response.attribution);
                         setTotal(response.itemCount);
                         setHasMore(more);
                         setLoading(false);
+                        setAggs(response.aggs.unique_scientific_names.buckets)
                     }
                 }
             });
 
             setLastQueryStringed(JSON.stringify(query));
         }
-    }, [search, results, lastQueryStringed]);
-
-    useEffect(() => {
-        if (searchProp!==search) {
-            setSearch(_.cloneDeep(searchProp));
-        }
-    }, [searchProp]);
+    }, [searchProp, results, lastQueryStringed]);
 
     useEffect(() => {
         getResults();
-    }, [search]);
+    }, [searchProp]);
 
     useEffect(() => {
         const handleScroll = () => {
-            let newSearch = _.cloneDeep(search);
+            let newSearch = _.cloneDeep(searchProp);
             if (total > newSearch.from + newSearch.size) {
                 if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
                     newSearch.from += newSearch.size;
@@ -78,7 +72,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     };
 
     const updateResults = (newSearch) => {
-        setSearch(newSearch);
+        searchChange(newSearch)
         setLoading(true);
         getResults();
     };
@@ -87,14 +81,14 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     let resultsComponent;
     switch (view) {
         case 'list':
-            resultsComponent = <ResultsList search={search} results={results} searchChange={searchChange} loading={loading} />;
+            resultsComponent = <ResultsList search={searchProp} results={results} searchChange={searchChange} loading={loading} />;
             break;
         case 'labels':
             resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            resultsComponent = <ResultsImages search={search} resultsProp={results}
-                                   loadingProp={loading}/>;
+            resultsComponent = <ResultsImages search={searchProp} resultsProp={results}
+                                              loadingProp={loading}/>;
             break;
         case 'recordsets':
             resultsComponent = <Providers attribution={attribution}/>;
@@ -134,7 +128,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
     }, [])
 
     function resetColumns(){
-            setColumns(defaultColumns());
+        setColumns(defaultColumns());
     }
     function defaultColumns(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
@@ -168,7 +162,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
         var dir, localSearch = _.cloneDeep(search), name=e.currentTarget.attributes['data-term'].value,
-        sort={name: name}, sorting=localSearch.sorting, curlength = sorting.length;
+            sort={name: name}, sorting=localSearch.sorting, curlength = sorting.length;
         if(_.isUndefined(e.currentTarget.attributes['data-sort'])){
             dir='asc';
         }else{
@@ -197,14 +191,14 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         //to prevent opening if hiliting text
 
         if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
-           window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
+            window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
         }
 
     }
 
     var cols = columns,self=this;
 
-   //['scientificname','genus','collectioncode','specificepithet','commonname'];
+    //['scientificname','genus','collectioncode','specificepithet','commonname'];
     var rows=[];
     var headers=[];
     //results table
@@ -330,7 +324,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                         </div>
                         <div className="modal-body clearfix">
 
-                                {list}
+                            {list}
 
                         </div>
 
@@ -342,10 +336,10 @@ const ResultsList = ({search, searchChange, results, loading}) => {
             </div>
             <table id="data-table" className="table table-condensed">
                 <thead>
-                    <tr id="results-headers">{headers}</tr>
+                <tr id="results-headers">{headers}</tr>
                 </thead>
                 <tbody>
-                    {rows}
+                {rows}
                 </tbody>
             </table>
         </div>
@@ -445,25 +439,25 @@ class ResultListColumnSelector extends React.Component{
                     }
                 });
                 fgroups.push(
-                  <optgroup key={val} label={fields.groupNames[val]}>
-                    &nbsp;&nbsp;{fltrs}
-                  </optgroup>
+                    <optgroup key={val} label={fields.groupNames[val]}>
+                        &nbsp;&nbsp;{fltrs}
+                    </optgroup>
                 );
             });
             var updisabled = ( ind === 0 );
             var downdisabled = ( ind === self.state.columns.length-1 );
             selects.push(
                 <div key={column+'-'+ind} className="column-select-wrapper clearfix">
-                        <div className="up-down">
-                            <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
-                            <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
-                        </div>
-                        <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
-                            {fgroups}
-                        </select>
-                        <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
-                            <i className="glyphicon glyphicon-minus"/>
-                        </button>
+                    <div className="up-down">
+                        <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
+                        <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
+                    </div>
+                    <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
+                        {fgroups}
+                    </select>
+                    <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
+                        <i className="glyphicon glyphicon-minus"/>
+                    </button>
                 </div>
             );
         });
@@ -536,7 +530,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
             content.push(<span key="event-date2" className="date">{formatedDC}</span>);
         }
 
-         var l=[];
+        var l=[];
         ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
             if(_.has(raw,item)){
                 l.push(raw[item])
@@ -695,21 +689,9 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         }
     }
     useEffect(() => {
-        // if(search.image) {
-        //     setResults(search.results);
-        //     setLoading(false);
-        // } else {
-            getImageOnlyResults(search);
-        // }
+        getImageOnlyResults(search);
     }, [search]);
-    // function UNSAFE_componentWillReceiveProps(nextProps){
-    //     if(nextProps.search.image){
-    //         setResults(nextProps.results)
-    //         setLoading(false)
-    //     }else{
-    //         getImageOnlyResults(nextProps.search);
-    //     }
-    // }
+
     function makeImageText(data){
 
     }
@@ -730,8 +712,8 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'a-'+uuid+_.random(999999)}>
                 <span className="img-count">{count}</span>
                 <img alt={name.join(' ')}
-                src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
-                onError={errorImage}/>
+                     src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
+                     onError={errorImage}/>
                 <div className="gallery-image-text">
                     <div className="image-text">
                         <span className="title">{_.capitalize(name.join(' '))}</span>
@@ -791,10 +773,10 @@ const Providers = ({attribution}) => {
         <div id="provider-results" className="panel">
             <table className="table table-condensed table-striped">
                 <thead>
-                    <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
+                <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
                 </thead>
                 <tbody>
-                    {list}
+                {list}
                 </tbody>
             </table>
         </div>

@@ -15,7 +15,7 @@ const Search = () => {
     const [optionsTab, setOptionsTab] = useState('filters')
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
-    const [ready, setReady] = useState(false)
+
     function defaultSearch(){
         return {
             filters: defaultFilters(),
@@ -71,7 +71,6 @@ const Search = () => {
         searchHistory.push(currentSearch);
         // Update the state with 'search'
         setSearch(currentSearch)
-        setReady(true)
     }, []);
     
     function searchChange(key,val){
@@ -101,7 +100,6 @@ const Search = () => {
 
     return (
         <div id='react-wrapper'>
-            {ready && (
                 <>
                     <div id="top" className="clearfix">
                         <div id="search" className="clearfix">
@@ -113,7 +111,6 @@ const Search = () => {
                     </div>
                     <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange} />
                 </>
-            )}
         </div>
     )
 

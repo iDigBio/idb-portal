@@ -144,9 +144,6 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
 const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
     const [text, setText] = useState(filter.text)
 
-    useEffect(() => {
-        debounce(filter)
-    }, []);
 
     useEffect(() => {
         setText(filter.text)
@@ -154,7 +151,7 @@ const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
 
     const debouncedTextType = _.debounce(function(param){
         changeFilter(param);
-    },700,{leading: false, trailing: true});
+    },200,{leading: false, trailing: true});
 
     function debounce(param) {
         debouncedTextType(param)

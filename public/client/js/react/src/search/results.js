@@ -3,54 +3,60 @@ import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
 
-const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) => {
+const Results = ({ searchProp, searchChange, view, viewChange }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
     const [attribution, setAttribution] = useState([]);
     const [total, setTotal] = useState(0);
+    const [search, setSearch] = useState(searchProp);
     const [hasMore, setHasMore] = useState(false);
     const [loading, setLoading] = useState(true);
     const lastQueryTimeRef = useRef();
 
     const getResults = useCallback(() => {
         let now = new Date().getTime();
-        let query = queryBuilder.makeSearchQuery(searchProp);
+        let query = queryBuilder.makeSearchQuery(search);
         if (JSON.stringify(query) !== lastQueryStringed) {
-            if (searchProp.from === 0) {
+            if (search.from === 0) {
                 setLoading(true);
                 setResults([]);
             }
 
             lastQueryTimeRef.current = now;
             idbapi.search(query, function (response) {
-                let searchState = searchProp
+                let searchState = search
                 if (response.error !== 'Internal Server Error') {
                     if (now >= lastQueryTimeRef.current) {
                         let res = search.from > 0 ? results.concat(response.items) : response.items;
-                        let more = response.itemCount > (searchProp.from + searchProp.size);
+                        let more = response.itemCount > (search.from + search.size);
                         searchState.from = query.offset;
-                        searchChange(searchState)
+                        setSearch(searchState)
                         setResults(res);
                         setAttribution(response.attribution);
                         setTotal(response.itemCount);
                         setHasMore(more);
                         setLoading(false);
-                        setAggs(response.aggs.unique_scientific_names.buckets)
                     }
                 }
             });
 
             setLastQueryStringed(JSON.stringify(query));
         }
-    }, [searchProp, results, lastQueryStringed]);
+    }, [search, results, lastQueryStringed]);
 
     useEffect(() => {
-        getResults();
+        if (searchProp!==search) {
+            setSearch(_.cloneDeep(searchProp));
+        }
     }, [searchProp]);
 
     useEffect(() => {
+        getResults();
+    }, [search]);
+
+    useEffect(() => {
         const handleScroll = () => {
-            let newSearch = _.cloneDeep(searchProp);
+            let newSearch = _.cloneDeep(search);
             if (total > newSearch.from + newSearch.size) {
                 if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
                     newSearch.from += newSearch.size;
@@ -72,7 +78,7 @@ const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) 
     };
 
     const updateResults = (newSearch) => {
-        searchChange(newSearch)
+        setSearch(newSearch);
         setLoading(true);
         getResults();
     };
@@ -81,13 +87,13 @@ const Results = ({ searchProp, searchChange, view, viewChange, aggs, setAggs }) 
     let resultsComponent;
     switch (view) {
         case 'list':
-            resultsComponent = <ResultsList search={searchProp} results={results} searchChange={searchChange} loading={loading} />;
+            resultsComponent = <ResultsList search={search} results={results} searchChange={searchChange} loading={loading} />;
             break;
         case 'labels':
             resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            resultsComponent = <ResultsImages search={searchProp} resultsProp={results}
+            resultsComponent = <ResultsImages search={search} resultsProp={results}
                                               loadingProp={loading}/>;
             break;
         case 'recordsets':
@@ -689,9 +695,21 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         }
     }
     useEffect(() => {
+        // if(search.image) {
+        //     setResults(search.results);
+        //     setLoading(false);
+        // } else {
         getImageOnlyResults(search);
+        // }
     }, [search]);
-
+    // function UNSAFE_componentWillReceiveProps(nextProps){
+    //     if(nextProps.search.image){
+    //         setResults(nextProps.results)
+    //         setLoading(false)
+    //     }else{
+    //         getImageOnlyResults(nextProps.search);
+    //     }
+    // }
     function makeImageText(data){
 
     }

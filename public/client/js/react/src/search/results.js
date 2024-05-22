@@ -30,6 +30,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
                         let res = search.from > 0 ? results.concat(response.items) : response.items;
                         let more = response.itemCount > (search.from + search.size);
                         searchState.from = query.offset;
+                        searchChange(searchState)
                         setSearch(searchState)
                         setResults(res);
                         setAttribution(response.attribution);

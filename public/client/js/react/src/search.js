@@ -16,6 +16,14 @@ const Search = () => {
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
 
+    useEffect(() => {
+        // Hide the loader when the component is mounted
+        const loader = document.getElementById('loader');
+        if (loader) {
+            loader.style.display = 'none';
+        }
+    }, []);
+
     function defaultSearch(){
         return {
             filters: defaultFilters(),

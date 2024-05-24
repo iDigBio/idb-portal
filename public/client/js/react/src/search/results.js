@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef, memo} from 'react';
 import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
 
-const Results = ({ searchProp, searchChange, view, viewChange }) => {
+const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
     const [attribution, setAttribution] = useState([]);
@@ -30,8 +30,8 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
                         let res = search.from > 0 ? results.concat(response.items) : response.items;
                         let more = response.itemCount > (search.from + search.size);
                         searchState.from = query.offset;
-                        searchChange(searchState)
                         setSearch(searchState)
+                        // searchChange(searchState)
                         setResults(res);
                         setAttribution(response.attribution);
                         setTotal(response.itemCount);
@@ -43,7 +43,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
 
             setLastQueryStringed(JSON.stringify(query));
         }
-    }, [search, results, lastQueryStringed]);
+    }, [search, lastQueryStringed]);
 
     useEffect(() => {
         if (searchProp!==search) {
@@ -56,7 +56,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     }, [search]);
 
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = _.debounce(() => {
             let newSearch = _.cloneDeep(search);
             if (total > newSearch.from + newSearch.size) {
                 if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
@@ -64,13 +64,13 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
                     updateResults(newSearch);
                 }
             }
-        };
+        }, 100);
 
         window.onscroll = handleScroll;
         return () => {
             window.onscroll = null;
         };
-    }, [total, loading]);
+    }, [loading]);
 
     const viewChangeHandler = (event) => {
         event.preventDefault();
@@ -88,13 +88,13 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     let resultsComponent;
     switch (view) {
         case 'list':
-            resultsComponent = <ResultsList search={search} results={results} searchChange={searchChange} loading={loading} />;
+            resultsComponent = <ResultsList search={searchProp} results={results} searchChange={searchChange} loading={loading} />;
             break;
         case 'labels':
             resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            resultsComponent = <ResultsImages search={search} resultsProp={results}
+            resultsComponent = <ResultsImages search={search} resultsProp={results} setResults={setResults}
                                               loadingProp={loading}/>;
             break;
         case 'recordsets':
@@ -119,7 +119,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
             {resultsComponent}
         </div>
     );
-}
+})
 var sortClick=false;
 const ResultsList = ({search, searchChange, results, loading}) => {
     const [columns, setColumnsState] = useState(defaultColumns())
@@ -657,44 +657,50 @@ const ResultsLabels = ({results, loading, stamp}) => {
 
 };
 
-const ResultsImages = ({loadingProp, resultsProp, search}) => {
+const ResultsImages = memo(({loadingProp, resultsProp, search}) => {
     const [results, setResults] = useState(resultsProp)
     const [loading, setLoading] = useState(loadingProp)
 
-    function getImageOnlyResults(search){
-
-        var d = new Date, self=this, searchState = _.cloneDeep(search);
-        searchState.image=true;
+    // useEffect(() => {
+    //     setResults(resultsProp)
+    // }, [resultsProp]);
+    const getImageOnlyResults = (search) => {
+        console.log(search)
+        var d = new Date();
+        var self = this;
+        var searchState = _.cloneDeep(search);
+        searchState.image = true;
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         let lastQueryTime = now;
-        setLoading(true)
-        idbapi.search(query,function(response){
-            //make sure last query run is the last one that renders
-            //as responses can be out of order
-            if(now>= lastQueryTime){
+        setLoading(true);
+        idbapi.search(query, function(response) {
+            // Make sure last query run is the last one that renders
+            // As responses can be out of order
+            if (now >= lastQueryTime) {
                 var res;
-                if(searchState.from > 0){
+                if (searchState.from > 0) {
                     res = results.concat(response.items);
-                }else{
+                } else {
                     res = response.items;
                 }
-                setResults(res)
-                setLoading(false)
-                // self.setState({results: res, loading: false},function(){
+                setResults(res);
+                setLoading(false);
+                // self.setState({results: res, loading: false}, function(){
                 //     self.forceUpdate();
                 // });
             }
         });
-    }
+    };
+
     function errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
-    function componentDidMount(){
-        if(!search.image){
-            getImageOnlyResults(search);
-        }
-    }
+    // function componentDidMount(){
+    //     if(!search.image){
+    //         getImageOnlyResults(search);
+    //     }
+    // }
     useEffect(() => {
         // if(search.image) {
         //     setResults(search.results);
@@ -703,6 +709,7 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         getImageOnlyResults(search);
         // }
     }, [search]);
+
     // function UNSAFE_componentWillReceiveProps(nextProps){
     //     if(nextProps.search.image){
     //         setResults(nextProps.results)
@@ -752,6 +759,7 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
             })
         }
     });
+
     if(images.length === 0 && !loading){
         images.push(
             <div key="no-images" className="no-images">
@@ -774,7 +782,7 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         </div>
     )
 
-};
+});
 
 const Providers = ({attribution}) => {
 

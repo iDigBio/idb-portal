@@ -1,5 +1,5 @@
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import Filters, {defaultFilters, newFilterProps} from './search/filters'
 import Sorting, {defaultSorts} from './search/sorting'
 import Mapping from './search/mapping'
@@ -15,12 +15,17 @@ const Search = () => {
     const [optionsTab, setOptionsTab] = useState('filters')
     const [resultsTab, setResultsTab] = useState('list')
     const [search, setSearch] = useState(defaultSearch())
+    const [ready, setReady] = useState(false)
 
     useEffect(() => {
         // Hide the loader when the component is mounted
         const loader = document.getElementById('loader');
+        const main = document.getElementById('main')
         if (loader) {
             loader.style.display = 'none';
+        }
+        if (main) {
+            main.style.height='auto'
         }
     }, []);
 
@@ -79,32 +84,34 @@ const Search = () => {
         searchHistory.push(currentSearch);
         // Update the state with 'search'
         setSearch(currentSearch)
+        setReady(true)
     }, []);
     
-    function searchChange(key,val){
+
+    const searchChange = useCallback((key, val) => {
+        console.log(key, val);
         var newSearch = _.cloneDeep(search);
-        if(typeof key == 'string'){
-            newSearch[key]=val;
-        }else if(typeof key == 'object'){
-            _.each(key,function(v,k){
-                newSearch[k]=v;
+        if (typeof key === 'string') {
+            newSearch[key] = val;
+        } else if (typeof key === 'object') {
+            _.each(key, function (v, k) {
+                newSearch[k] = v;
             });
         }
-        setSearch(newSearch)
-        // setHistory([...history, search])
-        searchHistory.push(newSearch);
-    }
+        setSearch(newSearch);
+        searchHistory.push(newSearch); // Assuming searchHistory can handle reactivity properly
+    }, [search, setSearch, searchHistory]);
 
-    function viewChange(view,option){
-        //currently only supports options panel and results tabs
-        if(view=='optionsTab'){
+    const viewChange = useCallback((view, option) => {
+        if (view === 'optionsTab') {
             localStorage.setItem(view, option);
-            setOptionsTab(option)
-        } else if (view=='resultsTab') {
+            setOptionsTab(option);
+        } else if (view === 'resultsTab') {
             localStorage.setItem(view, option);
-            setResultsTab(option)
+            setResultsTab(option);
         }
-    }
+    }, [setOptionsTab, setResultsTab]); // Not including these in deps if they are from useState
+
 
     return (
         <div id='react-wrapper'>
@@ -117,7 +124,9 @@ const Search = () => {
                         </div>
                         <Map search={search} searchChange={searchChange} viewChange={viewChange} />
                     </div>
-                    <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange} />
+                    {ready &&
+                        <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange} />
+                    }
                 </>
         </div>
     )

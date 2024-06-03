@@ -29,11 +29,20 @@ export default {
   },
   record: function(req, res) {
     const id = req.params.id;
-    request.get({ url: `${config.api}view/records/${id}`, json: true }, function(err, resp, body) {
+    const rqurl = `${config.api}view/records/${id}`;
+    request.get({ url: rqurl, json: true }, function(err, resp, body) {
       if (err) {
         logger.error(err);
       }
-      if (body.uuid) {
+      if (!body) {
+        logger.error('unexpected blank response to search API request:', {url: rqurl})
+        res.status(502).render('500', {
+          activemenu: 'search',
+          id: req.params.id,
+          user: req.user,
+          token: req.session._csrf
+        });
+      } else if (body.uuid) {
         const record = body;
         let Page = ReactDOMServer.renderToString( <RecordPage record={record} /> );
         res.render('record', {
@@ -57,11 +66,20 @@ export default {
   },
   media: function(req, res) {
     const id = req.params.id;
-    request.get({ url: `${config.api}view/mediarecords/${id}`, json: true }, function(err, resp, body) {
+    const rqurl = `${config.api}view/mediarecords/${id}`;
+    request.get({ url: rqurl, json: true }, function(err, resp, body) {
       if (err) {
         logger.error(err);
       }
-      if (body.uuid) {
+      if (!body) {
+        logger.error('unexpected blank response to search API request:', {url: rqurl})
+        res.status(502).render('500', {
+          activemenu: 'search',
+          id: req.params.id,
+          user: req.user,
+          token: req.session._csrf
+        });
+      } else if (body.uuid) {
         const mediarecord = body;
         let record = {};
         const render = function() {

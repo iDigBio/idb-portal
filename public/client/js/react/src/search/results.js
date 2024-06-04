@@ -60,8 +60,10 @@ const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
             let newSearch = _.cloneDeep(search);
             if (total > newSearch.from + newSearch.size) {
                 if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
+                    setLoading(true)
                     newSearch.from += newSearch.size;
                     updateResults(newSearch);
+                    searchChange(newSearch)
                 }
             }
         }, 100);
@@ -94,7 +96,7 @@ const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
             resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            resultsComponent = <ResultsImages search={search} resultsProp={results} setResults={setResults}
+            resultsComponent = <ResultsImages search={searchProp} resultsProp={results} setResults={setResults}
                                               loadingProp={loading}/>;
             break;
         case 'recordsets':

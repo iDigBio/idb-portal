@@ -155,9 +155,6 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
         setDropdownOptions([{label, options}])
     }, [aggs]);
 
-    useEffect(() => {
-        debounce(filter)
-    }, []);
 
     useEffect(() => {
         setText(filter.text)
@@ -165,7 +162,7 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
 
     const debouncedTextType = _.debounce(function(param){
         changeFilter(param);
-    },700,{leading: false, trailing: true});
+    },200,{leading: false, trailing: true});
 
     function debounce(param) {
         debouncedTextType(param)

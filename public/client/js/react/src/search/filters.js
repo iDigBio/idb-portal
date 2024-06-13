@@ -6,7 +6,7 @@ export function newFilterProps(term){
     const type = fields.byTerm[term].type;
     switch (type) {
         case 'text':
-            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: true };
+            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: false };
         case 'daterange':
             return { name: term, type: type, range: { gte: '', lte: '' }, exists: false, missing: false };
         case 'numericrange':
@@ -200,7 +200,9 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
         }
         changeFilter(localFilter);
     }
-    function textType(value){
+    function textType(e){
+        const value = e.target.value
+        e.preventDefault()
         setDropdownOpen(value !== '')
         var localText = value
         var localFilter = filter;//, filter=filters[ind];
@@ -326,14 +328,10 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
     // }
     if(localFilter.exists || localFilter.missing){
         disabled=true;
-        textval=fields.byTerm[name].dataterm;
+        // textval=fields.byTerm[name].dataterm;
+        setText(textval=fields.byTerm[name].dataterm)
     }else{
         textval=text;
-    }
-
-    const handleSelect = (value) => { // fires when a user selects an option from the dropdown
-        textType(value)
-        setDropdownOpen(false)
     }
 
     const renderItem = (count, name) => ({ // formats aggregation for rendering on dropdown
@@ -369,6 +367,26 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
         </span>
     );
 
+    const handleBlur = () => {
+        // setText('')
+        setDropdownOpen(false)
+    }
+
+    const handleEnter = (e) => {
+        if (!dropdownOpen) {
+            setDropdownOpen(false);
+        } else {
+            e.preventDefault();
+            setDropdownOpen(false)
+        }
+    }
+
+    const handleSelect = (e) => { // fires when a user selects an option from the dropdown
+        e.preventDefault()
+        textType(e.target.value)
+        setDropdownOpen(false)
+    }
+
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
             <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
@@ -381,8 +399,8 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
                         options={dropdownOptions}
                         popupMatchSelectWidth={false} // Allows custom dropdown width
                         dropdownStyle={{ width: 400 }} // Sets the dropdown width
-                        onSelect={handleSelect}
-                        onBlur={() => setDropdownOpen(false)}
+                        onSelect={(e) => handleSelect(e)}
+                        onBlur={() => handleBlur()}
                         onFocus={() => setDropdownOpen(text !== '' )} //dont open dropdown when text is empty
                         open={dropdownOpen}
                         disabled={disabled}
@@ -393,8 +411,9 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
                             name={name} data-name={name}
                             placeholder={fields.byTerm[name].dataterm}
                             disabled={disabled}
-                            onChange={(e) => textType(e.currentTarget.value)}
-                            onPressEnter={() => setDropdownOpen(false)}
+                            onChange={(e) => textType(e)}
+                            onPressEnter={(e) => handleEnter(e)}
+                            spellCheck={false}
                         />
                     </AutoComplete> : <AutoComplete><TextArea className="form-control" name={name} data-name={name} // all other fields use old textarea
                                                   placeholder={fields.byTerm[name].dataterm}
@@ -402,6 +421,7 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
                                                   onChange={(e) => textType(e.currentTarget.value)}
                                                   onFocus={setAutocomplete}
                                                   value={textval}
+                                                  spellCheck={false}
                                         >
                                         </TextArea></AutoComplete>
                 }
@@ -422,17 +442,17 @@ const TextFilter = ({filter, changeFilter, removeFilter, search, aggs}) => {
                         Missing
                     </label>
                 </div>
-                <div className="checkbox">
+                <div className="checkbox" style={{ display: filter.name !== 'scientificname' ? 'none' : 'flex' }}>
                     <label>
                         <input type="checkbox" name={name} value="exact" onChange={presenceClick}
-                               checked={localFilter.exact}/>
+                               checked={filter.name !== 'scientificname' ? false : localFilter.exact}/>
                         Exact
                     </label>
                 </div>
-                <div className="checkbox">
+                <div className="checkbox" style={{ display: filter.name !== 'scientificname' ? 'none' : 'flex' }}>
                     <label>
                         <input type="checkbox" name={name} value="fuzzy" onChange={presenceClick}
-                               checked={localFilter.fuzzy}/>
+                               checked={filter.name !== 'scientificname' ? false : localFilter.fuzzy}/>
                         Fuzzy
                     </label>
                 </div>

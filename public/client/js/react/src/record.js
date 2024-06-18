@@ -543,7 +543,7 @@ const RecordPage = ({ record }) => {
     const dif = _.difference(Object.keys(canonical), has);
     _.each(dif, function (item) {
         if (item.indexOf('idigbio:') === -1) {
-            if (_.isUndefined(record['other'])) {
+            if (_.isUndefined(localRecord['other'])) {
                 localRecord['other'] = [];
             }
             const datum = {};

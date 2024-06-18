@@ -53,6 +53,7 @@ module.exports = {
     ],
     "collectionevent": [
       "dwc:recordedBy",
+      "dwc:recordedByID",
       "dwc:recordNumber",
       "dwc:fieldNumber",
       "dwc:eventDate",
@@ -127,6 +128,12 @@ module.exports = {
     "idhistory": [
       "dwc:Identification"
     ],
+    "associatedtaxa": [
+      "aec:associatedTaxa"
+    ],
+    "resourcerelationship": [
+      "dwc:ResourceRelationship"
+    ],
     "extendedmeasurementorfact": [
         "obis:ExtendedMeasurementOrFact"
     ],
@@ -137,6 +144,7 @@ module.exports = {
       "chrono:ChronometricAge"
     ],
     "other": [
+      "dcterms:references",
       "dcterms:language",
       "dcterms:modified",
       "id"
@@ -308,6 +316,7 @@ module.exports = {
     "dwc:associatedTaxa": "Associated Taxa",
     "collectionevent": "Collection Event",
     "dwc:recordedBy": "Collected By",
+    "dwc:recordedByID": "Collected By ID",
     "dwc:recordNumber": "Collector Number",
     "dwc:fieldNumber": "Field Number",
     "dwc:eventDate": "Date Collected",
@@ -491,12 +500,44 @@ module.exports = {
     "idigbio:collectionSize": "Collection Size",
     "idigbio:importantHoldings": "Important Holdings",
     "dwc:associatedOccurrences": "Associated Occurrences",
+    "dcterms:references": "References",
 
     "idhistory": "Identification History",
     "dwc:identificationID": "Identification ID",
     "dwc:verbatimIdentification": "Verbatim Identification",
     "dwc:identifiedByID": "Identified By (ID)",
     "dwc:identificationVerificationStatus": "Identification Verification Status",
+
+    "associatedtaxa": "Associated Taxa",
+    "aec:associatedAuthor": "Author",
+    "aec:associatedCollectionLocation": "Collection Location",
+    "aec:associatedCommonName": "Common Name",
+    "aec:associatedCondition": "Condition",
+    "aec:associatedDeterminedBy": "Determined By",
+    "aec:associatedEmergenceVerbatimDate": "Emergence Verbatim Date",
+    "aec:associatedFamily": "Family",
+    "aec:associatedGenus": "Genus",
+    "aec:associatedImageAccessURI": "Image Access URI",
+    "aec:associatedImageCreator": "Image Creator",
+    "aec:associatedImageRights": "Image Rights",
+    "aec:associatedLocationOnHost": "Location on Host",
+    "aec:associatedNotes": "Notes",
+    "aec:associatedOccurrenceID": "Occurrence ID",
+    "aec:associatedRelationshipTerm": "Relationship Term",
+    "aec:associatedRelationshipURI": "Relationship URI",
+    "aec:associatedScientificName": "Scientific Name",
+    "aec:associatedSpecificEpithet": "Specific Epithet",
+    "aec:isCultivar": "Is Cultivar?",
+
+    "resourcerelationship": "Resource Relationship",
+    "dwc:relatedResourceID": "Related Resource ID",
+    "dwc:relationshipAccordingTo": "Relationship According To",
+    "dwc:relationshipEstablishedDate": "Relationship Established Date",
+    "dwc:relationshipOfResource": "Relationship of Resource",
+    "dwc:relationshipOfResourceID": "Relationship of Resource ID",
+    "dwc:relationshipRemarks": "Relationship Remarks",
+    "dwc:resourceID": "Resource ID",
+    "dwc:resourceRelationshipID": "Resource Relationship ID",
 
     "extendedmeasurementorfact": "Extended Measurement or Fact",
     "dwc:measurementDeterminedBy": "Measurement Determined By",

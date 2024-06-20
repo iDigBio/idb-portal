@@ -94,20 +94,31 @@ const extendedSpecimenOrder = {
     },
 }
 
-const Row = ({keyid, data}) => {
 
-    var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+/**
+ * (See top of function definition for regex defining "qualified URLs")
+ * @param {string} text - Text to scan for qualified URLs
+ * @returns {React.JSX.Element} {@link text} within a &lt;span&gt; node, with qualified URLs replaced with hyperlinks
+ * @example
+ * // returns (<span>ABC <a ... href="http://example.com">http://example.com</a> XYZ</span>)
+ * convertLinkText("ABC http://example.com XYZ");
+ */
+function convertLinkText(text) {
     // What shorthand character class is '\A'?
-    var regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
-    var str = data.replace(regex, function(match, p1, p2){
+    const regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+    return (<span dangerouslySetInnerHTML={{__html: text.replace(regex, function (match, p1, p2) {
         var href = p2.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
         return p1+"<a target=\"_outlink\" href=\""+href+"\">"+p2+"</a>";
+    })}} />)
+}
 
-    });
+
+const Row = ({keyid, data}) => {
+    var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
     return (
         <tr className="data-rows">
             <td className="field-name" style={{width:'50%'}}>{name}</td>
-            <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
+            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}</td>
         </tr>
     );
 
@@ -215,6 +226,7 @@ const Record = ({record, raw }) => {
      * 
      * @param {object[]} arr Section data array
      * @param {string} sec Section name
+     * @returns {string[]}
      */
     function extractKeys(arr, sec) {
         return arr.reduce((keys, obj) => {
@@ -233,10 +245,19 @@ const Record = ({record, raw }) => {
             title: _.isUndefined(dwc.names[key]) ? key : dwc.names[key],
             dataIndex: key,
             key: key,
+            render: convertLinkText,
         }));
     }
 
-    function completeData(data, keys) { // instantiates missing keys to ''
+    /**
+     * Applies table data corrections prior to display:
+     * - Instantiates missing keys to '' (empty string)
+     * - Converts URLs within data values to hyperlinks
+     * 
+     * @param {object[]} data - Section data array
+     * @param {string[]} keys
+     */
+    function completeData(data, keys) {
         return data.map((item, index) => {
             keys.forEach(key => {
                 if (!item.hasOwnProperty(key)) {
@@ -266,7 +287,7 @@ const Record = ({record, raw }) => {
                     }}>
                         <Table
                             className={'custom-antd-table'}
-                            rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
+                            rowClassName={(record, index) => 'field-value ' + (index % 2 === 0 ? 'evenRow' : 'oddRow')}
                             columns={columns}
                             dataSource={rows}
                             scroll={{x: 'max-content'}}

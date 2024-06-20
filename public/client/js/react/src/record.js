@@ -97,10 +97,11 @@ const extendedSpecimenOrder = {
 const Row = ({keyid, data}) => {
 
     var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
-    var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
-    var str = data.replace(regex, function(match){
-        var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
-        return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
+    // What shorthand character class is '\A'?
+    var regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+    var str = data.replace(regex, function(match, p1, p2){
+        var href = p2.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
+        return p1+"<a target=\"_outlink\" href=\""+href+"\">"+p2+"</a>";
 
     });
     return (

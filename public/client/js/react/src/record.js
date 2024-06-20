@@ -24,6 +24,7 @@ const ESO_HIDE_FIELD = -1;
 // expected 'Sample Designation' to be last
 const extendedSpecimenOrder = {
     "idhistory" : {
+        "symbiota:tidInterpreted": ESO_HIDE_FIELD,
         "dwc:scientificName": 1,
         "dwc:identifiedBy": 3,
         "idigbio:recordID": 6,

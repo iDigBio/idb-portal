@@ -6,7 +6,7 @@ import Mapping from './search/mapping'
 import Results from './search/results'
 import Download from './search/download'
 import Map from './search/map'
-import Chat from './rag_ui/chat'
+
 
 
 import paramsParser from './search/lib/params_parser'
@@ -84,7 +84,6 @@ const Search = () => {
         setSearch(newSearch)
         // setHistory([...history, search])
         searchHistory.push(newSearch);
-        console.log(search)
     }
 
     function viewChange(view,option){
@@ -100,14 +99,13 @@ const Search = () => {
 
     return(
         <div id='react-wrapper'>
-            {/*<div id="top" className="clearfix">*/}
-                <div id="search" className="clearfix" style={{display: "flex"}}>
-                    {/*<SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />*/}
-                    {/*<OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />*/}
-                    <Chat />
+            <div id="top" className="clearfix">
+                <div id="search" className="clearfix">
+                    <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
+                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
                 </div>
                 <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
-            {/*</div>*/}
+            </div>
             <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
         </div>
     )

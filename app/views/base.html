@@ -23,85 +23,85 @@
     {% block headblock %}    
     {% endblock %}
   </head>
-  <body>
+  <body style="background-color: #424549">
     <header>
-      <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> 
-      
-      <!-- wakulla header -->
+<!--      <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> -->
+<!--      -->
+<!--      &lt;!&ndash; wakulla header &ndash;&gt;-->
 
       <div class="sixteen columns full alpha omega" id="header">
-        <div id="nav" class="hidden-print">
-            <ul id="header-links">
-                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>
-                <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>
-                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>
-                <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
-            </ul>
-        
-<!--            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
-              {% if !user.is_authenticated -%} 
-              <li style="border:none;">
-               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
-                <span style="color:white;font-size:.8em;">|</span>
-                <a href="https://www.idigbio.org/login/accounts/new" style="color:white;font-size:.8em;">Sign Up</a>
-              </li>
-              {% else %}
-              <li style="border:none;"><a id="logout-link" href="/portal/logout" style="color:white;font-size:.8em;">Log Out</a></li>  
-              {%- endif %}
-            </div> -->
-        
-        </div>
+<!--        <div id="nav" class="hidden-print">-->
+<!--            <ul id="header-links">-->
+<!--                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>-->
+<!--                <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>-->
+<!--                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>-->
+<!--                <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>-->
+<!--            </ul>-->
+<!--        -->
+<!--&lt;!&ndash;            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">-->
+<!--              {% if !user.is_authenticated -%} -->
+<!--              <li style="border:none;">-->
+<!--               <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>-->
+<!--                <span style="color:white;font-size:.8em;">|</span>-->
+<!--                <a href="https://www.idigbio.org/login/accounts/new" style="color:white;font-size:.8em;">Sign Up</a>-->
+<!--              </li>-->
+<!--              {% else %}-->
+<!--              <li style="border:none;"><a id="logout-link" href="/portal/logout" style="color:white;font-size:.8em;">Log Out</a></li>  -->
+<!--              {%- endif %}-->
+<!--            </div> &ndash;&gt;-->
+<!--        -->
+<!--        </div>-->
         <a href="https://www.idigbio.org"><img src="/portal/img/idigbio_logo.png" alt="iDigBio" border="0" id="logo"></a>
 
       </div>
-      <div style="padding:3px 15px;background:#272727;" id="alert-banner">
-        <div class="alert alert-info alert-dismissible" style="margin-bottom:0px;">
-          <a href="#" class="close" data-dismiss="alert">&times;</a>
-          <a href="//ufl.qualtrics.com/jfe/form/SV_77ehHphc3xtBv7v?optOut=false" target="_blank" class="alert-link" data-dismiss="alert">Take our 30-second survey</a>
-          <div>The U.S. National Science Foundation and iDigBio are required to collect information on use of digitized collections-based specimen data. Please help us meet this requirement every time you use this search portal. Sustainability of the national digitization effort depends on evidence of data use!
-          <a href="//ufl.qualtrics.com/jfe/form/SV_77ehHphc3xtBv7v?optOut=true" target="_blank" class="alert-link" data-dismiss="alert">Maybe later</a>.</div>
-        </div>
-      </div>
-      <div class="sixteen columns full alpha omega hidden-print" id="snav-research">
-        <div id="snav" class="clearfix">
-          <ul id="portal-menu" style="float:left">
-          {% for value in menus.public -%}
-              <li {% if loop.key == activemenu %} class="active" {% endif %}>
-                <a href="{{ value.url }}" >{{ value.label }} </a>
-                {% if value.submenu -%}
-                    <ul>
-                      {% for item in value.submenu -%}
-                          <li>
-                            <a href="{{ item.url }}">{{ item.label }}</a>
-                          </li>
-                      {%- endfor %}
-                    </ul>
-                {%- endif %}
-              </li>
-          {%- endfor %}
-          </ul>
-         
-<!--           <ul id="user-menu" style="float:right">
-          {% if user.is_authenticated -%}          
-              <li>
-                <a style="min-width:90px;" href="#">&#x25BC;&nbsp;&nbsp;{{ user.login }}</a>
-                <ul id="user-menu-dd">
-                  {% for value in menus.private -%}
-                  <li {% if loop.key == activemenu %} class="active" {% endif %}>
-                       <a href="{{ value.url }}" >{{ value.label }}</a>
-                  </li>
-                  {%- endfor %}   
+<!--      <div style="padding:3px 15px;background:#272727;" id="alert-banner">-->
+<!--        <div class="alert alert-info alert-dismissible" style="margin-bottom:0px;">-->
+<!--          <a href="#" class="close" data-dismiss="alert">&times;</a>-->
+<!--          <a href="//ufl.qualtrics.com/jfe/form/SV_77ehHphc3xtBv7v?optOut=false" target="_blank" class="alert-link" data-dismiss="alert">Take our 30-second survey</a>-->
+<!--          <div>The U.S. National Science Foundation and iDigBio are required to collect information on use of digitized collections-based specimen data. Please help us meet this requirement every time you use this search portal. Sustainability of the national digitization effort depends on evidence of data use!-->
+<!--          <a href="//ufl.qualtrics.com/jfe/form/SV_77ehHphc3xtBv7v?optOut=true" target="_blank" class="alert-link" data-dismiss="alert">Maybe later</a>.</div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--      <div class="sixteen columns full alpha omega hidden-print" id="snav-research">-->
+<!--        <div id="snav" class="clearfix">-->
+<!--          <ul id="portal-menu" style="float:left">-->
+<!--          {% for value in menus.public -%}-->
+<!--              <li {% if loop.key == activemenu %} class="active" {% endif %}>-->
+<!--                <a href="{{ value.url }}" >{{ value.label }} </a>-->
+<!--                {% if value.submenu -%}-->
+<!--                    <ul>-->
+<!--                      {% for item in value.submenu -%}-->
+<!--                          <li>-->
+<!--                            <a href="{{ item.url }}">{{ item.label }}</a>-->
+<!--                          </li>-->
+<!--                      {%- endfor %}-->
+<!--                    </ul>-->
+<!--                {%- endif %}-->
+<!--              </li>-->
+<!--          {%- endfor %}-->
+<!--          </ul>-->
+<!--         -->
+<!--&lt;!&ndash;           <ul id="user-menu" style="float:right">-->
+<!--          {% if user.is_authenticated -%}          -->
+<!--              <li>-->
+<!--                <a style="min-width:90px;" href="#">&#x25BC;&nbsp;&nbsp;{{ user.login }}</a>-->
+<!--                <ul id="user-menu-dd">-->
+<!--                  {% for value in menus.private -%}-->
+<!--                  <li {% if loop.key == activemenu %} class="active" {% endif %}>-->
+<!--                       <a href="{{ value.url }}" >{{ value.label }}</a>-->
+<!--                  </li>-->
+<!--                  {%- endfor %}   -->
 
-                </ul> 
-              </li>
-          {%- endif %}
-          </ul> -->
-        </div>
+<!--                </ul> -->
+<!--              </li>-->
+<!--          {%- endif %}-->
+<!--          </ul> &ndash;&gt;-->
+<!--        </div>-->
 
-      </div>
+<!--      </div>-->
       <!-- /end wakulla header -->
     </header>
-    <div style="margin:0px;padding:0px;">
+    <div style="margin:0px;padding:0px; background-color: #424549" >
       
         <!-- dyna content-->
         

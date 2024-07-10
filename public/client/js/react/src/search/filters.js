@@ -306,7 +306,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
                         onSelect={(e) => handleSelect(e)}
                         onBlur={() => handleBlur()}
                         onFocus={() => setDropdownOpen(text !== '')}
-                        open={dropdownOpen}
+                        open={filter.fuzzy && dropdownOpen}
                         disabled={localFilter.exists || localFilter.missing}
                         value={textval}
                     >
@@ -322,7 +322,9 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
                         />
                     </AutoComplete>
                 ) : (
-                    <AutoComplete>
+                    <AutoComplete
+                        value={textval}
+                    >
                         <TextArea
                             className="form-control"
                             name={name}

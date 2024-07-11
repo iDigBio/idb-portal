@@ -277,7 +277,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
             {title}
             <a
                 style={{ float: 'right' }}
-                href="https://idigbio.github.io/idb-portal/portal/suggestions/"
+                href="https://idigbio.github.io/docs/portal/suggestions/"
                 target="_blank"
                 rel="noopener noreferrer"
             >

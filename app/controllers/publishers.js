@@ -228,27 +228,29 @@ export default {
     var stotal = 0, mtotal = 0;
     var rbody = {}, use = {};
     var lastRecord = '', lastMedia = '';
-    request.get({"url": config.api + 'view/recordsets/' + req.params.id, "json": true}, function(err, resp, body) {
+    let rqurl = config.api + 'view/recordsets/' + req.params.id;
+    request.get({"url": rqurl, "json": true}, function(err, resp, body) {
       if(err) {
         logger.error(err);
       }
-      if(body.found === false) {
+      const getRecordsetErrorViewVars = () => ({
+        activemenu: 'publishers',
+        user: req.user,
+        token: req.session._csrf,
+        id: req.params.id
+      });
+      if(!body) {
+        logger.error('unexpected blank response to search API request:', {url: rqurl});
+        res.status(502);
+        res.render('500', getRecordsetErrorViewVars());
+      } else if (body.found === false) {
         res.status(404);
-        res.render('404', {
-          activemenu: 'publishers',
-          user: req.user,
-          token: req.session._csrf,
-          id: req.params.id
-        });
+        res.render('404', getRecordsetErrorViewVars());
       } else if (body.statusCode >= 400) {
         res.status(body.statusCode);
-        res.render('404', {
-          activemenu: 'publishers',
-          user: req.user,
-          token: req.session._csrf,
-          id: req.params.id
-        });
+        res.render('404', getRecordsetErrorViewVars());
       } else {
+        // A successful response has neither 'found' nor 'statusCode'
         rbody = body;
         async.parallel([
           function(cback) {

@@ -24,6 +24,7 @@ const ESO_HIDE_FIELD = -1;
 // expected 'Sample Designation' to be last
 const extendedSpecimenOrder = {
     "idhistory" : {
+        "symbiota:tidInterpreted": ESO_HIDE_FIELD,
         "dwc:scientificName": 1,
         "dwc:identifiedBy": 3,
         "idigbio:recordID": 6,
@@ -31,6 +32,39 @@ const extendedSpecimenOrder = {
         "dwc:scientificNameAuthorship": 5,
         "dwc:dateIdentified": 2,
         "dcterms:modified": 7,
+    },
+    "associatedtaxa": {
+        "coreid": ESO_HIDE_FIELD,
+        "aec:associatedRelationshipTerm": 1,
+        "aec:associatedOccurrenceID": 2,
+        "aec:associatedFamily": 3,
+        "aec:associatedGenus": 4,
+        "aec:associatedSpecificEpithet": 5,
+        "aec:associatedScientificName": 6,
+        "aec:associatedAuthor": 7,
+        "aec:associatedCommonName": 8,
+        "aec:associatedNotes": 9,
+        "aec:associatedDeterminedBy": 10,
+        "aec:associatedCondition": 11,
+        "aec:associatedLocationOnHost": 12,
+        "aec:associatedEmergenceVerbatimDate": 13,
+        "aec:associatedCollectionLocation": 14,
+        "aec:isCultivar": 15,
+        "aec:associatedImageAccessURI": 16,
+        "aec:associatedImageCreator": 17,
+        "aec:associatedImageRights": 18,
+        "aec:associatedRelationshipURI": 19,
+    },
+    "resourcerelationship": {
+        "coreid": ESO_HIDE_FIELD,
+        "dwc:resourceID": 1,
+        "dwc:resourceRelationshipID": 2,
+        "dwc:relationshipOfResource": 3,
+        "dwc:relationshipOfResourceID": 4,
+        "dwc:relatedResourceID": 5,
+        "dwc:relationshipAccordingTo": 6,
+        "dwc:relationshipEstablishedDate": 7,
+        "dwc:relationshipRemarks": 8,
     },
     "extendedmeasurementorfact": {
         "coreid": ESO_HIDE_FIELD,
@@ -61,19 +95,31 @@ const extendedSpecimenOrder = {
     },
 }
 
+
+/**
+ * (See top of function definition for regex defining "qualified URLs")
+ * @param {string} text - Text to scan for qualified URLs
+ * @returns {React.JSX.Element} {@link text} within a &lt;span&gt; node, with qualified URLs replaced with hyperlinks
+ * @example
+ * // returns (<span>ABC <a ... href="http://example.com">http://example.com</a> XYZ</span>)
+ * convertLinkText("ABC http://example.com XYZ");
+ */
+function convertLinkText(text) {
+    // What shorthand character class is '\A'?
+    const regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+    return (<span dangerouslySetInnerHTML={{__html: text.replace(regex, function (match, p1, p2) {
+        var href = p2.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
+        return p1+"<a target=\"_outlink\" href=\""+href+"\">"+p2+"</a>";
+    })}} />)
+}
+
+
 const Row = ({keyid, data}) => {
-
     var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
-    var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
-    var str = data.replace(regex, function(match){
-        var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
-        return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
-
-    });
     return (
         <tr className="data-rows">
             <td className="field-name" style={{width:'50%'}}>{name}</td>
-            <td className="field-value" style={{width:'50%'}} dangerouslySetInnerHTML={{__html: str}}></td>
+            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}</td>
         </tr>
     );
 
@@ -181,6 +227,7 @@ const Record = ({record, raw }) => {
      * 
      * @param {object[]} arr Section data array
      * @param {string} sec Section name
+     * @returns {string[]}
      */
     function extractKeys(arr, sec) {
         return arr.reduce((keys, obj) => {
@@ -199,10 +246,19 @@ const Record = ({record, raw }) => {
             title: _.isUndefined(dwc.names[key]) ? key : dwc.names[key],
             dataIndex: key,
             key: key,
+            render: convertLinkText,
         }));
     }
 
-    function completeData(data, keys) { // instantiates missing keys to ''
+    /**
+     * Applies table data corrections prior to display:
+     * - Instantiates missing keys to '' (empty string)
+     * - Converts URLs within data values to hyperlinks
+     * 
+     * @param {object[]} data - Section data array
+     * @param {string[]} keys
+     */
+    function completeData(data, keys) {
         return data.map((item, index) => {
             keys.forEach(key => {
                 if (!item.hasOwnProperty(key)) {
@@ -232,7 +288,7 @@ const Record = ({record, raw }) => {
                     }}>
                         <Table
                             className={'custom-antd-table'}
-                            rowClassName={(record, index) => index % 2 === 0 ? 'evenRow' : 'oddRow'}
+                            rowClassName={(record, index) => 'field-value ' + (index % 2 === 0 ? 'evenRow' : 'oddRow')}
                             columns={columns}
                             dataSource={rows}
                             scroll={{x: 'max-content'}}
@@ -543,7 +599,7 @@ const RecordPage = ({ record }) => {
     const dif = _.difference(Object.keys(canonical), has);
     _.each(dif, function (item) {
         if (item.indexOf('idigbio:') === -1) {
-            if (_.isUndefined(record['other'])) {
+            if (_.isUndefined(localRecord['other'])) {
                 localRecord['other'] = [];
             }
             const datum = {};

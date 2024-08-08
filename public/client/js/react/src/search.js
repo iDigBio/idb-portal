@@ -7,8 +7,9 @@ import Results from './search/results'
 import Download from './search/download'
 import Map from './search/map'
 import Chat from './rag_ui/chat'
-
-
+import { Input, Button, Typography } from 'antd';
+const { TextArea } = Input;
+const { Paragraph, Text, Link } = Typography;
 import paramsParser from './search/lib/params_parser'
 
 const Search = () => {
@@ -100,14 +101,14 @@ const Search = () => {
 
     return(
         <div id='react-wrapper'>
-            {/*<div id="top" className="clearfix">*/}
-                <div id="search" className="clearfix" style={{display: "flex"}}>
-                    {/*<SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />*/}
-                    {/*<OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />*/}
-                    <Chat />
+            <div id="top" className="clearfix">
+                <div id="search" className="clearfix">
+                    <SearchAny search={search} searchChange={searchChange} defaultSearch={defaultSearch} />
+                    <OptionsPanel search={search} searchChange={searchChange} view={optionsTab} viewChange={viewChange} />
+                    {/*<Chat searchChange={searchChange} />*/}
                 </div>
                 <Map search={search} searchChange={searchChange} viewChange={viewChange}/>
-            {/*</div>*/}
+            </div>
             <Results searchProp={search} searchChange={searchChange} view={resultsTab} viewChange={viewChange}/>
         </div>
     )
@@ -212,12 +213,14 @@ const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
                 return <Mapping searchChange={searchChange} mapping={search.mapping} active="active" />;
             case 'download':
                 return <Download search={search} searchChange={searchChange} active="active" />;
+            case 'nlp':
+                return <NLP search={search} searchChange={searchChange} active="active"/>
             default:
                 return null;
         }
     };
 
-    const panels = { filters: '', mapping: '', sorting: '', download: '' };
+    const panels = { filters: '', mapping: '', sorting: '', download: '', nlp: '' };
     let panel;
     const menu = Object.keys(panels).map((item, ind) => {
         if (item === view) {
@@ -244,4 +247,150 @@ const OptionsPanel = ({ searchChange, search, view, viewChange }) => {
         </div>
     );
 };
+
+const NLP = ({active, search, searchChange}) => {
+    const [genQuery, setGenQuery] = useState('');
+    const [editQuery, setEditQuery] = useState('');
+    const [success, setSuccess] = useState('');
+    const [error, setError] = useState('');
+    const [input, setInput] = useState('');
+
+    console.log(editQuery)
+    useEffect(() => {
+        if (genQuery!='') {
+            let eq = editQuery
+            // let editQueryFormatted = eq.replace(/\"/g, '"')
+            let q
+            try {
+                q = JSON.parse(eq)
+            } catch {
+                setError('Error: Invalid JSON. Reverting.')
+                return
+            }
+            if (error=='Error: Invalid JSON. Reverting.') {
+                setError('')
+            }
+
+            fetch('http://sobami2.acis.ufl.edu:8080/search/update_input', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    "input": input,
+                    "rq": q
+                })
+            })
+            .then((res) => res.json())
+            .then((data) => {
+                if (data?.result=='error') {
+                    setError(data?.message)
+                } else {
+                    if (data?.input) {
+                        let genInput = data.input;
+                        setInput(genInput);
+                        setGenQuery(editQuery)
+                    }
+                    const newFilters = Object.entries(JSON.parse(editQuery)).map(([name, text]) => {
+                        return {
+                            name: name,
+                            type: 'text', // Assuming 'type' is a static value for this example
+                            text: text,
+                            exists: false,
+                            missing: false
+                        };
+                    })
+                    searchChange('filters', newFilters)
+                }
+
+            })
+            .catch((error) => {
+                console.log("Error: " + error)
+            })
+        }
+
+    }, [editQuery]);
+
+    const handleText = (typedText) => {
+        setInput(typedText)
+    }
+
+
+    const handleSubmit = () => {
+        const input_data = {
+            "input": input
+        }
+
+        fetch('http://sobami2.acis.ufl.edu:8080/search/generate_rq', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(input_data)
+        })
+        .then((res) => res.json())
+        .then((data) => {
+            console.log(data)
+            if (data?.result=='error') {
+                setError(data?.message)
+            } else {
+                setError('')
+                let rq
+                if (data?.rq) {
+                    rq = data.rq
+                    setGenQuery(rq)
+                }
+                const newFilters = Object.entries(rq).map(([name, text]) => {
+                    return {
+                        name: name,
+                        type: 'text', // Assuming 'type' is a static value for this example
+                        text: text,
+                        exists: false,
+                        missing: false
+                    };
+                })
+                searchChange('filters', newFilters)
+            }
+
+        }).catch((error) => {
+            console.log("error:" + error)
+        })
+
+    }
+
+    return (
+        <div className={"clearfix section "+active} sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+
+            <div sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                <Text strong>Natural Language Query:</Text>
+                <TextArea
+                    showCount
+                    maxLength={100}
+                    onChange={(e) => handleText(e.target.value)}
+                    placeholder="Which specimen records are you looking for?"
+                    value={input}
+                />
+                <Button
+                onClick={() => handleSubmit()}
+                >Generate</Button>
+            </div>
+
+            {error!='' &&
+                <Text type="danger">{error}</Text>
+            }
+
+            <div sx={{margin: '10px'}}>
+                <Text strong>Generated iDigBio Query:</Text>
+                <Paragraph
+                    editable={{
+                        onChange: setEditQuery,
+                        text: JSON.stringify(genQuery)
+                    }}
+                >
+                    { JSON.stringify(genQuery).replace(/\\"/g, '"')}
+                </Paragraph>
+            </div>
+        </div>
+    )
+}
 export default Search;

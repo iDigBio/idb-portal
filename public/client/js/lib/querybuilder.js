@@ -2,6 +2,7 @@
 // module for building API queries from Search State object
 
 var fields = require('./fields');
+const {isArray} = require("lodash");
 
 module.exports = (function(){
 	var QueryBuilder = function(){  
@@ -205,7 +206,12 @@ module.exports = (function(){
                 }else if(item.missing){
                     idbq[term]={'type': 'missing'};
                 }else if(item.text && !_.isEmpty(item.text)){
-                    var text = item.text.split('\n');
+                    let text
+                    if (isArray(item.text)) {
+                        text = item.text
+                    } else {
+                        text = item.text.split('\n');
+                    }
                     if(text.length>1){
                         idbq[term] = text;
                     }else{

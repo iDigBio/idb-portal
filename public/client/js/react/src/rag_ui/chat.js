@@ -9,7 +9,7 @@ export function newFilters(filtersParam) {
     return filters;
 }
 // Call the function to load the module dynamically
-const Chat = () => {
+const Chat = ({searchChange}) => {
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
 
     useEffect(() => {
@@ -83,6 +83,7 @@ const Chat = () => {
                         });
 
                         console.log(transformedArray);
+                        searchChange('filters', transformedArray)
                     } catch (error) {
                         console.error("Error parsing JSON:", error);
                     }

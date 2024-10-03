@@ -1,9 +1,9 @@
-import React, {useState, useEffect, useMemo, useCallback, useRef} from 'react';
+import React, {useState, useEffect, useMemo, useCallback, useRef, memo} from 'react';
 import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
 
-const Results = ({ searchProp, searchChange, view, viewChange }) => {
+const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
     const [attribution, setAttribution] = useState([]);
@@ -31,6 +31,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
                         let more = response.itemCount > (search.from + search.size);
                         searchState.from = query.offset;
                         setSearch(searchState)
+                        // searchChange(searchState)
                         setResults(res);
                         setAttribution(response.attribution);
                         setTotal(response.itemCount);
@@ -42,7 +43,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
 
             setLastQueryStringed(JSON.stringify(query));
         }
-    }, [search, results, lastQueryStringed]);
+    }, [search, lastQueryStringed]);
 
     useEffect(() => {
         if (searchProp!==search) {
@@ -55,21 +56,23 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     }, [search]);
 
     useEffect(() => {
-        const handleScroll = () => {
+        const handleScroll = _.debounce(() => {
             let newSearch = _.cloneDeep(search);
             if (total > newSearch.from + newSearch.size) {
                 if (($(window).scrollTop() + 40 >= $(document).height() - $(window).height()) && (!loading)) {
+                    setLoading(true)
                     newSearch.from += newSearch.size;
                     updateResults(newSearch);
+                    searchChange(newSearch)
                 }
             }
-        };
+        }, 100);
 
         window.onscroll = handleScroll;
         return () => {
             window.onscroll = null;
         };
-    }, [total, loading]);
+    }, [loading]);
 
     const viewChangeHandler = (event) => {
         event.preventDefault();
@@ -87,14 +90,14 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
     let resultsComponent;
     switch (view) {
         case 'list':
-            resultsComponent = <ResultsList search={search} results={results} searchChange={searchChange} loading={loading} />;
+            resultsComponent = <ResultsList search={searchProp} results={results} searchChange={searchChange} loading={loading} />;
             break;
         case 'labels':
             resultsComponent = <ResultsLabels results={results} loading={loading}/>;
             break;
         case 'media':
-            resultsComponent = <ResultsImages search={search} resultsProp={results}
-                                   loadingProp={loading}/>;
+            resultsComponent = <ResultsImages search={searchProp} resultsProp={results} setResults={setResults}
+                                              loadingProp={loading}/>;
             break;
         case 'recordsets':
             resultsComponent = <Providers attribution={attribution}/>;
@@ -118,7 +121,7 @@ const Results = ({ searchProp, searchChange, view, viewChange }) => {
             {resultsComponent}
         </div>
     );
-}
+})
 var sortClick=false;
 const ResultsList = ({search, searchChange, results, loading}) => {
     const [columns, setColumnsState] = useState(defaultColumns())
@@ -134,7 +137,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
     }, [])
 
     function resetColumns(){
-            setColumns(defaultColumns());
+        setColumns(defaultColumns());
     }
     function defaultColumns(){
         return ['family','scientificname','datecollected','country','institutioncode','basisofrecord'];
@@ -168,7 +171,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         //sorted column sorts the top level sort value in search and new sorting items length
         //shall not exceed original length
         var dir, localSearch = _.cloneDeep(search), name=e.currentTarget.attributes['data-term'].value,
-        sort={name: name}, sorting=localSearch.sorting, curlength = sorting.length;
+            sort={name: name}, sorting=localSearch.sorting, curlength = sorting.length;
         if(_.isUndefined(e.currentTarget.attributes['data-sort'])){
             dir='asc';
         }else{
@@ -197,14 +200,14 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         //to prevent opening if hiliting text
 
         if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
-           window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
+            window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
         }
 
     }
 
     var cols = columns,self=this;
 
-   //['scientificname','genus','collectioncode','specificepithet','commonname'];
+    //['scientificname','genus','collectioncode','specificepithet','commonname'];
     var rows=[];
     var headers=[];
     //results table
@@ -330,7 +333,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                         </div>
                         <div className="modal-body clearfix">
 
-                                {list}
+                            {list}
 
                         </div>
 
@@ -342,10 +345,10 @@ const ResultsList = ({search, searchChange, results, loading}) => {
             </div>
             <table id="data-table" className="table table-condensed">
                 <thead>
-                    <tr id="results-headers">{headers}</tr>
+                <tr id="results-headers">{headers}</tr>
                 </thead>
                 <tbody>
-                    {rows}
+                {rows}
                 </tbody>
             </table>
         </div>
@@ -445,25 +448,25 @@ class ResultListColumnSelector extends React.Component{
                     }
                 });
                 fgroups.push(
-                  <optgroup key={val} label={fields.groupNames[val]}>
-                    &nbsp;&nbsp;{fltrs}
-                  </optgroup>
+                    <optgroup key={val} label={fields.groupNames[val]}>
+                        &nbsp;&nbsp;{fltrs}
+                    </optgroup>
                 );
             });
             var updisabled = ( ind === 0 );
             var downdisabled = ( ind === self.state.columns.length-1 );
             selects.push(
                 <div key={column+'-'+ind} className="column-select-wrapper clearfix">
-                        <div className="up-down">
-                            <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
-                            <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
-                        </div>
-                        <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
-                            {fgroups}
-                        </select>
-                        <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
-                            <i className="glyphicon glyphicon-minus"/>
-                        </button>
+                    <div className="up-down">
+                        <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
+                        <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
+                    </div>
+                    <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
+                        {fgroups}
+                    </select>
+                    <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
+                        <i className="glyphicon glyphicon-minus"/>
+                    </button>
                 </div>
             );
         });
@@ -536,7 +539,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
             content.push(<span key="event-date2" className="date">{formatedDC}</span>);
         }
 
-         var l=[];
+        var l=[];
         ['dwc:country','dwc:stateProvince','dwc:county','dwc:locality'].forEach(function(item){
             if(_.has(raw,item)){
                 l.push(raw[item])
@@ -656,52 +659,59 @@ const ResultsLabels = ({results, loading, stamp}) => {
 
 };
 
-const ResultsImages = ({loadingProp, resultsProp, search}) => {
+const ResultsImages = memo(({loadingProp, resultsProp, search}) => {
     const [results, setResults] = useState(resultsProp)
     const [loading, setLoading] = useState(loadingProp)
 
-    function getImageOnlyResults(search){
-
-        var d = new Date, self=this, searchState = _.cloneDeep(search);
-        searchState.image=true;
+    // useEffect(() => {
+    //     setResults(resultsProp)
+    // }, [resultsProp]);
+    const getImageOnlyResults = (search) => {
+        console.log(search)
+        var d = new Date();
+        var self = this;
+        var searchState = _.cloneDeep(search);
+        searchState.image = true;
         var query = queryBuilder.makeSearchQuery(searchState);
         var now = d.getTime();
         let lastQueryTime = now;
-        setLoading(true)
-        idbapi.search(query,function(response){
-            //make sure last query run is the last one that renders
-            //as responses can be out of order
-            if(now>= lastQueryTime){
+        setLoading(true);
+        idbapi.search(query, function(response) {
+            // Make sure last query run is the last one that renders
+            // As responses can be out of order
+            if (now >= lastQueryTime) {
                 var res;
-                if(searchState.from > 0){
+                if (searchState.from > 0) {
                     res = results.concat(response.items);
-                }else{
+                } else {
                     res = response.items;
                 }
-                setResults(res)
-                setLoading(false)
-                // self.setState({results: res, loading: false},function(){
+                setResults(res);
+                setLoading(false);
+                // self.setState({results: res, loading: false}, function(){
                 //     self.forceUpdate();
                 // });
             }
         });
-    }
+    };
+
     function errorImage(e){
         e.target.attributes['src'].value = '/portal/img/missing.svg';
     }
-    function componentDidMount(){
-        if(!search.image){
-            getImageOnlyResults(search);
-        }
-    }
+    // function componentDidMount(){
+    //     if(!search.image){
+    //         getImageOnlyResults(search);
+    //     }
+    // }
     useEffect(() => {
         // if(search.image) {
         //     setResults(search.results);
         //     setLoading(false);
         // } else {
-            getImageOnlyResults(search);
+        getImageOnlyResults(search);
         // }
     }, [search]);
+
     // function UNSAFE_componentWillReceiveProps(nextProps){
     //     if(nextProps.search.image){
     //         setResults(nextProps.results)
@@ -730,8 +740,8 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
             <a className="image" target={uuid} href={"/portal/mediarecords/"+uuid} key={'a-'+uuid+_.random(999999)}>
                 <span className="img-count">{count}</span>
                 <img alt={name.join(' ')}
-                src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
-                onError={errorImage}/>
+                     src={idbapi.media_host + "v2/media/"+uuid+"?size=thumbnail"}
+                     onError={errorImage}/>
                 <div className="gallery-image-text">
                     <div className="image-text">
                         <span className="title">{_.capitalize(name.join(' '))}</span>
@@ -751,6 +761,7 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
             })
         }
     });
+
     if(images.length === 0 && !loading){
         images.push(
             <div key="no-images" className="no-images">
@@ -773,7 +784,7 @@ const ResultsImages = ({loadingProp, resultsProp, search}) => {
         </div>
     )
 
-};
+});
 
 const Providers = ({attribution}) => {
 
@@ -791,10 +802,10 @@ const Providers = ({attribution}) => {
         <div id="provider-results" className="panel">
             <table className="table table-condensed table-striped">
                 <thead>
-                    <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
+                <tr><th id="rset">Recordset</th><th id="rcount">Records in results</th><th id="rdesc">Description</th></tr>
                 </thead>
                 <tbody>
-                    {list}
+                {list}
                 </tbody>
             </table>
         </div>

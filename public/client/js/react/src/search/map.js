@@ -5,8 +5,9 @@ import * as helpers from '../../../lib/helpers';
 let map; // Declare map variable
 
 const Map = (props) => {
-    const [currentQuery, setCurrentQuery] = useState('');
+    const [currentQuery, setCurrentQuery] = useState(JSON.stringify(queryBuilder.buildQueryShim(props.search)));
     const mapRef = useRef(null); // To store the map instance without triggering re-renders
+    const searchRef = useRef(props.search);
 
     // Equivalent to componentDidMount and componentDidUpdate
     useEffect(() => {
@@ -43,18 +44,28 @@ const Map = (props) => {
             });
         }
 
+        if (!searchRef.current) {
+            searchRef.current = props.search
+        }
+
         const query = queryBuilder.buildQueryShim(props.search);
         mapRef.current.query(query);
-    }, [props.search]); // Only re-run if props.search changes
+    }, []);
 
     // Equivalent to UNSAFE_componentWillReceiveProps and shouldComponentUpdate
     useEffect(() => {
+        const prevSearch = searchRef.current
+        if (prevSearch === props.search) {
+            return
+        }
+
         const q = queryBuilder.buildQueryShim(props.search);
         const next = JSON.stringify(q);
 
         if (next !== currentQuery) {
             setCurrentQuery(next);
             mapRef.current.query(q);
+            searchRef.current = props.search
         }
     }, [props.search, currentQuery]);
 

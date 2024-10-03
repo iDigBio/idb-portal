@@ -87,7 +87,7 @@ gulp.task('build', function() {
         .pipe(buffer())
         // load and init sourcemaps
         .pipe(sourcemaps.init({loadMaps: true}))
-        // .pipe(uglify())
+        .pipe(uglify())
         // write sourcemaps
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./public/client/js/react/build'));
@@ -106,7 +106,7 @@ gulp.task('libs', function() {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        // .pipe(uglify())
+        .pipe(uglify())
         .on('error', log.error)
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./public/js/'));
@@ -124,7 +124,7 @@ gulp.task('mapper', function() {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        // .pipe(uglify())
+        .pipe(uglify())
         .on('error', log.error)
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./public/js/'));
@@ -142,7 +142,7 @@ gulp.task('client', function() {
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         // Add transformation tasks to the pipeline here.
-        // .pipe(uglify())
+        .pipe(uglify())
         .on('error', log.error)
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest('./public/js/'));

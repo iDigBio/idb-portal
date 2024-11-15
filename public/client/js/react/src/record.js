@@ -106,6 +106,9 @@ import {Button, Tag, Grid, Flex} from 'antd'
  * convertLinkText("ABC http://example.com XYZ");
  */
 function convertLinkText(text) {
+    if (!text || typeof text !== 'string') {
+        return <span></span>;
+    }
     // What shorthand character class is '\A'?
     const regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
     return (<span dangerouslySetInnerHTML={{__html: text.replace(regex, function (match, p1, p2) {
@@ -622,25 +625,28 @@ const RecordPage = ({ record }) => {
                     }
                     let datum = {};
                     datum[fld] = canonical[fld];
+                    if (interpreted.has(fld)) {
+                        datum['interpreted'] = true
+                    }
                     localRecord[key].push(datum);
                     has.push(fld);
                 }
             });
         }
-        _.each(dwc.order[key], function (fld) {
-            if (_.has(canonical, fld)) {
-                if (!_.has(localRecord, key)) {
-                    localRecord[key] = [];
-                }
-                const datum = {};
-                datum[fld] = canonical[fld];
-                if (interpreted.has(fld)) {
-                    datum['interpreted'] = true
-                }
-                localRecord[key].push(datum);
-                has.push(fld);
-            }
-        });
+        // _.each(dwc.order[key], function (fld) {
+        //     if (_.has(canonical, fld)) {
+        //         if (!_.has(localRecord, key)) {
+        //             localRecord[key] = [];
+        //         }
+        //         const datum = {};
+        //         datum[fld] = canonical[fld];
+        //         if (interpreted.has(fld)) {
+        //             datum['interpreted'] = true
+        //         }
+        //         localRecord[key].push(datum);
+        //         has.push(fld);
+        //     }
+        // });
     });
 
     const dif = _.difference(Object.keys(canonical), has);

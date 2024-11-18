@@ -551,11 +551,13 @@ const RecordPage = ({ record }) => {
     _.forOwn(index, function (v, k) {
         if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
             const dt = fields.byTerm[k].dataterm;
-            if (_.has(data,dt)) {
+            if (_.has(data,dt) && data[dt] !== '') {
                 canonical[dt] = data[dt]
-            } else {
+            } else if (v !== ''){
                 canonical[dt] = v
                 interpreted.add(dt)
+            } else {
+                canonical[dt] = ''
             }
         }
     });

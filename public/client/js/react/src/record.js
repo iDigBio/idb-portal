@@ -119,6 +119,7 @@ function convertLinkText(text) {
 
 const Row = ({keyid, data, interpreted}) => {
     let tag
+    console.log(keyid, interpreted, data)
     if (interpreted) {
         tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
     } else {
@@ -126,14 +127,14 @@ const Row = ({keyid, data, interpreted}) => {
         tag = <></>
             }
 
-            var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+    var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
     var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
     var str = data.replace(regex, function(match){
         var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
         return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
     });
 
-    console.log(data)
+
     return (
         <tr className="data-rows">
             <td className="field-name" style={{width:'50%'}}>{name}</td>
@@ -211,6 +212,7 @@ const Record = ({record, raw }) => {
     const [nonPropsRecord, setNonPropsRecord] = useState([])
 
     function formatJSON(json){
+        console.log(json)
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -602,7 +604,7 @@ const RecordPage = ({ record }) => {
                 // If this soft assert fails, key might correspond to the incorrect DwC field
                 console.warn("More than one value for dwc_fields order key '%s'. Using first value '%s'.", key, fld);
             }
-            if (_.has(canonical, fld)) {
+            if (_.has(canonical, fld) && canonical[fld] !== '') {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];
                 }

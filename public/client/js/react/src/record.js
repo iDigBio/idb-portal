@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Provider from './shared/provider';
 import Title from './shared/title';
 import dwc from '../../lib/dwc_fields';
-import _ from 'lodash';
+import _, {isObject} from 'lodash';
 import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
@@ -119,27 +119,43 @@ function convertLinkText(text) {
 
 const Row = ({keyid, data, interpreted}) => {
     let tag
-    console.log(keyid, interpreted, data)
-    if (interpreted) {
-        tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+    let original_data_to_display
+    let interpreted_data_to_display
+
+    function capitalizeFirstLetter(str) {
+        if (!str) return ""; // Handle empty or null strings
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+   if (isObject(data)) {
+       if (data.indexTerm=== undefined ) {
+           data.indexTerm = ''
+       }
+       if (data.original=== undefined ) {
+           data.indexTerm = ''
+       }
+
+        original_data_to_display = data.original
+        interpreted_data_to_display = data.indexTerm
+
+        if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
+            tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+        } else {
+            tag=<></>
+        }
     } else {
-        // tag = <Tag style={{marginLeft: '10px'}} color={'red'}>Original</Tag>
-        tag = <></>
-            }
+        original_data_to_display= data
+        interpreted_data_to_display= data
+    }
 
     var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
     var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
-    var str = data.replace(regex, function(match){
-        var href = match.replace(/(;|=|\+|!|&|,|\(|\)|\*|'|#)$/, '');
-        return "<a target=\"_outlink\" href=\""+href+"\">"+match+"</a>";
-    });
-
 
     return (
         <tr className="data-rows">
-            <td className="field-name" style={{width:'50%'}}>{name}</td>
-            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}{tag}</td>
-            {/*<td style={{textAlign: "center"}}>{tag}</td>*/}
+            <td >{name}</td>
+            <td >{convertLinkText(original_data_to_display)}</td>
+            <td >{capitalizeFirstLetter(interpreted_data_to_display)} {tag}</td>
         </tr>
     );
 
@@ -158,9 +174,7 @@ const Section = ({name, data, active}) => {
 
     _.each(data,function(fld){
         var key = Object.keys(fld)[0];
-        if(_.isString(fld[key])){
-            rows.push(<Row key={key} keyid={key} data={fld[key]} interpreted={!!fld.interpreted} />);
-        }
+        rows.push(<Row key={key} keyid={key} data={fld[key]} interpreted={!!fld.interpreted} />);
     });
     var cl = "section visible-print-block";
     if(active){
@@ -169,10 +183,17 @@ const Section = ({name, data, active}) => {
     /** @type {string} */
     let sectionName = dwc.names[name];
     return (
-        <div id={name} className={cl}>
-            <h5>{sectionName}</h5>
+        <div id={name} className={cl} style={{overflowX: 'auto'}}>
+            <h5 style={{fontWeight: 'bold', fontSize: '16px'}}>{sectionName}</h5>
             <table className={`table table-striped table-condensed table-bordered`} >
-                <tbody>{rows}</tbody>
+                <tbody>
+                <tr>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Field</td>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Original</td>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Interpreted <a href='https://idigbio.github.io/docs/portal/recordpage/#interpreted-vs-original' style={{fontSize: '10px', fontWeight: 'lighter'}}>What does this mean?</a></td>
+                </tr>
+                {rows}
+                </tbody>
             </table>
         </div>
     );
@@ -212,7 +233,6 @@ const Record = ({record, raw }) => {
     const [nonPropsRecord, setNonPropsRecord] = useState([])
 
     function formatJSON(json){
-        console.log(json)
         if (typeof json != 'string') {
              json = JSON.stringify(json, undefined, 2);
         }
@@ -320,8 +340,6 @@ const Record = ({record, raw }) => {
     }
 
     useEffect(() => {
-            console.log('record=', record);
-            console.log('raw=', raw);
 
         var has = [];
         /** @type {React.JSX.Element[]} */
@@ -533,7 +551,6 @@ const RecordPage = ({ record }) => {
                         <tr key={'named-' + item} className="name">
                             <td>{dic[item].name}</td>
                             <td className="val">{vals}</td>
-                            <td className='interpreted'><Tag color={"green"}>Interpreted</Tag></td>
                         </tr>
                     );
                 }
@@ -551,18 +568,17 @@ const RecordPage = ({ record }) => {
     _.forOwn(index, function (v, k) {
         if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
             const dt = fields.byTerm[k].dataterm;
-            if (_.has(data,dt) && data[dt] !== '') {
-                canonical[dt] = data[dt]
-            } else if (v !== ''){
-                canonical[dt] = v
-                interpreted.add(dt)
+            if (_.has(data,dt) ) {
+                canonical[dt] = {'original': data[dt]}
             } else {
-                canonical[dt] = ''
+                canonical[dt] = {'original': ''}
+            } if (v !== ''){
+                canonical[dt]['indexTerm'] = v
             }
         }
     });
 
-    _.defaults(canonical, data);
+    _.defaults(canonical, data); //Remaining values not in fields.byTerm will be added as string values
 
     _.each(dwc.order, function (val, key) {
         if (key in extendedSpecimenOrder) {
@@ -610,8 +626,7 @@ const RecordPage = ({ record }) => {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];
                 }
-                if (!_.isArray(canonical[fld]))
-                    console.error('error parsing field \'%s\': expected an array', fld);
+
                 _.forEach(canonical[fld], function (iden) {
                     let datum = {};
                     _.forIn(iden, function(idenFieldValue, idenFieldName) {
@@ -629,28 +644,11 @@ const RecordPage = ({ record }) => {
                     }
                     let datum = {};
                     datum[fld] = canonical[fld];
-                    if (interpreted.has(fld)) {
-                        datum['interpreted'] = true
-                    }
                     localRecord[key].push(datum);
                     has.push(fld);
                 }
             });
         }
-        // _.each(dwc.order[key], function (fld) {
-        //     if (_.has(canonical, fld)) {
-        //         if (!_.has(localRecord, key)) {
-        //             localRecord[key] = [];
-        //         }
-        //         const datum = {};
-        //         datum[fld] = canonical[fld];
-        //         if (interpreted.has(fld)) {
-        //             datum['interpreted'] = true
-        //         }
-        //         localRecord[key].push(datum);
-        //         has.push(fld);
-        //     }
-        // });
     });
 
     const dif = _.difference(Object.keys(canonical), has);

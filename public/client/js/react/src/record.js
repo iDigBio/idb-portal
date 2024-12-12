@@ -123,8 +123,14 @@ const Row = ({keyid, data, interpreted}) => {
     let interpreted_data_to_display
 
     function capitalizeFirstLetter(str) {
+        let term = str
         if (!str) return ""; // Handle empty or null strings
-        return str.charAt(0).toUpperCase() + str.slice(1);
+
+        if (!_.isString(str)) {
+            term = String(str)
+        }
+
+        return term.charAt(0).toUpperCase() + term.slice(1);
     }
 
    if (isObject(data)) {
@@ -132,17 +138,21 @@ const Row = ({keyid, data, interpreted}) => {
            data.indexTerm = ''
        }
        if (data.original=== undefined ) {
-           data.indexTerm = ''
+           data.original = ''
        }
 
         original_data_to_display = data.original
         interpreted_data_to_display = data.indexTerm
-
-        if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
-            tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
-        } else {
-            tag=<></>
+        try {
+            if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
+                tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+            } else {
+                tag=<></>
+            }
+        } catch(e) {
+           console.log(data)
         }
+
     } else {
         original_data_to_display= data
         interpreted_data_to_display= data

@@ -117,7 +117,7 @@ function convertLinkText(text) {
     })}} />)
 }
 
-const Row = ({keyid, data, interpreted}) => {
+const Row = ({keyid, data}) => {
     let tag
     let original_data_to_display
     let interpreted_data_to_display
@@ -174,7 +174,7 @@ const Section = ({name, data, active}) => {
 
     _.each(data,function(fld){
         var key = Object.keys(fld)[0];
-        rows.push(<Row key={key} keyid={key} data={fld[key]} interpreted={!!fld.interpreted} />);
+        rows.push(<Row key={key} keyid={key} data={fld[key]} />);
     });
     var cl = "section visible-print-block";
     if(active){

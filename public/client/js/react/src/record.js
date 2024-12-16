@@ -122,17 +122,6 @@ const Row = ({keyid, data, interpreted}) => {
     let original_data_to_display
     let interpreted_data_to_display
 
-    function capitalizeFirstLetter(str) {
-        let term = str
-        if (!str) return ""; // Handle empty or null strings
-
-        if (!_.isString(str)) {
-            term = String(str)
-        }
-
-        return term.charAt(0).toUpperCase() + term.slice(1);
-    }
-
    if (isObject(data)) {
        if (data.indexTerm=== undefined ) {
            data.indexTerm = ''
@@ -143,6 +132,7 @@ const Row = ({keyid, data, interpreted}) => {
 
         original_data_to_display = data.original
         interpreted_data_to_display = data.indexTerm
+
         try {
             if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
                 tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
@@ -165,7 +155,7 @@ const Row = ({keyid, data, interpreted}) => {
         <tr className="data-rows">
             <td >{name}</td>
             <td >{convertLinkText(original_data_to_display)}</td>
-            <td >{capitalizeFirstLetter(interpreted_data_to_display)} {tag}</td>
+            <td >{convertLinkText(interpreted_data_to_display)} {tag}</td>
         </tr>
     );
 

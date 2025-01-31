@@ -36,7 +36,7 @@ const Title = ({ data, mediaSearch, includeLink, attribution }) => {
             title = <em>No Name</em>;
         }
 
-        info = _.without([dataDetails['dwc:scientificNameAuthorship']], undefined);
+        info = _.without([index.indexData['dwc:scientificNameAuthorship']], undefined);
 
         var order = [], linktitle = [];
         _.each(taxonomy, function (item) {

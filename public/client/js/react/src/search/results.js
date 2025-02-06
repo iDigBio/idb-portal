@@ -3,7 +3,7 @@ import idbapi from '../../../lib/idbapi';
 import queryBuilder from '../../../lib/querybuilder';
 
 
-const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
+const Results = memo(({ searchProp, searchChange, view, viewChange, aggs, setAggs }) => {
     const [lastQueryStringed, setLastQueryStringed] = useState('');
     const [results, setResults] = useState([]);
     const [attribution, setAttribution] = useState([]);
@@ -37,6 +37,7 @@ const Results = memo(({ searchProp, searchChange, view, viewChange }) => {
                         setTotal(response.itemCount);
                         setHasMore(more);
                         setLoading(false);
+                        setAggs(response.aggs.unique_scientific_names.buckets)
                     }
                 }
             });

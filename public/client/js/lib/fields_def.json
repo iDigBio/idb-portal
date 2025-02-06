@@ -178,6 +178,12 @@
         "group": "collectionevent",
         "dataterm": "dwc:recordNumber"
     },
+    "Taxon Rank": {
+        "term": "taxonrank",
+        "type": "text",
+        "group": "taxonomy",
+        "dataterm": "dwc:taxonRank"
+    },
     "Catalog Number": {
         "term": "catalognumber",
         "type": "text",

@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useCallback} from "react";
 import idbapi from '../../../lib/idbapi';
-
+import { AutoComplete, Input } from 'antd';
+const { TextArea } = Input;
 export function newFilterProps(term){
     const type = fields.byTerm[term].type;
     switch (type) {
         case 'text':
-            return { name: term, type: type, text: '', exists: false, missing: false };
+            return { name: term, type: type, text: '', exists: false, missing: false, fuzzy: false };
         case 'daterange':
             return { name: term, type: type, range: { gte: '', lte: '' }, exists: false, missing: false };
         case 'numericrange':
@@ -22,7 +23,7 @@ export function defaultFilters() {
     });
     return filters;
 }
-const Filters = ({filters, search, searchChange, active}) => {
+const Filters = ({filters, search, searchChange, active, aggs}) => {
 
     function filterPropsChange(filterObj){
         const list = filters.map(item => item.name);
@@ -34,7 +35,7 @@ const Filters = ({filters, search, searchChange, active}) => {
     function makeFilter(filter) {
         switch (filter.type) {
             case 'text':
-                return <TextFilter key={filter.name} filter={filter} removeFilter={removeFilter} search={search} changeFilter={filterPropsChange} />;
+                return <TextFilter key={filter.name} filter={filter} removeFilter={removeFilter} search={search} changeFilter={filterPropsChange} aggs={aggs} />;
             case 'daterange':
                 return <DateRangeFilter key={filter.name} filter={filter} removeFilter={removeFilter} changeFilter={filterPropsChange} />;
             case 'numericrange':
@@ -141,203 +142,227 @@ $.widget("custom.IDBAutocomplete", $.ui.autocomplete, {
     }
 })
 
-const TextFilter = ({filter, changeFilter, removeFilter, search}) => {
-    const [text, setText] = useState(filter.text)
-
+const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
+    const [text, setText] = useState(filter.text);
+    const [dropdownOpen, setDropdownOpen] = useState(false);
+    const [dropdownOptions, setDropdownOptions] = useState([]);
 
     useEffect(() => {
-        setText(filter.text)
+        const label = renderTitle('Suggestions');
+        const options = aggs.map((agg) => {
+            return renderItem(agg.doc_count.toString(), agg.key);
+        });
+        setDropdownOptions([{ label, options }]);
+    }, [aggs]);
+
+    useEffect(() => {
+        setText(filter.text);
     }, [filter.text]);
 
-    const debouncedTextType = _.debounce(function(param){
-        changeFilter(param);
-    },200,{leading: false, trailing: true});
+    // const debouncedTextType = _.debounce((param) => {
+    //     changeFilter(param);
+    // }, 300, { leading: false, trailing: true });
 
-    function debounce(param) {
-        debouncedTextType(param)
-    }
+    const debounce = (param) => {
+        debouncedTextType(param);
+    };
 
-    function presenceClick(event){
-        var localFilter = filter;
-        if(event.currentTarget.checked){
-            if(event.currentTarget.value=='exists'){
-                localFilter.exists = true;
+    const presenceClick = (event) => {
+        const localFilter = { ...filter };
+        switch (event.currentTarget.value) {
+            case 'exists':
+                localFilter.exists = !localFilter.exists;
                 localFilter.missing = false;
-            }else if(event.currentTarget.value=='missing'){
+                localFilter.fuzzy = false;
+                break;
+            case 'missing':
                 localFilter.exists = false;
-                localFilter.missing = true;
-            }
-        }else{
-            localFilter.exists = false;
-            localFilter.missing = false;
+                localFilter.missing = !localFilter.missing;
+                localFilter.fuzzy = false;
+                break;
+            case 'fuzzy':
+                localFilter.fuzzy = !localFilter.fuzzy;
+                localFilter.exists = false;
+                localFilter.missing = false;
+                break;
+            default:
+                localFilter.exists = false;
+                localFilter.missing = false;
+                localFilter.fuzzy = false;
         }
         changeFilter(localFilter);
-    }
-    function textType(event){
-        var localText = event.currentTarget.value
-        var localFilter = filter;//, filter=filters[ind];
-        localFilter.text = localText;
-        setText(localText)
-        debounce(localFilter)
-    }
+    };
 
-    function setAutocomplete(event){
-        // var self=this.name;
-        var options = {
-            source: function(searchString, respCallback) {
-                name = this.element[0].name;//$(event.currentTarget).attr('data-name');
-                var split = searchString.term.split('\n'),
-                last = split[split.length-1].toLowerCase(),
-                rq = queryBuilder.buildQueryShim(search);
-                rq[name]={'type':'prefix', 'value': last};
-                var query = {rq: rq, count: 15, top_fields:[name]};
+    const debouncedTextType = useCallback(
+        _.debounce((localFilter) => {
+            changeFilter(localFilter);
+        }, 200, { leading: false, trailing: true }),
+        []
+    );
 
-                idbapi.summary('top/basic/',query, function(resp) {
-                    respCallback(_.map(resp[name], function(v,k){
-                        return k;
-                    }).sort());
-                })
-            },
-            focus: function (event,ui){
-                //adaption for textarea input with "or" query
-                var input = $(this).val().split('\n');
-                if(input.length > 1){
-                    input.pop();//remove partial line
-                    ui.item.value = input.join('\n') + '\n' + ui.item.value;
-                }    
-            },
-            messages: {
-                noResults: '',
-                results: function() {}
-            },
-            select: function(event,ui){
-                var localFilter = filter;//, filter=filters[ind];
-                var cont = localFilter.text.split('\n');
-                cont.pop();
-                //cont[cont.length-1] = ui.item.label;
-                var mozilla;
-                if(!_.isUndefined(event.toElement) && event.toElement.classList.contains('all')){
-                    //|| (!_.isUndefined(event.originalEvent.originalEvent.originalEvent.originalTarget.classList) && event.originalEvent.originalEvent.originalEvent.originalTarget.classList.contains('all'))){
-                    var rq = queryBuilder.buildQueryShim(search);
-                    rq[name]={'type':'prefix', 'value': ui.item.label.trim()+' '};
-                    var query = {rq: rq, count: 300, top_fields:[name]};
-                    cont.push(ui.item.label);
-                    idbapi.summary('top/basic/',query, function(resp) {
-                        _.each(resp[name], function(v,k){
-                            cont.push(k);
-                        })
-                        localFilter.text = cont.join('\n');
-                        changeFilter(localFilter);
-                    })
-                }else{
-                    cont.push(ui.item.label);
-                    localFilter.text = cont.join('\n');
-                    changeFilter(localFilter);
-                }
-            }
+    const textType = (e) => {
+        const value = e.target.value;
+        setText(value);
+        setDropdownOpen(value !== '');
+
+        const localFilter = { ...filter, text: value };
+        debouncedTextType(localFilter);
+    };
+
+    // const textType = (e) => {
+    //     const value = e.target.value;
+    //     setDropdownOpen(value !== '');
+    //     const localFilter = { ...filter, text: value };
+    //     setText(value);
+    //     debounce(localFilter);
+    // };
+
+    const handleBlur = () => {
+        setDropdownOpen(false);
+    };
+
+    const handleEnter = (e) => {
+        if (!dropdownOpen) {
+            setDropdownOpen(false);
+        } else {
+            console.log('inside')
+            e.preventDefault();
+            setDropdownOpen(false);
         }
+    };
+
+    // const handleSelect = (e) => {
+    //     e.preventDefault();
+    //     textType({ target: { value: e.target.innerText } });
+    //     setDropdownOpen(false);
+    // };
+
+    const handleSelect = (e) => { // fires when a user selects an option from the dropdown
+        // e.preventDefault()
+        // textType(e)
+        // setDropdownOpen(false)
+        const lastNewlineIndex = text.lastIndexOf('\n');
+
+        let trimmedText;
+        if (lastNewlineIndex === -1) {
+            // No newline character found, trim the whole text
+            trimmedText = ''
+        } else {
+            // Trim the content after the last newline
+            const beforeLastNewline = text.substring(0, lastNewlineIndex + 1);
+            const afterLastNewline = text.substring(lastNewlineIndex + 1).trim();
+            trimmedText = beforeLastNewline
+        }
+        const newText = trimmedText + e + '\n'
+        console.log(newText)
+        setText(newText);
+        setDropdownOpen(false);
+
+        const localFilter = { ...filter, text: newText };
+        debouncedTextType(localFilter);
     }
 
-    function getSynonyms(event){
-        event.preventDefault();
-        var localText = filter.text.split('\n'),self=this;
-        //dont run search for blank text
-        if(!_.isEmpty(localText[0].trim())){
-            //$(event.currentTarget).attr('disabled','disabled');
-            //$(event.currentTarget).find('.syn-loader').show();
-            var output = [];
-            async.each(localText,function(item,callback){
-                var val = helpers.strip(item);
-                if(val.length > 0){
-                    output.push(val);
-                    $.ajax({
-                        url: '/portal/eol_api/search/1.0.json?page=1&q='+val, //'http://eol.org/api/search/1.0.json?page=1&q='+val,
-                        type: 'GET',
-                        crossDomain: true,
-                        dataType: 'jsonp',
-                        success: function(resp) { 
-                           
-                            if(resp.results.length > 0){
-                                var rd = 2; //results index depth to search
-                                for(var i=0;i<=rd;i++){
-                                    if(!_.isUndefined(resp.results[i])){
-                                        var res = resp.results[i].content.split(';');
-                                        res.forEach(function(it,ind){
-                                            var syn = helpers.strip(it.toLowerCase());
-                                            if(localText.indexOf(syn)=== -1){
-                                                output.push(syn);
-                                            }
-                                        });
-                                    }
-                                }
-                            }
-                            callback();
-                        },
-                        error: function(e,f){
-                            console.log('synonym lookup failed'); 
-                            callback();
-                        }
-                    });                     
-                }else{
-                    callback();
-                }
-            },function(err){
-                var localFilter = filter;
-                localFilter.text = output.join('\n');
-                changeFilter(localFilter);
-            });            
-        }        
-    }
+    const renderItem = (count, name) => ({
+        value: name,
+        label: (
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                {name}
+                <span>{count}</span>
+            </div>
+        ),
+    });
 
-    var localFilter = filter,disabled=false,textval;
-    var name = localFilter.name, label = fields.byTerm[name].name;
-    var syn = <span/>,cl='text';
-    if(fields.byTerm[name].synonyms){
-        syn=<a onClick={getSynonyms}>Add EOL Synonyms</a>;
-        cl+=' syn'
-    }
-    if(localFilter.exists || localFilter.missing){
-        disabled=true;
-        textval=fields.byTerm[name].dataterm;
-    }else{
-        textval=text;
-    }
-    return(
-        <div className="option-group filter" id={name+'-filter'} key={name}>
+    const renderTitle = (title) => (
+        <span>
+            {title}
+            <a
+                style={{ float: 'right' }}
+                href="https://idigbio.github.io/docs/portal/suggestions/"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                How is this list populated?
+            </a>
+        </span>
+    );
+
+    const localFilter = filter;
+    const name = localFilter.name;
+    const label = fields.byTerm[name].name;
+    const textval = localFilter.exists || localFilter.missing ? fields.byTerm[name].dataterm : text;
+
+    return (
+        <div className="option-group filter" id={`${name}-filter`} key={name}>
             <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
-                <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+                <i className="glyphicon glyphicon-remove" title="click to remove this filter"></i>
             </a>
             <label className="filter-name">{label}</label>
-            <div className={cl}>
-            {syn}
-                <textarea className="form-control" name={name} data-name={name}
-                    placeholder={fields.byTerm[name].dataterm}
-                    disabled={disabled}
-                    onChange={textType}
-                    onFocus={setAutocomplete}
-                    value={textval}
-                >
-                </textarea>
-
+            <div className="text">
+                {filter.name === 'scientificname' ? (
+                    <AutoComplete
+                        options={dropdownOptions}
+                        popupMatchSelectWidth={false}
+                        dropdownStyle={{ width: 400 }}
+                        onSelect={(e) => handleSelect(e)}
+                        onBlur={() => handleBlur()}
+                        onFocus={() => setDropdownOpen(text !== '')}
+                        open={filter.fuzzy && dropdownOpen}
+                        disabled={localFilter.exists || localFilter.missing}
+                        value={textval}
+                    >
+                        <TextArea
+                            className="form-control"
+                            name={name}
+                            data-name={name}
+                            placeholder={fields.byTerm[name].dataterm}
+                            disabled={localFilter.exists || localFilter.missing}
+                            onChange={textType}
+                            onPressEnter={handleEnter}
+                            spellCheck={false}
+                        />
+                    </AutoComplete>
+                ) : (
+                    <AutoComplete
+                        value={textval}
+                    >
+                        <TextArea
+                            className="form-control"
+                            name={name}
+                            data-name={name}
+                            placeholder={fields.byTerm[name].dataterm}
+                            disabled={localFilter.exists || localFilter.missing}
+                            onChange={(e) => textType(e)}
+                            onFocus={() => setAutocomplete(e)}
+                            value={textval}
+                            spellCheck={false}
+                        />
+                    </AutoComplete>
+                )}
             </div>
             <div className="presence">
                 <div className="checkbox">
                     <label>
-                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={localFilter.exists}/>
+                        <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={localFilter.exists} />
                         Present
                     </label>
                 </div>
                 <div className="checkbox">
                     <label>
-                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={localFilter.missing}/>
+                        <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={localFilter.missing} />
                         Missing
+                    </label>
+                </div>
+                <div className="checkbox" style={{ display: filter.name !== 'scientificname' ? 'none' : 'flex' }}>
+                    <label>
+                        <input type="checkbox" name={name} value="fuzzy" onChange={presenceClick} checked={filter.name !== 'scientificname' ? false : localFilter.fuzzy} />
+                        Fuzzy
                     </label>
                 </div>
             </div>
         </div>
-    )
-
+    );
 };
+
 
 const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
 

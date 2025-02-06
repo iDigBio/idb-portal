@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Provider from './shared/provider';
 import Title from './shared/title';
 import dwc from '../../lib/dwc_fields';
-import _ from 'lodash';
+import _, {isObject} from 'lodash';
 import moment from 'moment';
 import fields from '../../lib/fields';
 import dqFlags from '../../lib/dq_flags';
@@ -94,6 +94,7 @@ const extendedSpecimenOrder = {
         "chrono:chronometricAgeReferences": 6,
     },
 }
+import {Button, Tag, Grid, Flex} from 'antd'
 
 
 /**
@@ -105,6 +106,9 @@ const extendedSpecimenOrder = {
  * convertLinkText("ABC http://example.com XYZ");
  */
 function convertLinkText(text) {
+    if (!text || typeof text !== 'string') {
+        return <span></span>;
+    }
     // What shorthand character class is '\A'?
     const regex = /([\A|\s]*)(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
     return (<span dangerouslySetInnerHTML={{__html: text.replace(regex, function (match, p1, p2) {
@@ -113,13 +117,45 @@ function convertLinkText(text) {
     })}} />)
 }
 
-
 const Row = ({keyid, data}) => {
+    let tag
+    let original_data_to_display
+    let interpreted_data_to_display
+
+   if (isObject(data)) {
+       if (data.indexTerm=== undefined ) {
+           data.indexTerm = ''
+       }
+       if (data.original=== undefined ) {
+           data.original = ''
+       }
+
+        original_data_to_display = data.original
+        interpreted_data_to_display = data.indexTerm
+
+        try {
+            if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
+                tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+            } else {
+                tag=<></>
+            }
+        } catch(e) {
+           console.log(data)
+        }
+
+    } else {
+        original_data_to_display= data
+        interpreted_data_to_display= data
+    }
+
     var name = _.isUndefined(dwc.names[keyid]) ? keyid : dwc.names[keyid];
+    var regex = /[\A|\s]*(((ftp|https?):\/\/)[\-\w@:%_\+.~#?,&\/\/=;]+)/g;
+
     return (
         <tr className="data-rows">
-            <td className="field-name" style={{width:'50%'}}>{name}</td>
-            <td className="field-value" style={{width:'50%'}}>{convertLinkText(data)}</td>
+            <td >{name}</td>
+            <td >{convertLinkText(original_data_to_display)}</td>
+            <td >{convertLinkText(interpreted_data_to_display)} {tag}</td>
         </tr>
     );
 
@@ -138,9 +174,7 @@ const Section = ({name, data, active}) => {
 
     _.each(data,function(fld){
         var key = Object.keys(fld)[0];
-        if(_.isString(fld[key])){
-            rows.push(<Row key={key} keyid={key} data={fld[key]} />);
-        }
+        rows.push(<Row key={key} keyid={key} data={fld[key]} />);
     });
     var cl = "section visible-print-block";
     if(active){
@@ -149,10 +183,17 @@ const Section = ({name, data, active}) => {
     /** @type {string} */
     let sectionName = dwc.names[name];
     return (
-        <div id={name} className={cl}>
-            <h5>{sectionName}</h5>
+        <div id={name} className={cl} style={{overflowX: 'auto'}}>
+            <h5 style={{fontWeight: 'bold', fontSize: '16px'}}>{sectionName}</h5>
             <table className={`table table-striped table-condensed table-bordered`} >
-                <tbody>{rows}</tbody>
+                <tbody>
+                <tr>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Field</td>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Original</td>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Interpreted <a href='https://idigbio.github.io/docs/portal/recordpage/#interpreted-vs-original' style={{fontSize: '10px', fontWeight: 'lighter'}}>What does this mean?</a></td>
+                </tr>
+                {rows}
+                </tbody>
             </table>
         </div>
     );
@@ -221,10 +262,10 @@ const Record = ({record, raw }) => {
     }
 
     /** Extracts keys from array of objects.
-     * 
+     *
      * {@link sec} is used for filtering out columns designated hidden
      * (see {@link extendedSpecimenOrder}).
-     * 
+     *
      * @param {object[]} arr Section data array
      * @param {string} sec Section name
      * @returns {string[]}
@@ -254,7 +295,7 @@ const Record = ({record, raw }) => {
      * Applies table data corrections prior to display:
      * - Instantiates missing keys to '' (empty string)
      * - Converts URLs within data values to hyperlinks
-     * 
+     *
      * @param {object[]} data - Section data array
      * @param {string[]} keys
      */
@@ -299,8 +340,6 @@ const Record = ({record, raw }) => {
     }
 
     useEffect(() => {
-            console.log('record=', record);
-            console.log('raw=', raw);
 
         var has = [];
         /** @type {React.JSX.Element[]} */
@@ -505,7 +544,17 @@ const RecordPage = ({ record }) => {
         _.each(list, item => {
             if (_.has(data, item)) {
                 const vals = _.map(_.words(data[item], /[^ ]+/g), i => _.capitalize(i)).join(' ');
-                values.push(<tr key={'named-' + item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
+                if (item.includes("dwc:")) {
+                    values.push(<tr key={'named-' + item} className="name"><td>{dic[item].name}</td><td className="val">{vals}</td></tr>);
+                } else {
+                    values.push(
+                        <tr key={'named-' + item} className="name">
+                            <td>{dic[item].name}</td>
+                            <td className="val">{vals}</td>
+                        </tr>
+                    );
+                }
+
             }
         });
         return values;
@@ -515,14 +564,21 @@ const RecordPage = ({ record }) => {
     const has = [], canonical = {};
     let eventdate = null, lat = null, lon = null;
     let localRecord = {}
+    let interpreted = new Set()
     _.forOwn(index, function (v, k) {
         if (_.has(fields.byTerm, k) && _.has(fields.byTerm[k], 'dataterm')) {
             const dt = fields.byTerm[k].dataterm;
-            canonical[dt] = _.has(data, dt) ? data[dt] : v;
+            if (_.has(data,dt) ) {
+                canonical[dt] = {'original': data[dt]}
+            } else {
+                canonical[dt] = {'original': ''}
+            } if (v !== ''){
+                canonical[dt]['indexTerm'] = v
+            }
         }
     });
 
-    _.defaults(canonical, data);
+    _.defaults(canonical, data); //Remaining values not in fields.byTerm will be added as string values
 
     _.each(dwc.order, function (val, key) {
         if (key in extendedSpecimenOrder) {
@@ -566,12 +622,11 @@ const RecordPage = ({ record }) => {
                 // If this soft assert fails, key might correspond to the incorrect DwC field
                 console.warn("More than one value for dwc_fields order key '%s'. Using first value '%s'.", key, fld);
             }
-            if (_.has(canonical, fld)) {
+            if (_.has(canonical, fld) && canonical[fld] !== '') {
                 if (!_.has(localRecord, key)) {
                     localRecord[key] = [];
                 }
-                if (!_.isArray(canonical[fld]))
-                    console.error('error parsing field \'%s\': expected an array', fld);
+
                 _.forEach(canonical[fld], function (iden) {
                     let datum = {};
                     _.forIn(iden, function(idenFieldValue, idenFieldName) {

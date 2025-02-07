@@ -509,7 +509,7 @@ const RecordPage = ({ record }) => {
     const taxaBreadCrumbs = () => {
         const order = [], values = [];
 
-        ['kingdom', 'phylum', 'class', 'order', 'family'].forEach(item => {
+        ['kingdom', 'phylum', 'class', 'order', 'family', 'genus'].forEach(item => {
             if (_.has(record.indexTerms, item)) {
                 order.push(item);
                 values.push(record.indexTerms[item]);

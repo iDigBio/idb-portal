@@ -197,7 +197,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
         _.debounce((localFilter) => {
             changeFilter(localFilter);
         }, 200, { leading: false, trailing: true }),
-        []
+        [search]
     );
 
     const textType = (e) => {

@@ -10,6 +10,8 @@ import CollectionsPage from './react/src/collections'
 import L from 'leaflet'
 require('@bower_components/leaflet.fullscreen/Control.FullScreen.js');
 require('leaflet-sleep');
+const { glify } = require('leaflet.glify');
+
 var triggerPopup = function(id){
     scrollToMap();
     map.setView(ref[id]._latlng).setZoomAround(ref[id]._latlng,8)
@@ -23,37 +25,34 @@ var scrollToMap = function(){
 
 ReactDOM.render(<CollectionsPage data={collections} openMapPopup={triggerPopup} />, document.getElementById('datatable'));
 
-var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+const base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
     attribution: 'Map data © OpenStreetMap',
-    minZoom: 0,
+    minZoom : 0,
     reuseTiles: true
-});
-
-var map = L.map('map',{
-    center: [47,-100],
-    zoom: 3,
-    minZoom: 2,
-    layers: [base],
-    scrollWheelZoom: true,
-    boxZoom: true,
-    zoomControl: true,
-    worldCopyJump: true,
-    fullscreenControl: true,
-    fullscreenControlOptions: {
-    position: "topright",
-    forceSeparateButton: true
-    },
-    zoomControl: false,
+  });
+  
+  const map = L.map('map',{
+    center:[47,-100],
+    zoom:3,
+    minZoom:2,
+    layers:[base],
+    scrollWheelZoom:true,
+    boxZoom:true,
+    zoomControl:true,
+    worldCopyJump:true,
+    fullscreenControl:true,
+    fullscreenControlOptions:{ position:"topright", forceSeparateButton:true },
+    zoomControl:false,          // ← you later add one manually
     sleepOpacity:.9,
-    sleepTime: 5
-});
-
-map.addControl(L.control.zoom({
-    position: 'topright'
-}));
+    sleepTime:5
+  });
+  
+  map.addControl(L.control.zoom({ position:'topright' }));
+  
+const layer = L.layerGroup().addTo(map);
 //add mapper modal for maximize view
 var cols=[],ref={};
-var layer = new L.layerGroup();
+//var layer = new L.layerGroup();
 layer.addTo(map);
 
 L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images';
@@ -80,54 +79,59 @@ var singleIcon = L.icon({
 
 //add map points
 var lookup={};
-_.each(collections,function(item){
-    
-    if(item.lat=="NA"){item.lat=null;}
-    if(item.lon=="NA"){item.lat=null;}
+const coords   = [];   // WebGL will draw these
+const payloads = [];   // keep a pointer to the original objects for pop‑ups
 
-    if(item.lat !== null && item.lon !== null){
-        var key = item.lat+' '+item.lon;
-        if(_.isUndefined(lookup[key])){
-            lookup[key]= item;
-        }else if(_.isArray(lookup[key])){
-            lookup[key].push(item);
-        }else if(_.isObject(lookup[key])){
-            var multi=[_.cloneDeep(lookup[key]),item];
-            delete lookup[key];
-            lookup[key]=multi;
-        }
-    }
+_.each(collections, item => {
+  if (item.lat === "NA" || item.lon === "NA") return;
+  const lat = +item.lat, lon = +item.lon;
+
+  const key = lat + ' ' + lon;
+  lookup[key] = lookup[key] || [];
+  lookup[key].push(item);
 });
 
+_.each(lookup, val => {
+  const first = _.isArray(val) ? val[0] : val;
+  coords.push([+first.lat, +first.lon]);
+  payloads.push(val);          // same index as coords[]
+});
 
-_.each(lookup,function(val,key){
-    var cont = '<div class="map-popup">', m;
-    if(_.isArray(val)){
-        m = L.marker([val[0].lat,val[0].lon],{icon: multiIcon});
-        cont+='<h5>'+val[0].institution+'</h5><div class="multi">';
-        _.each(val,function(item){
-            var name = _.isEmpty(item.collection.trim()) ? 'Collection' : item.collection;
-            cont+='<label><a target="'+item.collection_uuid+'"href="/portal/collections/'+item.collection_uuid.replace('urn:uuid:','')+'">'+
-                name+'</a></label>';
-            ref[item.collection_uuid]=m;
+L.glify.points({
+    map ,                  // attach to this map   :contentReference[oaicite:0]{index=0}
+    data : coords,         // array of [lat,lng]
+    size : 10,             // pixel radius
+    color: i =>
+      Array.isArray(payloads[i])               // multi‑collection → orange
+        ? { r:1, g:0.5, b:0, a:1 }
+        : { r:0, g:0.4, b:1, a:1 },            // single‑collection → blue
+  
+    // replicate your pop‑up HTML
+    click : (e, feature) => {
+      const i   = coords.findIndex(p => p[0] === feature[0] && p[1] === feature[1]);
+      const val = payloads[i];
+  
+      let html = '<div class="map-popup">';
+      if (Array.isArray(val)) {
+        html += `<h5>${val[0].institution}</h5><div class="multi">`;
+        val.forEach(item => {
+          const label = item.collection.trim() || 'Collection';
+          html += `<label><a href="/portal/collections/${item.collection_uuid.replace('urn:uuid:','')}"
+                             target="${item.collection_uuid}">${label}</a></label>`;
         });
-        cont+='</div>';
-        cont+='<address>'+val[0].physical_address+'<br>'+val[0].physical_city+', '+val[0].physical_state+' '+
-            val[0].physical_zip+'</address>';
-    }else{
-        cont+='<h5>'+val.institution+'</h5>';
-        var name = _.isEmpty(val.collection.trim()) ? 'Collection' : val.collection;
-        cont += '<label><a target="'+val.collection_uuid+'"href="/portal/collections/'+val.collection_uuid.replace('urn:uuid:','')+'">'+
-            name+'</a></label><address>'+val.physical_address+'<br>'+val.physical_city+', '+val.physical_state+' '+
-        val.physical_zip+'</address>';
-        m = L.marker([val.lat,val.lon], {icon: singleIcon});
-        ref[val.collection_uuid]=m;
+        html += '</div>';
+      } else {
+        const label = val.collection.trim() || 'Collection';
+        html += `<h5>${val.institution}</h5>
+                 <label><a href="/portal/collections/${val.collection_uuid.replace('urn:uuid:','')}"
+                           target="${val.collection_uuid}">${label}</a></label>`;
+      }
+      html += '</div>';
+  
+      L.popup().setLatLng(feature).setContent(html).openOn(map);
     }
-    cont+='</div>';
-    m.bindPopup(cont);
-    layer.addLayer(m); 
-});
-
+  });
+  
 //scroll to map
 $('#mapScroll').click(scrollToMap);
 

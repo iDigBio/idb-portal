@@ -6,6 +6,7 @@ import L from 'leaflet';
 require('leaflet-sleep');
 import RecordPage from './react/src/record'
 import MediaPage from "./react/src/media";
+const { glify } = require('leaflet.glify');
 
 var pubname = '';
 //Converted to csr due to ssr mismatch + ssr is not really needed here anyway.
@@ -52,32 +53,44 @@ $('#side-nav-list').affix({
 //     offsetTop: -205
 // });
 
-if(_.has(record.indexTerms,'geopoint')){
-    $('#map').css('display','block');
-
-    var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        attribution: 'Map data © OpenStreetMap contributors',
-        minZoom: 0,
-        maxZoom: 18,
-        reuseTiles: true
+if (_.has(record.indexTerms, 'geopoint')) {
+    $('#map').show();                            // same as css display:block;
+  
+    // ----  create the base layer and map  ----
+    const point = L.latLng(record.indexTerms.geopoint);
+  
+    const map = L.map('map‑box', {
+      center: point,
+      zoom  : 5,
+      layers: [
+        L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: 'Map data © OpenStreetMap contributors',
+          minZoom: 0,
+          maxZoom: 18,
+          reuseTiles: true
+        })
+      ],
+      scrollWheelZoom: true,
+      boxZoom: false,
+      sleepOpacity: 0.9,
+      sleepTime  : 5,
+      wakeTime   : 750
     });
-
-    var point = L.latLng(record.indexTerms.geopoint);
-
-    var map = L.map('map-box',{
-        center: point,
-        zoom: 5,
-        layers: [base],
-        scrollWheelZoom: true,
-        boxZoom: false,
-        sleepOpacity:.9,
-        sleepTime: 5,
-        wakeTime: 750
-    });
-
-    L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images/';
-    L.marker(point).addTo(map);
-    //map.panTo(point).setZoom(5); 
-}       
+  
+    // ----  draw with WebGL  ----
+    // simplest form: an array of [lat,lng] pairs
+    const glData = [[point.lat, point.lng]];
+  
+    L.glify.points({
+      map   : map,            // required
+      data  : glData,         // required
+      size  : 12,             // px
+      color : 'orange',       // string | function | {r,g,b,a}
+      opacity: 0.8
+    });                       // returns an L.glify.Points instance
+  
+    // If you only need the WebGL points layer, you can remove the classic marker:
+    // L.marker(point).addTo(map);
+  }   
 
 

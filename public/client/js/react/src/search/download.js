@@ -191,7 +191,13 @@ const Downloader = ({search, queryToSentence}) => {
                     removeDownload(item);
                     callback();
                 }else if(item.complete === false){
-                    var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
+                    // Why are we re-parsing item.status_url?
+                    // Anyway, we want to preserve the full URL origin:
+                    // status_url might get re-interpreted to an invalid URL otherwise
+                    // (especially when running a local development instance)
+                    let urlobj = new URL(item.status_url, /*fallback base url*/ idbapi.media_host);
+                    var surl = urlobj.origin + urlobj.pathname;
+                    //var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
 
                     var statusFunc = function(cretries) {
                         $.getJSON(surl, {}, function(data, textStatus, jqXHR) {

@@ -1,6 +1,25 @@
 
 import React, {useEffect, useState} from 'react'
 import idbapi from '../../../lib/idbapi'
+
+/**
+ * @typedef {Object} IdbApiDownloadResponse
+ * @property {boolean} complete
+ * @property {string} created ISO 8601 datetime format
+ * @property {?string} error
+ *    Error message returned by API server.
+ *    Usually present if `.task_status` is `'FAILURE'`.
+ * @property {?string} download_url Should only be present if `.task_status` is `'SUCCESS'`
+ * @property {string} expires ISO 8601 datetime format
+ * @property {string} hash
+ * @property {Object} query
+ * @property {string} status_url
+ * @property {'FAILURE'|'SUCCESS'|'PENDING'|'UNKNOWN'} task_status 
+ *    From python `celery.result.AsyncResult.status`
+ *    (except 'UNKNOWN', which is a custom API server status)
+ * @property {string} sentence Human-readable query string
+ */
+
 var Downloads
 const Download = ({searchChange, search, active, history}) => {
     const [options, setOptions] = useState([])
@@ -163,35 +182,57 @@ const Downloader = ({search, queryToSentence}) => {
 
     const checkDownloadStatus = function(){
         var update = downloads, pendings=false;
-        async.each(downloads,function(item,callback){
+        async.each(downloads,
+            /**
+             * @param {IdbApiDownloadResponse} item
+             */
+            function(item,callback){
+                if(Date.now() > Date.parse(item.expires)){
+                    removeDownload(item);
+                    callback();
+                }else if(item.complete === false){
+                    var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
 
-            if(Date.now() > Date.parse(item.expires)){
-                removeDownload(item);
-                callback();
-            }else if(item.complete === false){
-                var surl = 'https://'+ url('hostname',item.status_url) + url('path',item.status_url);
+                    var statusFunc = function(cretries) {
+                        $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
+                            if(data.complete) {
+                                updateDownload(data);
+                            }else{
+                                pendings = true;
+                            }
+                            callback();
+                        }).fail(() => {
+                            // If this request doesn't get a good response within 10 seconds,
+                            // it probably never will, so stop trying.
+                            if (++cretries >= 5) {
+                                // Create synthetic failed response,
+                                // since server isn't giving us one
+                                item.complete = true;
+                                item.task_status = 'UNKNOWN';
+                                item.error = 'API server failed to respond after 10s.'; // 1+2+3+4 s
+                                console.error('Giving up get download status (API server failure) for:', item);
+                                updateDownload(item);
+                                callback();
+                            }
 
-                var statusFunc = function() {
-                    $.getJSON(surl, {}, function(data, textStatus, jqXHR) {
-                        if(data.complete) {
-                            updateDownload(data);
-                        }else{
-                            pendings = true;
-                        }
-                        callback();
-                    }).fail(statusFunc);
+                            console.error('Retry #%d, failed get download status for:', cretries, item);
+                            // timeout so client doesn't rapid-fire maybe-bad requests
+                            setTimeout(() => {
+                                statusFunc(cretries);
+                            }, cretries * 1000 /*ms*/); // linear backoff
+                        });
+                    }
+                    statusFunc(0);
+                }else{
+                    callback();
                 }
-                statusFunc();
-            }else{
-                callback();
-            }
-        },function(err){
-            if(pendings){
-                setTimeout(function(){
-                    checkDownloadStatus();
-                },5000)
-            }
-        })
+            },function(err){
+                if(pendings){
+                    setTimeout(function(){
+                        checkDownloadStatus();
+                    },5000)
+                }
+            })
     }
     checkDownloadStatus();
 
@@ -219,24 +260,61 @@ const Downloader = ({search, queryToSentence}) => {
                 localStorage.setItem('downloads', JSON.stringify({downloads: tempDownloads}));
             }
             checkDownloadStatus();
-            setDownloadsTableRows(_.map(downloads,function(item){
-                var sentence = item.sentence ? item.sentence : 'no label';
-                if(item.complete){
-
-                    return (<tr key={sentence} className="dl-row" title={sentence}>
-                        <td className="title">{sentence}</td>
-                        <td className="status"><a href={item.download_url}>Click To Download</a></td>
-                    </tr>)
-                }else{
-                    return (<tr key={sentence} className="dl-row" title={sentence}>
-                        <td className="title">{sentence}</td>
-                        <td className="status pending">pending</td>
-                    </tr>)
-                }
-                key++;
-            }))
+            setDownloadsTableRows(_.map(downloads,convert_IdbApiDownloadObject_To_DownloadTableRow))
         }
     }
+
+    /**
+     * @param {IdbApiDownloadResponse} item
+     */
+    function convert_IdbApiDownloadObject_To_DownloadTableRow(item){
+        let sentence = item.sentence || 'no label';
+        if(item.task_status === 'SUCCESS' && item.download_url){
+            return (<tr key={sentence} className="dl-row" title={sentence}>
+                <td className="title">{sentence}</td>
+                <td className="status"><a href={item.download_url}>Click To Download</a></td>
+            </tr>)
+        }else if(item.complete){
+            let rowId = `dl-row-${item.hash}`;
+            const TITLE_UPDATE_TIMEOUT_MS = 3000;
+            let originalAttrValTitle = `(click to copy error details) ${item.error}`;
+            return (<tr key={sentence} className="dl-row" title={sentence} {...(item.hash ? {id: rowId} : {})}>
+                <td className="title">{sentence}</td>
+                <td className="status"><a href="#" className="error" title={originalAttrValTitle}
+                        onClick={e => {
+                            e.preventDefault(); // don't scroll to top of page
+                            navigator.clipboard.writeText(JSON.stringify(item))
+                                .then(() => {
+                                    $(`#${rowId} > .status > a`)
+                                        .attr('title', 'Copied to clipboard')
+                                        .text('Error (copied)');
+                                })
+                                .catch((exc) => {
+                                    console.error('Failed writing to clipboard:', {item: item, exception: exc});
+                                    $(`#${rowId} > .status > a`)
+                                        .attr('title', 'Copy failed')
+                                        .text('Error (clipboard error)');
+                                })
+                                .finally(() => {
+                                    setTimeout(() => {
+                                        $(`#${rowId} > .status > a`)
+                                            .attr('title', originalAttrValTitle)
+                                            .text('Error');
+                                    }, TITLE_UPDATE_TIMEOUT_MS);
+                                });
+                    }}>Error</a></td>
+            </tr>)
+        }else{
+            return (<tr key={sentence} className="dl-row" title={sentence}>
+                <td className="title">{sentence}</td>
+                <td className="status pending">pending</td>
+            </tr>)
+        }
+    }
+
+    /**
+     * @param {IdbApiDownloadResponse} obj 
+     */
     function updateDownload(obj){
         var tempDownloads = downloads;
         var ids = getDownloadIds();
@@ -246,22 +324,7 @@ const Downloader = ({search, queryToSentence}) => {
         if(localStorage){
             localStorage.setItem('downloads',JSON.stringify({downloads: tempDownloads}));
         }
-        setDownloadsTableRows(_.map(downloads,function(item){
-            var sentence = item.sentence ? item.sentence : 'no label';
-            if(item.complete){
-
-                return (<tr key={sentence} className="dl-row" title={sentence}>
-                    <td className="title">{sentence}</td>
-                    <td className="status"><a href={item.download_url}>Click To Download</a></td>
-                </tr>)
-            }else{
-                return (<tr key={sentence} className="dl-row" title={sentence}>
-                    <td className="title">{sentence}</td>
-                    <td className="status pending">pending</td>
-                </tr>)
-            }
-            key++;
-        }))
+        setDownloadsTableRows(_.map(downloads,convert_IdbApiDownloadObject_To_DownloadTableRow))
     }
     function removeDownload(obj){
         var tempDownloads = downloads;
@@ -311,22 +374,7 @@ const Downloader = ({search, queryToSentence}) => {
 
     useEffect(() => {
         var key=0;
-        var updatedDownloadsTableRows = _.map(downloads,function(item){
-            var sentence = item.sentence ? item.sentence : 'no label';
-            if(item.complete){
-
-                return (<tr key={sentence} className="dl-row" title={sentence}>
-                    <td className="title">{sentence}</td>
-                    <td className="status"><a href={item.download_url}>Click To Download</a></td>
-                </tr>)
-            }else{
-                return (<tr key={sentence} className="dl-row" title={sentence}>
-                    <td className="title">{sentence}</td>
-                    <td className="status pending">pending</td>
-                </tr>)
-            }
-            key++;
-        })
+        var updatedDownloadsTableRows = _.map(downloads,convert_IdbApiDownloadObject_To_DownloadTableRow)
         setDownloadsTableRows(updatedDownloadsTableRows)
     }, [downloads]);
 

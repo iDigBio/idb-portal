@@ -1,4 +1,5 @@
 @import '../variables.less';
+@import '../../../../node_modules/bootstrap/less/mixins/text-emphasis.less';
 
 #download{
     padding:0px;
@@ -52,7 +53,16 @@
                     word-wrap: break-word;
                     text-overflow: ellipsis;
                     white-space: nowrap;
-                    padding:2px 15px; 
+                    padding:2px 15px;
+                    a.error{
+                        // copied from bootstrap/less/type.less:.text-danger
+                        .text-emphasis-variant(@state-danger-text);
+
+                        text-decoration: underline dotted;
+                        &:hover{
+                            text-decoration: underline;
+                        }
+                    }
                 }
                 td.title{
                     width: 60%;

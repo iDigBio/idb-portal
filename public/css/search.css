@@ -967,6 +967,17 @@
   white-space: nowrap;
   padding: 2px 15px;
 }
+#download #downloads-section table tr.dl-row td.status a.error {
+  color: #a94442;
+  text-decoration: underline dotted;
+}
+a#download #downloads-section table tr.dl-row td.status a.error:hover,
+a#download #downloads-section table tr.dl-row td.status a.error:focus {
+  color: #843534;
+}
+#download #downloads-section table tr.dl-row td.status a.error:hover {
+  text-decoration: underline;
+}
 #download #downloads-section table tr.dl-row td.title {
   width: 60%;
   max-width: 280px;

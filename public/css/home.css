@@ -123,3 +123,16 @@ h4 {
     margin: 6px;
   }
 }
+/* Links underlined by default, not on hover */
+#top a,
+#welcome a,
+#jump a,
+#notes a {
+  text-decoration: underline;
+}
+#top a:hover,
+#welcome a:hover,
+#jump a:hover,
+#notes a:hover {
+  text-decoration: none;
+}

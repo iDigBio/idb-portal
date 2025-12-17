@@ -473,12 +473,19 @@ a:hover {
   border-top: 1px solid #ccc;
   padding-top: 15px;
   margin-top: 20px;
+  height: auto;
 }
 #footer p {
   font-size: 13px;
   line-height: 15px;
   margin-bottom: 5px;
   color: #777;
+}
+#footer a {
+  text-decoration: underline;
+}
+#footer a:hover {
+  text-decoration: none;
 }
 #footnote {
   border-top: 1px solid #ccc;
@@ -490,6 +497,12 @@ a:hover {
   line-height: 15px;
   margin-bottom: 5px;
   color: #777;
+}
+#footnote a {
+  text-decoration: underline;
+}
+#footnote a:hover {
+  text-decoration: none;
 }
 #lic-attributions a {
   color: inherit;

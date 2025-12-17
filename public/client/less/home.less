@@ -130,3 +130,14 @@ h4{
 
     }
 }
+
+/* Links underlined by default, not on hover */
+#top a,
+#welcome a,
+#jump a,
+#notes a {
+    text-decoration: underline;
+    &:hover {
+        text-decoration: none;
+    }
+}

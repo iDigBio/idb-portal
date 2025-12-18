@@ -113,7 +113,7 @@ const Filters = ({filters, search, searchChange, active, aggs}) => {
     return (
         <div className={`section ${active}`} id="filters">
             <div className="option-group" id="filter-select">
-                <select className="form-control" value="0" placeholder="select to add" onChange={addFilter}>
+                <select className="form-control" value="0" placeholder="select to add" onChange={addFilter} aria-label="Add a field">
                     <option value="0" defaultValue className="default">Add a field</option>
                     {fgroups}
                 </select>

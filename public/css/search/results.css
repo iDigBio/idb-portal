@@ -211,7 +211,7 @@
   white-space: nowrap;
 }
 #results #result-list #data-table tbody tr td span.no-data {
-  color: #aaa;
+  color: #747474;
   font-style: italic;
 }
 #results #result-list #data-table tbody tr td.open a {

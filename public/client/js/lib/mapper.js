@@ -493,17 +493,26 @@ module.exports = function(elid, options){
         //set map view on query change
         if(_.has(query,'geopoint')){
             if(query.geopoint.type=='geo_distance'){
-                var g = new GeoPoint(query.geopoint.lat,query.geopoint.lon);
+                var lat = query.geopoint.lat;
+                var lon = query.geopoint.lon;
                 var dist = parseFloat(query.geopoint.distance.split('km')[0]);
-                //keeps fitBounds from zooming in too much with point clicks
-                if(dist < 10){
-                    dist=10;
+                // Only fitBounds if we have valid numeric coordinates
+                if(Number.isFinite(lat) && Number.isFinite(lon) && Number.isFinite(dist)){
+                    var g = new GeoPoint(lat, lon);
+                    //keeps fitBounds from zooming in too much with point clicks
+                    if(dist < 10){
+                        dist=10;
+                    }
+                    var co = g.boundingCoordinates(dist);
+                    this.map.fitBounds([[co[0]._degLat,co[0]._degLon],[co[1]._degLat,co[1]._degLon]]);
                 }
-                var co = g.boundingCoordinates(dist);
-                this.map.fitBounds([[co[0]._degLat,co[0]._degLon],[co[1]._degLat,co[1]._degLon]]);
             }else if(query.geopoint.type=='geo_bounding_box'){
                 var g=query.geopoint;
-                this.map.fitBounds([[g.top_left.lat,g.top_left.lon],[g.bottom_right.lat,g.bottom_right.lon]]);
+                // Only fitBounds if all coordinates are valid numbers
+                if(Number.isFinite(g.top_left.lat) && Number.isFinite(g.top_left.lon) && 
+                   Number.isFinite(g.bottom_right.lat) && Number.isFinite(g.bottom_right.lon)){
+                    this.map.fitBounds([[g.top_left.lat,g.top_left.lon],[g.bottom_right.lat,g.bottom_right.lon]]);
+                }
             }
         }else{
             this.map.setView([0,0],2);

@@ -253,7 +253,8 @@ module.exports = (function(){
                 case 'box':
                     _.each(search.mapping.bounds,function(val,key){
                         _.each(val, function(v,k){
-                            if(v && _.isEmpty(geobounds)){
+                            var parsed = parseFloat(v);
+                            if(v && _.isEmpty(geobounds) && Number.isFinite(parsed)){
                                 geobounds={
                                     type: "geo_bounding_box",
                                     top_left:{
@@ -266,8 +267,8 @@ module.exports = (function(){
                                     }
                                 }
                             }
-                            if(v){
-                                geobounds[key][k]=parseFloat(v);
+                            if(v && Number.isFinite(parsed)){
+                                geobounds[key][k]=parsed;
                             }
                         })
                     });
@@ -275,12 +276,14 @@ module.exports = (function(){
 
                 case 'radius':
                     var b = search.mapping.bounds
-                 
-                    if(b.distance && b.lat && b.lon){
+                    var parsedLat = parseFloat(b.lat);
+                    var parsedLon = parseFloat(b.lon);
+                    var parsedDist = parseFloat(b.distance);
+                    if(b.distance && b.lat && b.lon && Number.isFinite(parsedLat) && Number.isFinite(parsedLon) && Number.isFinite(parsedDist)){
                         geobounds.type = 'geo_distance';
                         geobounds.distance = b.distance+'km';
-                        geobounds.lat = parseFloat(b.lat);
-                        geobounds.lon = parseFloat(b.lon);
+                        geobounds.lat = parsedLat;
+                        geobounds.lon = parsedLon;
                     }
                     break; 
             }

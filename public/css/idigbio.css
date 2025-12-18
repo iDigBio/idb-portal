@@ -446,7 +446,7 @@ a:hover {
   text-decoration: none;
 }
 #nav li.nav-about a {
-  color: #3782cd;
+  color: #4f91d3;
 }
 #nav li.nav-research a {
   color: #6aaa51;
@@ -479,7 +479,7 @@ a:hover {
   font-size: 13px;
   line-height: 15px;
   margin-bottom: 5px;
-  color: #777;
+  color: #747474;
 }
 #footer a {
   text-decoration: underline;
@@ -496,7 +496,7 @@ a:hover {
   font-size: 11px;
   line-height: 15px;
   margin-bottom: 5px;
-  color: #777;
+  color: #747474;
 }
 #footnote a {
   text-decoration: underline;
@@ -537,7 +537,8 @@ ul#logo-list {
 }
 #portal-menu {
   float: left;
-  background-color: #6aaa51;
+  background-color: #50813d;
+  color: #333333;
 }
 #user-menu {
   float: right;
@@ -552,6 +553,9 @@ ul#logo-list {
 }
 .login-links li {
   border-right: none;
+}
+#snav {
+  background-color: #50813d;
 }
 @media (max-width: 992px) {
   #snav ul li {
@@ -723,4 +727,7 @@ outline: 0;
     top: 45%;
     background-size: 25px 118px;
   }
+}
+.ichatbio-link {
+  color: #2d6da3;
 }

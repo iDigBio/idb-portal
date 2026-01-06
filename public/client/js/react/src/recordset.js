@@ -43,7 +43,7 @@ const Flagrow = ({value, name, uuid, total}) => {
                         {name}
                     </a>
                 </b>
-                &nbsp;&nbsp;<span className="badge" title={dqFlags[name]} data-toggle="tooltip">i</span>
+                &nbsp;&nbsp;<span className="badge" title={dqFlags[name]}>i</span>
             </td>
             <td style={sty2} className="value-column record-count">{checkVal(total)}</td>
             <td className="value-column">

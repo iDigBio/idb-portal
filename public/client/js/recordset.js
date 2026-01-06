@@ -29,5 +29,3 @@ $('#side-nav-list').affix({
 // $('.scrollspy').scrollSpy({
 //     offsetTop: -205
 // });
-
-$('[data-toggle="tooltip"]').tooltip();

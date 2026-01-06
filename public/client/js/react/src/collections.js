@@ -87,8 +87,7 @@ const ModExports = ({openMapPopup, data}) => {
             columns={['institution','collection',
             'contact','contact_role', 'portalDisplay', 'collection_uuid', 'recordsets']}
             columnMetadata={columnMeta.concat(cols)}
-            enableInfiniteScroll={true} bodyHeight={400}
-            useFixedHeader={true} />
+            enableInfiniteScroll={true} bodyHeight={400} />
     )
 
 };

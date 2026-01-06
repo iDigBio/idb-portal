@@ -42,3 +42,10 @@ div.map-popup label {
 #shim-marker-shadow {
   background: url("../../node_modules/leaflet/dist/images/marker-shadow.png");
 }
+#map .sleep-note,
+#map p.sleep-note,
+.leaflet-container .sleep-note,
+.leaflet-container p.sleep-note,
+p.sleep-note {
+  color: #595959 !important;
+}

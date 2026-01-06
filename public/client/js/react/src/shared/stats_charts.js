@@ -149,12 +149,12 @@ const Collected = ({data}) => {
             <h3><a name="temporal-coverage">Temporal Coverage</a></h3>
             <form className="form-inline">
                 <div className="form-group">
-                    <label className="control-label" htmlFor="startDate">Start:</label>
-                    <Datetime viewMode="months" defaultValue={startDate} timeFormat={false} onChange={m => setStartDate(m)} inputProps={{name: "startDate"}} />
+                    <label className="control-label" htmlFor="collectedStartDate">Start:</label>
+                    <Datetime viewMode="months" defaultValue={startDate} timeFormat={false} onChange={m => setStartDate(m)} inputProps={{id: "collectedStartDate", name: "startDate"}} />
                 </div>
                 <div className="form-group">
-                    <label className="control-label" htmlFor="endDate">End:</label>
-                    <Datetime viewMode="months" defaultValue={endDate} timeFormat={false} onChange={m => setEndDate(m)} inputProps={{name: "endDate"}} />
+                    <label className="control-label" htmlFor="collectedEndDate">End:</label>
+                    <Datetime viewMode="months" defaultValue={endDate} timeFormat={false} onChange={m => setEndDate(m)} inputProps={{id: "collectedEndDate", name: "endDate"}} />
                 </div>
             </form>
             <C3Chart data={{x: "x", columns: cols}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
@@ -312,23 +312,23 @@ const StatsCharts = (props) => {
         <div>
             <form className="form-inline">
                 <div className="form-group">
-                    <label className="control-label" htmlFor="startDate">Start:</label>
+                    <label className="control-label" htmlFor="statsStartDate">Start:</label>
                     <Datetime
                         viewMode="months"
                         defaultValue={startDate}
                         timeFormat={false}
                         onChange={m => setStartDate(m)}
-                        inputProps={{ name: "startDate" }}
+                        inputProps={{ id: "statsStartDate", name: "startDate" }}
                     />
                 </div>
                 <div className="form-group">
-                    <label className="control-label" htmlFor="endDate">End:</label>
+                    <label className="control-label" htmlFor="statsEndDate">End:</label>
                     <Datetime
                         viewMode="months"
                         defaultValue={endDate}
                         timeFormat={false}
                         onChange={m => setEndDate(m)}
-                        inputProps={{ name: "endDate" }}
+                        inputProps={{ id: "statsEndDate", name: "endDate" }}
                     />
                 </div>
             </form>
@@ -337,6 +337,7 @@ const StatsCharts = (props) => {
             <div className="form-group">
                 <label className="control-label" htmlFor="logcheck">Log Scale: </label>
                 <input
+                    id="logcheck"
                     name="logcheck"
                     type="checkbox"
                     checked={log}
@@ -348,6 +349,7 @@ const StatsCharts = (props) => {
             <div className="form-group">
                 <label className="control-label" htmlFor="cumulativecheck">Cumulative: </label>
                 <input
+                    id="cumulativecheck"
                     name="cumulativecheck"
                     type="checkbox"
                     checked={cumulative}

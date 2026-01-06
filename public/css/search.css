@@ -475,8 +475,8 @@
   padding: 20px;
 }
 #results #result-list #data-table tbody tr td {
-  overflow: hidden;
-  height: 30px;
+  overflow: visible;
+  min-height: 30px;
   word-wrap: break-word;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -527,8 +527,8 @@
   margin: 8px;
   position: relative;
   width: 24.05%;
-  height: 150px;
-  overflow: hidden;
+  min-height: 150px;
+  overflow: visible;
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.19), 0 1px 1px rgba(0, 0, 0, 0.23);
   background-color: #ECECEC;
   padding: 3px 8px;
@@ -554,18 +554,19 @@
   transition: background-color 0.5s;
 }
 #results #result-labels .result-label h5.title {
-  color: #03A9F4;
+  color: #2d6da3 !important;
   font-weight: bold;
   display: inline-block;
   max-width: 65%;
-  max-height: 35px;
-  overflow: hidden;
-  text-overflow: '...';
+  overflow: visible;
   font-style: italic;
   line-height: 1.25em;
   text-decoration: underline;
   margin: 2px;
   paddding: 6px;
+}
+#results #result-labels .result-label h5.title a.title-link {
+  color: #2d6da3;
 }
 #results #result-labels .result-label h5.title .author {
   font-style: normal;
@@ -603,11 +604,6 @@
 #results #result-labels .result-label .content span.date {
   bottom: 2px;
   right: 10px;
-}
-#results #result-labels .result-label .content span.locality {
-  max-height: 40px;
-  text-oveflow: ellipsis;
-  overflow: hidden;
 }
 #results #result-labels .result-label .content span.highertaxa {
   font-style: italic;
@@ -744,7 +740,7 @@
   z-index: 10;
   font-size: .80em;
   font-weight: bold;
-  background-color: #888;
+  background-color: #3c3c3c;
   opacity: .7;
 }
 #results #results-images .image .gallery-image-text {
@@ -785,7 +781,7 @@
   width: 70%;
 }
 #results #provider-results td {
-  overflow: hidden;
+  overflow: visible;
   line-height: 1.3em;
 }
 #results #provider-results td.desc {

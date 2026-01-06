@@ -45,7 +45,8 @@ var map = L.map('map',{
     },
     zoomControl: false,
     sleepOpacity:.9,
-    sleepTime: 5
+    sleepTime: 5,
+    sleepNoteStyle: { color: '#595959', opacity: 1 }
 });
 
 map.addControl(L.control.zoom({

@@ -32,6 +32,7 @@ const Stats = ({usage, ingest, ingestCumulative, collected, taxon, flags}) => {
                     <iframe width="100%" height="600px"
                             src="https://lookerstudio.google.com/embed/reporting/e1efb265-1581-4bfe-961c-e7c3b1795208/page/kIV1C"
                             style={{"border":0}} allowFullScreen
+                            title="iDigBio Google Analytics Dashboard"
                             sandbox="allow-storage-access-by-user-activation allow-scripts allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe>
                 </div>
                 <div className="col-lg-2 col-md-2 col-sm-2">

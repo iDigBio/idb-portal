@@ -611,7 +611,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
 
         return (
             <div key={'label-'+id}  className="pull-left result-item result-label" >
-                <h5 className="title" title="click to open record"><a href={'/portal/records/'+result.uuid} target={result.uuid}>{title}&nbsp;{auth}</a></h5>
+                <h5 className="title" title="click to open record"><a className='title-link' href={'/portal/records/'+result.uuid} target={result.uuid}>{title}&nbsp;{auth}</a></h5>
                 <h5 className="family">{family}</h5>
                 {img}
                 <p className="content">

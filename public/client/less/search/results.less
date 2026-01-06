@@ -221,8 +221,8 @@
                         }
                     }
                     td{
-                        overflow:hidden;
-                        height:30px;
+                        overflow:visible;
+                        min-height:30px;
                         word-wrap: break-word;
                         text-overflow:ellipsis;
                         white-space: nowrap;
@@ -284,8 +284,8 @@
             position:relative;
 
             width:24.05%;
-            height:150px;
-            overflow:hidden;
+            min-height:150px;
+            overflow:visible;
             box-shadow: @shadow1;
             background-color:@lightgrey;
             //margin:8px 8px 8px 8px;
@@ -311,16 +311,17 @@
                 //background-color: #e5e5e5;
             }
             h5.title{
-                color:@lightblue;
+                color:#2d6da3 !important;
                 font-weight:bold;
                 display:inline-block;
                 max-width:65%;
-                max-height: 35px;
-                overflow:hidden;
-                text-overflow: '...';
+                overflow:visible;
                 font-style:italic;
                 line-height: 1.25em;
                 text-decoration: underline;
+                a.title-link{
+                    color:#2d6da3;
+                }
                 .author{
                     font-style:normal;
                     //color:#666;
@@ -362,9 +363,6 @@
                         right:10px;
                     }
                     &.locality{
-                        max-height:40px;
-                        text-oveflow: ellipsis;
-                        overflow:hidden;
                         //top:30px;
                         //max-width:70%;
                     }
@@ -508,7 +506,7 @@
                 z-index:10;
                 font-size: .80em;
                 font-weight:bold;
-                background-color:#888;
+                background-color:#3c3c3c;
                 opacity:.7;
             }
             .gallery-image-text{
@@ -556,7 +554,7 @@
             }  
         }
         td{ 
-            overflow: hidden;
+            overflow: visible;
             line-height: 1.3em;
             &.desc{
                 text-align: justify;

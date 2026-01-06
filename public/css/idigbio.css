@@ -469,6 +469,9 @@ a:hover {
 #nav li.nav-education a:hover {
   color: #fcd40f;
 }
+footer {
+  background-color: white;
+}
 #footer {
   border-top: 1px solid #ccc;
   padding-top: 15px;

@@ -45,3 +45,12 @@ div.map-popup label{
 #shim-marker-shadow{
     background: url("../../node_modules/leaflet/dist/images/marker-shadow.png");
 }
+
+// Fix contrast ratio for leaflet-sleep wake message (WCAG 1.4.3 requires 4.5:1)
+#map .sleep-note,
+#map p.sleep-note,
+.leaflet-container .sleep-note,
+.leaflet-container p.sleep-note,
+p.sleep-note {
+    color: #595959 !important;
+}

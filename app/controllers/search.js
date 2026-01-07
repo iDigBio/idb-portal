@@ -1,4 +1,4 @@
-var request = require('request');
+var axios = require('axios');
 import config from 'config/config'; // eslint-disable-line no-unused-vars
 import logger from 'app/logging'; // eslint-disable-line no-unused-vars
 
@@ -85,11 +85,10 @@ export default {
     var forward = req.headers['x-forwarded-for'];
     // don't send acis and localhost/dev requests
     if(typeof forward !== 'undefined' && forward.indexOf('10.244.19') !== 0  && ip !== '127.0.0.1') {
-      var stats = {form: {type: req.body.type, search: req.body.search, results: req.body.results}};
-      request.post(
-        'http://10.13.45.208:3000',
-        stats
-      );
+      var stats = {type: req.body.type, search: req.body.search, results: req.body.results};
+      axios.post('http://10.13.45.208:3000', stats).catch(function(err) {
+        // Silently ignore stats posting errors
+      });
     }
   }
 };

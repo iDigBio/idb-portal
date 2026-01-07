@@ -1,4 +1,4 @@
-var request = require('request');
+var axios = require('axios');
 
 if(typeof window === "undefined") {
     var window = global;
@@ -51,32 +51,47 @@ module.exports = {
         this.summary('count/records/',query,callback);
     },
     _basic: function(method,arg1,arg2,arg3) {
-        var options = {
-            method: method,
-            uri: this.host,
-            json: true
-        };
-        var cb;
+        var url = this.host;
+        var data = null;
+        var cb = null;
+        var self = this;
+        
         [arg1, arg2, arg3].forEach(function(arg) {
             switch (typeof arg) {
                 case 'object':
-                    options.json = arg;
+                    data = arg;
                     break;
                 case 'string':
-                    options.uri += arg;
+                    url += arg;
                     break;
                 case 'function':
-                    cb = function(err, resp, body) {
-                        if(err) {
-                            console.log(err);
-                        }
-                        arg(body);
-                    };
+                    cb = arg;
                     break;
                 default:
                     break;
             }
         });
-        request(options, cb);
+        
+        var axiosConfig = {
+            method: method,
+            url: url
+        };
+        
+        if (data && method.toUpperCase() === 'POST') {
+            axiosConfig.data = data;
+        }
+        
+        axios(axiosConfig)
+            .then(function(response) {
+                if(cb) {
+                    cb(response.data);
+                }
+            })
+            .catch(function(err) {
+                console.log(err);
+                if(cb) {
+                    cb(null);
+                }
+            });
     }
 };

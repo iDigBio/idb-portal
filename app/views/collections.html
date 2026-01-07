@@ -3,10 +3,8 @@
 <link rel="stylesheet" type="text/css" href="https://dynamictyped.github.io/Griddle/styles/griddle.css">  
 <link rel="stylesheet" type="text/css" href="/portal/css/collections.css">  
 <script type="text/javascript">
- {% autoescape false %}
-  var collections={{ data }}
+  var collections={{ data | safe }};
   var count = Object.keys(collections).length;
- {% endautoescape %}
 </script>
 
 {% endblock %}

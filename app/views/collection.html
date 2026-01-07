@@ -2,9 +2,7 @@
 {% block headblock %}  
 <link rel="stylesheet" type="text/css" href="/portal/css/collection.css"> 
 <script type="text/javascript">
- {% autoescape false %}
-  var collection={{ data }}
- {% endautoescape %}
+  var collection={{ data | safe }};
 </script> 
 {% endblock %}
 {% block content %}

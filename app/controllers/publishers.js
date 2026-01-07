@@ -1,5 +1,5 @@
 import {createFactory} from '../createFactory.js'
-import request from 'request'
+import axios from 'axios'
 import async from 'async'
 import _ from 'lodash'
 import RecordsetPage from 'public/client/js/react/build/recordset'
@@ -64,33 +64,31 @@ function transformCollection(record) {
 // var RecordsetPage = require(appDir+'/public/react/build/recordset');
 export default {
   collections: function(req, res) {
-
-    request.get({"url": config.gbifApi + 'external/idigbio/collections', "json": true}, function(err, resp, body) {
-      if(err) {
-        logger.error(err);
-      }
-      const collections = Array.isArray(body) ? body.map(transformCollection) : [];	    
-      res.render('collections', {
-        activemenu: 'publishers',
-        user: req.user,
-        token: req.session._csrf,
-        data: JSON.stringify(collections)
-      });
-    });
-  },
-  collection: function(req, res) {
-    request.get({"url": config.gbifApi + 'external/idigbio/collections/' + req.params.id, "json": true}, function(err, resp, body) {
-      if(err) {
-        logger.error(err);
-      } else if(resp.statusCode === 404) {
-        res.status(404);
-        res.render('404', {
+    axios.get(config.gbifApi + 'external/idigbio/collections')
+      .then(function(response) {
+        const body = response.data;
+        const collections = Array.isArray(body) ? body.map(transformCollection) : [];	    
+        res.render('collections', {
           activemenu: 'publishers',
           user: req.user,
           token: req.session._csrf,
-          id: req.params.id
+          data: JSON.stringify(collections)
         });
-      } else {
+      })
+      .catch(function(err) {
+        logger.error(err);
+        res.render('collections', {
+          activemenu: 'publishers',
+          user: req.user,
+          token: req.session._csrf,
+          data: JSON.stringify([])
+        });
+      });
+  },
+  collection: function(req, res) {
+    axios.get(config.gbifApi + 'external/idigbio/collections/' + req.params.id)
+      .then(function(response) {
+        const body = response.data;
         const collection = transformCollection(body);
         res.render('collection', {
           activemenu: 'publishers',
@@ -98,8 +96,27 @@ export default {
           token: req.session._csrf,
           data: JSON.stringify(collection)
         });
-      }
-    });
+      })
+      .catch(function(err) {
+        if(err.response && err.response.status === 404) {
+          res.status(404);
+          res.render('404', {
+            activemenu: 'publishers',
+            user: req.user,
+            token: req.session._csrf,
+            id: req.params.id
+          });
+        } else {
+          logger.error(err);
+          res.status(500);
+          res.render('500', {
+            activemenu: 'publishers',
+            user: req.user,
+            token: req.session._csrf,
+            id: req.params.id
+          });
+        }
+      });
   },
   publishers: function(req, res) {
     res.render('publishers', {
@@ -126,86 +143,107 @@ export default {
     async.parallel([
       function(cback) {
         var params = {"dateInterval": "month", "minDate": defaultMin};
-        request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          _.forEach(a_body.dates, (rs_data, date) => {
-            usage[date] = {};
-            _.forEach(rs_data, (stats, rs) => {
-              _.forEach(stats, (v, k) => {
-                if(usage[date][k]) {
-                  usage[date][k] += v;
-                } else {
-                  usage[date][k] = v;
-                }
+        axios.post(config.api + 'summary/stats/search', params)
+          .then(function(response) {
+            var a_body = response.data;
+            _.forEach(a_body.dates, (rs_data, date) => {
+              usage[date] = {};
+              _.forEach(rs_data, (stats, rs) => {
+                _.forEach(stats, (v, k) => {
+                  if(usage[date][k]) {
+                    usage[date][k] += v;
+                  } else {
+                    usage[date][k] = v;
+                  }
+                });
               });
             });
+            cback(null, 'one');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'one');
           });
-
-          cback(a_err, 'one');
-        });
       },
       function(cback) {
         var params = {"dateInterval": "month", "minDate": defaultMin};
-        request.post({"url": config.api + 'summary/stats/api', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          _.forEach(a_body.dates, (rs_data, date) => {
-            ingestCumulative[date] = {};
-            var rsCount = 0;
-            _.forEach(rs_data, (stats, rs) => {
-              rsCount += 1;
-              _.forEach(stats, (v, k) => {
-                if(ingestCumulative[date][k]) {
-                  ingestCumulative[date][k] += v;
-                } else {
-                  ingestCumulative[date][k] = v;
-                }
+        axios.post(config.api + 'summary/stats/api', params)
+          .then(function(response) {
+            var a_body = response.data;
+            _.forEach(a_body.dates, (rs_data, date) => {
+              ingestCumulative[date] = {};
+              var rsCount = 0;
+              _.forEach(rs_data, (stats, rs) => {
+                rsCount += 1;
+                _.forEach(stats, (v, k) => {
+                  if(ingestCumulative[date][k]) {
+                    ingestCumulative[date][k] += v;
+                  } else {
+                    ingestCumulative[date][k] = v;
+                  }
+                });
               });
+              ingestCumulative[date]["recordsets"] = rsCount;
             });
-            ingestCumulative[date]["recordsets"] = rsCount;
+
+            var dates = _.keys(ingestCumulative).sort();
+            for(var i = dates.length - 2; i > 0; i--) {
+              ingest[dates[i]] = {};
+              _.forEach(ingestCumulative[dates[i]], (v, k) => {
+                ingest[dates[i]][k] = ingestCumulative[dates[i + 1]][k] - ingestCumulative[dates[i]][k];
+              });
+            }
+            cback(null, 'two');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'two');
           });
-
-          var dates = _.keys(ingestCumulative).sort();
-          for(var i = dates.length - 2; i > 0; i--) {
-            ingest[dates[i]] = {};
-            _.forEach(ingestCumulative[dates[i]], (v, k) => {
-              ingest[dates[i]][k] = ingestCumulative[dates[i + 1]][k] - ingestCumulative[dates[i]][k];
-            });
-          }
-
-          cback(a_err, 'two');
-        });
       },
       function(cback) {
         var params = {"dateInterval": "year"};
-        request.post({"url": config.api + 'summary/datehist', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          _.forEach(a_body.dates, (rs_data, date) => {
-            collected[date] = {"Date Collected": rs_data.itemCount};
+        axios.post(config.api + 'summary/datehist', params)
+          .then(function(response) {
+            var a_body = response.data;
+            _.forEach(a_body.dates, (rs_data, date) => {
+              collected[date] = {"Date Collected": rs_data.itemCount};
+            });
+            cback(null, 'three');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'three');
           });
-
-          cback(a_err, 'three');
-        });
       },
       function(cback) {
         var params = {top_fields: ["kingdom", "family"], count: 10};
-        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          taxon["records"] = a_body;
-
-          cback(a_err, 'four');
-        });
+        axios.post(config.api + 'summary/top/records', params)
+          .then(function(response) {
+            taxon["records"] = response.data;
+            cback(null, 'four');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'four');
+          });
       },
       function(cback) {
         var params = {top_fields: ["kingdom", "family"], count: 10, rq: {hasMedia: true}};
-        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          taxon["mediarecords"] = a_body;
-
-          cback(a_err, 'five');
-        });
+        axios.post(config.api + 'summary/top/records', params)
+          .then(function(response) {
+            taxon["mediarecords"] = response.data;
+            cback(null, 'five');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'five');
+          });
       },
       function(cback) {
         var params = {top_fields: ["flags"], count: 100};
-        request.post({"url": config.api + 'summary/top/records', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-          flags = a_body;
-
-          cback(a_err, 'six');
-        });
+        axios.post(config.api + 'summary/top/records', params)
+          .then(function(response) {
+            flags = response.data;
+            cback(null, 'six');
+          })
+          .catch(function(a_err) {
+            cback(a_err, 'six');
+          });
       },
     ], function(a_err, results) {
       if(a_err) {
@@ -229,90 +267,120 @@ export default {
     var rbody = {}, use = {};
     var lastRecord = '', lastMedia = '';
     let rqurl = config.api + 'view/recordsets/' + req.params.id;
-    request.get({"url": rqurl, "json": true}, function(err, resp, body) {
-      if(err) {
+    
+    const getRecordsetErrorViewVars = () => ({
+      activemenu: 'publishers',
+      user: req.user,
+      token: req.session._csrf,
+      id: req.params.id
+    });
+
+    axios.get(rqurl)
+      .then(function(response) {
+        var body = response.data;
+        if(!body) {
+          logger.error('unexpected blank response to search API request:', {url: rqurl});
+          res.status(502);
+          res.render('500', getRecordsetErrorViewVars());
+        } else if (body.found === false) {
+          res.status(404);
+          res.render('404', getRecordsetErrorViewVars());
+        } else if (body.statusCode >= 400) {
+          res.status(body.statusCode);
+          res.render('404', getRecordsetErrorViewVars());
+        } else {
+          // A successful response has neither 'found' nor 'statusCode'
+          rbody = body;
+          async.parallel([
+            function(cback) {
+              var q = {top_fields: ["flags"], count: 100, rq: {"recordset": req.params.id}};
+              axios.post(config.api + 'summary/top/records/', q)
+                .then(function(a_response) {
+                  flags = a_response.data.flags;
+                  cback(null, 'one');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'one');
+                });
+            },
+            function(cback) {
+              axios.post(config.api + 'summary/count/records/', {rq: {recordset: req.params.id}})
+                .then(function(a_response) {
+                  stotal = a_response.data.itemCount;
+                  cback(null, 'two');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'two');
+                });
+            },
+            function(cback) {
+              axios.post(config.api + 'summary/count/media/', {mq: {recordset: req.params.id}})
+                .then(function(a_response) {
+                  mtotal = a_response.data.itemCount;
+                  cback(null, 'three');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'three');
+                });
+            },
+            function(cback) {
+              var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": moment().subtract(3,'years').startOf('month')};
+              axios.post(config.api + 'summary/stats/search', params)
+                .then(function(a_response) {
+                  use = a_response.data;
+                  cback(null, 'four');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'four');
+                });
+            },
+            function(cback) {
+              axios.post(config.api + 'summary/modified/records/', {rq: {recordset: req.params.id}})
+                .then(function(a_response) {
+                  lastRecord = a_response.data.lastModified.substring(0, 10);
+                  cback(null, 'five');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'five');
+                });
+            },
+            function(cback) {
+              axios.post(config.api + 'summary/modified/media/', {mq: {recordset: req.params.id}})
+                .then(function(a_response) {
+                  lastMedia = a_response.data.lastModified.substring(0, 10);
+                  cback(null, 'six');
+                })
+                .catch(function(a_err) {
+                  cback(a_err, 'six');
+                });
+            }
+          ], function(a_err, results) {
+            if(a_err) {
+              logger.error(a_err); // This should probably actually be handled better.
+            }
+            var rp = createFactory(RecordsetPage);
+            var lastmodified = lastRecord >= lastMedia ? lastRecord : lastMedia;
+            res.render('recordset', {
+              activemenu: 'publishers',
+              user: req.user,
+              token: req.session._csrf,
+              uuid: "'" + req.params.id + "'",
+              mtotal: mtotal,
+              stotal: stotal,
+              lastmodified: lastmodified,
+              flags: JSON.stringify(flags),
+              recordset: JSON.stringify(rbody),
+              use: JSON.stringify(use),
+              content: ReactDOMServer.renderToString(rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, lastmodified: lastmodified, uuid: req.params.id}))
+            });
+          });
+        }
+      })
+      .catch(function(err) {
         logger.error(err);
-      }
-      const getRecordsetErrorViewVars = () => ({
-        activemenu: 'publishers',
-        user: req.user,
-        token: req.session._csrf,
-        id: req.params.id
-      });
-      if(!body) {
-        logger.error('unexpected blank response to search API request:', {url: rqurl});
         res.status(502);
         res.render('500', getRecordsetErrorViewVars());
-      } else if (body.found === false) {
-        res.status(404);
-        res.render('404', getRecordsetErrorViewVars());
-      } else if (body.statusCode >= 400) {
-        res.status(body.statusCode);
-        res.render('404', getRecordsetErrorViewVars());
-      } else {
-        // A successful response has neither 'found' nor 'statusCode'
-        rbody = body;
-        async.parallel([
-          function(cback) {
-            var q = {top_fields: ["flags"], count: 100, rq: {"recordset": req.params.id}};
-            request.post({"url": config.api + 'summary/top/records/', "json": true, "body": q}, function(a_err, a_resp, a_body) {
-              flags = a_body.flags;
-              cback(a_err, 'one');
-            });
-          },
-          function(cback) {
-            request.post({"url": config.api + 'summary/count/records/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(a_err, a_resp, a_body) {
-              stotal = a_body.itemCount;
-              cback(a_err, 'two');
-            });
-          },
-          function(cback) {
-            request.post({"url": config.api + 'summary/count/media/', "json": true, "body": {mq: {recordset: req.params.id}}}, function(a_err, a_resp, a_body) {
-              mtotal = a_body.itemCount;
-              cback(a_err, 'three');
-            });
-          },
-          function(cback) {
-            var params = {"dateInterval": "month", "recordset": req.params.id, "minDate": moment().subtract(3,'years').startOf('month')};
-            request.post({"url": config.api + 'summary/stats/search', "json": true, "body": params}, function(a_err, a_resp, a_body) {
-              use = a_body;
-              cback(a_err, 'four');
-            });
-          },
-          function(cback) {
-            request.post({"url": config.api + 'summary/modified/records/', "json": true, "body": {rq: {recordset: req.params.id}}}, function(a_err, a_resp, a_body) {
-              lastRecord = a_body.lastModified.substring(0, 10);
-              cback(a_err, 'five');
-            });
-          },
-          function(cback) {
-            request.post({"url": config.api + 'summary/modified/media/', "json": true, "body": {mq: {recordset: req.params.id}}}, function(a_err, a_resp, a_body) {
-              lastMedia = a_body.lastModified.substring(0, 10);
-              cback(a_err, 'six');
-            });
-          }
-        ], function(a_err, results) {
-          if(a_err) {
-            logger.error(a_err); // This should probably actually be handled better.
-          }
-          var rp = createFactory(RecordsetPage);
-          var lastmodified = lastRecord >= lastMedia ? lastRecord : lastMedia;
-          res.render('recordset', {
-            activemenu: 'publishers',
-            user: req.user,
-            token: req.session._csrf,
-            uuid: "'" + req.params.id + "'",
-            mtotal: mtotal,
-            stotal: stotal,
-            lastmodified: lastmodified,
-            flags: JSON.stringify(flags),
-            recordset: JSON.stringify(rbody),
-            use: JSON.stringify(use),
-            content: ReactDOMServer.renderToString(rp({mtotal: mtotal, stotal: stotal, flags: flags, recordset: rbody, use: use, lastmodified: lastmodified, uuid: req.params.id}))
-          });
-        });
-      }
-    });
+      });
   },
   recordsetRedirect: function(req, res) {
     res.redirect('/portal/recordsets/' + req.params.id);

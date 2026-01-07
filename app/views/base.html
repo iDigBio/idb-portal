@@ -40,7 +40,7 @@
             <b style="float: right;color: white;clear: both;margin-right: 8px;position: relative;margin-top: 28px;">iDigBio's taxonomic normalization currently uses GBIF Backbone version 2023-08-28&nbsp;</b>
         
 <!--            <div class="login-links" style="display:block;float:right;margin-top:5px;color:#fff;">
-              {% if !user.is_authenticated -%} 
+              {% if not user.is_authenticated -%} 
               <li style="border:none;">
                <a id="login-link" href="https://www.idigbio.org/login/sessions/new?return_to=/portal{{ user.refurl }}" style="color:white;font-size:.8em;">Log In</a>
                 <span style="color:white;font-size:.8em;">|</span>
@@ -67,8 +67,8 @@
       <div class="sixteen columns full alpha omega hidden-print" id="snav-research">
         <div id="snav" class="clearfix">
           <ul id="portal-menu" style="float:left">
-          {% for value in menus.public -%}
-              <li {% if loop.key == activemenu %} class="active" {% endif %}>
+          {% for key, value in menus.public -%}
+              <li {% if key == activemenu %} class="active" {% endif %}>
                 <a href="{{ value.url }}" >{{ value.label }} </a>
                 {% if value.submenu -%}
                     <ul>
@@ -88,8 +88,8 @@
               <li>
                 <a style="min-width:90px;" href="#">&#x25BC;&nbsp;&nbsp;{{ user.login }}</a>
                 <ul id="user-menu-dd">
-                  {% for value in menus.private -%}
-                  <li {% if loop.key == activemenu %} class="active" {% endif %}>
+                  {% for key, value in menus.private -%}
+                  <li {% if key == activemenu %} class="active" {% endif %}>
                        <a href="{{ value.url }}" >{{ value.label }}</a>
                   </li>
                   {%- endfor %}   
@@ -149,7 +149,7 @@
 
     <div id="dialog-window" class="modal hide fade">
     </div> 
-    {% if !user.is_authenticated -%}
+    {% if not user.is_authenticated -%}
       <form id="login-form" style="display:none" method="get" action="/portal/authenticate">
         <p>Login using OpenID</p>
         <input type="hidden" name="openid_identifier" />
@@ -162,10 +162,8 @@
     {%- endif %}
 
     <script>
-      {% autoescape false %}
-      {{ javascript }}
-      {{ apiconfig }}
-      {% endautoescape %}
+      {{ javascript | safe }}
+      {{ apiconfig | safe }}
     </script>
     <!-- load gloabal libs here managed with bower packages-->
     <!-- end global libs block -->
@@ -175,9 +173,9 @@
         <script src='/portal/js/client.js'></script>
     {% endblock %}
     
-<!--     {% if user.host == 'www.idigbio.org' || user.host == 'portal.idigbio.org' -%}
-    <script src="https://www.idigbio.org/login/server/script?type=portal&t={{ user.random }}"></script>
-    {%- endif %} -->
+<!-- Disabled login script
+    <script src="https://www.idigbio.org/login/server/script?type=portal"></script>
+-->
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-NZY6105TCK"></script>
     <script>

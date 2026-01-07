@@ -9,13 +9,18 @@ var favicon = require("serve-favicon");
 var methodOverride = require("method-override");
 var morgan = require("morgan");
 var cons = require('consolidate');
-var swig = require('swig');
+var nunjucks = require('nunjucks');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
-var request = require('request');
 
 import config from 'config/config';
 import logger from 'app/logging';
+
+nunjucks.configure(config.root + '/app/views', {
+  autoescape: true,
+  watch: false,
+  noCache: true
+});
 
 var home = require('app/controllers/home').default;
 var search = require('app/controllers/search').default;
@@ -42,14 +47,8 @@ export default app;
 app.use(compression());
 // set cache expiration on public directory
 app.use(serveStatic(config.root + '/public', {maxAge: 86400000}));
-app.engine('html', cons.swig);
+app.engine('html', cons.nunjucks);
 app.engine('haml', cons.haml);
-// NOTE: Swig requires some extra setup so that it knows where to look for includes and parent templates
-swig.setDefaults({
-  cache: false,
-  root: config.root + '/app/views',
-  allowErrors: true
-});
 app.set('view engine', 'html');
 app.set('views', config.root + '/app/views');
 app.use(favicon(config.root + '/public/img/favicon.ico'));

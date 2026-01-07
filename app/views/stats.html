@@ -7,12 +7,10 @@
 <meta property="og:url" content="{{user.protocol}}://{{ user.host }}/portal/portalstats" />
 <meta property="og:description" content="iDigBio Portal Statistics" />
 <script type="text/javascript">
-{% autoescape false %}
-  var data={{ data }};
-{% endautoescape %}
+  var data={{ data | safe }};
 </script>
 {% endblock %}
 
 {% block content %}
-<div id="react-wrapper" class="container-fluid">{% autoescape false %}{{ content }}{% endautoescape %}</div>
+<div id="react-wrapper" class="container-fluid">{{ content | safe }}</div>
 {% endblock %}

@@ -16,19 +16,17 @@
 {% endif %}
 {% if record.attribution.description %}
 <meta property="og:description" content="{{ record.attribution.description }}" />
-{% elseif record.attribution.name %}
+{% elif record.attribution.name %}
 <meta property="og:description" content="{{ record.attribution.name }}" />
 {% endif %}
 <meta property="og:url" content="https://{{ user.host }}/portal/records/{{ id }}" />
 <script type="text/javascript">
-{% autoescape false %}
-  var record={{ data }};
-{% endautoescape %}
+  var record={{ data | safe }};
 </script>
 
 {% endblock %} 
 
 {% block content %}
 <input type="hidden" value="{{ id }}" id="recordID">
-<div id="react-wrapper" class="container-fluid">{% autoescape false %}{{ content }}{% endautoescape %}</div>
+<div id="react-wrapper" class="container-fluid">{{ content | safe }}</div>
 {% endblock %}

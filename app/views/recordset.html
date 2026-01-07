@@ -20,23 +20,19 @@
 
 {% block content %}
 <input type="hidden" value="{{ id }}" id="recordsetID">
-<div id="main" class="container-fluid" style="margin:0px;">{% autoescape false %}{{ content }}{% endautoescape %}</div>
+<div id="main" class="container-fluid" style="margin:0px;">{{ content | safe }}</div>
 {% endblock %}
 
 {% block appblock %}
 <script type="text/javascript">
-{% autoescape false %}
-  var mtotal={{ mtotal }};
-  var stotal={{ stotal }};
-  var use={{ use }};
-  var flags={{ flags }};
-  var recordset={{ recordset }};
+  var mtotal={{ mtotal | safe }};
+  var stotal={{ stotal | safe }};
+  var use={{ use | safe }};
+  var flags={{ flags | safe }};
+  var recordset={{ recordset | safe }};
   var lastmodified='{{ lastmodified }}';
-  var uuid={{ uuid }};
-{% endautoescape %}
-
+  var uuid={{ uuid | safe }};
 </script>
-  {% parent %}
-
+  {{ super() }}
 {% endblock %}
 {% block scriptblock %} {% endblock %}

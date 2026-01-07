@@ -7,16 +7,24 @@ const Stats = ({usage, ingest, ingestCumulative, collected, taxon, flags}) => {
     //     super(props);
     //     this.navList = this.navList.bind(this)
     // }
+    const navLinkStyle = {
+        display: "inline-block",
+        minHeight: "24px",
+        minWidth: "24px",
+        padding: "4px 8px",
+        lineHeight: "1.5"
+    };
+
     const navList = () => {
         return (
             <ul id="side-nav-list">
                 <li className="title">Contents</li>
-                <li><a href="#data-usage">Data Usage</a></li>
-                <li><a href="#data-ingestion">Data Ingestion</a></li>
-                <li><a href="#temportal-coverage">Temportal Coverage</a></li>
-                <li><a href="#taxon-coverage">Taxonomic Coverage</a></li>
-                <li><a href="#data-quality">Data Quality</a></li>
-                <li><a href="#google-analytics">Google Analytics Data</a></li>
+                <li><a href="#data-usage" style={navLinkStyle}>Data Usage</a></li>
+                <li><a href="#data-ingestion" style={navLinkStyle}>Data Ingestion</a></li>
+                <li><a href="#temportal-coverage" style={navLinkStyle}>Temporal Coverage</a></li>
+                <li><a href="#taxon-coverage" style={navLinkStyle}>Taxonomic Coverage</a></li>
+                <li><a href="#data-quality" style={navLinkStyle}>Data Quality</a></li>
+                <li><a href="#google-analytics" style={navLinkStyle}>Google Analytics Data</a></li>
             </ul>
         );
     }

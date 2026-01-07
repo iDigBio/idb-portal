@@ -52,31 +52,31 @@ const Usage = ({data, startDate, endDate, log}) => {
             <table>
               <tbody>
                   <tr>
-                    <td style={{"backgroundColor": "#C0C0C0", "fontSize": "120%"}}>Total Searches:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.search_count}</span></td>
+                    <td style={{"backgroundColor": "#C0C0C0", "color": "#000000", "fontSize": "120%", "padding": "8px"}}>Total Searches:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.search_count}</span></td>
                     <td style={{"fontSize": "25%"}}>&nbsp;</td>
-                    <td style={{"backgroundColor": "#6AA850", "fontSize": "120%"}}>Total Downloads:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.download_count}</span></td>
+                    <td style={{"backgroundColor": "#478030", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total Downloads:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.download_count}</span></td>
                   </tr>
                   <tr>
                       <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td style={{"backgroundColor": "#C0C0C0", "fontWeight": "bold", "fontSize": "120%", "textAlign": "center"}} colSpan="3">Total records searched:&nbsp;<span id="totSearch">{totals.search}</span></td>
+                    <td style={{"backgroundColor": "#C0C0C0", "color": "#000000", "fontWeight": "bold", "fontSize": "120%", "textAlign": "center", "padding": "8px"}} colSpan="3">Total records searched:&nbsp;<span id="totSearch">{totals.search}</span></td>
                   </tr>
                   <tr>
                       <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td style={{"backgroundColor": "#618CB8", "fontSize": "120%"}}>Total records seen:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.seen}</span></td>
+                    <td style={{"backgroundColor": "#3d6a8a", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total records seen:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.seen}</span></td>
                     <td style={{"fontSize": "25%"}}>&nbsp;</td>
-                    <td style={{"backgroundColor": "#D58B28", "fontSize": "120%"}}>Total specimen records viewed:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_records}</span></td>
+                    <td style={{"backgroundColor": "#a2671c", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total specimen records viewed:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_records}</span></td>
                   </tr>
                   <tr>
                     <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td style={{"backgroundColor": "#6AA850", "fontSize": "120%"}}>Total records downloaded:&nbsp;<span id="totDownload" style={{"fontWeight": "bold", "float": "right"}}>{totals.download}</span></td>
+                    <td style={{"backgroundColor": "#478030", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total records downloaded:&nbsp;<span id="totDownload" style={{"fontWeight": "bold", "float": "right"}}>{totals.download}</span></td>
                     <td style={{"fontSize": "50%"}}>&nbsp;</td>
-                    <td style={{"backgroundColor": "#D3B831", "fontSize": "120%"}}>Total media records viewed:&nbsp;<span id="totMedView" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_media}</span></td>
+                    <td style={{"backgroundColor": "#9e8a24", "color": "#000000", "fontSize": "120%", "padding": "8px"}}>Total media records viewed:&nbsp;<span id="totMedView" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_media}</span></td>
                   </tr>
               </tbody>
             </table>

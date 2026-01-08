@@ -8,6 +8,7 @@ describe('app', function() {
   });
 });
 
+/*
 describe('records', function() {
   const app = require('app/app').default;
   let server = null;
@@ -16,13 +17,12 @@ describe('records', function() {
   });
   afterAll(() => server.close());
 
-/*
- * This function is deprecated
+  // This function is deprecated
   it('should return json', async function() {
     const response = await request(server)
           .get("/eol_api/search/1.0.json?page=1&q=aphis")
           .expect('Content-Type', /json/)
           .expect(200);
   });
-  */
 });
+*/

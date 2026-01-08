@@ -11,6 +11,7 @@ var morgan = require("morgan");
 var cons = require('consolidate');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
+var redis = require('redis');
 var RedisStore = require('connect-redis')(session);
 
 import config from 'config/config';
@@ -67,7 +68,14 @@ if(config.env === "test") {
     }
   }));
 } else {
-  var store = new RedisStore(config.redis);
+  var redisClient = redis.createClient({
+    host: config.redis.host,
+    port: config.redis.port || 6379
+  });
+  redisClient.on('error', function(err) {
+    logger.error('Redis Client Error:', err);
+  });
+  var store = new RedisStore({ client: redisClient });
   app.use(session({
     secret: config.secret,
     store: store,

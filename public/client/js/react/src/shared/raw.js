@@ -29,7 +29,9 @@ const Raw = ({data}) => {
             <div className="modal-dialog">
                 <div className="modal-content">
                     <div className="modal-header">
-                        <button type="button" className="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
                         <h4 id="apiModalLabel">Raw API Data</h4>
                     </div>
                     <div className="modal-body">
@@ -37,7 +39,7 @@ const Raw = ({data}) => {
                         </p>
                     </div>
                     <div className="modal-footer">
-                        <button className="btn pull-left" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button className="btn pull-left" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>

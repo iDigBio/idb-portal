@@ -93,7 +93,7 @@ const Provider = ({data}) => {
     }
 
     if(_.has(data,'logo') && !_.isEmpty(data.logo)){
-        logo = (<img key="logo" className="logo" src={data.logo} onError={noLogo} />)
+        logo = (<img key="logo" className="logo" alt={data.name ? data.name + ' logo' : 'Recordset logo'} src={data.logo} onError={noLogo} />)
     }
 
     description = (

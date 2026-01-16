@@ -328,7 +328,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                             <button onClick={resetColumns} id="reset" className="">
                                 Reset
                             </button>
-                            <button type="button" className="close pull-right" data-dismiss="modal">
+                            <button type="button" className="close pull-right" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
@@ -459,13 +459,13 @@ class ResultListColumnSelector extends React.Component{
             selects.push(
                 <div key={column+'-'+ind} className="column-select-wrapper clearfix">
                     <div className="up-down">
-                        <button className="btn up" title="move up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
-                        <button className="btn down" title="move down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
+                        <button className="btn up" title="move up" aria-label="Move column up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
+                        <button className="btn down" title="move down" aria-label="Move column down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
                     </div>
                     <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
                         {fgroups}
                     </select>
-                    <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)}title="remove column" data-column={column} onClick={self.removeColumn}>
+                    <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)} title="remove column" aria-label="Remove column" data-column={column} onClick={self.removeColumn}>
                         <i className="glyphicon glyphicon-minus"/>
                     </button>
                 </div>
@@ -603,7 +603,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
                     <img
                         onError={errorImage}
                         className="pull-right label-image"
-                        alt={title}
+                        alt={typeof title === 'string' ? title : 'Specimen image'}
                         src={idbapi.media_host + "v2/media/"+data.mediarecords[0]+"?size=thumbnail"} />
                 </span>
             )

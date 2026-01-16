@@ -34,6 +34,7 @@ const Media = ({keyid, data}) => {
         <div key={keyid} id="media-wrapper" className="scrollspy section clearfix" >
             <a className="clearfix" target={'_'+keyid} href={link} title="click to open original media file">
                 <img className="media"
+                alt="Specimen media"
                 src={idbapi.media_host + 'v2/media/'+keyid+'?size=webview'}
                 onError={errorImage}/>
             </a>
@@ -170,7 +171,7 @@ const Group = ({record, keyid}) => {
             if(media[id] != keyid){
                 imgs.push(
                     <a href={'/portal/mediarecords/'+media[id]} title="click to open media record" key={media[id]} >
-                        <img className="gallery-image" src={idbapi.media_host + 'v2/media/'+media[id]+'?size=webview'} onError={errorImage} />
+                        <img className="gallery-image" alt="Related specimen media" src={idbapi.media_host + 'v2/media/'+media[id]+'?size=webview'} onError={errorImage} />
                     </a>
                 )
             }

@@ -84,7 +84,7 @@ const Sorting = ({sorting, searchChange, active}) => {
             sorts.push(
                 <div className="option-group" key={ind}>
                     <label>Sort by</label>
-                    <button onClick={removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>
+                    <button onClick={removeClick} data-index={ind} aria-label="Remove sort"><i className="glyphicon glyphicon-minus"></i></button>
                     <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name'>
                         {fgroups}
                     </select>
@@ -98,7 +98,7 @@ const Sorting = ({sorting, searchChange, active}) => {
             sorts.push(
                 <div className="option-group" key={ind}>
                     <label>Then by</label>
-                    <button onClick={removeClick} data-index={ind}><i className="glyphicon glyphicon-minus"></i></button>
+                    <button onClick={removeClick} data-index={ind} aria-label="Remove sort"><i className="glyphicon glyphicon-minus"></i></button>
                     <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name'>
                         {fgroups}
                     </select>
@@ -116,7 +116,7 @@ const Sorting = ({sorting, searchChange, active}) => {
     return (
         <div className={"clearfix section "+active} id="sorting">
             <div id="sort-add">
-                 Add a sort &nbsp;<button onClick={addClick} disabled={disabled}><span className="glyphicon glyphicon-plus"></span></button>
+                 Add a sort &nbsp;<button onClick={addClick} disabled={disabled} aria-label="Add sort"><span className="glyphicon glyphicon-plus"></span></button>
             </div>
             <div id="sort-group">
                 {sorts}

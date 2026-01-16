@@ -148,7 +148,7 @@ const Download = ({searchChange, search, active, history}) => {
                     <select className="form-control history-select" onChange={historySelect}>
                         {options}
                     </select>
-                    <a className="btn input-group-addon" title="click to clear search history" onClick={clearHistory}>
+                    <a className="btn input-group-addon" title="click to clear search history" onClick={clearHistory} aria-label="Clear search history">
                         <i className="glyphicon glyphicon-refresh"></i>
                     </a>
                 </div>
@@ -391,7 +391,7 @@ const Downloader = ({search, queryToSentence}) => {
                 <div className="input-group">
                     <span className="input-group-addon">Email</span>
                     <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={disabled}/>
-                    <a className="btn input-group-addon" onClick={startDownload} disabled={disabled} title="click to start download">
+                    <a className="btn input-group-addon" onClick={startDownload} disabled={disabled} title="click to start download" aria-label="Start download">
                         <i className="glyphicon glyphicon-download"></i>
                     </a>
                 </div>

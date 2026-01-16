@@ -34,7 +34,7 @@
               <div class="clearfix">
                 <figure id="fig1" >
                 	<figcaption>Fig. 1</figcaption>
-                	<img style="width:98%;max-width:750px;" src="/portal/img/tutorial/greenbar.png">
+                	<img style="width:98%;max-width:750px;" src="/portal/img/tutorial/greenbar.png" alt="iDigBio portal navigation bar">
             	  </figure>
               </div>
         		<p style="margin-top:10px;">The <em><b>iDigBio Home</b></em> link takes you away from the portal, and into the portion of iDigBio website containing information about the project, its workshops and working groups, research, education and outreach.</p>
@@ -62,15 +62,15 @@
             </p>
               <figure id="fig2"  class="clearfix">
                   <figcaption>Fig. 2</figcaption>
-                  <img src="/portal/img/tutorial/search-page.png">
+                  <img src="/portal/img/tutorial/search-page.png" alt="Search page overview">
               </figure>
         		<h4 id="searching" class="scrollspy" style="margin-top:30px;">Understanding and Performing Searches</h4>
 
         		<p>The search form section of the <em><b>Search Records</b></em> page <em>(Fig. 3)</em> provides all fields necessary for doing full text and advanced exact match searching across iDigBio data. The <b>search all field</b> box allows you to search a term across all fields of the data simultaneously. If you search for ‘carex’, this term is searched in all fields, and the search returns records where ‘carex’ appears in a scientific name, genus, host, locality, or any other place where it appears, excluding substrings (parts of words). Searches are not case-sensitive, i.e., ‘carex’ and ‘Carex’ will return the same result. Checking the box <b>Must have media</b> restricts mapped and record results to those specimens that have related images and other media. Checking the <b>Must have map point</b> restricts the record results section to show only records that contain geopoint data (mapping results can contain only records with geopoint data).</p>
             <div class="clearfix">      		
               <figure id="fig3">
-                  <figcaption>Fig. 3</figcaption>
-          			  <img src="/portal/img/tutorial/search-form.png">
+                <figcaption>Fig. 3</figcaption>
+        			  <img src="/portal/img/tutorial/search-form.png" alt="Search form interface">
           		</figure>
             </div>
         		
@@ -89,17 +89,17 @@
             <div class="clearfix">
               <figure id="fig4" >
                   <figcaption>Fig. 4</figcaption>
-                  <img src="/portal/img/tutorial/mapping-panel.png"> 
+                  <img src="/portal/img/tutorial/mapping-panel.png" alt="Mapping panel interface"> 
               </figure>
             </div>
 
             <h4 id="filters" style="margin-top:30px;">Sorting tab</h4>
-            <p>The <em>Sorting</em> tab <em>(Fig. 5)</em> provides the ability on up to six data fields. The default settings for this tab sort results based Genus then Specific Epithet and then Date Collected. Sort rules can be added with the "Add a sort" <img src="/portal/img/tutorial/add-button.jpg"/> button and removed with the <img src="/portal/img/tutorial/remove-button.jpg"/> button.</p>
+            <p>The <em>Sorting</em> tab <em>(Fig. 5)</em> provides the ability on up to six data fields. The default settings for this tab sort results based Genus then Specific Epithet and then Date Collected. Sort rules can be added with the "Add a sort" <img src="/portal/img/tutorial/add-button.jpg" alt="Add button"/> button and removed with the <img src="/portal/img/tutorial/remove-button.jpg" alt="Remove button"/> button.</p>
             <p>
             <div class="clearfix">
               <figure id="fig5" >
                   <figcaption>Fig. 5</figcaption>
-                  <img src="/portal/img/tutorial/sort-panel.png" style="max-width:650px;">
+                  <img src="/portal/img/tutorial/sort-panel.png" style="max-width:650px;" alt="Sorting panel interface">
               </figure>
             </div>
             </p>
@@ -110,7 +110,7 @@
             <div class="clearfix">
               <figure id="fig6">
                   <figcaption>Fig. 6</figcaption>
-                  <img src="/portal/img/tutorial/download-panel.png"> 
+                  <img src="/portal/img/tutorial/download-panel.png" alt="Download panel interface"> 
               </figure>
             </div>
             <p>A Darwin Core Archive is a zip file that includes one or more text CSV (comma separated value) files, each with a .txt extension and a descriptor (meta.xml) that contains metadata about the data set that you downloaded (e.g., who provided the data and the format).  A data download that has images or other media associated with it will have two CSV files, one for specimen data and the other describing the media.  The CSV file can be opened by any text editor or can be imported into a database or spreadsheet.  A modestly sized download (100,000 records) can be readily opened in software like MS Excel.  The easiest way to open a CSV file with Excel is to change the .txt extension to .csv before you open the file.  
@@ -126,7 +126,7 @@
             <div class="clearfix">
               <figure id="fig7" >
                   <figcaption>Fig. 7</figcaption>
-                  <img style="width:95%" src="/portal/img/tutorial/fullrecord.png">
+                  <img style="width:95%" src="/portal/img/tutorial/fullrecord.png" alt="Full specimen record page">
               </figure>
             </div>
          
@@ -134,16 +134,16 @@
             <h4 id="map" class="scrollspy" style="margin-top:30px;">Mapped Results</h4>
             <p>Any records that have been georeferenced (i.e., latitude and longitude coordinates are present) are included in the map view. The map displays results in two styles depending on the number of mapped results. When the results contain more than 100,000 points they will be displayed as a geohashed heat map <em>(Fig. 8)</em>. When the results are a 100,000 or less, the results are displayed as individual color coded points <em>(Fig. 9)</em>. Color coded points are displayed as such to distinguish between different taxa. The map legend in the lower left corner displays the color to taxa labeling of the top 10 taxa in the results (all other taxa are displayed with a brown colored point by default). Both the heat map and point displays allow you to click on them to display the results in a pop-up box in the location you clicked. In the case of the heat map, the results will be all records within the boundary of the geohash (heat) box where you click. In the case of clicking a point the results displayed will be all those that fall within a radius of the point where you clicked (the radius length varies depending on the zoom level of the map).  The results pop-up box also provides a <i>Set Map Bounds</i> button. This feature allows you to set the <em>Mapping</em> tab parameters to the same parameters as the box or point that you clicked on.</p>
 
-            <p>The map provides several controls for further interaction. The top left corner provides two sets of controls. The camera button <img src="/portal/img/tutorial/camera-button.png" /> allows you to create a PNG image of the map as displayed the moment you click the button. This feature can take several seconds to generate the image. The buttons below the camera button provide boundary drawing capabilities. Click the rectangle <img src="/portal/img/tutorial/rectangle-button.png" /> or circle button <img src="/portal/img/tutorial/circle-button.png" /> to draw a rectangular or circular boundary around a geographic area to further limit your results to records with geopoints inside the boundary. The button in the top right corner is a toggle between regular and a full screen mode. Below the full screen button are the zoom-in and zoom-out buttons. The map zoom can also be changed with a mouse scroll wheel when the mouse pointer is over the map. You can also draw a boundary to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary.</p>
+            <p>The map provides several controls for further interaction. The top left corner provides two sets of controls. The camera button <img src="/portal/img/tutorial/camera-button.png" alt="Camera button" /> allows you to create a PNG image of the map as displayed the moment you click the button. This feature can take several seconds to generate the image. The buttons below the camera button provide boundary drawing capabilities. Click the rectangle <img src="/portal/img/tutorial/rectangle-button.png" alt="Rectangle button" /> or circle button <img src="/portal/img/tutorial/circle-button.png" alt="Circle button" /> to draw a rectangular or circular boundary around a geographic area to further limit your results to records with geopoints inside the boundary. The button in the top right corner is a toggle between regular and a full screen mode. Below the full screen button are the zoom-in and zoom-out buttons. The map zoom can also be changed with a mouse scroll wheel when the mouse pointer is over the map. You can also draw a boundary to zoom in to by holding the <b>shift</b> button on your keyboard and using your mouse to draw the box boundary.</p>
 
             <div class="clearfix">
               <figure id="fig8" style="display:inline-block;margin:10px 10px;" >
                   <figcaption>Fig. 8</figcaption>          
-                  <img src="/portal/img/tutorial/heatmap.jpg"> 
+                  <img src="/portal/img/tutorial/heatmap.jpg" alt="Map showing specimen data as a heatmap"> 
               </figure>
               <figure id="fig9" style="display:inline-block;margin:10px 10px;">
                   <figcaption>Fig. 9</figcaption>          
-                  <img src="/portal/img/tutorial/pointmap.jpg"> 
+                  <img src="/portal/img/tutorial/pointmap.jpg" alt="Map showing specimen data as individual points"> 
               </figure>
             </div>
 

@@ -79,7 +79,7 @@ const FlagsTable = ({active, flags, uuid, stotal}) => {
         <div id="flags-table" style={{display: (active ? 'block':'none')}} className="stat-table clearfix" >
 
             <div className="blurb">This table shows any data corrections that were performed on this recordset to improve the capabilities of iDigBio <a href="/portal/search">Search</a>. The first column represents the correction performed. The last two columns represent the number and percentage of
-             records that were corrected. A complete list of the data quality flags and their descriptions can be found <a alt="flag descriptions" href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>. Clicking on a data flag name will
+             records that were corrected. A complete list of the data quality flags and their descriptions can be found <a href="https://github.com/iDigBio/idigbio-search-api/wiki/Data-Quality-Flags">here</a>. Clicking on a data flag name will
              take you to a search for all records with this flag in this recordset.</div>
             <table className="table table-condensed pull-left tablesorter-blue" id="table-fields">
                 <thead>
@@ -220,7 +220,7 @@ const Description = ({data}) => {
 
     var logo = '';
     if(_.has(data, 'logo_url') && !_.isEmpty(data.logo_url)){
-        logo = <img className="logo" src={data.logo_url} onError={errorImage} />
+        logo = <img className="logo" alt={data.name ? data.name + ' logo' : 'Recordset logo'} src={data.logo_url} onError={errorImage} />
     }
     //decode html characters that appear in some descriptions
     var desc = _.unescape(data.collection_description);

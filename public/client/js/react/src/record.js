@@ -400,7 +400,7 @@ const Img = ({keyid}) => {
 
     return (
         <a href={'/portal/mediarecords/'+keyid} title="click to open media record">
-            <img className="gallery-image" onError={error} src={idbapi.media_host + 'v2/media/'+keyid+'?size=webview'} />
+            <img className="gallery-image" alt="Specimen media" onError={error} src={idbapi.media_host + 'v2/media/'+keyid+'?size=webview'} />
         </a>
     );
 

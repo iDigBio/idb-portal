@@ -293,8 +293,8 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
 
     return (
         <div className="option-group filter" id={`${name}-filter`} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
-                <i className="glyphicon glyphicon-remove" title="click to remove this filter"></i>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+                <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>
             <div className="text">
@@ -401,8 +401,8 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
     }
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
-                <i className="glyphicon glyphicon-remove"   title="click to remove this filter"></i>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+                <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>
             <div className="dates clearfix pull-right">
@@ -489,8 +489,8 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
     }
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name}>
-                <i className="glyphicon glyphicon-remove"  title="click to remove this filter"></i>
+            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+                <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>
 

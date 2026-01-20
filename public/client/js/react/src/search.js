@@ -149,7 +149,8 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
                 <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>
             </h3>
             <div >
-                <input type="text" className="form-control" placeholder="search all fields" onChange={textType} value={search.fulltext}/>
+                <label htmlFor="search-all-input" className="sr-only">Search all fields</label>
+                <input id="search-all-input" type="text" className="form-control" placeholder="search all fields" onChange={textType} value={search.fulltext}/>
             </div>
             <div className="checkbox">
                 <label>

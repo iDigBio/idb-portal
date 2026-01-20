@@ -24,7 +24,7 @@
     {% endblock %}
   </head>
   <body>
-    <header>
+    <header role="banner">
       <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> 
       
       <!-- wakulla header -->
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="sixteen columns full alpha omega hidden-print" id="snav-research">
-        <div id="snav" class="clearfix">
+        <nav id="snav" class="clearfix" role="navigation" aria-label="Main navigation">
           <ul id="portal-menu" style="float:left">
           {% for key, value in menus.public -%}
               <li {% if key == activemenu %} class="active" {% endif %}>
@@ -98,12 +98,12 @@
               </li>
           {%- endif %}
           </ul> -->
-        </div>
+        </nav>
 
       </div>
       <!-- /end wakulla header -->
     </header>
-    <div style="margin:0px;padding:0px;">
+    <main role="main" style="margin:0px;padding:0px;">
       
         <!-- dyna content-->
         
@@ -114,10 +114,11 @@
      <!-- <a id="feedback-link" href="//idigbio.org/contact">
       </a>-->
     </div>
+    </main>
     <!-- list link for web crawlers-->
     <a href="/portal/list/index.html" alt="specimen links" style="display:none;">specimen list</a>
     <!-- footer section -->
-    <footer class="container-fluid">
+    <footer class="container-fluid" role="contentinfo">
         <div class="sixteen columns" id="footer" style="height: auto;">
 
             <ul id="logo-list">

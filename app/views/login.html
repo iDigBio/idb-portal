@@ -2,7 +2,8 @@
 {% block content %}
 <form method="get" action="/portal/authenticate">
   <p>Login using OpenID</p>
-  <input name="openid_identifier" />
+  <label for="openid_identifier">OpenID:</label>
+  <input id="openid_identifier" name="openid_identifier" type="url" autocomplete="url" aria-label="OpenID identifier" />
   <input type="submit" value="Login" />
 </form>
 {% endblock %}

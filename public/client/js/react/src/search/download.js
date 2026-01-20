@@ -387,10 +387,10 @@ const Downloader = ({search, queryToSentence}) => {
     return (
         <div className="sub">
             <div id="downloader">
-                <label>Download CSV</label> - <span>Build time: {time}</span>
+                <label htmlFor="email">Download CSV</label> - <span>Build time: {time}</span>
                 <div className="input-group">
                     <span className="input-group-addon">Email</span>
-                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" disabled={disabled}/>
+                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autocomplete="email" aria-label="Email address for download link" disabled={disabled}/>
                     <a className="btn input-group-addon" onClick={startDownload} disabled={disabled} title="click to start download" aria-label="Start download">
                         <i className="glyphicon glyphicon-download"></i>
                     </a>
@@ -398,15 +398,13 @@ const Downloader = ({search, queryToSentence}) => {
             </div>
             <div id="downloads-section" className="clearfix">
                 <label>Downloads</label>
-                <table id="download-header">
+                <table id="downloads-table" role="table" aria-label="Download status list">
                     <thead>
-                    <tr><th className="title">Search</th><th className="status">Status</th></tr>
+                    <tr><th scope="col" className="title">Search</th><th scope="col" className="status">Status</th></tr>
                     </thead>
-                </table>
-                <table id="downloads-available">
-
+                    <tbody>
                     {downloadsTableRows}
-
+                    </tbody>
                 </table>
             </div>
         </div>

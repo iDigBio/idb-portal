@@ -470,7 +470,7 @@ class ResultListColumnSelector extends React.Component{
                         <button className="btn up" title="move up" aria-label="Move column up" data-index={ind} disabled={updisabled} data-column={column} data-move={'up'} onClick={self.moveColumn}></button>
                         <button className="btn down" title="move down" aria-label="Move column down" data-index={ind} disabled={downdisabled} data-column={column} data-move={'down'} onClick={self.moveColumn}></button>
                     </div>
-                    <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} >
+                    <select key={column+'-selector'} data-index={ind} name={column} value={column} className="form-control column-select" onChange={self.selectChange} aria-label={`Column ${ind + 1} field selector`}>
                         {fgroups}
                     </select>
                     <button className="btn remove " data-index={ind} disabled={(self.props.columns.length < 2)} title="remove column" aria-label="Remove column" data-column={column} onClick={self.removeColumn}>

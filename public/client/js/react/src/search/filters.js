@@ -415,6 +415,7 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
                         onChange={dateChange}
                         value={filter.range.gte}
                         placeholder="yyyy-mm-dd"
+                        aria-label={`${label} start date`}
                     />
                 </div>
                 <div className="pull-left">
@@ -427,6 +428,7 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
                         onChange={dateChange}
                         value={filter.range.lte}
                         placeholder="yyyy-mm-dd"
+                        aria-label={`${label} end date`}
                     />
                 </div>
             </div>
@@ -504,6 +506,7 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
                         onChange={valueChange}
                         value={filter.range.gte ?  filter.range.gte : ''}
                         placeholder={fields.byTerm[name].dataterm}
+                        aria-label={`${label} minimum value`}
                     />
                 </div>
                 <div className="pull-left">
@@ -516,6 +519,7 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
                         onChange={valueChange}
                         value={filter.range.lte ? filter.range.lte : ''}
                         placeholder={fields.byTerm[name].dataterm}
+                        aria-label={`${label} maximum value`}
                     />
                 </div>
             </div>

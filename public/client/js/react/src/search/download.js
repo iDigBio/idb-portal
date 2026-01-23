@@ -146,7 +146,7 @@ const Download = ({searchChange, search, active, history}) => {
             <div className="sub" id="current">
                 <label>Current Search</label>
                 <div className="input-group">
-                    <select className="form-control history-select" onChange={historySelect}>
+                    <select className="form-control history-select" onChange={historySelect} aria-label="Select search from history">
                         {options}
                     </select>
                     <a href="#" role="button" className="btn input-group-addon" title="click to clear search history" onClick={clearHistory} aria-label="Clear search history">
@@ -165,6 +165,7 @@ const Downloader = ({search, queryToSentence}) => {
     const [disabled, setDisabled] = useState(false)
     const [downloads, setDownloads] = useState()
     const [downloadsTableRows, setDownloadsTableRows] = useState()
+    const [emailError, setEmailError] = useState('')
 
     //Initialize non-state variables
     useEffect(() => {
@@ -368,7 +369,9 @@ const Downloader = ({search, queryToSentence}) => {
         if (email == "") {
             $('#download-email').addClass("invalid")
             $('#download-email').focus()
+            setEmailError('Email address is required to download data')
         } else {
+            setEmailError('')
             var req = function(){
                 setTimeout(function(){
                     $.post(idbapi.media_host + "v2/download", {rq: JSON.stringify(q), email: email}, function(data, textStatus, jqXHR) {
@@ -392,11 +395,12 @@ const Downloader = ({search, queryToSentence}) => {
                 <label htmlFor="email">Download CSV</label> - <span>Build time: {time}</span>
                 <div className="input-group">
                     <span className="input-group-addon">Email</span>
-                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autoComplete="email" aria-label="Email address for download link" disabled={disabled}/>
+                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autoComplete="email" aria-label="Email address for download link" aria-describedby="email-error" disabled={disabled}/>
                     <a href="#" role="button" className="btn input-group-addon" onClick={startDownload} aria-disabled={disabled} title="click to start download" aria-label="Start download" style={{pointerEvents: disabled ? 'none' : 'auto', opacity: disabled ? 0.65 : 1}}>
                         <i className="glyphicon glyphicon-download"></i>
                     </a>
                 </div>
+                {emailError && <div id="email-error" role="alert" style={{color: '#d9534f', marginTop: '5px'}}>{emailError}</div>}
             </div>
             <div id="downloads-section" className="clearfix">
                 <label>Downloads</label>

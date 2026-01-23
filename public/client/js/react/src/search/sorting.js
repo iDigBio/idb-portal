@@ -85,10 +85,10 @@ const Sorting = ({sorting, searchChange, active}) => {
                 <div className="option-group" key={ind}>
                     <label>Sort by</label>
                     <button onClick={removeClick} data-index={ind} aria-label="Remove sort"><i className="glyphicon glyphicon-minus"></i></button>
-                    <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name'>
+                    <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name' aria-label="Sort by field">
                         {fgroups}
                     </select>
-                    <select className="direction form-control" value={item.order} onChange={sortChange} data-index={ind} data-name='order'>
+                    <select className="direction form-control" value={item.order} onChange={sortChange} data-index={ind} data-name='order' aria-label="Sort direction">
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>
@@ -99,10 +99,10 @@ const Sorting = ({sorting, searchChange, active}) => {
                 <div className="option-group" key={ind}>
                     <label>Then by</label>
                     <button onClick={removeClick} data-index={ind} aria-label="Remove sort"><i className="glyphicon glyphicon-minus"></i></button>
-                    <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name'>
+                    <select className="name form-control" value={item.name} onChange={sortChange} data-index={ind} data-name='name' aria-label="Then by field">
                         {fgroups}
                     </select>
-                    <select className="direction form-control" value={item.order} onChange={sortChange} data-index={ind} data-name='order'>
+                    <select className="direction form-control" value={item.order} onChange={sortChange} data-index={ind} data-name='order' aria-label="Sort direction">
                         <option value="asc">Ascending</option>
                         <option value="desc">Descending</option>
                     </select>

@@ -124,7 +124,8 @@ const Box = ({mapping, searchChange}) => {
                         placeholder="90.0"
                         data-corner="top_left"
                         data-name="lat"
-                        className="coordinate form-control"/>
+                        className="coordinate form-control"
+                        aria-label="Northwest Latitude"/>
                 </div>
                 <div className="ordinate">
                     Lon:
@@ -134,7 +135,8 @@ const Box = ({mapping, searchChange}) => {
                         placeholder="-180.0"
                         data-corner="top_left"
                         data-name="lon"
-                        className="coordinate form-control" />
+                        className="coordinate form-control"
+                        aria-label="Northwest Longitude" />
                 </div>
             </div>
             <div className="ordinates clearfix">
@@ -147,7 +149,8 @@ const Box = ({mapping, searchChange}) => {
                         placeholder="-90.0"
                         data-corner="bottom_right"
                         data-name="lat"
-                        className="coordinate form-control"/>
+                        className="coordinate form-control"
+                        aria-label="Southeast Latitude"/>
                 </div>
                 <div className="ordinate">
                     Lon:
@@ -157,7 +160,8 @@ const Box = ({mapping, searchChange}) => {
                         placeholder="180.0"
                         data-corner="bottom_right"
                         data-name="lon"
-                        className="coordinate form-control" />
+                        className="coordinate form-control"
+                        aria-label="Southeast Longitude" />
                 </div>
             </div>
         </div>
@@ -210,7 +214,8 @@ const Radius = ({mapping, searchChange}) => {
                         onChange={boundsChange}
                         value={!bounds.lat ? '' : bounds.lat}
                         name="lat"
-                        className="coordinate form-control"/>
+                        className="coordinate form-control"
+                        aria-label="Circle center Latitude"/>
                 </div>
                 <div className="ordinate">
                     Lon:
@@ -218,7 +223,8 @@ const Radius = ({mapping, searchChange}) => {
                         onChange={boundsChange}
                         value={!bounds.lon ? '' : bounds.lon}
                         name="lon"
-                        className="coordinate form-control" />
+                        className="coordinate form-control"
+                        aria-label="Circle center Longitude" />
                 </div>
             </div>
             <div className="ordinates clearfix">
@@ -228,7 +234,8 @@ const Radius = ({mapping, searchChange}) => {
                         onChange={boundsChange}
                         value={!bounds.distance ? '' : bounds.distance}
                         name="distance"
-                        className="coordinate form-control"/> km
+                        className="coordinate form-control"
+                        aria-label="Circle radius in kilometers"/> km
                 </div>
             </div>
         </div>

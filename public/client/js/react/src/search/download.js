@@ -142,7 +142,7 @@ const Download = ({searchChange, search, active, history}) => {
     //get count
 
     return (
-        <div className={"clearfix section "+active} id="download">
+        <div className={"clearfix section "+active} id="download" role="tabpanel" aria-labelledby="download-tab">
             <div className="sub" id="current">
                 <label>Current Search</label>
                 <div className="input-group">
@@ -392,7 +392,7 @@ const Downloader = ({search, queryToSentence}) => {
     return (
         <div className="sub">
             <div id="downloader">
-                <label htmlFor="email">Download CSV</label> - <span>Build time: {time}</span>
+                <label htmlFor="email">Download CSV</label> - <span role="status" aria-live="polite" aria-atomic="true">Build time: {time}</span>
                 <div className="input-group">
                     <span className="input-group-addon">Email</span>
                     <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autoComplete="email" aria-label="Email address for download link" aria-describedby="email-error" disabled={disabled}/>

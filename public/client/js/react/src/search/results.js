@@ -114,17 +114,17 @@ const Results = memo(({ searchProp, searchChange, view, viewChange, aggs, setAgg
     }
 
     let li = ['list', 'labels', 'media', 'recordsets'].map(item => (
-        <li key={'tab-' + item} onClick={viewChangeHandler} data-value={item} className={item === view ? 'active' : ''}>
+        <li key={'tab-' + item} onClick={viewChangeHandler} data-value={item} className={item === view ? 'active' : ''} role="tab" aria-selected={item === view}>
             {helpers.firstToUpper(item)}
         </li>
     ));
 
     return (
         <div id="results" className="clearfix">
-            <ul id="results-menu" className="pull-left">
+            <ul id="results-menu" className="pull-left" role="tablist" aria-label="Results view options">
                 {li}
             </ul>
-            <div className="pull-right total">
+            <div className="pull-right total" role="status" aria-live="polite" aria-atomic="true">
                 Total: {helpers.formatNum(parseInt(total))}
             </div>
             {resultsComponent}
@@ -248,7 +248,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
     //add column list button
     headers.push(
         <th key={'header-select'} style={{width: '80px', fontSize: '10px', textAlign: 'center'}}>
-            <button className="pull-left" data-toggle="modal" data-target="#column-list">
+            <button className="pull-left" data-toggle="modal" data-target="#column-list" aria-label="Select columns to display">
                 Columns
             </button>
         </th>
@@ -328,11 +328,11 @@ const ResultsList = ({search, searchChange, results, loading}) => {
 
     return(
         <div id="result-list" className="panel">
-            <div id="column-list" className="modal fade">
+            <div id="column-list" className="modal fade" role="dialog" aria-labelledby="column-list-title" aria-modal="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <label>List Results Columns</label>
+                            <label id="column-list-title">List Results Columns</label>
                             <button type="button" onClick={resetColumns} id="reset" className="" aria-label="Reset columns to default">
                                 Reset
                             </button>
@@ -648,7 +648,7 @@ const ResultsLabels = ({results, loading, stamp}) => {
     })
     if(labels.length===0 && loading===false){
         labels.push(
-            <div key="no-records" className="no-records">
+            <div key="no-records" className="no-records" role="status" aria-live="polite">
                 <h4>No Matching Records</h4>
             </div>
         );
@@ -656,8 +656,9 @@ const ResultsLabels = ({results, loading, stamp}) => {
     if(loading){
 
         labels.push(
-            <div key={'loading-div'} className="label-loading clearfix pull-left">
-                <i className="spinner" />
+            <div key={'loading-div'} className="label-loading clearfix pull-left" role="status" aria-live="polite" aria-label="Loading search results">
+                <i className="spinner" aria-hidden="true" />
+                <span className="sr-only">Loading search results</span>
             </div>
         )
     }
@@ -774,15 +775,16 @@ const ResultsImages = memo(({loadingProp, resultsProp, search}) => {
 
     if(images.length === 0 && !loading){
         images.push(
-            <div key="no-images" className="no-images">
+            <div key="no-images" className="no-images" role="status" aria-live="polite">
                 <h4>No Media Available</h4>
             </div>
         )
     }
     if(loading){
         images.push(
-            <div key="loading-images" id="loading-images" className="clearfix">
-                <i className="spinner" />
+            <div key="loading-images" id="loading-images" className="clearfix" role="status" aria-live="polite" aria-label="Loading media results">
+                <i className="spinner" aria-hidden="true" />
+                <span className="sr-only">Loading media results</span>
             </div>
         )
     }

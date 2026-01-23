@@ -112,13 +112,13 @@ const Filters = ({filters, search, searchChange, active, aggs}) => {
     }
 
     return (
-        <div className={`section ${active}`} id="filters">
+        <div className={`section ${active}`} id="filters" role="tabpanel" aria-labelledby="filters-tab">
             <div className="option-group" id="filter-select">
                 <select className="form-control" value="0" placeholder="select to add" onChange={addFilter} aria-label="Add a field">
                     <option value="0" defaultValue className="default">Add a field</option>
                     {fgroups}
                 </select>
-                <a href="#" role="button" className="btn" onClick={clearFilters} title="Clear all filter inputs" style={{fontSize: '14px', color: '#0088cc'}}>
+                <a href="#" role="button" className="btn" onClick={clearFilters} title="Clear all filter inputs" aria-label="Clear all filter inputs" style={{fontSize: '14px', color: '#0088cc'}}>
                     Clear
                 </a>
             </div>

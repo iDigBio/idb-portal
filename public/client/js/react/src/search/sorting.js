@@ -114,7 +114,7 @@ const Sorting = ({sorting, searchChange, active}) => {
         disabled=true;
     }
     return (
-        <div className={"clearfix section "+active} id="sorting">
+        <div className={"clearfix section "+active} id="sorting" role="tabpanel" aria-labelledby="sorting-tab">
             <div id="sort-add">
                  Add a sort &nbsp;<button onClick={addClick} disabled={disabled} aria-label="Add sort"><span className="glyphicon glyphicon-plus"></span></button>
             </div>

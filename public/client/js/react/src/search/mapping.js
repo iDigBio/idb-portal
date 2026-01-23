@@ -57,10 +57,10 @@ const Mapping = ({mapping, searchChange, active}) => {
             break;
     }
     return(
-        <div className={"clearfix section "+active} id="mapping">
+        <div className={"clearfix section "+active} id="mapping" role="tabpanel" aria-labelledby="mapping-tab">
             <div className="option-group" id="mapping-options">
                 <span className="title">Lat/Lon Bounds</span>
-                <a href="#" role="button" className="btn" onClick={resetBounds} style={{fontSize: '14px', color: '#0088cc'}}>
+                <a href="#" role="button" className="btn" onClick={resetBounds} aria-label="Clear mapping bounds" style={{fontSize: '14px', color: '#0088cc'}}>
                     Clear
                 </a>
                 <div className="form" >

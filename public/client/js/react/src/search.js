@@ -145,8 +145,8 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
         <div id="search-any" className="clearfix">
             <h3>
                 Search Records
-                <a href="#" role="button" className="btn pull-right" id="reset-button" onClick={resetSearch} title="reset search form" style={{marginLeft: '20px', fontSize: '14px', color: '#0088cc'}}>Reset</a>
-                <a href="#" role="button" className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help" style={{fontSize: '14px', color: '#0088cc'}}>Help</a>
+                <a href="#" role="button" className="btn pull-right" id="reset-button" onClick={resetSearch} title="reset search form" aria-label="Reset search form" style={{marginLeft: '20px', fontSize: '14px', color: '#0088cc'}}>Reset</a>
+                <a href="#" role="button" className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help" aria-label="Open search help dialog" style={{fontSize: '14px', color: '#0088cc'}}>Help</a>
             </h3>
             <div >
                 <label htmlFor="search-all-input" className="sr-only">Search all fields</label>
@@ -164,14 +164,14 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
                     Must have map point
                 </label>
             </div>
-            <div id="search-help" className="modal fade">
+            <div id="search-help" className="modal fade" role="dialog" aria-labelledby="search-help-title" aria-modal="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
                             <button type="button" className="close pull-right" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                            <h3>Search Help</h3>
+                            <h3 id="search-help-title">Search Help</h3>
                         </div>
                         <div className="modal-body">
                             <ul>
@@ -242,8 +242,8 @@ const OptionsPanel = ({ searchChange, search, view, viewChange, aggs }) => {
             panels[item] = '';
         }
         return (
-            <li key={ind} className="tab">
-                <a className={panels[item]} href="#" onClick={showPanel} data-panel={item}>
+            <li key={ind} className="tab" role="presentation">
+                <a className={panels[item]} href="#" onClick={showPanel} data-panel={item} role="tab" aria-selected={item === view} aria-controls={item}>
                     {helpers.firstToUpper(item)}
                 </a>
             </li>
@@ -252,7 +252,7 @@ const OptionsPanel = ({ searchChange, search, view, viewChange, aggs }) => {
 
     return (
         <div id="options" className="clearfix">
-            <ul id="options-menu">
+            <ul id="options-menu" role="tablist" aria-label="Search options">
                 {menu}
             </ul>
             {panel}

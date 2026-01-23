@@ -1,5 +1,22 @@
 @import 'variables.less';
 
+// Skip to main content link
+.skip-link {
+  display: block;
+  width: 100%;
+  background-color: #272727;
+  padding: 10px 15px;
+  text-align: left;
+  color: white;
+  text-decoration: none;
+  
+  &:hover,
+  &:focus {
+    text-decoration: underline;
+    color: white;
+  }
+}
+
 //make scroll bars always appear for OS x webkit browsers
 //mac class added in clients main.js file 
 html.mac{

@@ -1,3 +1,17 @@
+.skip-link {
+  display: block;
+  width: 100%;
+  background-color: #272727;
+  padding: 10px 15px;
+  text-align: left;
+  color: white;
+  text-decoration: none;
+}
+.skip-link:hover,
+.skip-link:focus {
+  text-decoration: underline;
+  color: white;
+}
 html.mac ::-webkit-scrollbar {
   -webkit-appearance: none;
 }

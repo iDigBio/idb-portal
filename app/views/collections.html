@@ -1,4 +1,7 @@
 {% extends "base.html" %}
+
+{% block title %}Collections - iDigBio Portal{% endblock %}
+
 {% block headblock %}  
 <link rel="stylesheet" type="text/css" href="https://dynamictyped.github.io/Griddle/styles/griddle.css">  
 <link rel="stylesheet" type="text/css" href="/portal/css/collections.css">  
@@ -16,7 +19,7 @@
             <p>
             This catalogue, developed in partnership with <a href="http://www.gbif.org/" target="_blank" style="text-decoration: underline;">GBIF</a>, is intended to provide a comprehensive list of <span id='spnTheCount'></span>natural history collections registered in the United States of America.
             </p>
-            <a href="#" id="mapScroll" style="margin-bottom:20px;display:inline-block;">Show Map of Collections</a>
+            <button type="button" id="mapScroll" style="margin-bottom:20px;display:inline-block;background:none;border:none;color:#0088cc;text-decoration:underline;cursor:pointer;padding:0;">Show Map of Collections</button>
             <div id="datatable"></div>
         </div>  
     </div>

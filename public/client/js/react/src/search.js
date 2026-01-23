@@ -136,7 +136,8 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
     function textType(event){
         searchChange('fulltext',event.currentTarget.value);
     }
-    function resetSearch(){
+    function resetSearch(e){
+        e.preventDefault();
         searchChange(defaultSearch());
     }
 
@@ -144,9 +145,8 @@ const SearchAny = ({searchChange, search, defaultSearch}) => {
         <div id="search-any" className="clearfix">
             <h3>
                 Search Records
-
-                <a className="btn pull-right" id="reset-button" onClick={resetSearch} title="reset search form">Reset</a>
-                <a className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help">Help</a>
+                <a href="#" role="button" className="btn pull-right" id="reset-button" onClick={resetSearch} title="reset search form" style={{marginLeft: '20px', fontSize: '14px', color: '#0088cc'}}>Reset</a>
+                <a href="#" role="button" className="btn pull-right" title="help" data-toggle="modal" data-target="#search-help" style={{fontSize: '14px', color: '#0088cc'}}>Help</a>
             </h3>
             <div >
                 <label htmlFor="search-all-input" className="sr-only">Search all fields</label>

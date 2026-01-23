@@ -36,7 +36,8 @@ const Mapping = ({mapping, searchChange, active}) => {
             return defaultRadiusBounds();
         }
     }
-    function resetBounds(){
+    function resetBounds(e){
+        e.preventDefault();
         var t = type
         searchChange('mapping',{type: t, bounds: defaultMappingProps(t)});
     }
@@ -59,7 +60,7 @@ const Mapping = ({mapping, searchChange, active}) => {
         <div className={"clearfix section "+active} id="mapping">
             <div className="option-group" id="mapping-options">
                 <span className="title">Lat/Lon Bounds</span>
-                <a className="btn" onClick={resetBounds}>
+                <a href="#" role="button" className="btn" onClick={resetBounds} style={{fontSize: '14px', color: '#0088cc'}}>
                     Clear
                 </a>
                 <div className="form" >

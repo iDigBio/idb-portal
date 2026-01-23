@@ -81,6 +81,14 @@ const Results = memo(({ searchProp, searchChange, view, viewChange, aggs, setAgg
         viewChange('resultsTab', newView);
     };
 
+                    
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault();
+            viewChangeHandler(event);
+        }
+    };
+
     const updateResults = (newSearch) => {
         setSearch(newSearch);
         setLoading(true);
@@ -201,7 +209,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
         //to prevent opening if hiliting text
 
         if(window.getSelection().toString().length===0 || (e.target.nodeName=='I' || e.target.nodeName=='BUTTON')){
-            window.open('/portal/records/'+e.currentTarget.id,e.currentTarget.id);
+            window.open('/portal/records/'+e.currentTarget.id,'_blank');
         }
 
     }
@@ -264,7 +272,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
             tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
         })
         //add openrecord column
-        tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" id={item.uuid} onClick={openRecord} title="view full record">view</a></td>);
+        tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" href={'/portal/records/'+item.uuid} target="_blank" id={item.uuid} onClick={openRecord} title="view full record">view</a></td>);
         rows.push(
             <tr key={'row-'+index}>
                 {tds}
@@ -325,7 +333,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                     <div className="modal-content">
                         <div className="modal-header">
                             <label>List Results Columns</label>
-                            <button onClick={resetColumns} id="reset" className="">
+                            <button type="button" onClick={resetColumns} id="reset" className="" aria-label="Reset columns to default">
                                 Reset
                             </button>
                             <button type="button" className="close pull-right" data-dismiss="modal" aria-label="Close">
@@ -489,10 +497,10 @@ class ResultListColumnSelector extends React.Component{
         );*/
         return(
             <div className="modal-body clearfix" >
-                <button onClick={this.addColumn} id="reset" className="">
+                <button type="button" onClick={this.addColumn} className="" aria-label="Add column">
                     Add <i className="glyphicon glyphicon-plus"/>
                 </button>
-                <button onClick={this.resetColumns} id="reset" className="">
+                <button type="button" onClick={this.resetColumns} className="" aria-label="Reset columns to default">
                     Reset
                 </button>
                 {selects}
@@ -598,7 +606,8 @@ const ResultsLabels = ({results, loading, stamp}) => {
                     className="image-wrapper"
                     id={data.mediarecords[0]}
                     onClick={openMedia}
-                    title="click to open media record" >
+                    title="click to open media record"
+                    aria-label="View media record" >
                     {imgcount}
                     <img
                         onError={errorImage}

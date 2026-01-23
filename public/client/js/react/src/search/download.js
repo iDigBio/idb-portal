@@ -123,7 +123,8 @@ const Download = ({searchChange, search, active, history}) => {
         var q = searchHistory.history[val];
         searchChange(q);
     }
-    function clearHistory(){
+    function clearHistory(e){
+        e.preventDefault();
         searchHistory.clear();
         setOptions([])
     }
@@ -148,7 +149,7 @@ const Download = ({searchChange, search, active, history}) => {
                     <select className="form-control history-select" onChange={historySelect}>
                         {options}
                     </select>
-                    <a className="btn input-group-addon" title="click to clear search history" onClick={clearHistory} aria-label="Clear search history">
+                    <a href="#" role="button" className="btn input-group-addon" title="click to clear search history" onClick={clearHistory} aria-label="Clear search history">
                         <i className="glyphicon glyphicon-refresh"></i>
                     </a>
                 </div>
@@ -358,7 +359,8 @@ const Downloader = ({search, queryToSentence}) => {
             }
         )
     }
-    function startDownload(){
+    function startDownload(e){
+        e.preventDefault();
         // var self=this;
         // self.dlstatus = true;
         var email = $('#email').val();
@@ -390,8 +392,8 @@ const Downloader = ({search, queryToSentence}) => {
                 <label htmlFor="email">Download CSV</label> - <span>Build time: {time}</span>
                 <div className="input-group">
                     <span className="input-group-addon">Email</span>
-                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autocomplete="email" aria-label="Email address for download link" disabled={disabled}/>
-                    <a className="btn input-group-addon" onClick={startDownload} disabled={disabled} title="click to start download" aria-label="Start download">
+                    <input id="email" type="email" className="form-control email" placeholder="enter an email to download" autoComplete="email" aria-label="Email address for download link" disabled={disabled}/>
+                    <a href="#" role="button" className="btn input-group-addon" onClick={startDownload} aria-disabled={disabled} title="click to start download" aria-label="Start download" style={{pointerEvents: disabled ? 'none' : 'auto', opacity: disabled ? 0.65 : 1}}>
                         <i className="glyphicon glyphicon-download"></i>
                     </a>
                 </div>
@@ -402,9 +404,9 @@ const Downloader = ({search, queryToSentence}) => {
                     <thead>
                     <tr><th scope="col" className="title">Search</th><th scope="col" className="status">Status</th></tr>
                     </thead>
-                    <tbody>
+                    
                     {downloadsTableRows}
-                    </tbody>
+                    
                 </table>
             </div>
         </div>

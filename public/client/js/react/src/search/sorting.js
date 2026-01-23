@@ -121,11 +121,6 @@ const Sorting = ({sorting, searchChange, active}) => {
             <div id="sort-group">
                 {sorts}
             </div>
-            <div id="sort-scroller" >
-                <span style={{'display': 'block' }} onClick={scrollSorts}>
-
-                </span>
-            </div>
         </div>
     )
 

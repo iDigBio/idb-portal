@@ -45,7 +45,8 @@ const Filters = ({filters, search, searchChange, active, aggs}) => {
         }
     }
 
-    function clearFilters(){
+    function clearFilters(e){
+        e.preventDefault();
         const updatedFilters = filters.map(item => newFilterProps(item.name));
         searchChange({ 'filters': updatedFilters });
     }
@@ -117,18 +118,16 @@ const Filters = ({filters, search, searchChange, active, aggs}) => {
                     <option value="0" defaultValue className="default">Add a field</option>
                     {fgroups}
                 </select>
-                <a className="btn" onClick={clearFilters} title="Clear all filter inputs">
+                <a href="#" role="button" className="btn" onClick={clearFilters} title="Clear all filter inputs" style={{fontSize: '14px', color: '#0088cc'}}>
                     Clear
                 </a>
             </div>
             <div id="filters-holder" className="options-holder">
                 {filtersElements}
             </div>
-            <div id="filter-scroller" onClick={scrollFilters}>
-                <span style={{ 'display': scrollDisplay }}>
-                    &darr; Scroll To Bottom &darr;
-                </span>
-            </div>
+            <button type="button" id="filter-scroller" onClick={scrollFilters} style={{ 'display': scrollDisplay, background: 'none', border: 'none', cursor: 'pointer', width: '100%', padding: 0, font: 'inherit', color: 'inherit' }} aria-label="Scroll filters to bottom">
+                &darr; Scroll To Bottom &darr;
+            </button>
         </div>
     );
 };
@@ -293,7 +292,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
 
     return (
         <div className="option-group filter" id={`${name}-filter`} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+            <a href="#" role="button" className="remove btn-link-style" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
                 <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>
@@ -401,7 +400,7 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
     }
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+            <a href="#" role="button" className="remove btn-link-style" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
                 <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>
@@ -489,7 +488,7 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
     }
     return(
         <div className="option-group filter" id={name+'-filter'} key={name}>
-            <a className="remove" href="#" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
+            <a href="#" role="button" className="remove btn-link-style" onClick={removeFilter} data-remove={name} title="click to remove this filter" aria-label={`Remove ${label} filter`}>
                 <i className="glyphicon glyphicon-remove"></i>
             </a>
             <label className="filter-name">{label}</label>

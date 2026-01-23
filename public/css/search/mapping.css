@@ -4,6 +4,9 @@
   float: left;
   margin-top: 20px;
 }
+#mapping-options.option-group a.btn:hover {
+  text-decoration: underline;
+}
 #mapping-options.option-group .title {
   font-weight: bold;
   margin: 20px 20px;

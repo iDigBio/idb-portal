@@ -922,6 +922,9 @@
   max-width: 400px;
   display: inline-block;
 }
+#download .sub#current a.btn.input-group-addon:hover {
+  text-decoration: underline;
+}
 #download .sub .input-group {
   width: 100%;
 }
@@ -1003,6 +1006,9 @@ a#download #downloads-section table tr.dl-row td.status a.error:focus {
   display: block;
   float: left;
   margin-top: 20px;
+}
+#mapping-options.option-group a.btn:hover {
+  text-decoration: underline;
 }
 #mapping-options.option-group .title {
   font-weight: bold;
@@ -1459,6 +1465,12 @@ i.spinner {
 #search #search-any a.btn.pull-right {
   color: #3277b3 !important;
 }
+#search #search-any a.btn.pull-right:hover {
+  text-decoration: underline;
+}
 #search #filters #filter-select a.btn {
   color: #2e6ca3 !important;
+}
+#search #filters #filter-select a.btn:hover {
+  text-decoration: underline;
 }

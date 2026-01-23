@@ -14,6 +14,9 @@
   max-width: 400px;
   display: inline-block;
 }
+#download .sub#current a.btn.input-group-addon:hover {
+  text-decoration: underline;
+}
 #download .sub .input-group {
   width: 100%;
 }

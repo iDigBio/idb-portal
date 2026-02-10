@@ -243,7 +243,16 @@ const OptionsPanel = ({ searchChange, search, view, viewChange, aggs }) => {
         }
         return (
             <li key={ind} className="tab" role="presentation">
-                <a className={panels[item]} href="#" onClick={showPanel} data-panel={item} role="tab" aria-selected={item === view} aria-controls={item}>
+                <a
+                    id={`${item}-tab`}
+                    className={panels[item]}
+                    href="#"
+                    onClick={showPanel}
+                    data-panel={item}
+                    role="tab"
+                    aria-selected={item === view}
+                    aria-controls={item}
+                >
                     {helpers.firstToUpper(item)}
                 </a>
             </li>

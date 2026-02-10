@@ -80,6 +80,12 @@ const Table = ({record}) => {
         setActive(e.target.attributes['data-tab'].value)
         // this.setState({active: e.target.attributes['data-tab'].value});
     }
+    function handleKeyDown(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            tabClick(e);
+        }
+    }
 
     useEffect(() => {
 
@@ -136,9 +142,9 @@ const Table = ({record}) => {
 
     return (
         <div id="data-table" className="scrollspy">
-            <ul className="tabs" onClick={tabClick}>
-                <li className={active == 'record' ? 'active' : ''} data-tab="record">Data</li>
-                <li className={active == 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+            <ul className="tabs" onClick={tabClick} role="tablist">
+                <li className={active == 'record' ? 'active' : ''} data-tab="record" onKeyDown={handleKeyDown} role="tab" tabIndex={0}>Data</li>
+                <li className={active == 'raw' ? 'active' : ''} data-tab="raw" onKeyDown={handleKeyDown} role="tab" tabIndex={0}>Raw</li>
             </ul>
             <section id="record" className="clearfix" style={{display: (active == 'record' ? 'block' : 'none' )}}>
                 <table className="table table-striped table-condensed table-bordered">

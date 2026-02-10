@@ -113,8 +113,25 @@ const Results = memo(({ searchProp, searchChange, view, viewChange, aggs, setAgg
             break;
     }
 
+    const panelIds = {
+        list: 'result-list',
+        labels: 'result-labels',
+        media: 'results-images',
+        recordsets: 'provider-results'
+    };
     let li = ['list', 'labels', 'media', 'recordsets'].map(item => (
-        <li key={'tab-' + item} onClick={viewChangeHandler} data-value={item} className={item === view ? 'active' : ''} role="tab" aria-selected={item === view}>
+        <li
+            key={'tab-' + item}
+            id={`results-${item}-tab`}
+            onClick={viewChangeHandler}
+            onKeyDown={handleKeyDown}
+            data-value={item}
+            className={item === view ? 'active' : ''}
+            role="tab"
+            tabIndex={0}
+            aria-selected={item === view}
+            aria-controls={panelIds[item]}
+        >
             {helpers.firstToUpper(item)}
         </li>
     ));
@@ -134,6 +151,12 @@ const Results = memo(({ searchProp, searchChange, view, viewChange, aggs, setAgg
 var sortClick=false;
 const ResultsList = ({search, searchChange, results, loading}) => {
     const [columns, setColumnsState] = useState(defaultColumns())
+    function handleSortKeyDown(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            sortColumn(e);
+        }
+    }
 
     useEffect(() => {
         if(_.isUndefined(localStorage) || _.isUndefined(localStorage.viewColumns)){
@@ -234,14 +257,37 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                 sym = <i className={"glyphicon "+icon}></i>;
             }
             headers.push(
-                <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} data-sort={sorted.order} onClick={sortColumn}>
+                <th
+                    key={'header-'+item}
+                    id={item}
+                    className="data-column"
+                    style={style}
+                    data-term={item}
+                    data-sort={sorted.order}
+                    onClick={sortColumn}
+                    onKeyDown={handleSortKeyDown}
+                    role="button"
+                    tabIndex={0}
+                >
                     {fields.byTerm[item].name}
                     {sym}
                 </th>
             )
         }else{
             headers.push(
-                <th key={'header-'+item} id={item} className="data-column" style={style} data-term={item} onClick={sortColumn}>{fields.byTerm[item].name}</th>
+                <th
+                    key={'header-'+item}
+                    id={item}
+                    className="data-column"
+                    style={style}
+                    data-term={item}
+                    onClick={sortColumn}
+                    onKeyDown={handleSortKeyDown}
+                    role="button"
+                    tabIndex={0}
+                >
+                    {fields.byTerm[item].name}
+                </th>
             )
         }
     });

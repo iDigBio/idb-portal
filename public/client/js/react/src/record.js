@@ -260,6 +260,12 @@ const Record = ({record, raw }) => {
         // this.setState({active: e.target.attributes['data-tab'].value});
         setActive(e.target.attributes['data-tab'].value)
     }
+    function handleKeyDown(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            tabClick(e);
+        }
+    }
 
     /** Extracts keys from array of objects.
      *
@@ -375,10 +381,10 @@ const Record = ({record, raw }) => {
     return (
         <div id="data" className="scrollspy section">
 
-            <ul className="tabs" onClick={tabClick}>
-                <li className={active === 'record' ? 'active' : ''} data-tab="record">Data</li>
-                {doRenderFlags ? <li className={active === 'flags' ? 'active' : ''} data-tab="flags">Flags</li> : ''}
-                <li className={active === 'raw' ? 'active' : ''} data-tab="raw">Raw</li>
+            <ul className="tabs" onClick={tabClick} role="tablist">
+                <li className={active === 'record' ? 'active' : ''} data-tab="record" onKeyDown={handleKeyDown} role="tab" tabIndex={0}>Data</li>
+                {doRenderFlags ? <li className={active === 'flags' ? 'active' : ''} data-tab="flags" onKeyDown={handleKeyDown} role="tab" tabIndex={0}>Flags</li> : ''}
+                <li className={active === 'raw' ? 'active' : ''} data-tab="raw" onKeyDown={handleKeyDown} role="tab" tabIndex={0}>Raw</li>
             </ul>
             <div id="record" className="clearfix" style={{display: (active === 'record' ? 'block' : 'none' )}}>
                 {nonPropsRecord}

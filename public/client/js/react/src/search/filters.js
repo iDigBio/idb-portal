@@ -317,6 +317,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
                             disabled={localFilter.exists || localFilter.missing}
                             onChange={textType}
                             onPressEnter={handleEnter}
+                            aria-label={label}
                             spellCheck={false}
                         />
                     </AutoComplete>
@@ -333,6 +334,7 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
                             onChange={(e) => textType(e)}
                             onFocus={() => setAutocomplete(e)}
                             value={textval}
+                            aria-label={label}
                             spellCheck={false}
                         />
                     </AutoComplete>

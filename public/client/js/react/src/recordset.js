@@ -188,13 +188,19 @@ const StatsTables = ({flags, stotal, uuid, use, raw}) => {
         e.preventDefault();
         setActive(e.currentTarget.attributes['data-active'].value)
     }
+    function handleKeyDown(e){
+        if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            click(e);
+        }
+    }
 
     return (
         <div id="stats-tables" className="clearfix scrollspy">
-            <ul className="tabs" id="stats-tabs">
-                <li className={active == 'flags' ?  'active': ''} id="corrected-tab" onClick={click} data-active="flags">Data Corrected</li>
-                <li className={active == 'use' ?  'active': ''} id="use-tab" onClick={click} data-active="use">Data Use</li>
-                <li className={active == 'raw' ?  'active': ''} id="raw-tab" onClick={click} data-active="raw">Raw</li>
+            <ul className="tabs" id="stats-tabs" role="tablist">
+                <li className={active == 'flags' ?  'active': ''} id="corrected-tab" onClick={click} onKeyDown={handleKeyDown} data-active="flags" role="tab" tabIndex={0}>Data Corrected</li>
+                <li className={active == 'use' ?  'active': ''} id="use-tab" onClick={click} onKeyDown={handleKeyDown} data-active="use" role="tab" tabIndex={0}>Data Use</li>
+                <li className={active == 'raw' ?  'active': ''} id="raw-tab" onClick={click} onKeyDown={handleKeyDown} data-active="raw" role="tab" tabIndex={0}>Raw</li>
             </ul>
             <FlagsTable active={active=='flags'} flags={flags} stotal={stotal} uuid={uuid} />
             <UseTable active={active=='use'} use={use} uuid={uuid} />

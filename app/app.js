@@ -70,7 +70,9 @@ if(config.env === "test") {
 } else {
   var redisClient = redis.createClient({
     host: config.redis.host,
-    port: config.redis.port || 6379
+    port: config.redis.port || 6379,
+    db: config.redis.db || 0,
+    auth_pass: config.redis.password
   });
   redisClient.on('error', function(err) {
     logger.error('Redis Client Error:', err);

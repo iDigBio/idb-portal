@@ -25,7 +25,7 @@
     {% endblock %}
   </head>
   <body>
-    <a href="#main-content" class="skip-link">Skip to main content</a>
+    <a href="#main-content" class="skip-link" tabindex="0">Skip to main content</a>
     <header role="banner">
       <input type="hidden" id="csrf" name="_csrf" value="{{ token }}" /> 
       
@@ -34,10 +34,10 @@
       <div class="sixteen columns full alpha omega" id="header">
         <div id="nav" class="hidden-print">
             <ul id="header-links">
-                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio">About iDigBio</a></li>
-                <li class="nav-research"><a href="https://www.idigbio.org/research">Research</a></li>
-                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info">Technical Information</a></li>
-                <li class="nav-education"><a href="https://www.idigbio.org/education">Education</a></li>
+                <li class="nav-about"><a href="https://www.idigbio.org/about-idigbio" tabindex="0">About iDigBio</a></li>
+                <li class="nav-research"><a href="https://www.idigbio.org/research" tabindex="0">Research</a></li>
+                <li class="nav-tech"><a href="https://www.idigbio.org/technical-info" tabindex="0">Technical Information</a></li>
+                <li class="nav-education"><a href="https://www.idigbio.org/education" tabindex="0">Education</a></li>
             </ul>
             <b style="float: right;color: white;clear: both;margin-right: 8px;position: relative;margin-top: 28px;">iDigBio's taxonomic normalization currently uses GBIF Backbone version 2023-08-28&nbsp;</b>
         
@@ -71,12 +71,12 @@
           <ul id="portal-menu" style="float:left">
           {% for key, value in menus.public -%}
               <li {% if key == activemenu %} class="active" {% endif %}>
-                <a href="{{ value.url }}" >{{ value.label }} </a>
+                <a href="{{ value.url }}" tabindex="0" {% if value.submenu -%} aria-haspopup="true" aria-expanded="false" {%- endif %}>{{ value.label }} </a>
                 {% if value.submenu -%}
                     <ul>
                       {% for item in value.submenu -%}
                           <li>
-                            <a href="{{ item.url }}">{{ item.label }}</a>
+                            <a href="{{ item.url }}" tabindex="0">{{ item.label }}</a>
                           </li>
                       {%- endfor %}
                     </ul>

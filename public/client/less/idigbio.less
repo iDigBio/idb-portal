@@ -499,6 +499,11 @@ a:hover{
 #nav li.nav-tech a:hover { color: #fe960a; }
 #nav li.nav-education a:hover { color: #fcd40f; }
 
+#nav li a:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+  text-decoration: underline;
+}
 
 
 footer { background-color: white; }
@@ -597,15 +602,28 @@ ul#logo-list  {
 
 #snav  li a { color: #fff; }
 
+#snav a:focus {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 /*--- DROPDOWN ---*/
-#snav  ul ul {
+#snav ul ul {
   width: 160px;
-  position:absolute;
-  left:-9999px; /* Hide off-screen when not needed (this is more accessible than display:none;) */
-  }
-  
-#snav #portal-menu li:hover ul{ /* Display the dropdown on hover */
-  left:0px; /* Bring back on-screen when needed */
+  position: absolute;
+  left: 0;
+  top: 100%;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  z-index: 3000;
+}
+
+#snav #portal-menu li:hover > ul,
+#snav #portal-menu li:focus-within > ul {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
     
 #snav  li li {
@@ -619,9 +637,14 @@ ul#logo-list  {
   
 #snav  li li.last { border-bottom: 1px solid #624e2e; }
     
-#snav  li:hover li a {
+#snav li li a {
   display: block;
   padding: 5px;
+}
+
+#snav li li a:focus {
+  outline: 2px solid #fff;
+  outline-offset: -2px;
 }
 
 #snav  li:hover ul a { 
@@ -629,19 +652,25 @@ ul#logo-list  {
 }
 
 #snav-about #snav  .active, #snav-about #snav  li:hover { background: #244d85; }
+#snav-about #snav li:focus-within { background: #244d85; }
 #snav-about { background: #608cb8; height: 36px; }
 #snav-about #snav  li li { background: #608cb8; }
 #snav-about #snav  li:hover ul li a:hover{ background:#244d85; }
 
 #snav-research #snav  .active, #snav-research #snav  li:hover { background: #2c711a; }
+#snav-research #snav li:focus-within { background: #2c711a; }
 #snav-research { 
   background: #6aaa51; min-height: 36px; 
   @media(max-width: @screenmed){
     min-height: 33px;
   }
 }
-#snav-research #snav  li li { background: #6aaa51; }
-#snav-research #snav  li:hover ul li a:hover{ background:#2c711a; }
+#snav-research #snav li li { background: #50813d; }
+#snav-research #snav ul ul { background: #50813d; }
+#snav-research #snav  li:hover ul li a:hover,
+#snav-research #snav  li:hover ul li a:focus,
+#snav-research #snav  li:focus-within ul li a:hover,
+#snav-research #snav  li:focus-within ul li a:focus { background:#2c711a; }
 
 #snav-technical #snav  .active, #snav-technical #snav  li:hover { background: #b44d07; }
 #snav-technical { background: #d68c29; height: 36px; }

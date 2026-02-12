@@ -12,6 +12,9 @@
   text-decoration: underline;
   color: white;
 }
+.close {
+  opacity: 0.55 !important;
+}
 html.mac ::-webkit-scrollbar {
   -webkit-appearance: none;
 }
@@ -460,7 +463,7 @@ a:hover {
   text-decoration: none;
 }
 #nav li.nav-about a {
-  color: #4f91d3;
+  color: #5091D3;
 }
 #nav li.nav-research a {
   color: #6aaa51;

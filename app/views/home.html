@@ -32,6 +32,7 @@
                             <option value="fulltext">All Fields</option>
                         </select>
                         <input type="text" class="form-control" id="searchbox" autocomplete="off" aria-label="Search term">
+                        <button type="submit" class="sr-only" aria-label="Submit search"></button>
                         <a id="searchbtn" href="#" role="button" class="input-group-addon btn btn-material-lightblue" aria-label="Search">
                             <i class="glyphicon glyphicon-search"></i>
                         </a>
@@ -54,19 +55,27 @@
     </div>
 </div>
 <div class="row" id="stats-row">
-    <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-2 col-sm-5 col-sm-offset-1" id="react-wrapper">
+            <div class="col-lg-3 col-lg-offset-3 col-md-4 col-md-offset-2 col-sm-5 col-sm-offset-1 react-wrapper" id="react-wrapper-specimen">
                 <h3 style="text-align: center;">Specimen Records</h3>
-                <div id="recordcount" aria-label="Total specimen records count" style="text-align: center;"></div>
-                <div class="chart" id="specimen-chart" role="img" aria-label="Specimen records by kingdom chart"></div>
+                <figure style="margin: 0;">
+                    <figcaption id="specimen-count-caption" style="text-align: center;">
+                        <span id="recordcount"></span>
+                    </figcaption>
+                    <div class="chart" id="specimen-chart" role="img" aria-labelledby="specimen-count-caption"></div>
+                </figure>
             </div>
-            <div class="col-lg-3 col-md-4 col-sm-5" id="react-wrapper">
+            <div class="col-lg-3 col-md-4 col-sm-5 react-wrapper" id="react-wrapper-media">
                 <h3 style="text-align: center;">Media Records</h3>
-                <div id="mediacount" aria-label="Total media records count" style="text-align: center;"></div>
-                <div class="chart" id="media-chart" role="img" aria-label="Media records by kingdom chart"></div>
+                <figure style="margin: 0;">
+                    <figcaption id="media-count-caption" style="text-align: center;">
+                        <span id="mediacount"></span>
+                    </figcaption>
+                    <div class="chart" id="media-chart" role="img" aria-labelledby="media-count-caption"></div>
+                </figure>
     </div>
 </div>
 <div class="row" id="notes">
-    <div class="col-lg-6 col-lg-offset-3" id="react-wrapper">
+    <div class="col-lg-6 col-lg-offset-3 react-wrapper" id="react-wrapper-notes">
         <p>Select a section (wedge) of the chart to search for records in that kingdom. Select a kingdom name in the legend to show or hide that section from the chart.</p>
     </div>
 </div>

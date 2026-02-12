@@ -1,10 +1,5 @@
 @import 'variables.less';
 
-#top{
-    //background: url('/portal/img/homepage-bg.png');
-    //background-tranparency:.1;
-    //color:white;
-}
 .count{
     text-align: center;
     height:60px;
@@ -87,6 +82,24 @@ h4{
 
 
 }
+#stats-row h3,
+#stats-row #recordcount,
+#stats-row #mediacount {
+    color: #000000;
+}
+#stats-row #specimen-chart svg text,
+#stats-row #media-chart svg text {
+    fill: #000000;
+}
+#stats-row .chart .c3-arc.is-focus {
+    stroke: #000000;
+    stroke-width: 2px;
+}
+#stats-row .chart .c3-legend-item.is-focus .c3-legend-item-event {
+    stroke: #000000;
+    stroke-width: 2px;
+}
+
 #notes{
     border-bottom:2px solid lighten(@idbgreen,35%);
     text-align:center;
@@ -94,6 +107,7 @@ h4{
     padding-top:10px;
     p{
         font-size:.8em;
+        color: #000000;
     }
 }
 #welcome{

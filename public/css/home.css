@@ -75,6 +75,23 @@ h4 {
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#eef5eb, endColorstr=#d0e5c8, GradientType=0);
   /* IE6-9 */
 }
+#stats-row h3,
+#stats-row #recordcount,
+#stats-row #mediacount {
+  color: #000000;
+}
+#stats-row #specimen-chart svg text,
+#stats-row #media-chart svg text {
+  fill: #000000;
+}
+#stats-row .chart .c3-arc.is-focus {
+  stroke: #000000;
+  stroke-width: 2px;
+}
+#stats-row .chart .c3-legend-item.is-focus .c3-legend-item-event {
+  stroke: #000000;
+  stroke-width: 2px;
+}
 #notes {
   border-bottom: 2px solid #d0e5c8;
   text-align: center;
@@ -83,6 +100,7 @@ h4 {
 }
 #notes p {
   font-size: .8em;
+  color: #000000;
 }
 #welcome {
   font-size: 1.25em;

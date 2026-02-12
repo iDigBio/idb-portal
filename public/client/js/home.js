@@ -30,6 +30,126 @@ var sortFunc = function(a,b){
     return 0;
 };
 
+var enablePieKeyboardAccess = function(options){
+    var container = document.querySelector(options.bindto);
+    if(!container){
+        return;
+    }
+    var getLegendItem = function(node){
+        var current = node;
+        while(current && current !== container){
+            if(current.classList && current.classList.contains('c3-legend-item')){
+                return current;
+            }
+            current = current.parentNode;
+        }
+        return null;
+    };
+    var isKeyboardActivate = function(event){
+        return event.key === 'Enter' ||
+            event.key === ' ' ||
+            event.keyCode === 13 ||
+            event.keyCode === 32 ||
+            event.which === 13 ||
+            event.which === 32;
+    };
+    if(container.getAttribute('data-kb-container') !== 'true'){
+        container.setAttribute('data-kb-container', 'true');
+        container.addEventListener('keydown', function(event){
+            if(!isKeyboardActivate(event)){
+                return;
+            }
+            var legendItem = getLegendItem(event.target);
+            if(!legendItem){
+                return;
+            }
+            var className = legendItem.getAttribute('class') || '';
+            var match = className.match(/c3-legend-item-([^\s]+)/);
+            var targetId = match ? match[1] : null;
+            event.preventDefault();
+            if(options.chart && typeof options.chart.toggle === 'function' && targetId){
+                options.chart.toggle(targetId);
+            }else{
+                var clickTarget = legendItem.querySelector('.c3-legend-item-event') || legendItem;
+                clickTarget.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+            }
+        }, true);
+    }
+    var legendLabels = {};
+    container.querySelectorAll('.c3-legend-item').forEach(function(item){
+        var labelNode = item.querySelector('text');
+        var label = labelNode ? labelNode.textContent.trim() : '';
+        var className = item.getAttribute('class') || '';
+        var match = className.match(/c3-legend-item-([^\s]+)/);
+        if(match && label){
+            legendLabels[match[1]] = label;
+        }
+    });
+
+    var focusableSelectors = [
+        '.c3-legend-item',
+        '.c3-chart-arc .c3-arc'
+    ];
+
+    container.querySelectorAll(focusableSelectors.join(',')).forEach(function(element){
+        if(element.getAttribute('data-kb-focus') === 'true'){
+            return;
+        }
+        element.setAttribute('data-kb-focus', 'true');
+        element.setAttribute('tabindex', '0');
+        element.setAttribute('role', 'button');
+        element.setAttribute('focusable', 'true');
+        element.addEventListener('focus', function(){
+            element.classList.add('is-focus');
+        });
+        element.addEventListener('blur', function(){
+            element.classList.remove('is-focus');
+        });
+    });
+
+    container.querySelectorAll('.c3-legend-item').forEach(function(item){
+        if(item.getAttribute('data-kb-bound') === 'true'){
+            return;
+        }
+        item.setAttribute('data-kb-bound', 'true');
+        var labelNode = item.querySelector('text');
+        var label = labelNode ? labelNode.textContent.trim() : 'Legend item';
+        var className = item.getAttribute('class') || '';
+        var match = className.match(/c3-legend-item-([^\s]+)/);
+        var targetId = match ? match[1] : label;
+        item.setAttribute('aria-label', 'Toggle ' + label);
+        item.setAttribute('tabindex', '0');
+        item.setAttribute('role', 'button');
+        item.setAttribute('focusable', 'true');
+        item.querySelectorAll('text, .c3-legend-item-event').forEach(function(child){
+            child.removeAttribute('tabindex');
+            child.removeAttribute('role');
+            child.removeAttribute('focusable');
+        });
+    });
+
+    container.querySelectorAll('.c3-chart-arc .c3-arc').forEach(function(arc){
+        if(arc.getAttribute('data-kb-bound') === 'true'){
+            return;
+        }
+        arc.setAttribute('data-kb-bound', 'true');
+        var targetNode = arc.closest('.c3-target');
+        var targetClass = targetNode ? (targetNode.getAttribute('class') || '') : '';
+        var match = targetClass.match(/c3-target-([^\s]+)/);
+        var targetKey = match ? match[1] : '';
+        var label = legendLabels[targetKey] || targetKey.replace(/-/g, ' ') || 'Slice';
+        arc.setAttribute('aria-label', 'View ' + label + ' records');
+        arc.addEventListener('keydown', function(event){
+            if(event.key === 'Enter' || event.key === ' '){
+                event.preventDefault();
+                if(label.toLowerCase() !== 'other'){
+                    options.onSliceActivate(label);
+                }
+            }
+        });
+    });
+};
+
 
 //record pie chart
 var record = {"rq":{"kingdom":{"type":"exists"}},"top_fields": ["kingdom"]};
@@ -61,6 +181,15 @@ idbapi.summary('top/records/',record,function(response){
             }
         },
         bindto:'#specimen-chart',
+        onrendered: function(){
+            enablePieKeyboardAccess({
+                bindto: '#specimen-chart',
+                chart: this,
+                onSliceActivate: function(label){
+                    window.location = '/portal/search?rq={"kingdom":"'+label+'"}';
+                }
+            });
+        },
         pie:{
             label:{
                 format: function(value, ratio, id){
@@ -108,6 +237,15 @@ idbapi.summary('top/records/',media,function(response){
             }
         },
         bindto:'#media-chart',
+        onrendered: function(){
+            enablePieKeyboardAccess({
+                bindto: '#media-chart',
+                chart: this,
+                onSliceActivate: function(label){
+                    window.location = '/portal/search?rq={"kingdom":"'+label+'"}&view=media';
+                }
+            });
+        },
         color:{
             pattern: colorOrder
         },

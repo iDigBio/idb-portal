@@ -8,6 +8,43 @@ import C3Chart from 'react-c3js';
 import 'c3/c3.css';
 import 'react-datetime/css/react-datetime.css'
 
+const SERIES_COLORS = {
+    search: '#0b3d91',
+    download: '#8a4b00',
+    viewed_media: '#0b5d0b',
+    search_count: '#8b0000',
+    seen: '#4b2a7b',
+    viewed_records: '#5b3a2e',
+    download_count: '#7a1f5c',
+    recordsets: '#1a5a6b',
+    records: '#2f6b1f',
+    mediarecords: '#8a3d2b'
+};
+
+const COLOR_PATTERN = [
+    '#0b3d91',
+    '#8a4b00',
+    '#0b5d0b',
+    '#8b0000',
+    '#4b2a7b',
+    '#5b3a2e',
+    '#7a1f5c',
+    '#1a5a6b',
+    '#2f6b1f',
+    '#8a3d2b'
+];
+
+const enforceChartTextContrast = () => {
+    const nodes = document.querySelectorAll(
+        '.c3 text, .c3 tspan, .c3-legend-item text, .c3-axis text, .c3-chart-arc text'
+    );
+    nodes.forEach((node) => {
+        node.setAttribute('fill', '#111111');
+        node.style.fill = '#111111';
+        node.style.opacity = '1';
+    });
+};
+
 const Usage = ({data, startDate, endDate, log}) => {
 
     var totals = {};
@@ -52,9 +89,9 @@ const Usage = ({data, startDate, endDate, log}) => {
             <table>
               <tbody>
                   <tr>
-                    <td style={{"backgroundColor": "#C0C0C0", "color": "#000000", "fontSize": "120%", "padding": "8px"}}>Total Searches:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.search_count}</span></td>
+                    <td style={{"backgroundColor": "#C0C0C0", "color": "#000000", "fontSize": "120%", "padding": "8px"}}>Total Searches:&nbsp;<span id="totSearchCount" style={{"fontWeight": "bold", "float": "right"}}>{totals.search_count}</span></td>
                     <td style={{"fontSize": "25%"}}>&nbsp;</td>
-                    <td style={{"backgroundColor": "#478030", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total Downloads:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.download_count}</span></td>
+                    <td style={{"backgroundColor": "#478030", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total Downloads:&nbsp;<span id="totDownloadCount" style={{"fontWeight": "bold", "float": "right"}}>{totals.download_count}</span></td>
                   </tr>
                   <tr>
                       <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
@@ -66,9 +103,9 @@ const Usage = ({data, startDate, endDate, log}) => {
                       <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
                   </tr>
                   <tr>
-                    <td style={{"backgroundColor": "#3d6a8a", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total records seen:&nbsp;<span id="totSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.seen}</span></td>
+                    <td style={{"backgroundColor": "#3d6a8a", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total records seen:&nbsp;<span id="totRecordsSeen" style={{"fontWeight": "bold", "float": "right"}}>{totals.seen}</span></td>
                     <td style={{"fontSize": "25%"}}>&nbsp;</td>
-                    <td style={{"backgroundColor": "#a2671c", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total specimen records viewed:&nbsp;<span id="totRecView" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_records}</span></td>
+                    <td style={{"backgroundColor": "#a2671c", "color": "#ffffff", "fontSize": "120%", "padding": "8px"}}>Total specimen records viewed:&nbsp;<span id="totSpecimenViewed" style={{"fontWeight": "bold", "float": "right"}}>{totals.viewed_records}</span></td>
                   </tr>
                   <tr>
                     <td style={{"fontSize": "25%"}} colSpan="3">&nbsp;</td>
@@ -80,8 +117,8 @@ const Usage = ({data, startDate, endDate, log}) => {
                   </tr>
               </tbody>
             </table>
-            <h3><a name="data-usage">Data Usage</a></h3>
-            <C3Chart data={{x: "x", columns: cols, "hide": ["search"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: (d) => {if(log){ return Math.pow(10, d).toLocaleString() } else { return d }}}}}} />
+            <h3 id="data-usage">Data Usage</h3>
+            <C3Chart data={{x: "x", columns: cols, "hide": ["search"], colors: SERIES_COLORS}} color={{pattern: COLOR_PATTERN}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: (d) => {if(log){ return Math.pow(10, d).toLocaleString() } else { return d }}}}}} />
         </div>
     );
 
@@ -112,8 +149,8 @@ const Ingest = ({data, startDate, endDate}) => {
     })
     return (
         <div>
-            <h3><a name="data-ingestion">Data Ingestion</a></h3>
-            <C3Chart data={{x: "x", columns: cols, "hide": ["recordsets"]}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+            <h3 id="data-ingestion">Data Ingestion</h3>
+            <C3Chart data={{x: "x", columns: cols, "hide": ["recordsets"], colors: SERIES_COLORS}} color={{pattern: COLOR_PATTERN}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
         </div>
     );
 
@@ -146,8 +183,10 @@ const Collected = ({data}) => {
     })
     return (
         <div>
-            <h3><a name="temporal-coverage">Temporal Coverage</a></h3>
-            <form className="form-inline">
+            <span id="temportal-coverage" aria-hidden="true"></span>
+            <h3 id="temporal-coverage">Temporal Coverage</h3>
+            <fieldset className="form-inline" aria-label="Temporal coverage date range">
+                <legend className="sr-only">Temporal coverage date range</legend>
                 <div className="form-group">
                     <label className="control-label" htmlFor="collectedStartDate">Start:</label>
                     <Datetime viewMode="months" defaultValue={startDate} timeFormat={false} onChange={m => setStartDate(m)} inputProps={{id: "collectedStartDate", name: "startDate"}} />
@@ -156,8 +195,8 @@ const Collected = ({data}) => {
                     <label className="control-label" htmlFor="collectedEndDate">End:</label>
                     <Datetime viewMode="months" defaultValue={endDate} timeFormat={false} onChange={m => setEndDate(m)} inputProps={{id: "collectedEndDate", name: "endDate"}} />
                 </div>
-            </form>
-            <C3Chart data={{x: "x", columns: cols}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
+            </fieldset>
+            <C3Chart data={{x: "x", columns: cols, colors: SERIES_COLORS}} color={{pattern: COLOR_PATTERN}} axis={{x: {type: "timeseries", tick: {"format": "%Y-%m-%d"}}, y: { tick: {format: function(d) {return d.toLocaleString()}}}}} />
         </div>
     );
 
@@ -213,8 +252,15 @@ const Taxon = (props) => {
                 data={{
                     columns: kingdomData[activeData],
                     type: "pie",
+                    colors: SERIES_COLORS,
                     onclick: (d) => {
                         setActiveData(d.name);
+                    },
+                }}
+                color={{pattern: COLOR_PATTERN}}
+                pie={{
+                    label: {
+                        show: false,
                     },
                 }}
                 axis={{
@@ -253,19 +299,26 @@ const Flags = (props) => {
 
     return (
         <div>
-            <h3><a name="data-quality">Data Quality</a></h3>
+            <h3 id="data-quality">Data Quality</h3>
             <C3Chart
                 data={{
                     x: "x",
                     columns: cols,
                     type: "bar",
+                    colors: SERIES_COLORS,
                 }}
+                size={{
+                    height: 500,
+                }}
+                color={{pattern: COLOR_PATTERN}}
                 axis={{
                     x: {
                         type: "category",
+                        height: 180,
                         tick: {
                             rotate: -60,
-                        }
+                            multiline: false,
+                        },
                     },
                     y: {
                         tick: {
@@ -283,7 +336,7 @@ const TaxonPies = ({data}) => {
 
     return (
         <div>
-            <h3><a name="taxon-coverage">Taxonomic Coverage</a></h3>
+            <h3 id="taxon-coverage">Taxonomic Coverage</h3>
 
             <h4>Records</h4>
             <Taxon data={data.records} />
@@ -310,7 +363,8 @@ const StatsCharts = (props) => {
 
     return (
         <div>
-            <form className="form-inline">
+            <fieldset className="form-inline" aria-label="Usage date range">
+                <legend className="sr-only">Usage date range</legend>
                 <div className="form-group">
                     <label className="control-label" htmlFor="statsStartDate">Start:</label>
                     <Datetime
@@ -331,7 +385,7 @@ const StatsCharts = (props) => {
                         inputProps={{ id: "statsEndDate", name: "endDate" }}
                     />
                 </div>
-            </form>
+            </fieldset>
 
             <Usage startDate={startDate} endDate={endDate} data={props.usage} log={log} />
             <div className="form-group">
@@ -362,6 +416,12 @@ const StatsCharts = (props) => {
 
 
 const Charts = ({ingest, collected, taxon, flags, usage, ingestCumulative}) => {
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            enforceChartTextContrast();
+        }, 150);
+        return () => clearTimeout(timer);
+    }, [ingest, collected, taxon, flags, usage, ingestCumulative]);
 
     return (
         <div>

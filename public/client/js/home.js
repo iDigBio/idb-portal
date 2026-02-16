@@ -5,7 +5,7 @@ var idbapi = require('./lib/idbapi');
 
 import 'c3/c3.css';
 
-var colors = ['#6C477C','#56E4F4','#194B94','#ED2E2E','#C86B61'];
+var colors = ['#6C477C','#0B5F6D','#194B94','#ED2E2E','#C86B61'];
 var kingdomColor={'Plantae': '#6aaa51','Fungi':'#d3b833' ,'Chromista': '#cf7a0b','Animalia': '#3782cd', 'Protozoa': '#DD5656' },colorsIndex=0;
 var others = ["incertae","ichnofossil","taxon indet.","monocotyledonae","pteridophyta","dicotyledonae","protista","protoctista","monera","incertae sedis"]
 var setGetColor = function(kingdom){

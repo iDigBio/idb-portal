@@ -47,5 +47,14 @@ div.map-popup label {
 .leaflet-container .sleep-note,
 .leaflet-container p.sleep-note,
 p.sleep-note {
-  color: #595959 !important;
+  color: #000 !important;
+}
+#map .leaflet-control-attribution a {
+  color: #0b3d91;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#map .leaflet-control-attribution a:hover,
+#map .leaflet-control-attribution a:focus {
+  color: #072c68;
 }

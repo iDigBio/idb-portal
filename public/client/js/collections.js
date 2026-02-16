@@ -21,6 +21,15 @@ var scrollToMap = function(){
     }, 700);
 }
 
+var applyMarkerAriaLabel = function(marker, label){
+    marker.on('add', function(){
+        var icon = marker.getElement ? marker.getElement() : marker._icon;
+        if(icon){
+            icon.setAttribute('aria-label', label);
+        }
+    });
+}
+
 ReactDOM.render(<CollectionsPage data={collections} openMapPopup={triggerPopup} />, document.getElementById('datatable'));
 
 var base = L.tileLayer('//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -104,7 +113,9 @@ _.each(collections,function(item){
 _.each(lookup,function(val,key){
     var cont = '<div class="map-popup">', m;
     if(_.isArray(val)){
-        m = L.marker([val[0].lat,val[0].lon],{icon: multiIcon});
+        var multiLabel = val[0].institution ? 'Collections at ' + val[0].institution : 'Collections location';
+        m = L.marker([val[0].lat,val[0].lon],{icon: multiIcon, title: multiLabel, alt: multiLabel});
+        applyMarkerAriaLabel(m, multiLabel);
         cont+='<h5>'+val[0].institution+'</h5><div class="multi">';
         _.each(val,function(item){
             var name = _.isEmpty(item.collection.trim()) ? 'Collection' : item.collection;
@@ -118,10 +129,12 @@ _.each(lookup,function(val,key){
     }else{
         cont+='<h5>'+val.institution+'</h5>';
         var name = _.isEmpty(val.collection.trim()) ? 'Collection' : val.collection;
+        var singleLabel = val.institution ? name + ' at ' + val.institution : name + ' location';
         cont += '<label><a target="'+val.collection_uuid+'"href="/portal/collections/'+val.collection_uuid.replace('urn:uuid:','')+'">'+
             name+'</a></label><address>'+val.physical_address+'<br>'+val.physical_city+', '+val.physical_state+' '+
         val.physical_zip+'</address>';
-        m = L.marker([val.lat,val.lon], {icon: singleIcon});
+        m = L.marker([val.lat,val.lon], {icon: singleIcon, title: singleLabel, alt: singleLabel});
+        applyMarkerAriaLabel(m, singleLabel);
         ref[val.collection_uuid]=m;
     }
     cont+='</div>';

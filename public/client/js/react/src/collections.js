@@ -1,5 +1,5 @@
 
-import React, {useState} from 'react'
+import React, {useEffect} from 'react'
 import Griddle from 'griddle-react'
 import helpers from '../../lib/helpers'
 
@@ -9,6 +9,14 @@ import '../../../../css/collections.css';
 var openMap;
 const ModExports = ({openMapPopup, data}) => {
     openMap = openMapPopup;
+
+    useEffect(() => {
+        const input = document.querySelector('#datatable .griddle-filter input');
+        if (input) {
+            input.setAttribute('aria-label', 'Filter results');
+            input.setAttribute('title', 'Filter results');
+        }
+    }, []);
 
     var columnMeta=[{
             "columnName": "collection_url",

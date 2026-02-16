@@ -169,6 +169,41 @@
 #map.leaflet-container {
     font-size: 12px;
 }
+#map {
+    .leaflet-bar a,
+    .leaflet-bar a span {
+        color: #111;
+        background-color: #fff;
+    }
+    .leaflet-bar a.leaflet-disabled,
+    .leaflet-bar a.leaflet-disabled span {
+        color: #555;
+        background-color: #f2f2f2;
+    }
+    .leaflet-control-scale,
+    .leaflet-control-scale-line {
+        opacity: 1;
+    }
+    .leaflet-control-scale-line {
+        color: #000;
+        background: #fff;
+        border-color: #000;
+        text-shadow: none;
+    }
+    .leaflet-control-attribution {
+        color: #111;
+        background: #fff;
+    }
+    .leaflet-control-attribution a {
+        color: #0b3d91;
+        text-decoration: underline;
+        text-underline-offset: 2px;
+    }
+    .leaflet-control-attribution a:hover,
+    .leaflet-control-attribution a:focus {
+        color: #072c68;
+    }
+}
 .map-popup-wrapper{
     margin-top:5px;
     min-height:40px;

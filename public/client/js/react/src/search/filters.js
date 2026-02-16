@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useCallback} from "react";
 import idbapi from '../../../lib/idbapi';
-import { AutoComplete, Input } from 'antd';
+import { Input } from 'antd';
 const { TextArea } = Input;
 export function newFilterProps(term){
     const type = fields.byTerm[term].type;
@@ -147,11 +147,11 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
     const [dropdownOptions, setDropdownOptions] = useState([]);
 
     useEffect(() => {
-        const label = renderTitle('Suggestions');
-        const options = aggs.map((agg) => {
-            return renderItem(agg.doc_count.toString(), agg.key);
-        });
-        setDropdownOptions([{ label, options }]);
+        const options = aggs.map((agg) => ({
+            value: agg.key,
+            count: agg.doc_count.toString()
+        }));
+        setDropdownOptions(options);
     }, [aggs]);
 
     useEffect(() => {
@@ -261,34 +261,13 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
         debouncedTextType(localFilter);
     }
 
-    const renderItem = (count, name) => ({
-        value: name,
-        label: (
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                {name}
-                <span>{count}</span>
-            </div>
-        ),
-    });
-
-    const renderTitle = (title) => (
-        <span>
-            {title}
-            <a
-                style={{ float: 'right' }}
-                href="https://idigbio.github.io/docs/portal/suggestions/"
-                target="_blank"
-                rel="noopener noreferrer"
-            >
-                How is this list populated?
-            </a>
-        </span>
-    );
-
     const localFilter = filter;
     const name = localFilter.name;
     const label = fields.byTerm[name].name;
     const textval = localFilter.exists || localFilter.missing ? fields.byTerm[name].dataterm : text;
+    const presenceLabelStyle = { color: '#000000' };
+    const showSuggestions = filter.name === 'scientificname' && filter.fuzzy && dropdownOpen && dropdownOptions.length > 0;
+    const suggestionsId = `${name}-suggestions`;
 
     return (
         <div className="option-group filter" id={`${name}-filter`} key={name}>
@@ -297,64 +276,68 @@ const TextFilter = ({ filter, changeFilter, removeFilter, search, aggs }) => {
             </a>
             <label className="filter-name">{label}</label>
             <div className="text">
-                {filter.name === 'scientificname' ? (
-                    <AutoComplete
-                        options={dropdownOptions}
-                        popupMatchSelectWidth={false}
-                        dropdownStyle={{ width: 400 }}
-                        onSelect={(e) => handleSelect(e)}
-                        onBlur={() => handleBlur()}
-                        onFocus={() => setDropdownOpen(text !== '')}
-                        open={filter.fuzzy && dropdownOpen}
-                        disabled={localFilter.exists || localFilter.missing}
-                        value={textval}
-                    >
-                        <TextArea
-                            className="form-control"
-                            name={name}
-                            data-name={name}
-                            placeholder={fields.byTerm[name].dataterm}
-                            disabled={localFilter.exists || localFilter.missing}
-                            onChange={textType}
-                            onPressEnter={handleEnter}
-                            aria-label={label}
-                            spellCheck={false}
-                        />
-                    </AutoComplete>
-                ) : (
-                    <AutoComplete
-                        value={textval}
-                    >
-                        <TextArea
-                            className="form-control"
-                            name={name}
-                            data-name={name}
-                            placeholder={fields.byTerm[name].dataterm}
-                            disabled={localFilter.exists || localFilter.missing}
-                            onChange={(e) => textType(e)}
-                            onFocus={() => setAutocomplete(e)}
-                            value={textval}
-                            aria-label={label}
-                            spellCheck={false}
-                        />
-                    </AutoComplete>
-                )}
+                <TextArea
+                    className="form-control"
+                    name={name}
+                    data-name={name}
+                    placeholder={fields.byTerm[name].dataterm}
+                    disabled={localFilter.exists || localFilter.missing}
+                    onChange={textType}
+                    onPressEnter={handleEnter}
+                    onBlur={handleBlur}
+                    onFocus={() => setDropdownOpen(text !== '')}
+                    aria-label={label}
+                    spellCheck={false}
+                    value={textval}
+                />
+                {showSuggestions ? (
+                    <div className="idb-autocomplete" role="listbox" id={suggestionsId} aria-label={`${label} suggestions`}>
+                        <div className="idb-autocomplete-header">
+                            <span>Suggestions</span>
+                            <a
+                                href="https://idigbio.github.io/docs/portal/suggestions/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                How is this list populated?
+                            </a>
+                        </div>
+                        <ul className="idb-autocomplete-list">
+                            {dropdownOptions.map((option) => (
+                                <li key={option.value}>
+                                    <button
+                                        type="button"
+                                        className="idb-autocomplete-option"
+                                        onMouseDown={(event) => {
+                                            event.preventDefault();
+                                            handleSelect(option.value);
+                                        }}
+                                        aria-label={`${option.value} (${option.count})`}
+                                    >
+                                        <span className="idb-autocomplete-value">{option.value}</span>
+                                        <span className="idb-autocomplete-count">{option.count}</span>
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : null}
             </div>
             <div className="presence">
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={localFilter.exists} />
                         Present
                     </label>
                 </div>
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={localFilter.missing} />
                         Missing
                     </label>
                 </div>
                 <div className="checkbox" style={{ display: filter.name !== 'scientificname' ? 'none' : 'flex' }}>
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="fuzzy" onChange={presenceClick} checked={filter.name !== 'scientificname' ? false : localFilter.fuzzy} />
                         Fuzzy
                     </label>
@@ -397,6 +380,7 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
     var exists = filter.exists;
     var missing = filter.missing;
     var disabled = false;
+    var presenceLabelStyle = { color: '#000000' };
     if(exists || missing){
         disabled=true;
     }
@@ -436,13 +420,13 @@ const DateRangeFilter = ({filter, changeFilter, removeFilter}) => {
             </div>
             <div className="presence">
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={exists}/>
                         Present
                     </label>
                 </div>
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={missing}/>
                         Missing
                     </label>
@@ -487,6 +471,7 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
     var exists = filter.exists;
     var missing = filter.missing;
     var disabled = false;
+    var presenceLabelStyle = { color: '#000000' };
     if(exists || missing){
         disabled=true;
     }
@@ -527,13 +512,13 @@ const NumericRangeFilter = ({filter, changeFilter, removeFilter}) => {
             </div>
             <div className="presence">
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="exists" onChange={presenceClick} checked={exists}/>
                         Present
                     </label>
                 </div>
                 <div className="checkbox">
-                    <label>
+                    <label style={presenceLabelStyle}>
                         <input type="checkbox" name={name} value="missing" onChange={presenceClick} checked={missing}/>
                         Missing
                     </label>

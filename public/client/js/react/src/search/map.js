@@ -13,6 +13,7 @@ const Map = (props) => {
     useEffect(() => {
         if (!mapRef.current) {
             mapRef.current = new IDBMap('map', {
+                loadingControl: false,
                 queryChange: function(query) {
                     var mapping;
                     if (_.has(query, 'geopoint')) {

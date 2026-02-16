@@ -156,6 +156,39 @@
 #map.leaflet-container {
   font-size: 12px;
 }
+#map .leaflet-bar a,
+#map .leaflet-bar a span {
+  color: #111;
+  background-color: #fff;
+}
+#map .leaflet-bar a.leaflet-disabled,
+#map .leaflet-bar a.leaflet-disabled span {
+  color: #555;
+  background-color: #f2f2f2;
+}
+#map .leaflet-control-scale,
+#map .leaflet-control-scale-line {
+  opacity: 1;
+}
+#map .leaflet-control-scale-line {
+  color: #000;
+  background: #fff;
+  border-color: #000;
+  text-shadow: none;
+}
+#map .leaflet-control-attribution {
+  color: #111;
+  background: #fff;
+}
+#map .leaflet-control-attribution a {
+  color: #0b3d91;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+#map .leaflet-control-attribution a:hover,
+#map .leaflet-control-attribution a:focus {
+  color: #072c68;
+}
 .map-popup-wrapper {
   margin-top: 5px;
   min-height: 40px;

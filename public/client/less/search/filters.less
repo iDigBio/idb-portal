@@ -145,6 +145,7 @@
                 //word-break:break-word;
                 width:20%;
                 font-size:.88em;
+                color:#000;
             }
             .text{
                 position:relative;
@@ -153,6 +154,19 @@
                     float:right;
                     margin-right:5px;
                     height:54px;
+                    color:#000;
+                    &::placeholder{
+                        color:#555;
+                    }
+                    &::-webkit-input-placeholder{
+                        color:#555;
+                    }
+                    &::-moz-placeholder{
+                        color:#555;
+                    }
+                    &:-ms-input-placeholder{
+                        color:#555;
+                    }
                     @media(max-width: @screenmed){
                         width:220px;
                     }
@@ -163,6 +177,65 @@
                         font-size:15px;
                         color:#666;
                     }
+                }
+                .idb-autocomplete{
+                    position:absolute;
+                    right:5px;
+                    top:58px;
+                    width:360px;
+                    max-height:200px;
+                    overflow-y:auto;
+                    overflow-x:hidden;
+                    background:#fff;
+                    border:1px solid #ccc;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+                    z-index: 1000;
+                    @media(max-width: @screenmed){
+                        width:260px;
+                    }
+                    @media(max-width: @screenlarge){
+                        width:320px;
+                    }
+                }
+                .idb-autocomplete-header{
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:6px 8px;
+                    font-size:12px;
+                    border-bottom:1px solid #ddd;
+                    a{
+                        font-size:12px;
+                    }
+                }
+                .idb-autocomplete-list{
+                    list-style:none;
+                    margin:0;
+                    padding:0;
+                }
+                .idb-autocomplete-option{
+                    width:100%;
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    padding:6px 8px;
+                    border:0;
+                    background:none;
+                    color:#222;
+                    text-align:left;
+                    cursor:pointer;
+                }
+                .idb-autocomplete-option:hover,
+                .idb-autocomplete-option:focus{
+                    background:#f2f2f2;
+                }
+                .idb-autocomplete-count{
+                    color:#666;
+                }
+                .idb-autocomplete-value{
+                    white-space:normal;
+                    word-break:break-word;
+                    padding-right:8px;
                 }
                 &.syn{
                     textarea{
@@ -203,6 +276,19 @@
                     display:block;
                     height:30px;
                     margin:2px;
+                    color:#000;
+                    &::placeholder{
+                        color:#555;
+                    }
+                    &::-webkit-input-placeholder{
+                        color:#555;
+                    }
+                    &::-moz-placeholder{
+                        color:#555;
+                    }
+                    &:-ms-input-placeholder{
+                        color:#555;
+                    }
                     @media(max-width: @screenmed){
                         width:110px;
                     }

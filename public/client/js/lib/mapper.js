@@ -601,6 +601,39 @@ module.exports = function(elid, options){
 
     this.map = new L.Map(elid,mapDefaults);
 
+    var applyMapA11yFixes = function(){
+        if(!self.map || !self.map.getContainer){
+            return;
+        }
+        var mapContainer = self.map.getContainer();
+        if(!mapContainer){
+            return;
+        }
+        var scaleControl = mapContainer.querySelector('.leaflet-control-scale');
+        if(scaleControl){
+            scaleControl.style.opacity = '1';
+        }
+        var scaleLines = mapContainer.querySelectorAll('.leaflet-control-scale-line');
+        scaleLines.forEach(function(scaleLine){
+            scaleLine.style.color = '#000';
+            scaleLine.style.backgroundColor = '#fff';
+            scaleLine.style.borderColor = '#000';
+            scaleLine.style.textShadow = 'none';
+            scaleLine.style.opacity = '1';
+        });
+        var attribution = mapContainer.querySelector('.leaflet-control-attribution');
+        if(attribution){
+            attribution.style.color = '#111';
+            attribution.style.backgroundColor = '#fff';
+        }
+        var attributionLink = mapContainer.querySelector('.leaflet-control-attribution a');
+        if(attributionLink){
+            attributionLink.style.color = '#0b3d91';
+            attributionLink.style.textDecoration = 'underline';
+            attributionLink.style.textUnderlineOffset = '2px';
+        }
+    };
+
     if(options.maximizeControl){
         this.map.addControl(new MaximizeButton());
         //add mapper modal for maximize view
@@ -633,6 +666,7 @@ module.exports = function(elid, options){
         this.map.addControl(new L.control.scale({
             position:'bottomright'
         }));        
+        applyMapA11yFixes();
     }
 
     if(options.drawControl){
@@ -700,12 +734,19 @@ module.exports = function(elid, options){
             separate: true
         });
         this.map.addControl(loading);
+        var loadingControl = this.map.getContainer().querySelector('.leaflet-control-loading');
+        if(loadingControl){
+            loadingControl.setAttribute('aria-label','Map loading');
+            loadingControl.setAttribute('title','Map loading');
+            loadingControl.innerHTML = '<span class="sr-only">Map loading</span>';
+        }
     }    
     /*
     * Map Events Actions
     ***/
 
     this.map.on('zoomend',function(e){
+        applyMapA11yFixes();
         if(typeof legend == 'object'){
             self.map.removeControl(legend);
             if(typeof self.map.mapCode != 'undefined'){
@@ -719,5 +760,11 @@ module.exports = function(elid, options){
             }
         }
     })
+    this.map.on('moveend', function(){
+        applyMapA11yFixes();
+    });
+    this.map.on('load', function(){
+        applyMapA11yFixes();
+    });
 
 }

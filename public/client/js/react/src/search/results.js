@@ -315,7 +315,7 @@ const ResultsList = ({search, searchChange, results, loading}) => {
                 val = <span className="no-data">no data</span>;
             }
 
-            tds.push(<td key={'row-'+index+'-cell-'+ind}>{val}</td>);
+            tds.push(<td key={'row-'+index+'-cell-'+ind}><span className="cell-content">{val}</span></td>);
         })
         //add openrecord column
         tds.push(<td key={'row-'+index+'-open'} className="open"><a className="pull-left" href={'/portal/records/'+item.uuid} target="_blank" id={item.uuid} onClick={openRecord} title="view full record">view</a></td>);

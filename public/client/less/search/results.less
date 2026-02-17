@@ -221,16 +221,27 @@
                         }
                     }
                     td{
-                        overflow:visible;
                         min-height:30px;
-                        word-wrap: break-word;
-                        text-overflow:ellipsis;
-                        white-space: nowrap;
                         span.no-data{
                             color:#747474;
                             font-style:italic;
                         }
+                        &:not(.open){
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            min-width: 0;
+                            .cell-content{
+                                display: block;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                min-width: 0;
+                            }
+                        }
                         &.open{
+                            min-width: 4.5em;
+                            white-space: nowrap;
                             a{
                                 cursor: pointer;
                             }

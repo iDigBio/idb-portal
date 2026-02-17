@@ -11,6 +11,12 @@ table {
   background-color: #fefefe;
   box-shadow: 1px 1px 2px #ccc;
 }
+#publishers-wrapper p a {
+  text-decoration: underline;
+}
+#publishers-wrapper p a:hover {
+  text-decoration: underline;
+}
 .table thead th.statcol,
 #statstable .statcol {
   text-align: center;
@@ -27,4 +33,9 @@ th.top-header {
 h3,
 h4 {
   font-weight: normal;
+}
+/* WCAG 2 AA contrast for table header text */
+#publishers-wrapper .publishers-table thead th {
+  color: #1a1a1a;
+  background-color: #e9ecef;
 }

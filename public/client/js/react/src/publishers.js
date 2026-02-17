@@ -2,8 +2,6 @@ import React, {useEffect} from 'react'
 import ReactDOM from 'react-dom'
 import idbapi from '../../lib/idbapi'
 
-import 'tablesorter/dist/css/theme.blue.min.css'
-
 function formatNum (num){
   return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -123,23 +121,25 @@ const Publishers = () => {
   }, []);
 
 
-  
+    var summaryRows = _.without(prows || [], null);
+    if (summaryRows.length === 0) {
+      return <p>No publisher data available.</p>;
+    }
     return (
-      <table className="table table-bordered datatable table-condensed tablesorter-blue">
+      <table className="table table-bordered table-condensed publishers-table" id="publishers-summary-table">
         <thead>
-          <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
           <tr>
-            <th>Publisher Name</th>
-            <th className="statcol">Digest</th>
-            <th className="statcol">API</th>
-            <th className="statcol">Index</th>
-            <th className="statcol">Digest</th>
-            <th className="statcol">API</th>
-            <th className="statcol">Index</th>
+            <th scope="col">Publisher Name</th>
+            <th scope="col" className="statcol">Records Digest</th>
+            <th scope="col" className="statcol">Records API</th>
+            <th scope="col" className="statcol">Records Index</th>
+            <th scope="col" className="statcol">Media Digest</th>
+            <th scope="col" className="statcol">Media API</th>
+            <th scope="col" className="statcol">Media Index</th>
           </tr>
         </thead>
         <tbody>
-          {_.without(prows,null)}
+          {summaryRows}
         </tbody>
       </table>
     )
@@ -148,36 +148,38 @@ const Publishers = () => {
 
 class Recordsets extends React.Component{
   render(){
-    var rows = _.map(this.props.recordsets,function(name,uuid){
-      if(_.isUndefined(rsets[uuid]) || _.without(_.values(rsets[uuid]),0).length === 0 ){
+    var uuid = this.props.uuid;
+    if (!uuid) return null;
+    var rows = _.map(this.props.recordsets,function(name,rsUuid){
+      if(_.isUndefined(rsets[rsUuid]) || _.without(_.values(rsets[rsUuid]),0).length === 0 ){
         //rsets[uuid]=defsets();
         return null;
       }else{
         var qp = getQueryParams(window.location.search);
         var rec_cols, media_cols, rec_cols1, rec_cols2, rec_cols3, media_cols1, media_cols2, media_cols3;
-        if (qp.merged && rsets[uuid].digestrecords == rsets[uuid].apirecords && rsets[uuid].apirecords == rsets[uuid].indexrecords) {
+        if (qp.merged && rsets[rsUuid].digestrecords == rsets[rsUuid].apirecords && rsets[rsUuid].apirecords == rsets[rsUuid].indexrecords) {
           rec_cols = (
-            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestrecords)}</td>
+            <td className="valcol" colSpan="3">{formatNum(rsets[rsUuid].digestrecords)}</td>
           )
         } else {
-          rec_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestrecords)}</td>)
-          rec_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apirecords)}</td>)
-          rec_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexrecords)}</td>)
+          rec_cols1 = (<td className="valcol">{formatNum(rsets[rsUuid].digestrecords)}</td>)
+          rec_cols2 = (<td className="valcol">{formatNum(rsets[rsUuid].apirecords)}</td>)
+          rec_cols3 = (<td className="valcol">{formatNum(rsets[rsUuid].indexrecords)}</td>)
         }
 
-        if (qp.merged && rsets[uuid].digestmedia == rsets[uuid].apimedia && rsets[uuid].apimedia == rsets[uuid].indexmedia) {
+        if (qp.merged && rsets[rsUuid].digestmedia == rsets[rsUuid].apimedia && rsets[rsUuid].apimedia == rsets[rsUuid].indexmedia) {
           media_cols = (
-            <td className="valcol" colSpan="3">{formatNum(rsets[uuid].digestmedia)}</td>
+            <td className="valcol" colSpan="3">{formatNum(rsets[rsUuid].digestmedia)}</td>
           )
         } else {
-          media_cols1 = (<td className="valcol">{formatNum(rsets[uuid].digestmedia)}</td>)
-          media_cols2 = (<td className="valcol">{formatNum(rsets[uuid].apimedia)}</td>)
-          media_cols3 = (<td className="valcol">{formatNum(rsets[uuid].indexmedia)}</td>)
+          media_cols1 = (<td className="valcol">{formatNum(rsets[rsUuid].digestmedia)}</td>)
+          media_cols2 = (<td className="valcol">{formatNum(rsets[rsUuid].apimedia)}</td>)
+          media_cols3 = (<td className="valcol">{formatNum(rsets[rsUuid].indexmedia)}</td>)
         }
 
         return (
-          <tr key={'publisher-'+uuid}>
-            <td><a href={'/portal/recordsets/'+uuid} target="_new">{name}</a></td>
+          <tr key={'publisher-'+rsUuid}>
+            <td><a href={'/portal/recordsets/'+rsUuid} target="_new">{name}</a></td>
             {rec_cols}
             {rec_cols1}
             {rec_cols2}
@@ -191,16 +193,28 @@ class Recordsets extends React.Component{
       }
     });
 
+    var validRows = _.without(rows,null);
+    if (validRows.length === 0) {
+      return null;
+    }
+
     return (
-      <div id={this.props.uuid}>
-        <h4>{this.props.name}</h4>
-        <table className="table table-bordered datatable table-condensed tablesorter-blue">
+      <div id={uuid}>
+        <h4>{this.props.name || '\u00A0'}</h4>
+        <table className="table table-bordered table-condensed publishers-table" id={'recordsets-' + uuid}>
           <thead>
-            <tr className="tablesorter-ignoreRow"><th></th><th colSpan="3">Records</th><th colSpan="3">Media</th></tr>
-            <tr><th>Recordset</th><th>Digest</th><th>API</th><th>Index</th><th>Digest</th><th>API</th><th>Index</th></tr>
+            <tr>
+              <th scope="col">Recordset</th>
+              <th scope="col">Records Digest</th>
+              <th scope="col">Records API</th>
+              <th scope="col">Records Index</th>
+              <th scope="col">Media Digest</th>
+              <th scope="col">Media API</th>
+              <th scope="col">Media Index</th>
+            </tr>
           </thead>
           <tbody>
-            {_.without(rows,null)}
+            {validRows}
           </tbody>
         </table>
       </div>
@@ -330,8 +344,7 @@ async.parallel([
     ReactDOM.render(
       <Page/>,
       document.getElementById('main')
-    );  
-    $('.datatable').tablesorter();
+    );
 })
 
 

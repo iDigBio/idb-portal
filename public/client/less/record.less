@@ -36,7 +36,7 @@ body{
     height:100%;
 }
 h1#banner{
-    color:#999;
+    color:#737373;
     //text-shadow: 1px 1px 1px #ddd;
     margin-left:0px;
     font-size: 2em;
@@ -50,8 +50,18 @@ h1#banner{
     margin:0px 0px;
 }
 
+#attribution{
+    h4.title{
+        color:#444;
+        text-shadow:none;
+    }
+}
+
 #summary-info{
     margin-bottom:40px;
+    td{
+        text-shadow: none;
+    }
     .sec{
         width: 49%;
         margin-right: 1%;
@@ -94,12 +104,12 @@ h1#banner{
             }
         }
         .name{
-            color:#333;
+            color:#222;
             text-align: left;
             min-width:80px;
         }
         .val{
-            color:#666;
+            color:#444;
             text-align: left;
             padding-left:8px;
         }
@@ -221,6 +231,41 @@ h1#banner{
                 margin:0px 5px 0px 0px;
             }
         }                
+    }
+
+    #map-box{
+        .leaflet-bar a,
+        .leaflet-bar a span{
+            color:#111;
+            background-color:#fff;
+            text-shadow:none;
+        }
+        .leaflet-bar a.leaflet-disabled,
+        .leaflet-bar a.leaflet-disabled span{
+            color:#666;
+            background-color:#f2f2f2;
+        }
+        .leaflet-control-attribution{
+            color:#222 !important;
+            background:#fefefe !important;
+            text-shadow:none;
+        }
+        .leaflet-control-attribution a{
+            color:#2a6496 !important;
+            text-decoration:underline !important;
+            text-underline-offset:2px;
+        }
+        .leaflet-control-attribution a:hover,
+        .leaflet-control-attribution a:focus{
+            color:#1f4e78 !important;
+        }
+        .sleep-note,
+        p.sleep-note{
+            color:#111 !important;
+            background:#fff !important;
+            border:2px solid #111 !important;
+            text-shadow:none;
+        }
     }
 }
 #media{

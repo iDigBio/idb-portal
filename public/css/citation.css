@@ -32,3 +32,6 @@ div.citationtext {
   margin: 1em;
   padding: 0.5em 10px;
 }
+div.citationtext a {
+  color: #2a6496;
+}

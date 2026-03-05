@@ -78,7 +78,7 @@
   width: 60px;
 }
 #contacts table.contact td i {
-  color: #999;
+  color: #767676;
 }
 #citation {
   margin: 0px 0px 15px 0px;
@@ -113,6 +113,9 @@ div.citationtext {
   border-left: 5px solid #ccc;
   margin: 1em;
   padding: 0.5em 10px;
+}
+div.citationtext a {
+  color: #2a6496;
 }
 #attribution {
   width: 100%;
@@ -191,7 +194,7 @@ body {
   height: 100%;
 }
 h1#banner {
-  color: #999;
+  color: #737373;
   margin-left: 0px;
   font-size: 2em;
 }
@@ -200,9 +203,16 @@ h1#banner {
   display: block;
   margin: 0px 0px;
 }
+#attribution h4.title {
+  color: #444;
+  text-shadow: none;
+}
 #summary-info {
   margin-bottom: 40px;
   border-radius: 3px;
+}
+#summary-info td {
+  text-shadow: none;
 }
 #summary-info .sec {
   width: 49%;
@@ -239,12 +249,12 @@ h1#banner {
   vertical-align: top;
 }
 #summary-info .sec .name {
-  color: #333;
+  color: #222;
   text-align: left;
   min-width: 80px;
 }
 #summary-info .sec .val {
-  color: #666;
+  color: #444;
   text-align: left;
   padding-left: 8px;
 }
@@ -356,6 +366,38 @@ h1#banner {
 }
 #map #map-wrapper #map-geopoint span {
   margin: 0px 5px 0px 0px;
+}
+#map #map-box .leaflet-bar a,
+#map #map-box .leaflet-bar a span {
+  color: #111;
+  background-color: #fff;
+  text-shadow: none;
+}
+#map #map-box .leaflet-bar a.leaflet-disabled,
+#map #map-box .leaflet-bar a.leaflet-disabled span {
+  color: #666;
+  background-color: #f2f2f2;
+}
+#map #map-box .leaflet-control-attribution {
+  color: #222 !important;
+  background: #fefefe !important;
+  text-shadow: none;
+}
+#map #map-box .leaflet-control-attribution a {
+  color: #2a6496 !important;
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+}
+#map #map-box .leaflet-control-attribution a:hover,
+#map #map-box .leaflet-control-attribution a:focus {
+  color: #1f4e78 !important;
+}
+#map #map-box .sleep-note,
+#map #map-box p.sleep-note {
+  color: #111 !important;
+  background: #fff !important;
+  border: 2px solid #111 !important;
+  text-shadow: none;
 }
 #media {
   margin-top: 30px;

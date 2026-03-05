@@ -113,14 +113,13 @@ body {
   color: white;
   margin: 30px 10px;
   padding: 6px 6px;
-  background-color: #488431;
+  background-color: #50813D;
   border: none;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 #content a#search-button:hover {
   transition: box-shadow 0.5s, background-color 0.5s, transform 0.5s;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  background-color: #3f742b;
 }
 #content .info {
   display: inline-block;

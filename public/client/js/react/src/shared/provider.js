@@ -103,7 +103,7 @@ const Provider = ({data}) => {
         </p>
     );
 
-    if(_.has(data,'url')){
+    if(_.has(data,'url') && _.isString(data.url) && !_.isEmpty(_.trim(data.url))){
         link = (
             <a key="link" href={data.url}>
                 {data.url}

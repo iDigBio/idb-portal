@@ -95,7 +95,7 @@ body {
   color: #999;
 }
 #content h1#banner {
-  color: #999;
+  color: #949494;
   margin-left: 0px;
   font-size: 2em;
 }
@@ -113,14 +113,14 @@ body {
   color: white;
   margin: 30px 10px;
   padding: 6px 6px;
-  background-color: #78b461;
+  background-color: #488431;
   border: none;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 #content a#search-button:hover {
   transition: box-shadow 0.5s, background-color 0.5s, transform 0.5s;
   box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  background-color: #87bc72;
+  background-color: #3f742b;
 }
 #content .info {
   display: inline-block;
@@ -180,6 +180,20 @@ body {
 #content #flags-table .badge {
   text-shadow: none;
   cursor: pointer;
+  background-color: #767676;
+  color: #fff;
+}
+#content #flags-table .blurb a {
+  color: #005a9c;
+  text-decoration: underline;
+}
+#content #flags-table .blurb a:hover,
+#content #flags-table .blurb a:focus {
+  color: #004b82;
+  text-decoration: underline;
+}
+#content #flags-table #table-fields.tablesorter-blue thead tr th .tablesorter-header-inner {
+  color: #1f2933;
 }
 #content #flags-table td .tooltip-inner {
   text-shadown: none;
@@ -224,6 +238,7 @@ td.record-count {
   width: 100px;
   text-align: center;
   font-size: 1em;
+  color: #222;
 }
 .button {
   margin: 5px;

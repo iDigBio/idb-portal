@@ -17,7 +17,7 @@ body{
     box-shadow: 1px 1px 2px #ccc;
     text-shadow: 1px 1px 1px white;
     h1#banner{
-        color:#999;
+        color:#949494;
         //text-shadow: 1px 1px 1px #ddd;
         margin-left:0px;
         font-size: 2em;
@@ -37,13 +37,13 @@ body{
         color: white;
         margin:30px 10px;
         padding: 6px 6px;
-        background-color: lighten(@idbgreen, 5%);
+        background-color: #488431;
         border:none;
         box-shadow: @shadow2;
         &:hover{
             transition: box-shadow .5s, background-color .5s, transform .5s;
             box-shadow: @shadow3;
-            background-color: lighten(@idbgreen, 10%);
+            background-color: #3f742b;
         }
     }
 
@@ -90,6 +90,20 @@ body{
         .badge{
             text-shadow:none;
             cursor: pointer;
+            background-color: #767676;
+            color: #fff;
+        }
+        .blurb a{
+            color: #005a9c;
+            text-decoration: underline;
+        }
+        .blurb a:hover,
+        .blurb a:focus{
+            color: #004b82;
+            text-decoration: underline;
+        }
+        #table-fields.tablesorter-blue thead tr th .tablesorter-header-inner{
+            color: #1f2933;
         }
         td{
             .tooltip-inner{
@@ -143,6 +157,7 @@ td.record-count{
     width:100px;
     text-align:center;
     font-size:1em;
+    color: #222;
 }
 .button{
     margin:5px;

@@ -42,8 +42,7 @@ const Collection = ({data}) => {
             }
         }
         if(key=='recordsetQuery'){
-            if(_.isString(val)){
-                console.log(val)
+            if(_.isString(val) && !_.isEmpty(_.trim(val))){
                 val = <a href={'/portal/search?rq='+val}>{val}</a>
             }
         }

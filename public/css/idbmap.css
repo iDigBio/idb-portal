@@ -158,13 +158,13 @@
 }
 #map .leaflet-bar a,
 #map .leaflet-bar a span {
-  color: #111;
-  background-color: #fff;
+  color: #111 !important;
+  background-color: #fff !important;
 }
 #map .leaflet-bar a.leaflet-disabled,
 #map .leaflet-bar a.leaflet-disabled span {
-  color: #555;
-  background-color: #f2f2f2;
+  color: #4a4a4a !important;
+  background-color: #fff !important;
 }
 #map .leaflet-control-scale,
 #map .leaflet-control-scale-line {
@@ -177,17 +177,17 @@
   text-shadow: none;
 }
 #map .leaflet-control-attribution {
-  color: #111;
-  background: #fff;
+  color: #111 !important;
+  background: #fefefe !important;
 }
 #map .leaflet-control-attribution a {
-  color: #0b3d91;
-  text-decoration: underline;
+  color: #2a6496 !important;
+  text-decoration: underline !important;
   text-underline-offset: 2px;
 }
 #map .leaflet-control-attribution a:hover,
 #map .leaflet-control-attribution a:focus {
-  color: #072c68;
+  color: #1f4e78 !important;
 }
 .map-popup-wrapper {
   margin-top: 5px;

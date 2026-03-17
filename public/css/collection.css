@@ -9,6 +9,10 @@ body {
   background-color: #fefefe;
   box-shadow: 1px 1px 2px #ccc;
 }
+#collection a {
+  color: #2a6496;
+  text-decoration: underline;
+}
 h1 {
   font-size: 2em;
   color: #999;

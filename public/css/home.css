@@ -82,7 +82,15 @@ h4 {
 }
 #stats-row #specimen-chart svg text,
 #stats-row #media-chart svg text {
-  fill: #000000;
+  fill: #111111 !important;
+  opacity: 1 !important;
+  text-shadow: none;
+}
+#stats-row #specimen-chart svg tspan,
+#stats-row #media-chart svg tspan {
+  fill: #111111 !important;
+  opacity: 1 !important;
+  text-shadow: none;
 }
 #stats-row .chart .c3-arc.is-focus {
   stroke: #000000;

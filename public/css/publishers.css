@@ -34,7 +34,6 @@ h3,
 h4 {
   font-weight: normal;
 }
-/* WCAG 2 AA contrast for table header text */
 #publishers-wrapper .publishers-table thead th {
   color: #1a1a1a;
   background-color: #e9ecef;

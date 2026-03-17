@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom'
 import idbapi from '../../lib/idbapi'
 
 function formatNum (num){
-  return num.toString().replace(/,/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  if (num == null || isNaN(num)) return '0';
+  return Number(num).toString().replace(/,/g, '').replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
 function toTitleCase(str){
   return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
@@ -288,6 +289,7 @@ async.parallel([
   },
   function(callback){
     idbapi.summary('stats/api',{inverted: "true",minDate:"now-1d"},function(resp){
+      if (!resp || !resp.recordsets) { callback(); return; }
       _.forEach(resp.recordsets,function(val,key){
         var d = _.keys(val).sort().reverse()[0];
         if(_.isUndefined(rsets[key])){
@@ -303,6 +305,7 @@ async.parallel([
   },
   function(callback){
     idbapi.summary('stats/digest',{inverted: "true",dateInterval:"day",minDate:"now-1y"},function(resp){
+      if (!resp || !resp.recordsets) { callback(); return; }
       _.forEach(resp.recordsets,function(val,key){
         var d = _.keys(val).sort().reverse()[0];
         if(_.isUndefined(rsets[key])){
@@ -318,6 +321,7 @@ async.parallel([
   },
   function(callback){
     idbapi.summary('top/records',{top_fields:["recordset"],count: maxRecordsets}, function(resp){
+      if (!resp || !resp.recordset) { callback(); return; }
       _.forEach(resp.recordset,function(val,key){
         if(_.isUndefined(rsets[key])){
           rsets[key]=defsets();
@@ -330,6 +334,7 @@ async.parallel([
   },
   function(callback){
     idbapi.summary('top/media',{top_fields:["recordset"],count: maxRecordsets}, function(resp){
+      if (!resp || !resp.recordset) { callback(); return; }
       _.forEach(resp.recordset,function(val,key){
         if(_.isUndefined(rsets[key])){
           rsets[key]=defsets();

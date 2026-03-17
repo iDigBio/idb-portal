@@ -6,11 +6,13 @@
 }
 #container .c3 text,
 #container .c3 svg text,
+#container .c3 tspan,
 #container .c3-legend-item text,
 #container .c3-axis text,
 #container .c3-chart-arc text {
   fill: #111111 !important;
   opacity: 1 !important;
+  text-shadow: none;
 }
 #container .c3-axis path,
 #container .c3-axis line {

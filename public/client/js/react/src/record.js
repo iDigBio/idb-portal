@@ -135,7 +135,7 @@ const Row = ({keyid, data}) => {
 
         try {
             if (data.original.toLowerCase() !== data.indexTerm.toLowerCase()) {
-                tag = <Tag style={{marginLeft: '10px'}} color={'green'}>Interpreted</Tag>
+                tag = <Tag style={{marginLeft: '10px', color: '#1f1f1f', backgroundColor: '#d9f2d9', borderColor: '#7fc47f'}}>Interpreted</Tag>
             } else {
                 tag=<></>
             }
@@ -190,7 +190,7 @@ const Section = ({name, data, active}) => {
                 <tr>
                     <td style={{fontWeight: 'bold', fontSize: '14px'}}>Field</td>
                     <td style={{fontWeight: 'bold', fontSize: '14px'}}>Original</td>
-                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Interpreted <a href='https://idigbio.github.io/docs/portal/recordpage/#interpreted-vs-original' style={{fontSize: '10px', fontWeight: 'lighter'}}>What does this mean?</a></td>
+                    <td style={{fontWeight: 'bold', fontSize: '14px'}}>Interpreted <a href='https://idigbio.github.io/docs/portal/recordpage/#interpreted-vs-original' style={{fontSize: '10px', fontWeight: 'normal', color: '#2a6496'}}>What does this mean?</a></td>
                 </tr>
                 {rows}
                 </tbody>
@@ -458,9 +458,9 @@ const SuppliedCitation = ({data}) => {
 
     if(_.has(data,'dcterms:bibliographicCitation')){
         return (
-            <div id="citation" className="clearfix scrollspy section">
+            <div id="supplied-citation" className="clearfix scrollspy section">
                 <div>The provider has specified the following citation for use with this data.</div>
-                <div id="citationText" className="citationtext">{data['dcterms:bibliographicCitation']}</div>
+                <div id="suppliedCitationText" className="citationtext">{data['dcterms:bibliographicCitation']}</div>
             </div>
         )
     }else{
@@ -710,6 +710,7 @@ const RecordPage = ({ record }) => {
                     <Map data={index} suppressHydrationWarning={true} />
                     <Gallery data={index} />
                     <Provider data={record.attribution} />
+                    <Citation data={record} pubname={record?.attribution?.name || ''} />
                     <Record record={localRecord} raw={record} suppressHydrationWarning={true} />
                 </div>
                 <div className="col-lg-2 col-md-2 col-sm-2">

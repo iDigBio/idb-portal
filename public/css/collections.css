@@ -50,11 +50,25 @@ p.sleep-note {
   color: #000 !important;
 }
 #map .leaflet-control-attribution a {
-  color: #0b3d91;
-  text-decoration: underline;
+  color: #2a6496 !important;
+  text-decoration: underline !important;
   text-underline-offset: 2px;
 }
 #map .leaflet-control-attribution a:hover,
 #map .leaflet-control-attribution a:focus {
-  color: #072c68;
+  color: #1f4e78 !important;
+}
+#map .leaflet-control-attribution {
+  color: #111 !important;
+  background: #fefefe !important;
+}
+#map .leaflet-bar a,
+#map .leaflet-bar a span {
+  color: #111 !important;
+  background: #fff !important;
+}
+#map .leaflet-bar a.leaflet-disabled,
+#map .leaflet-bar a.leaflet-disabled span {
+  color: #4a4a4a !important;
+  background: #fff !important;
 }

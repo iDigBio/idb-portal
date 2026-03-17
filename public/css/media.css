@@ -43,15 +43,16 @@
   font-weight: normal;
   cursor: pointer;
   letter-spacing: .035em;
-  color: #333;
-  text-decoration: none;
+  color: #222 !important;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 #side-nav #side-nav-list li a:hover,
 #side-nav #side-nav-list li a:visited {
-  text-decoration: none;
+  text-decoration: underline;
 }
 #side-nav #side-nav-list li a:hover {
-  color: #777;
+  color: #1f4e78 !important;
 }
 #side-nav #side-nav-list.affix {
   margin-top: 0px;

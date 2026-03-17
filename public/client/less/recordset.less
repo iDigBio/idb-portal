@@ -102,11 +102,12 @@ body{
             text-decoration: underline;
         }
         #table-fields.tablesorter-blue thead tr th .tablesorter-header-inner{
-            color: #1f2933;
+            color: #1f2933 !important;
+            text-shadow: none;
         }
         td{
             .tooltip-inner{
-                text-shadown:none;
+                text-shadow:none;
             }
         }
     }
@@ -142,7 +143,7 @@ td.record-count{
     position:relative;
 }
 .perc-bar{
-    background-color: #ccc;
+    background-color: #e5e5e5;
     position: absolute;
     z-index: 1;
     display: inline-block;
@@ -156,7 +157,9 @@ td.record-count{
     width:100px;
     text-align:center;
     font-size:1em;
-    color: #222;
+    color: #111 !important;
+    font-weight: bold;
+    text-shadow:none;
 }
 .button{
     margin:5px;

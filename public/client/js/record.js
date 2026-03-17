@@ -76,7 +76,11 @@ if(_.has(record.indexTerms,'geopoint')){
     });
 
     L.Icon.Default.imagePath = '/portal/vendor/leaflet/dist/images/';
-    L.marker(point).addTo(map);
+    const marker = L.marker(point, { keyboard: false, title: 'Specimen location marker' }).addTo(map);
+    const markerEl = marker.getElement();
+    if (markerEl) {
+        markerEl.setAttribute('aria-label', 'Specimen location marker');
+    }
     //map.panTo(point).setZoom(5); 
 }       
 
